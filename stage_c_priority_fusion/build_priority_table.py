@@ -55,7 +55,23 @@ def _load_level2():
     return mod
 
 
-planet_parameters = _load_level2().planet_parameters
+_LEVEL2 = _load_level2()
+planet_parameters = _LEVEL2.planet_parameters
+MU_H2HE, MU_SECONDARY = _LEVEL2.MU_H2HE, _LEVEL2.MU_SECONDARY
+
+# Which mean molecular weight applies to which planet. Below the radius valley (~1.8 Re,
+# Fulton+2017) a planet has almost certainly lost any H2/He envelope, so its atmosphere - if it
+# has one - is high-mu and MU_SECONDARY (N2, Earth-like) is the right assumption; that is the
+# value stage_b_rocky_benchmark uses for exactly these planets. Above it an H2/He envelope is
+# expected and MU_H2HE applies. Using 2.3 for everything overstated one scale height by 12.2x
+# for the 21 rocky planets here, inflating `observable` for the very planets `small` already
+# favours. The threshold is an assumption: amplitude_1H_ppm_mu2p3 and _mu28 are both carried in
+# the output, so the effect of moving it is one column away.
+RADIUS_VALLEY_RE = 1.8
+
+
+def assign_mu(rade_earth):
+    return np.where(np.asarray(rade_earth, float) < RADIUS_VALLEY_RE, MU_SECONDARY, MU_H2HE)
 
 TEMPLATE = (RESEARCH_DIR / "exoplanet_research_data" / "05_final_ML_dataset_DO_NOT_USE"
             / "final_priority_table_TEMPLATE.csv")
@@ -138,6 +154,15 @@ def gas_scores() -> pd.DataFrame:
     Averaged over that planet's spectra.
     """
     lp = pd.read_csv(STAGE_B / "stage_b_lopo_predictions.csv")
+    # Only rows Stage B could actually evaluate. A spectrum whose coverage does not reach a
+    # molecule's band carries label_known = False there; Stage B masks those out of its own loss
+    # and metrics, so importing their predictions would put a number in a cell Stage B declined
+    # to score. Without this filter 11 of 39 cells came from such rows, and for WASP-17 b and
+    # WASP-80 b the whole evidence term did.
+    n_all = len(lp)
+    lp = lp[lp.label_known.astype(bool)]
+    print(f"  using {len(lp)} of {n_all} LOPO rows ({n_all - len(lp)} dropped: label masked out "
+          f"as unobservable in that spectrum)")
     agg = (lp.groupby(["planet", "molecule"]).gbm_prob.mean().unstack("molecule"))
     agg.columns = [f"{c}_score" for c in agg.columns]
     return agg.reset_index().rename(columns={"planet": "pl_name"})
@@ -243,7 +268,10 @@ def make_figure(final: pd.DataFrame, abl: pd.DataFrame) -> None:
     ax.barh(range(len(a)), a.spearman_vs_full, color="#2d6fa8", edgecolor="black", linewidth=0.5)
     ax.set_yticks(range(len(a)))
     ax.set_yticklabels([f"{r.dropped} (w={r.weight:.2f})" for _, r in a.iterrows()], fontsize=8)
-    ax.set_xlim(0.85, 1.0)
+    # Data-driven, not a fixed window: after the mu fix the weakest ablation fell to 0.75, and a
+    # hardcoded lower bound of 0.85 silently drew the two most important bars off the axis.
+    lo = min(0.0 if a.spearman_vs_full.isna().all() else a.spearman_vs_full.min(), 0.95)
+    ax.set_xlim(max(0.0, lo - 0.06), 1.0)
     ax.set_xlabel("Spearman vs the full ranking when this contributor is dropped")
     ax.set_title("Ablation: what the ranking actually depends on\n(lower = matters more)", fontsize=9)
     for i, (_, r) in enumerate(a.iterrows()):
@@ -295,11 +323,18 @@ def main() -> int:
           f"= {list(tpl['transit_ML_probABILITY'].unique())}  <- a placeholder, not a prediction")
 
     # ---- physical parameters -------------------------------------------- #
-    params = planet_parameters(sorted(tpl.pl_name.unique()))
+    params = planet_parameters(sorted(tpl.pl_name.unique()), mu=assign_mu)
     out = out.merge(params[["pl_name", "pl_eqt", "pl_rade", "st_rad", "st_teff",
-                            "gravity_ms2", "scale_height_km", "amplitude_1H_ppm"]],
+                            "gravity_ms2", "mu_assumed", "scale_height_km", "amplitude_1H_ppm",
+                            "amplitude_1H_ppm_mu2p3", "amplitude_1H_ppm_mu28"]],
                     on="pl_name", how="left")
     print(f"\n[2] physical parameters found for {out.pl_eqt.notna().sum()}/{len(out)} planets")
+    n_rocky = int((out.mu_assumed == MU_SECONDARY).sum())
+    print(f"  mu={MU_SECONDARY:g} (N2, secondary) for the {n_rocky} planets below "
+          f"{RADIUS_VALLEY_RE} Re; mu={MU_H2HE:g} (H2/He) for the other {len(out) - n_rocky}")
+    print(f"  one scale height of absorption spans {out.amplitude_1H_ppm.min():.2f}-"
+          f"{out.amplitude_1H_ppm.max():.0f} ppm; at a single mu=2.3 it would read "
+          f"{out.amplitude_1H_ppm_mu2p3.min():.2f}-{out.amplitude_1H_ppm_mu2p3.max():.0f} ppm")
 
     # ---- Stage A --------------------------------------------------------- #
     print("\n[3] Stage A transit probability (CNN+LSTM, run bn_aug_sched)")
@@ -365,8 +400,29 @@ def main() -> int:
         print(f"  {m:<4} scored for {n:>2}/{len(out)} planets"
               + (f"   (the rest: {why})" if n < len(out) else ""))
     out["gas_provenance"] = np.where(out[[f"{m}_score" for m in MOLECULES]].notna().any(axis=1),
-                                     "Stage B LOPO (out-of-fold), mean over that planet's spectra",
+                                     "Stage B LOPO (out-of-fold), mean over that planet's spectra; "
+                                     "NO SKILL above a constant majority prediction at planet level "
+                                     "(see eda/STAGE_B_RESULTS.md) - rank signal, not a detection",
                                      "no spectra in the pack")
+    # Where the model's score disagrees with the verified literature label, say so in the table.
+    # TRAPPIST-1 c is the case that matters: H2O = 0 in labels/verified_gas_labels.csv (a 2-sigma
+    # non-detection) against a model score of 0.93, and it ranks near the top.
+    labels = pd.read_csv(RESEARCH_DIR / "outputs" / "labels" / "verified_gas_labels.csv",
+                         dtype=str, keep_default_na=False).set_index("planet")
+    clashes = []
+    for i, r in out.iterrows():
+        for m in ("H2O", "CO2", "CH4"):
+            score = r.get(f"{m}_score")
+            if pd.isna(score) or r.pl_name not in labels.index:
+                continue
+            verified = labels.at[r.pl_name, m] if m in labels.columns else "unknown"
+            if verified == "0" and score >= 0.5:
+                clashes.append(f"{m} scored {score:.2f} vs verified non-detection")
+        out.at[i, "score_vs_verified_label"] = "; ".join(clashes) if clashes else ""
+        clashes = []
+    n_clash = int((out.score_vs_verified_label != "").sum())
+    print(f"  {n_clash} planet(s) carry a score >= 0.5 for a molecule their verified label records "
+          f"as a non-detection; flagged in score_vs_verified_label")
 
     # ---- components + priority ------------------------------------------- #
     out["c_small"] = score_small(out.pl_rade)
@@ -408,7 +464,9 @@ def main() -> int:
     cols = ["pl_name", "transit_ML_probability_TESS", "transit_ML_probability_kepler_model",
             "transit_ML_probability", "transit_provenance",
             "H2O_score", "CO2_score", "CH4_score", "O3_score", "gas_provenance",
-            "pl_rade", "pl_eqt", "st_teff", "st_rad", "amplitude_1H_ppm",
+            "score_vs_verified_label",
+            "pl_rade", "pl_eqt", "st_teff", "st_rad",
+            "mu_assumed", "amplitude_1H_ppm", "amplitude_1H_ppm_mu2p3", "amplitude_1H_ppm_mu28",
             "c_small", "c_temperate", "c_observable", "c_evidence",
             "priority_score", "priority", "components_used", "notes"]
     final = out[cols].sort_values("priority_score", ascending=False).reset_index(drop=True)

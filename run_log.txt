@@ -2806,3 +2806,38 @@ FIX STEP 5: Overwrite K2 outputs (Kepler/TESS untouched)
   wrote splits\k2\val.csv  (270 rows)
   wrote splits\k2\test.csv  (272 rows)
   appended this output to run_log.txt
+
+[2026-09-27 03:05] STAGE C CORRECTION - two defects found in a full-codebase review, both affecting the published table
+  1. Scale-height mu. stage_b_level2.planet_parameters hardcoded mu = 2.3 (H2/He) for every planet, and Stage C
+     reused its amplitude_1H_ppm as the `observable` component (weight 0.30) for all 54 planets, 21 of them rocky.
+     For a rocky planet with a high-mu secondary atmosphere 2.3 is not doubtful but ruled out; stage_b_rocky_benchmark
+     already used mu = 28 for the SAME planets. The two files disagreed by exactly 28/2.3 = 12.17x:
+       GJ 1132 b  106.57 ppm (Stage C) vs 8.75 ppm (rocky benchmark);  LHS 475 b 75.51 vs 6.20;
+       LHS 1140 b  43.44 vs 3.57;  GJ 486 b 49.61 vs 4.08.
+     Fix: planet_parameters(planets, mu=...) now takes a scalar or a callable; the default stays 2.3 so Stage B
+     Level 2 (13 H2/He planets) is untouched. Stage C assigns mu per planet: 28 below the 1.8 Re radius valley
+     (Fulton+2017), 2.3 above. Both bracketing amplitudes are carried in the output as amplitude_1H_ppm_mu2p3/_mu28.
+     Verified: the four overlapping planets now agree with the rocky benchmark to <0.05%.
+  2. label_known. gas_scores() averaged every row of stage_b_lopo_predictions.csv, including the 136 of 265 rows
+     Stage B masks out because the spectrum does not cover that molecule's band. That put numbers in cells Stage B
+     had declined to score: 11 of 39, and for WASP-17 b and WASP-80 b the whole evidence term. Now filtered.
+     Per-molecule coverage falls from 13/13/13 planets to H2O 11, CO2 8, CH4 9.
+  Also, from the same review:
+   - gas_provenance now states in every row that the Stage B model has NO skill above a constant majority
+     prediction at planet level, so the score is not read as a detection.
+   - New column score_vs_verified_label flags a score >= 0.5 against a verified non-detection. Three planets:
+     TRAPPIST-1 c (H2O 0.93, CH4 0.57), K2-18 b (H2O 1.00, CO2 1.00), WASP-39 b (CH4 0.71).
+   - The ablation panel's x-limits were hardcoded to (0.85, 1.0). Harmless before; after the mu fix the weakest
+     ablation is 0.749, so two bars would have been drawn off the axis. Now data-driven.
+  Effect on the results: 10 of 54 planets changed band. The five rocky planets whose observability was most
+  inflated (GJ 1132 b and c, LHS 475 b, LHS 1140 b, L 98-59 f) all fell High -> Medium. Top place moves from
+  TRAPPIST-1 d to TOI-270 d; TRAPPIST-1 keeps four of the top seven on the corrected physics. The ablation
+  ordering changes qualitatively: `small` (0.749) now matters most, not `observable` (0.879) - at a single
+  mu = 2.3 those two terms were partly measuring the same thing.
+  Verification: stage_b_level2 re-run, every pre-existing column byte-identical and its figure unchanged;
+  stage_c re-run; eda/STAGE_C_RESULTS.md updated (top-target table, ablation table, limitations).
+  NOT fixed, still open from the same review: load_run_model ignores the checkpoint's saved `arch` so the four
+  architecture-ablation runs cannot be loaded; Stage C crashes with AttributeError when no views are present;
+  data_manifest still points at absolute D:/Files paths so Stage D cannot run; cnn_lstm's test-eval tensors are
+  not moved to --device; the view cache is validated by file count only.
+

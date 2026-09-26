@@ -166,21 +166,36 @@ be a statement about the observing log, not about the planet.
 
 ### Top targets
 
-| rank | planet | score | R_p (R⊕) | T_eq (K) | 1 H (ppm) | components |
-|---|---|---|---|---|---|---|
-| 1 | TRAPPIST-1 d | 0.886 | 0.79 | 286 | 246 | small+temperate+observable |
-| 2 | TRAPPIST-1 c | 0.880 | 1.10 | 340 | 234 | + evidence |
-| 3 | TRAPPIST-1 b | 0.871 | 1.12 | 398 | 274 | small+temperate+observable |
-| 4 | TRAPPIST-1 e | 0.863 | 0.92 | 250 | 192 | small+temperate+observable |
-| 5 | TRAPPIST-1 f | 0.840 | 1.04 | 218 | 163 | small+temperate+observable |
-| 6 | GJ 1002 b | 0.819 | 1.03 | 231 | 121 | small+temperate+observable |
-| 11 | TOI-270 d | 0.721 | 2.00 | 383 | 49 | + evidence |
+| rank | planet | score | R_p (R⊕) | T_eq (K) | 1 H (ppm) | µ | components |
+|---|---|---|---|---|---|---|---|
+| 1 | TOI-270 d | 0.721 | 2.00 | 383 | 49.0 | 2.3 | + evidence |
+| 2 | TRAPPIST-1 c | 0.717 | 1.10 | 340 | 19.2 | 28 | + evidence |
+| 3 | GJ 1214 b | 0.705 | 2.73 | 567 | 285.3 | 2.3 | small+temperate+observable |
+| 4 | TRAPPIST-1 d | 0.682 | 0.79 | 286 | 20.2 | 28 | small+temperate+observable |
+| 5 | K2-18 b | 0.668 | 2.37 | 284 | 24.3 | 2.3 | + evidence |
+| 6 | TRAPPIST-1 b | 0.668 | 1.12 | 398 | 22.5 | 28 | small+temperate+observable |
+| 7 | TRAPPIST-1 e | 0.659 | 0.92 | 250 | 15.7 | 28 | small+temperate+observable |
+| 8 | GJ 3470 b | 0.652 | 4.57 | 594 | 132.0 | 2.3 | + evidence |
 
-The ranking is dominated by the TRAPPIST-1 system, and the reason is physical rather than
+TRAPPIST-1 still occupies four of the top seven, and the reason is physical rather than
 sentimental: the host is 0.119 R☉, and `A_H = 2·R_p·H/R_s²` scales as 1/R_s². A small rocky
 planet around a very small star produces a *larger* signal than the same planet around a
 Sun-like star. That is precisely why TRAPPIST-1 is the most-observed rocky system in the sky,
 and the score recovers it from first principles without being told.
+
+It no longer sweeps the first six places, and the reason is a **correction made 2026-09-27**: the
+scale-height amplitude previously used µ = 2.3 (H₂/He) for all 54 planets, which overstates one
+scale height by 28/2.3 = 12.2× for a rocky planet with a high-µ secondary atmosphere. µ is now
+assigned per planet — 28 (N₂, Earth-like) below the 1.8 R⊕ radius valley, 2.3 above it — which
+matches what `stage_b_rocky_benchmark` already used for these same planets: GJ 1132 b now reads
+8.75 ppm against the benchmark's 8.75, where before it read 106.6. Ten of the 54 changed band;
+the five rocky planets that lost the most (GJ 1132 b and c, LHS 475 b, LHS 1140 b, L 98-59 f) all
+fell from High to Medium. Both bracketing amplitudes are carried in the table as
+`amplitude_1H_ppm_mu2p3` and `_mu28`.
+
+The 1.8 R⊕ threshold is an assumption and it is load-bearing for one entry: TOI-270 d sits at
+2.00 R⊕, just above it, and takes µ = 2.3. Placing the valley at 2.0 R⊕ instead would move it to
+µ = 28 and drop it out of first place.
 
 Bands are terciles of this sample of 54 (18 High / 18 Medium / 18 Low) — relative to this list,
 not absolute.
@@ -193,18 +208,28 @@ Each contributor dropped in turn, re-scored, compared to the full ranking:
 
 | dropped | weight | Spearman vs full | planets changing band |
 |---|---|---|---|
-| **observable** | 0.30 | **0.907** | 10 |
-| small | 0.25 | 0.923 | 10 |
-| temperate | 0.25 | 0.929 | 12 |
-| evidence | 0.20 | 0.981 | 10 |
+| **small** | 0.25 | **0.749** | 22 |
+| temperate | 0.25 | 0.766 | 21 |
+| observable | 0.30 | 0.879 | 12 |
+| evidence | 0.20 | 0.969 | 10 |
 
-The ranking depends most on **observability** — the one term derived from physics rather than
-preference. `evidence` moves it least (ρ = 0.981), which is a direct consequence of §1: it is
-only present for 13 of 54 planets, so it cannot move a ranking it barely participates in.
+The ranking depends most on **planet size**, then temperature, then observability. Before the µ
+correction above, `observable` looked like the dominant term (ρ = 0.907); at a single µ = 2.3 it
+was inflated for exactly the small planets `small` already favours, so the two terms were partly
+measuring the same thing. With µ assigned per planet they separate, and the preference terms turn
+out to carry more of the ordering than the physics term does — which is worth knowing, because
+preferences are arguable and physics is not.
 
-Useful honesty: no contributor changes the ranking dramatically (all ρ > 0.90). The ordering is
-fairly robust to the exact weights — which also means the weights are not doing heroic work, and
-the result should not be over-interpreted as a finely-tuned optimum.
+`evidence` still moves the ranking least (ρ = 0.969), a direct consequence of §1: it is present
+for only 11 (H₂O), 8 (CO₂) and 9 (CH₄) of 54 planets, so it cannot move a ranking it barely
+participates in. Those counts fell from 13 each on 2026-09-27, when the import was restricted to
+the LOPO rows Stage B could actually evaluate — 136 of 265 rows carry `label_known = False`
+because the spectrum does not cover that molecule's band, and Stage B masks them out of its own
+loss and metrics. Importing their predictions put numbers in cells Stage B had declined to score.
+
+No contributor changes the ranking beyond recognition (ρ ≥ 0.75), so the ordering is reasonably
+robust to the exact weights — which also means the weights are not doing heroic work, and the
+result should not be over-interpreted as a finely-tuned optimum.
 
 ---
 
@@ -227,9 +252,15 @@ the result should not be over-interpreted as a finely-tuned optimum.
 - `evidence` uses the maximum molecular probability, so a planet with one confident detection
   scores the same as one with three. Defensible for "is there anything to look at", crude as
   a chemistry summary.
-- Scale-height amplitudes assume µ = 2.3 (H₂/He) for every planet, inherited from Stage B
-  Level 2. Most doubtful for the rocky TRAPPIST-1 planets — which are also the top of the
-  ranking, so this assumption is load-bearing and is flagged rather than buried.
+- Scale-height amplitudes use µ = 28 (N₂) below 1.8 R⊕ and µ = 2.3 (H₂/He) above it. The
+  threshold is an assumption, not a measurement; `amplitude_1H_ppm_mu2p3` and `_mu28` in the
+  table bracket it, and TOI-270 d's first place depends on which side of it that planet falls.
+- The `evidence` term is a Stage B model output, and Stage B's own conclusion is that the model
+  has **no skill above a constant majority prediction** at planet level. It is a ranking signal,
+  not a detection claim, and `gas_provenance` now says so in every row. Three planets carry a
+  score ≥ 0.5 for a molecule their verified label records as a non-detection — TRAPPIST-1 c
+  (H₂O 0.93, CH₄ 0.57), K2-18 b (H₂O 1.00, CO₂ 1.00) and WASP-39 b (CH₄ 0.71) — and are flagged
+  in the `score_vs_verified_label` column rather than left for a reader to notice.
 - Bands are terciles, so "High" means "top third of these 54", not an absolute standard.
 - Kepler-296 f's transit score is in-sample and is labelled as such; it should not be quoted.
 
