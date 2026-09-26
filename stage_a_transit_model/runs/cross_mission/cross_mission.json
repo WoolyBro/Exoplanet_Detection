@@ -1,0 +1,54 @@
+{
+  "generated_at": "2026-09-26T22:04:05",
+  "note": "PR-AUC must be read against each mission's base rate: Kepler test is ~50% planet-like, TESS test ~87%, so the same PR-AUC means very different things.",
+  "results": [
+    {
+      "trained_on": "Kepler",
+      "evaluated_on": "Kepler",
+      "same_mission": true,
+      "n": 1406,
+      "base_rate": 0.49431009957325744,
+      "roc_auc": 0.915816207793259,
+      "pr_auc": 0.9059602201414626,
+      "acc3": 0.7304409672830725,
+      "p_at_r90": 0.7652811735941321,
+      "pr_auc_lift": 0.41165012056820516
+    },
+    {
+      "trained_on": "Kepler",
+      "evaluated_on": "TESS",
+      "same_mission": false,
+      "n": 855,
+      "base_rate": 0.8596491228070176,
+      "roc_auc": 0.7585714285714286,
+      "pr_auc": 0.9439137059529867,
+      "acc3": 0.3532163742690059,
+      "p_at_r90": 0.9032697547683923,
+      "pr_auc_lift": 0.08426458314596919
+    },
+    {
+      "trained_on": "TESS",
+      "evaluated_on": "Kepler",
+      "same_mission": false,
+      "n": 1406,
+      "base_rate": 0.49431009957325744,
+      "roc_auc": 0.8802416294812251,
+      "pr_auc": 0.8666888202219082,
+      "acc3": 0.6244665718349929,
+      "p_at_r90": 0.7431952662721893,
+      "pr_auc_lift": 0.37237872064865074
+    },
+    {
+      "trained_on": "TESS",
+      "evaluated_on": "TESS",
+      "same_mission": true,
+      "n": 855,
+      "base_rate": 0.8596491228070176,
+      "roc_auc": 0.7842630385487528,
+      "pr_auc": 0.9525862217388503,
+      "acc3": 0.5005847953216375,
+      "p_at_r90": 0.907103825136612,
+      "pr_auc_lift": 0.09293709893183277
+    }
+  ]
+}

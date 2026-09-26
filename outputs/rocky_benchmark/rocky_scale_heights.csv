@@ -1,0 +1,10 @@
+planet,Rp_Rearth,M_Mearth,mass_source,Teq_K,g_ms2,Rs_Rsun,st_spectype,H_km_mu18,A_H_ppm_mu18,H_km_mu28,A_H_ppm_mu28,H_km_mu44,A_H_ppm_mu44
+GJ 1132 b,1.19151465,1.837,measured (catalogue),583.8,12.71,0.2211,M4.5 V,21.2,13.62,13.6,8.75,8.7,5.57
+GJ 341 b,0.88,0.623,estimated M=R^3.7 (catalogue 4.0 M_E is an upper limit),629.0,7.9,0.5066,M1,36.8,3.32,23.6,2.13,15.0,1.36
+GJ 486 b,1.289,2.77,measured (catalogue),696.3,16.37,0.3243,M3.5 V,19.6,6.34,12.6,4.08,8.0,2.59
+L 98-59 c,1.329,2.0,measured (catalogue),526.0,11.12,0.3155,M3 V,21.9,7.68,14.0,4.94,8.9,3.14
+L 98-59 d,1.627,1.64,measured (catalogue),416.0,6.08,0.3155,M3 V,31.6,13.59,20.3,8.74,12.9,5.56
+LHS 1140 b,1.73,5.6,measured (catalogue),226.0,18.37,0.2159,M4.5 V,5.7,5.55,3.7,3.57,2.3,2.27
+LHS 1140 c,1.272,1.91,measured (catalogue),422.0,11.59,0.2159,M4.5 V,16.8,12.08,10.8,7.77,6.9,4.94
+LHS 475 b,0.991,0.941,M-R relation (catalogue),586.0,9.41,0.2789,M3.5 V,28.8,9.65,18.5,6.2,11.8,3.95
+TOI-836 b,1.704,4.53,measured (catalogue),871.0,15.32,0.665,K V,26.3,2.66,16.9,1.71,10.7,1.09

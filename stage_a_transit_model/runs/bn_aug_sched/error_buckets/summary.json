@@ -1,0 +1,24 @@
+{
+  "run": "bn_aug_sched",
+  "views": "kepler_val",
+  "generated_at": "2026-09-26T10:21:13",
+  "recall_target": 0.9,
+  "threshold": 0.6540927886962891,
+  "snr_threshold": 7.1,
+  "noise_cut_oot_mad": 0.1572268344461918,
+  "n_planets": 701,
+  "n_missed": 70,
+  "missed_composition_pct": {
+    "genuine miss": 55.7,
+    "noise-dominated": 21.4,
+    "below detection": 14.3,
+    "unknown": 8.6
+  },
+  "all_planets_composition_pct": {
+    "genuine miss": 74.8,
+    "noise-dominated": 21.5,
+    "below detection": 2.6,
+    "unknown": 1.1
+  },
+  "n_genuine_miss": 39
+}

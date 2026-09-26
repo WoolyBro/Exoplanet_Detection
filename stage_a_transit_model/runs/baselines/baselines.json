@@ -1,0 +1,168 @@
+{
+  "generated_at": "2026-09-25T07:42:13",
+  "seed": 42,
+  "n_train": 6574,
+  "n_val": 1414,
+  "results": {
+    "majority": {
+      "n": 1414,
+      "class_counts": {
+        "FALSE POSITIVE": 713,
+        "CANDIDATE": 288,
+        "CONFIRMED": 413
+      },
+      "accuracy_3class": 0.5042432814710043,
+      "confusion_3class": [
+        [
+          713,
+          0,
+          0
+        ],
+        [
+          288,
+          0,
+          0
+        ],
+        [
+          413,
+          0,
+          0
+        ]
+      ],
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.504     1.000     0.670       713\n     CANDIDATE      0.000     0.000     0.000       288\n     CONFIRMED      0.000     0.000     0.000       413\n\n      accuracy                          0.504      1414\n     macro avg      0.168     0.333     0.223      1414\n  weighted avg      0.254     0.504     0.338      1414\n",
+      "precision_at_recall": [
+        {
+          "target_recall": 0.9,
+          "achievable": true,
+          "precision": 0.4957567185289958,
+          "recall": 1.0,
+          "threshold": 0.0
+        },
+        {
+          "target_recall": 0.95,
+          "achievable": true,
+          "precision": 0.4957567185289958,
+          "recall": 1.0,
+          "threshold": 0.0
+        },
+        {
+          "target_recall": 0.99,
+          "achievable": true,
+          "precision": 0.4957567185289958,
+          "recall": 1.0,
+          "threshold": 0.0
+        }
+      ],
+      "roc_auc_binary": 0.5,
+      "pr_auc_binary": 0.4957567185289958,
+      "roc_auc_3class_macro_ovr": 0.5,
+      "_note": "always predicts FALSE POSITIVE; AUCs are undefined or 0.5 by construction because the score is constant"
+    },
+    "logistic": {
+      "n": 1414,
+      "class_counts": {
+        "FALSE POSITIVE": 713,
+        "CANDIDATE": 288,
+        "CONFIRMED": 413
+      },
+      "accuracy_3class": 0.5954738330975955,
+      "confusion_3class": [
+        [
+          502,
+          105,
+          106
+        ],
+        [
+          101,
+          83,
+          104
+        ],
+        [
+          72,
+          84,
+          257
+        ]
+      ],
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.744     0.704     0.723       713\n     CANDIDATE      0.305     0.288     0.296       288\n     CONFIRMED      0.550     0.622     0.584       413\n\n      accuracy                          0.595      1414\n     macro avg      0.533     0.538     0.535      1414\n  weighted avg      0.598     0.595     0.596      1414\n",
+      "precision_at_recall": [
+        {
+          "target_recall": 0.9,
+          "achievable": true,
+          "precision": 0.5184577522559475,
+          "recall": 0.9015691868758916,
+          "threshold": 0.0013875343138352036
+        },
+        {
+          "target_recall": 0.95,
+          "achievable": true,
+          "precision": 0.5026375282592314,
+          "recall": 0.9514978601997147,
+          "threshold": 1.720208274491597e-05
+        },
+        {
+          "target_recall": 0.99,
+          "achievable": true,
+          "precision": 0.4992836676217765,
+          "recall": 0.9942938659058488,
+          "threshold": 4.4507502067539506e-13
+        }
+      ],
+      "roc_auc_binary": 0.7404589316404335,
+      "pr_auc_binary": 0.6866432048222555,
+      "roc_auc_3class_macro_ovr": 0.6577591732434213
+    },
+    "shape_gbm": {
+      "n": 1414,
+      "class_counts": {
+        "FALSE POSITIVE": 713,
+        "CANDIDATE": 288,
+        "CONFIRMED": 413
+      },
+      "accuracy_3class": 0.7284299858557284,
+      "confusion_3class": [
+        [
+          513,
+          135,
+          65
+        ],
+        [
+          74,
+          164,
+          50
+        ],
+        [
+          34,
+          26,
+          353
+        ]
+      ],
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.826     0.719     0.769       713\n     CANDIDATE      0.505     0.569     0.535       288\n     CONFIRMED      0.754     0.855     0.801       413\n\n      accuracy                          0.728      1414\n     macro avg      0.695     0.715     0.702      1414\n  weighted avg      0.740     0.728     0.731      1414\n",
+      "precision_at_recall": [
+        {
+          "target_recall": 0.9,
+          "achievable": true,
+          "precision": 0.722794959908362,
+          "recall": 0.9001426533523538,
+          "threshold": 0.38503885319894104
+        },
+        {
+          "target_recall": 0.95,
+          "achievable": true,
+          "precision": 0.6865979381443299,
+          "recall": 0.9500713266761769,
+          "threshold": 0.16550233241799633
+        },
+        {
+          "target_recall": 0.99,
+          "achievable": true,
+          "precision": 0.57166392092257,
+          "recall": 0.9900142653352354,
+          "threshold": 0.004156054155554823
+        }
+      ],
+      "roc_auc_binary": 0.8800071226638763,
+      "pr_auc_binary": 0.8669016051788204,
+      "roc_auc_3class_macro_ovr": 0.8771968768258177
+    }
+  }
+}

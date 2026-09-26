@@ -1,0 +1,187 @@
+{
+  "run": "toi_all",
+  "generated_at": "2026-09-17T09:12:05",
+  "features": [
+    "pl_pnum",
+    "st_tmag",
+    "st_tmagerr1",
+    "st_tmagerr2",
+    "st_pmra",
+    "st_pmraerr1",
+    "st_pmraerr2",
+    "st_pmdec",
+    "st_pmdecerr1",
+    "st_pmdecerr2",
+    "pl_tranmid",
+    "pl_tranmiderr1",
+    "pl_tranmiderr2",
+    "pl_orbper",
+    "pl_orbpererr1",
+    "pl_orbpererr2",
+    "pl_trandurh",
+    "pl_trandurherr1",
+    "pl_trandurherr2",
+    "pl_trandep",
+    "pl_trandeperr1",
+    "pl_trandeperr2",
+    "pl_rade",
+    "pl_radeerr1",
+    "pl_radeerr2",
+    "pl_insol",
+    "pl_eqt",
+    "st_dist",
+    "st_disterr1",
+    "st_disterr2",
+    "st_teff",
+    "st_tefferr1",
+    "st_tefferr2",
+    "st_logg",
+    "st_loggerr1",
+    "st_loggerr2",
+    "st_rad",
+    "st_raderr1",
+    "st_raderr2"
+  ],
+  "dropped": {
+    "leaky (mentor-named)": [],
+    "review-flagged (Step 3)": [
+      "toi_created",
+      "rowupdate",
+      "release_date"
+    ],
+    "label/split/id/position": [
+      "tfopwg_disp",
+      "label_harmonized",
+      "split",
+      "star_group_id",
+      "tid",
+      "toi",
+      "toidisplay",
+      "toipfx",
+      "ctoi_alias",
+      "ra",
+      "dec",
+      "rastr",
+      "decstr"
+    ],
+    "non-numeric (text)": [],
+    "empty/constant in train": [
+      "st_tmagsymerr",
+      "st_tmaglim",
+      "raerr1",
+      "raerr2",
+      "rasymerr",
+      "decerr1",
+      "decerr2",
+      "decsymerr",
+      "st_pmrasymerr",
+      "st_pmralim",
+      "st_pmdecsymerr",
+      "st_pmdeclim",
+      "pl_tranmidsymerr",
+      "pl_tranmidlim",
+      "pl_orbpersymerr",
+      "pl_orbperlim",
+      "pl_trandurhsymerr",
+      "pl_trandurhlim",
+      "pl_trandepsymerr",
+      "pl_trandeplim",
+      "pl_radesymerr",
+      "pl_radelim",
+      "pl_insolerr1",
+      "pl_insolerr2",
+      "pl_insolsymerr",
+      "pl_insollim",
+      "pl_eqterr1",
+      "pl_eqterr2",
+      "pl_eqtsymerr",
+      "pl_eqtlim",
+      "st_distsymerr",
+      "st_distlim",
+      "st_teffsymerr",
+      "st_tefflim",
+      "st_loggsymerr",
+      "st_logglim",
+      "st_radsymerr",
+      "st_radlim",
+      "sectors"
+    ]
+  },
+  "rf_params": {
+    "n_estimators": 300,
+    "random_state": 42,
+    "class_weight": "balanced_subsample"
+  },
+  "binary_mapping": "planet-like = CANDIDATE or CONFIRMED; P = P(CANDIDATE) + P(CONFIRMED)",
+  "top_features": {
+    "st_tmag": 0.0506,
+    "pl_tranmid": 0.046,
+    "pl_eqt": 0.0443,
+    "pl_insol": 0.041,
+    "st_disterr2": 0.0384,
+    "st_dist": 0.0374,
+    "st_disterr1": 0.0373,
+    "pl_radeerr2": 0.0352,
+    "pl_orbper": 0.0335,
+    "pl_radeerr1": 0.0319,
+    "pl_trandep": 0.0312,
+    "pl_rade": 0.0306,
+    "pl_trandurh": 0.0304,
+    "pl_trandurherr2": 0.0294,
+    "pl_tranmiderr1": 0.0288
+  },
+  "results": {
+    "val": {
+      "n": 1223,
+      "accuracy_3class": 0.7252657399836467,
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.726     0.290     0.415       210\n     CANDIDATE      0.725     0.940     0.819       798\n     CONFIRMED      0.724     0.353     0.475       215\n\n      accuracy                          0.725      1223\n     macro avg      0.725     0.528     0.570      1223\n  weighted avg      0.725     0.725     0.689      1223\n",
+      "confusion_3class": [
+        [
+          61,
+          146,
+          3
+        ],
+        [
+          22,
+          750,
+          26
+        ],
+        [
+          1,
+          138,
+          76
+        ]
+      ],
+      "accuracy_binary": 0.856909239574816,
+      "roc_auc_binary": 0.8386710854134349,
+      "pr_auc_binary": 0.9547024501315504,
+      "report_binary": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.754     0.248     0.373       210\n   PLANET-LIKE      0.863     0.983     0.919      1013\n\n      accuracy                          0.857      1223\n     macro avg      0.808     0.615     0.646      1223\n  weighted avg      0.844     0.857     0.825      1223\n"
+    },
+    "test": {
+      "n": 1223,
+      "accuracy_3class": 0.7473426001635323,
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.720     0.280     0.403       211\n     CANDIDATE      0.743     0.946     0.832       797\n     CONFIRMED      0.802     0.470     0.592       215\n\n      accuracy                          0.747      1223\n     macro avg      0.755     0.565     0.609      1223\n  weighted avg      0.749     0.747     0.716      1223\n",
+      "confusion_3class": [
+        [
+          59,
+          148,
+          4
+        ],
+        [
+          22,
+          754,
+          21
+        ],
+        [
+          1,
+          113,
+          101
+        ]
+      ],
+      "accuracy_binary": 0.8462796402289452,
+      "roc_auc_binary": 0.8359636963078134,
+      "pr_auc_binary": 0.944782080569198,
+      "report_binary": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.695     0.194     0.304       211\n   PLANET-LIKE      0.854     0.982     0.914      1012\n\n      accuracy                          0.846      1223\n     macro avg      0.774     0.588     0.609      1223\n  weighted avg      0.827     0.846     0.808      1223\n"
+    }
+  }
+}

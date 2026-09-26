@@ -1,0 +1,51 @@
+{
+  "generated_at": "2026-09-26T23:29:19",
+  "n_planets": 54,
+  "weights": {
+    "small": 0.25,
+    "temperate": 0.25,
+    "observable": 0.3,
+    "evidence": 0.2
+  },
+  "transit_scored_by_model": 2,
+  "transit_held_out": 1,
+  "transit_in_sample": 1,
+  "gas_scored_by_model": 13,
+  "o3_scored": 0,
+  "band_counts": {
+    "Low": 18,
+    "Medium": 18,
+    "High": 18
+  },
+  "ablation": [
+    {
+      "dropped": "observable",
+      "weight": 0.3,
+      "spearman_vs_full": 0.9067622169703439,
+      "planets_changing_band": 10,
+      "n_scored": 54
+    },
+    {
+      "dropped": "small",
+      "weight": 0.25,
+      "spearman_vs_full": 0.9226195014103836,
+      "planets_changing_band": 10,
+      "n_scored": 54
+    },
+    {
+      "dropped": "temperate",
+      "weight": 0.25,
+      "spearman_vs_full": 0.9291691182680899,
+      "planets_changing_band": 12,
+      "n_scored": 53
+    },
+    {
+      "dropped": "evidence",
+      "weight": 0.2,
+      "spearman_vs_full": 0.9810170008386064,
+      "planets_changing_band": 10,
+      "n_scored": 54
+    }
+  ],
+  "integrity_note": "The template shipped transit_ML_probability = 0.99 for all 54 planets, which encodes 'confirmed', not a prediction. Cells with no model behind them are left empty here rather than carried forward."
+}

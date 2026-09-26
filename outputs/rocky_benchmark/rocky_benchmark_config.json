@@ -1,0 +1,50 @@
+{
+  "excluded": {
+    "TRAPPIST1b.txt": "provenance unresolved: the Zenodo record names no source; the paper (arXiv:2507.00933) states only that its TRAPPIST-1 b spectrum is contamination-corrected and cites Lim et al. 2023 (NIRISS) for stellar contamination, not as the data source; the file matches no local JWST spectrum (-150 ppm offset, corr -0.18 vs Rathcke 2025 PRISM)",
+    "TRAPPIST1h.txt": "provenance unresolved: the Zenodo record names no source; the paper's only TRAPPIST-1 h reference is Garcia et al. 2022 (HST/WFC3, 1.1-1.7 um), which cannot have produced a 0.69-5.38 um spectrum; no local JWST spectrum exists"
+  },
+  "bands": {
+    "H2O": [
+      [
+        2.5,
+        2.9
+      ]
+    ],
+    "CH4": [
+      [
+        2.2,
+        2.4
+      ],
+      [
+        2.6,
+        3.5
+      ]
+    ],
+    "SO2": [
+      [
+        3.85,
+        4.05
+      ]
+    ],
+    "CO2": [
+      [
+        4.05,
+        4.55
+      ]
+    ],
+    "CO": [
+      [
+        4.35,
+        4.85
+      ]
+    ]
+  },
+  "mu_primary": 28.0,
+  "mu_bracket": {
+    "H2O (steam)": 18.0,
+    "N2 (Earth-like)": 28.0,
+    "CO2 (Venus-like)": 44.0
+  },
+  "cont_window_um": 0.5,
+  "min_points": 3
+}

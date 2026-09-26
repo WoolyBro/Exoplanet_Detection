@@ -1,0 +1,16 @@
+{
+  "run": "bn_aug_sched",
+  "views": "kepler_val",
+  "generated_at": "2026-09-26T10:03:06",
+  "n": 1414,
+  "dims": 64,
+  "dead_units": 1,
+  "perplexity": 30.0,
+  "seed": 0,
+  "knn_accuracy": 0.7807633511264818,
+  "knn_accuracy_shuffled_labels": 0.4462496554143799,
+  "silhouette": 0.1767088621854782,
+  "silhouette_shuffled_labels": -0.007294976618140936,
+  "majority_class_rate": 0.5042432814710043,
+  "verdict": "real structure"
+}

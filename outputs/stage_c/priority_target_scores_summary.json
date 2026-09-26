@@ -1,0 +1,12 @@
+{
+  "generated_at": "2026-09-26T22:32:55",
+  "model_run": "bn_aug_sched",
+  "trained_on": "Kepler 30-minute photometry",
+  "scored_on": "TESS 2-minute photometry (CROSS-MISSION)",
+  "score_column": "transit_ML_probability_TESS_crossmission",
+  "n_attempted": 44,
+  "n_scored": 41,
+  "fraction_ge_0.5": 0.7073170731707317,
+  "median_planet_like": 0.7630518674850464,
+  "caveat": "All targets are confirmed planets, so this is a transfer sanity check with no negative class - it cannot yield precision or recall. Replace with a TESS-trained model once the TOI build finishes."
+}

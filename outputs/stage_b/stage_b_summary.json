@@ -1,0 +1,77 @@
+{
+  "folds": [
+    {
+      "held_out_planet": "GJ 3470 b",
+      "n_spectra": 3,
+      "evaluable_molecules": "H2O, CH4, CO2, SO2"
+    },
+    {
+      "held_out_planet": "HAT-P-18 b",
+      "n_spectra": 3,
+      "evaluable_molecules": "H2O, CO2"
+    },
+    {
+      "held_out_planet": "HAT-P-26 b",
+      "n_spectra": 2,
+      "evaluable_molecules": "H2O, CO2, SO2"
+    },
+    {
+      "held_out_planet": "HD 189733 b",
+      "n_spectra": 2,
+      "evaluable_molecules": "H2O, CH4, CO2, CO"
+    },
+    {
+      "held_out_planet": "HD 209458 b",
+      "n_spectra": 2,
+      "evaluable_molecules": "H2O, CH4, CO2, SO2"
+    },
+    {
+      "held_out_planet": "K2-18 b",
+      "n_spectra": 2,
+      "evaluable_molecules": "H2O, CH4, CO2, CO"
+    },
+    {
+      "held_out_planet": "TOI-270 d",
+      "n_spectra": 8,
+      "evaluable_molecules": "CH4"
+    },
+    {
+      "held_out_planet": "TRAPPIST-1 c",
+      "n_spectra": 3,
+      "evaluable_molecules": "H2O, CH4, CO"
+    },
+    {
+      "held_out_planet": "WASP-107 b",
+      "n_spectra": 11,
+      "evaluable_molecules": "H2O, CH4, CO2, SO2, CO"
+    },
+    {
+      "held_out_planet": "WASP-17 b",
+      "n_spectra": 2,
+      "evaluable_molecules": "H2O"
+    },
+    {
+      "held_out_planet": "WASP-39 b",
+      "n_spectra": 13,
+      "evaluable_molecules": "H2O, CH4, CO2, SO2, CO"
+    },
+    {
+      "held_out_planet": "WASP-52 b",
+      "n_spectra": 1,
+      "evaluable_molecules": "H2O"
+    },
+    {
+      "held_out_planet": "WASP-80 b",
+      "n_spectra": 1,
+      "evaluable_molecules": "CH4"
+    }
+  ],
+  "evaluable_folds": {
+    "H2O": 11,
+    "CH4": 9,
+    "CO2": 8,
+    "SO2": 5,
+    "CO": 5
+  },
+  "grad_check": 1.8982005620926097e-08
+}

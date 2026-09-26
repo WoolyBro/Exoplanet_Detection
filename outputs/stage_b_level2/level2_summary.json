@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-09-26T23:24:05",
+  "n_spectra": 53,
+  "n_planets": 13,
+  "mu_assumed": 2.3,
+  "amplitude_1H_ppm": {
+    "HAT-P-18 b": 350.23184590539165,
+    "HAT-P-26 b": 218.87172657357132,
+    "HD 189733 b": 117.85322364952822,
+    "HD 209458 b": 162.76600909403214,
+    "WASP-17 b": 284.58735951679523,
+    "WASP-39 b": 422.8180166433479,
+    "GJ 3470 b": 131.99423285665708,
+    "WASP-52 b": 403.30095574583135,
+    "WASP-80 b": 191.18495395967273,
+    "K2-18 b": 24.315878553945268,
+    "TRAPPIST-1 c": 233.84616955457577,
+    "WASP-107 b": 576.0326474307537,
+    "TOI-270 d": 48.960671211479195
+  },
+  "band_measurable": {
+    "H2O": 15,
+    "CH4": 32,
+    "SO2": 26,
+    "CO2": 28,
+    "CO": 28
+  },
+  "band_gt3sigma": {
+    "H2O": 11,
+    "CH4": 9,
+    "SO2": 2,
+    "CO2": 20,
+    "CO": 0
+  },
+  "kmeans_vs_physical_split_agreement": 0.7272727272727273,
+  "pca_explained_variance": [
+    0.2534412590212035,
+    0.23736673259643368,
+    0.13284076297359532,
+    0.11252937851544739,
+    0.08403707772657491
+  ],
+  "most_structured_planets": {
+    "WASP-17 b": 3.9934067415529757,
+    "HAT-P-18 b": 3.339005460005364,
+    "WASP-39 b": 2.9307781185794184,
+    "WASP-107 b": 2.884014622658813,
+    "HD 189733 b": 2.67598238603732
+  },
+  "anomaly_note": "ranked by reconstruction error divided by the spectrum's own noise. Raw error correlates with normalised uncertainty at Spearman +0.69, because normalising by A_H inflates the noise of small-amplitude planets; K2-18 b tops the raw ranking for that reason alone.",
+  "caveat": "53 spectra of 13 planets: descriptive only. Clusters are illustrations and anomalies are flags for human inspection, not detections."
+}

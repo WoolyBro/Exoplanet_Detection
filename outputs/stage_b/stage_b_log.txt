@@ -1,0 +1,96 @@
+=== Part 1: dataset ===
+JWST transmission spectra found in metadata: 64; per planet {'GJ 3470 b': 3, 'HAT-P-18 b': 3, 'HAT-P-26 b': 2, 'HD 189733 b': 2, 'HD 209458 b': 2, 'K2-18 b': 4, 'TOI-270 d': 8, 'TRAPPIST-1 c': 3, 'WASP-107 b': 12, 'WASP-17 b': 6, 'WASP-39 b': 17, 'WASP-52 b': 1, 'WASP-80 b': 1}
+dropped (no data inside 1.0-5.0 um): 11
+  WASP-17 b | Grant et al. 2023 | Mid-Infrared Instrument (MIRI) - LRS | 5.12-11.88 um | WASP-17_b_Transmission_WASP_17_b_3.11446_5275_2.tbl
+  WASP-17 b | Grant et al. 2023 | Mid-Infrared Instrument (MIRI) - LRS | 5.12-11.88 um | WASP-17_b_Transmission_WASP_17_b_3.11446_5275_1.tbl
+  WASP-39 b | Powell et al. 2024 | Mid-Infrared Instrument (MIRI) - LRS | 5.12-11.88 um | WASP-39_b_Transmission_WASP_39_b_3.11466_5352_1.tbl
+  WASP-39 b | Powell et al. 2024 | Mid-Infrared Instrument (MIRI) - LRS | 5.12-11.38 um | WASP-39_b_Transmission_WASP_39_b_3.11466_5352_2.tbl
+  WASP-39 b | Powell et al. 2024 | Mid-Infrared Instrument (MIRI) - LRS | 5.12-11.88 um | WASP-39_b_Transmission_WASP_39_b_3.11466_5352_3.tbl
+  WASP-107 b | Welbanks et al. 2024 | Mid-Infrared Instrument (MIRI) - LRS | 5.06-13.63 um | WASP-107_b_Transmission_WASP_107_b_3.12045_5453_1.tbl
+  WASP-39 b | Carter et al. 2024 | Near Infrared Imager and Slitless Spectrograph (NIRISS) | 0.63-0.85 um | WASP-39_b_Transmission_WASP_39_b_3.11466_5502_3.tbl
+  WASP-17 b | Louie et al. 2025 | Near Infrared Imager and Slitless Spectrograph (NIRISS) | 0.63-0.95 um | WASP-17_b_Transmission_WASP_17_b_3.11446_5567_3.tbl
+  WASP-17 b | Louie et al. 2025 | Near Infrared Imager and Slitless Spectrograph (NIRISS) | 0.63-0.86 um | WASP-17_b_Transmission_WASP_17_b_3.11446_5567_1.tbl
+  K2-18 b | Madhusudhan et al. 2025 | Mid-Infrared Instrument (MIRI) - LRS | 5.78-11.79 um | K2-18_b_Transmission_K2_18_b_3.11793_5638_1.tbl
+  K2-18 b | Madhusudhan et al. 2025 | Mid-Infrared Instrument (MIRI) - LRS | 5.78-11.79 um | K2-18_b_Transmission_K2_18_b_3.11793_5638_2.tbl
+usable spectra (with data on the grid): 53 across 13 planets
+usable per planet {'GJ 3470 b': 3, 'HAT-P-18 b': 3, 'HAT-P-26 b': 2, 'HD 189733 b': 2, 'HD 209458 b': 2, 'K2-18 b': 2, 'TOI-270 d': 8, 'TRAPPIST-1 c': 3, 'WASP-107 b': 11, 'WASP-17 b': 2, 'WASP-39 b': 13, 'WASP-52 b': 1, 'WASP-80 b': 1}
+found vs expected mismatches: none
+usable vs expected (usable, expected): {'WASP-39 b': (13, 17), 'WASP-107 b': (11, 12), 'WASP-17 b': (2, 6), 'K2-18 b': (2, 4)}
+artifact rows across all 64 files: all-null 1, all-zero 0, partial-null dropped 0 (raw rows 31747, kept 31746)
+depth source: {'PL_TRANDEP': 64}; rows with missing errors: 0
+bins covered per spectrum: min 1, median 45, max 100
+spectrum-level labels: 189 known before band check; 60 masked because the spectrum does not cover the molecule's band; 129 used
+  H2O: used 31 (pos 26, neg 5), band-masked 13
+  CH4: used 36 (pos 17, neg 19), band-masked 9
+  CO2: used 26 (pos 24, neg 2), band-masked 12
+  SO2: used 17 (pos 15, neg 2), band-masked 14
+  CO: used 19 (pos 17, neg 2), band-masked 12
+
+=== Part 2: leave-one-planet-out folds ===
+held_out_planet  n_spectra    evaluable_molecules
+      GJ 3470 b          3     H2O, CH4, CO2, SO2
+     HAT-P-18 b          3               H2O, CO2
+     HAT-P-26 b          2          H2O, CO2, SO2
+    HD 189733 b          2      H2O, CH4, CO2, CO
+    HD 209458 b          2     H2O, CH4, CO2, SO2
+        K2-18 b          2      H2O, CH4, CO2, CO
+      TOI-270 d          8                    CH4
+   TRAPPIST-1 c          3           H2O, CH4, CO
+     WASP-107 b         11 H2O, CH4, CO2, SO2, CO
+      WASP-17 b          2                    H2O
+      WASP-39 b         13 H2O, CH4, CO2, SO2, CO
+      WASP-52 b          1                    H2O
+      WASP-80 b          1                    CH4
+evaluable folds per molecule: {'H2O': 11, 'CH4': 9, 'CO2': 8, 'SO2': 5, 'CO': 5}
+
+=== Part 3: models ===
+CNN numerical gradient check: worst relative error 1.90e-08
+molecule           model  evaluable_folds  n_pos  n_neg  accuracy  precision  recall    f1  roc_auc  folds_train_single_class                                                      reliability
+     H2O             gbm               11      9      2     0.818      0.818   1.000 0.900    0.500                         0                exploratory: only 2 planets of the minority class
+     H2O             cnn               11      9      2     0.818      0.889   0.889 0.889    0.667                         0                exploratory: only 2 planets of the minority class
+     H2O        baseline               11      9      2     0.818      0.818   1.000 0.900    0.500                         0                exploratory: only 2 planets of the minority class
+     H2O majority_global               11      9      2     0.818      0.818   1.000 0.900    0.500                         0                exploratory: only 2 planets of the minority class
+     CH4             gbm                9      5      4     0.556      0.600   0.600 0.600    0.600                         0                           meaningful (>=3 planets of each class)
+     CH4             cnn                9      5      4     0.556      0.571   0.800 0.667    0.450                         0                           meaningful (>=3 planets of each class)
+     CH4        baseline                9      5      4     0.000      0.000   0.000 0.000    0.000                         0                           meaningful (>=3 planets of each class)
+     CH4 majority_global                9      5      4     0.556      0.556   1.000 0.714    0.500                         0                           meaningful (>=3 planets of each class)
+     CO2             gbm                8      7      1     0.875      0.875   1.000 0.933    0.000                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+     CO2             cnn                8      7      1     0.875      0.875   1.000 0.933    0.143                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+     CO2        baseline                8      7      1     0.875      0.875   1.000 0.933    0.500                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+     CO2 majority_global                8      7      1     0.875      0.875   1.000 0.933    0.500                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+     SO2             gbm                5      4      1     0.600      0.750   0.750 0.750    0.000                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+     SO2             cnn                5      4      1     0.800      0.800   1.000 0.889    0.000                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+     SO2        baseline                5      4      1     0.800      0.800   1.000 0.889    0.500                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+     SO2 majority_global                5      4      1     0.800      0.800   1.000 0.889    0.500                         1 NOT MEANINGFUL: only one example of a class - indicative at best
+      CO             gbm                5      3      2     0.600      0.600   1.000 0.750    0.167                         0                exploratory: only 2 planets of the minority class
+      CO             cnn                5      3      2     0.600      0.667   0.667 0.667    0.667                         0                exploratory: only 2 planets of the minority class
+      CO        baseline                5      3      2     0.600      0.600   1.000 0.750    0.500                         0                exploratory: only 2 planets of the minority class
+      CO majority_global                5      3      2     0.600      0.600   1.000 0.750    0.500                         0                exploratory: only 2 planets of the minority class
+
+spectrum-level (secondary; spectra of one planet are not independent):
+molecule           model  n  n_pos  n_neg  accuracy    f1  roc_auc
+     H2O             gbm 31     26      5     0.839 0.912    0.554
+     H2O             cnn 31     26      5     0.903 0.943    0.808
+     H2O        baseline 31     26      5     0.839 0.912    0.500
+     H2O majority_global 31     26      5     0.839 0.912    0.500
+     CH4             gbm 36     17     19     0.528 0.541    0.560
+     CH4             cnn 36     17     19     0.389 0.450    0.254
+     CH4        baseline 36     17     19     0.000 0.000    0.000
+     CH4 majority_global 36     17     19     0.472 0.642    0.500
+     CO2             gbm 26     24      2     0.923 0.960    0.000
+     CO2             cnn 26     24      2     0.923 0.960    0.396
+     CO2        baseline 26     24      2     0.923 0.960    0.500
+     CO2 majority_global 26     24      2     0.923 0.960    0.500
+     SO2             gbm 17     15      2     0.706 0.828    0.000
+     SO2             cnn 17     15      2     0.882 0.938    0.067
+     SO2        baseline 17     15      2     0.882 0.938    0.500
+     SO2 majority_global 17     15      2     0.882 0.938    0.500
+      CO             gbm 19     17      2     0.789 0.882    0.176
+      CO             cnn 19     17      2     0.842 0.909    0.765
+      CO        baseline 19     17      2     0.895 0.944    0.500
+      CO majority_global 19     17      2     0.895 0.944    0.500
+
+=== Part 4: figure ===
+saved eda/stage_b_spectra_sample.png: ['WASP-39 b (WASP-39_b_Transmission_WASP_39_b_3.11466_5087_1.tbl)', 'K2-18 b (K2-18_b_Transmission_K2_18_b_3.11793_5255_1.tbl)', 'HAT-P-18 b (HAT-P-18_b_Transmission_HAT_P_18_b_3.11001_5041_1.tbl)', 'WASP-80 b (WASP-80_b_Transmission_WASP_80_b_3.11585_5432_1.tbl)']
+
+runtime 106 s

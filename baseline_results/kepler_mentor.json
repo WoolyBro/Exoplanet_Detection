@@ -1,0 +1,131 @@
+{
+  "run": "kepler_mentor",
+  "generated_at": "2026-09-17T09:11:57",
+  "features": [
+    "koi_period",
+    "koi_duration",
+    "koi_depth",
+    "koi_prad",
+    "koi_teq",
+    "koi_insol",
+    "koi_impact",
+    "koi_ror",
+    "koi_dor",
+    "koi_model_snr",
+    "koi_num_transits",
+    "koi_steff",
+    "koi_slogg",
+    "koi_srad"
+  ],
+  "dropped": {
+    "leaky (mentor-named)": [
+      "koi_pdisposition",
+      "koi_fpflag_nt",
+      "koi_fpflag_ss",
+      "koi_fpflag_co",
+      "koi_fpflag_ec",
+      "koi_score"
+    ],
+    "review-flagged (Step 3)": [
+      "kepler_name",
+      "koi_comment",
+      "koi_vet_stat",
+      "koi_vet_date",
+      "koi_disp_prov",
+      "koi_parm_prov",
+      "koi_sparprov",
+      "koi_delivname",
+      "koi_tce_delivname",
+      "koi_datalink_dvr",
+      "koi_datalink_dvs",
+      "koi_fittype"
+    ],
+    "label/split/id/position": [
+      "koi_disposition",
+      "label_harmonized",
+      "split",
+      "star_group_id",
+      "kepid",
+      "kepoi_name",
+      "ra",
+      "dec",
+      "koi_quarters"
+    ]
+  },
+  "rf_params": {
+    "n_estimators": 300,
+    "random_state": 42,
+    "class_weight": "balanced_subsample"
+  },
+  "binary_mapping": "planet-like = CANDIDATE or CONFIRMED; P = P(CANDIDATE) + P(CONFIRMED)",
+  "top_features": {
+    "koi_model_snr": 0.1893,
+    "koi_ror": 0.0925,
+    "koi_prad": 0.0916,
+    "koi_dor": 0.0899,
+    "koi_duration": 0.0676,
+    "koi_period": 0.0662,
+    "koi_num_transits": 0.0656,
+    "koi_depth": 0.0638,
+    "koi_impact": 0.0623,
+    "koi_insol": 0.0502,
+    "koi_teq": 0.0488,
+    "koi_steff": 0.0401,
+    "koi_slogg": 0.0366,
+    "koi_srad": 0.0356
+  },
+  "results": {
+    "val": {
+      "n": 1440,
+      "accuracy_3class": 0.7701388888888889,
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.812     0.828     0.820       728\n     CANDIDATE      0.563     0.498     0.529       297\n     CONFIRMED      0.825     0.863     0.843       415\n\n      accuracy                          0.770      1440\n     macro avg      0.733     0.730     0.731      1440\n  weighted avg      0.764     0.770     0.767      1440\n",
+      "confusion_3class": [
+        [
+          603,
+          86,
+          39
+        ],
+        [
+          112,
+          148,
+          37
+        ],
+        [
+          28,
+          29,
+          358
+        ]
+      ],
+      "accuracy_binary": 0.8173611111111111,
+      "roc_auc_binary": 0.9121197447215705,
+      "pr_auc_binary": 0.908770439726982,
+      "report_binary": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.833     0.799     0.816       728\n   PLANET-LIKE      0.803     0.836     0.819       712\n\n      accuracy                          0.817      1440\n     macro avg      0.818     0.818     0.817      1440\n  weighted avg      0.818     0.817     0.817      1440\n"
+    },
+    "test": {
+      "n": 1434,
+      "accuracy_3class": 0.7531380753138075,
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.796     0.851     0.823       726\n     CANDIDATE      0.538     0.409     0.464       296\n     CONFIRMED      0.788     0.828     0.807       412\n\n      accuracy                          0.753      1434\n     macro avg      0.707     0.696     0.698      1434\n  weighted avg      0.740     0.753     0.744      1434\n",
+      "confusion_3class": [
+        [
+          618,
+          67,
+          41
+        ],
+        [
+          124,
+          121,
+          51
+        ],
+        [
+          34,
+          37,
+          341
+        ]
+      ],
+      "accuracy_binary": 0.8179916317991632,
+      "roc_auc_binary": 0.9128807333737997,
+      "pr_auc_binary": 0.9030256994582533,
+      "report_binary": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.815     0.829     0.822       726\n   PLANET-LIKE      0.822     0.806     0.814       708\n\n      accuracy                          0.818      1434\n     macro avg      0.818     0.818     0.818      1434\n  weighted avg      0.818     0.818     0.818      1434\n"
+    }
+  }
+}

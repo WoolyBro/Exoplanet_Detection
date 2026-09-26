@@ -1,0 +1,321 @@
+{
+  "run": "20260925_063635",
+  "smoke": false,
+  "generated_at": "2026-09-25T06:39:36",
+  "args": {
+    "train_views": "C:\\Users\\ayush\\OneDrive\\Desktop\\VS\\Research\\detection_views\\kepler_train",
+    "val_views": "C:\\Users\\ayush\\OneDrive\\Desktop\\VS\\Research\\detection_views\\kepler_val",
+    "test_views": "C:\\Users\\ayush\\OneDrive\\Desktop\\VS\\Research\\detection_views\\kepler_test",
+    "eval_test": "False",
+    "smoke": "False",
+    "smoke_holdout": "0.15",
+    "limit": "0",
+    "epochs": "60",
+    "batch_size": "64",
+    "lr": "0.001",
+    "weight_decay": "0.0001",
+    "dropout": "0.3",
+    "width": "1.0",
+    "clip": "5.0",
+    "augment": "False",
+    "batchnorm": "True",
+    "scheduler": "False",
+    "monitor": "roc",
+    "patience": "10",
+    "min_delta": "0.0001",
+    "seed": "42",
+    "device": "cpu",
+    "threads": "8",
+    "out": "detection_model\\runs\\bn",
+    "no_save": "False"
+  },
+  "n_train_rows": 6574,
+  "n_val_rows": 1414,
+  "official_train_balance_pct": {
+    "FALSE POSITIVE": 50.6,
+    "CANDIDATE": 20.69,
+    "CONFIRMED": 28.71
+  },
+  "built_subset_balance_pct": {
+    "FALSE POSITIVE": 50.52,
+    "CANDIDATE": 20.38,
+    "CONFIRMED": 29.1
+  },
+  "training": {
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 0.8389325431249675,
+        "val_accuracy_3class": 0.6647807637906648,
+        "val_roc_auc_binary": 0.8509702628783165,
+        "val_pr_auc_binary": 0.843600259291811
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.6672238915869333,
+        "val_accuracy_3class": 0.7171145685997171,
+        "val_roc_auc_binary": 0.8882121913595685,
+        "val_pr_auc_binary": 0.8834595083812169
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.6325340499577013,
+        "val_accuracy_3class": 0.71004243281471,
+        "val_roc_auc_binary": 0.894152413002463,
+        "val_pr_auc_binary": 0.8888841061944376
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.614600090725908,
+        "val_accuracy_3class": 0.7164073550212164,
+        "val_roc_auc_binary": 0.8937782730741297,
+        "val_pr_auc_binary": 0.8927658861522259
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.6047711817963609,
+        "val_accuracy_3class": 0.7178217821782178,
+        "val_roc_auc_binary": 0.8994223839716053,
+        "val_pr_auc_binary": 0.896230023845429
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.6052135911960046,
+        "val_accuracy_3class": 0.7079207920792079,
+        "val_roc_auc_binary": 0.89838199486608,
+        "val_pr_auc_binary": 0.8950544909758342
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.5909471520521108,
+        "val_accuracy_3class": 0.7043847241867044,
+        "val_roc_auc_binary": 0.8989982253362757,
+        "val_pr_auc_binary": 0.8985313206232763
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.587737311147949,
+        "val_accuracy_3class": 0.7220650636492221,
+        "val_roc_auc_binary": 0.9032178034584936,
+        "val_pr_auc_binary": 0.9027264276580497
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.5840306394887202,
+        "val_accuracy_3class": 0.7107496463932107,
+        "val_roc_auc_binary": 0.8995604356029154,
+        "val_pr_auc_binary": 0.8985643536774967
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.5770452664893808,
+        "val_accuracy_3class": 0.7142857142857143,
+        "val_roc_auc_binary": 0.9036339591007037,
+        "val_pr_auc_binary": 0.9012004363025252
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.5727730020157342,
+        "val_accuracy_3class": 0.7107496463932107,
+        "val_roc_auc_binary": 0.9035659336591886,
+        "val_pr_auc_binary": 0.9024243697651002
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.5762995348393338,
+        "val_accuracy_3class": 0.7227722772277227,
+        "val_roc_auc_binary": 0.9043882412022096,
+        "val_pr_auc_binary": 0.9043339965325015
+      },
+      {
+        "epoch": 13,
+        "train_loss": 0.5714182196890266,
+        "val_accuracy_3class": 0.7128712871287128,
+        "val_roc_auc_binary": 0.8986941115977376,
+        "val_pr_auc_binary": 0.9005015374147876
+      },
+      {
+        "epoch": 14,
+        "train_loss": 0.5629328428541572,
+        "val_accuracy_3class": 0.7284299858557284,
+        "val_roc_auc_binary": 0.8952388193184252,
+        "val_pr_auc_binary": 0.896182807351363
+      },
+      {
+        "epoch": 15,
+        "train_loss": 0.5568248814749486,
+        "val_accuracy_3class": 0.7178217821782178,
+        "val_roc_auc_binary": 0.8991182702330671,
+        "val_pr_auc_binary": 0.8951690168942488
+      },
+      {
+        "epoch": 16,
+        "train_loss": 0.5513111755107213,
+        "val_accuracy_3class": 0.7227722772277227,
+        "val_roc_auc_binary": 0.9040861282119513,
+        "val_pr_auc_binary": 0.9013625040434801
+      },
+      {
+        "epoch": 17,
+        "train_loss": 0.547322491997654,
+        "val_accuracy_3class": 0.7107496463932107,
+        "val_roc_auc_binary": 0.9017472534727987,
+        "val_pr_auc_binary": 0.9019416642041104
+      },
+      {
+        "epoch": 18,
+        "train_loss": 0.5331400352195629,
+        "val_accuracy_3class": 0.7206506364922206,
+        "val_roc_auc_binary": 0.8999805927416852,
+        "val_pr_auc_binary": 0.9006602184289199
+      },
+      {
+        "epoch": 19,
+        "train_loss": 0.5462457526077344,
+        "val_accuracy_3class": 0.7256011315417256,
+        "val_roc_auc_binary": 0.9042101746053022,
+        "val_pr_auc_binary": 0.9057372792802019
+      },
+      {
+        "epoch": 20,
+        "train_loss": 0.5297634390372674,
+        "val_accuracy_3class": 0.7206506364922206,
+        "val_roc_auc_binary": 0.9066590904998469,
+        "val_pr_auc_binary": 0.9043397765617138
+      },
+      {
+        "epoch": 21,
+        "train_loss": 0.5212447805312074,
+        "val_accuracy_3class": 0.7263083451202264,
+        "val_roc_auc_binary": 0.8967193730455191,
+        "val_pr_auc_binary": 0.8957983208584792
+      },
+      {
+        "epoch": 22,
+        "train_loss": 0.5132644902733923,
+        "val_accuracy_3class": 0.6966053748231966,
+        "val_roc_auc_binary": 0.8995604356029154,
+        "val_pr_auc_binary": 0.8998828516643543
+      },
+      {
+        "epoch": 23,
+        "train_loss": 0.5109412053835045,
+        "val_accuracy_3class": 0.7213578500707214,
+        "val_roc_auc_binary": 0.9008129040261058,
+        "val_pr_auc_binary": 0.9013801532170029
+      },
+      {
+        "epoch": 24,
+        "train_loss": 0.49282707143755794,
+        "val_accuracy_3class": 0.7256011315417256,
+        "val_roc_auc_binary": 0.9003027132147423,
+        "val_pr_auc_binary": 0.9010239465287565
+      },
+      {
+        "epoch": 25,
+        "train_loss": 0.47902918353821466,
+        "val_accuracy_3class": 0.7050919377652051,
+        "val_roc_auc_binary": 0.8940143613711528,
+        "val_pr_auc_binary": 0.8889996838198849
+      },
+      {
+        "epoch": 26,
+        "train_loss": 0.47068950967881285,
+        "val_accuracy_3class": 0.7503536067892503,
+        "val_roc_auc_binary": 0.8839245877958356,
+        "val_pr_auc_binary": 0.8840396786797933
+      },
+      {
+        "epoch": 27,
+        "train_loss": 0.4716673050690623,
+        "val_accuracy_3class": 0.7065063649222065,
+        "val_roc_auc_binary": 0.8738508202067573,
+        "val_pr_auc_binary": 0.8676665950142868
+      },
+      {
+        "epoch": 28,
+        "train_loss": 0.45461102596764424,
+        "val_accuracy_3class": 0.6881188118811881,
+        "val_roc_auc_binary": 0.8908731865717778,
+        "val_pr_auc_binary": 0.8892705349172575
+      },
+      {
+        "epoch": 29,
+        "train_loss": 0.4402324997105645,
+        "val_accuracy_3class": 0.7128712871287128,
+        "val_roc_auc_binary": 0.8850109941117978,
+        "val_pr_auc_binary": 0.8862059123752566
+      },
+      {
+        "epoch": 30,
+        "train_loss": 0.43664245987401423,
+        "val_accuracy_3class": 0.7241867043847242,
+        "val_roc_auc_binary": 0.8973736177330321,
+        "val_pr_auc_binary": 0.898872547799369
+      }
+    ],
+    "best_epoch": 20,
+    "best_monitor": 0.9066590904998469,
+    "monitor": "val binary ROC-AUC",
+    "n_params": 40371,
+    "class_weights": [
+      0.6598414132289472,
+      1.6353233830845773,
+      1.1454957309635825
+    ]
+  },
+  "val_metrics": {
+    "n": 1414,
+    "class_counts": {
+      "FALSE POSITIVE": 713,
+      "CANDIDATE": 288,
+      "CONFIRMED": 413
+    },
+    "accuracy_3class": 0.7206506364922206,
+    "confusion_3class": [
+      [
+        446,
+        215,
+        52
+      ],
+      [
+        38,
+        205,
+        45
+      ],
+      [
+        11,
+        34,
+        368
+      ]
+    ],
+    "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.901     0.626     0.738       713\n     CANDIDATE      0.452     0.712     0.553       288\n     CONFIRMED      0.791     0.891     0.838       413\n\n      accuracy                          0.721      1414\n     macro avg      0.715     0.743     0.710      1414\n  weighted avg      0.777     0.721     0.730      1414\n",
+    "precision_at_recall": [
+      {
+        "target_recall": 0.9,
+        "achievable": true,
+        "precision": 0.7476303317535545,
+        "recall": 0.9001426533523538,
+        "threshold": 0.5799509882926941
+      },
+      {
+        "target_recall": 0.95,
+        "achievable": true,
+        "precision": 0.7003154574132492,
+        "recall": 0.9500713266761769,
+        "threshold": 0.45181822776794434
+      },
+      {
+        "target_recall": 0.99,
+        "achievable": true,
+        "precision": 0.629193109700816,
+        "recall": 0.9900142653352354,
+        "threshold": 0.09476524591445923
+      }
+    ],
+    "roc_auc_binary": 0.9066590904998469,
+    "pr_auc_binary": 0.9043397765617138,
+    "roc_auc_3class_macro_ovr": 0.899632148258672
+  },
+  "test_metrics": null
+}

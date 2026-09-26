@@ -1,0 +1,16 @@
+{
+  "run": "base_01",
+  "generated_at": "2026-09-25T06:38:26",
+  "architecture": {
+    "dropout": 0.3,
+    "width": 1.0,
+    "batchnorm": false
+  },
+  "recall_target": 0.9,
+  "threshold": 0.6313795447349548,
+  "precision_at_target": 0.722794959908362,
+  "n_val": 1414,
+  "n_false_positives": 713,
+  "n_fooled": 242,
+  "n_rejected": 471
+}

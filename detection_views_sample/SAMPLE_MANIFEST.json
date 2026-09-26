@@ -1,0 +1,70 @@
+{
+  "generated_at": "2026-09-26T23:46:02",
+  "per_class": 14,
+  "seed": 0,
+  "total_files": 252,
+  "total_bytes": 2371807,
+  "purpose": "A committable slice of the full build so the code can be run immediately after cloning. NOT a basis for any result - the reported numbers come from the full view set.",
+  "splits": {
+    "kepler_train": {
+      "n": 42,
+      "bytes": 404403,
+      "by_class": {
+        "FALSE POSITIVE": 14,
+        "CANDIDATE": 14,
+        "CONFIRMED": 14
+      },
+      "of_total": 6574
+    },
+    "kepler_val": {
+      "n": 42,
+      "bytes": 402600,
+      "by_class": {
+        "FALSE POSITIVE": 14,
+        "CANDIDATE": 14,
+        "CONFIRMED": 14
+      },
+      "of_total": 1414
+    },
+    "kepler_test": {
+      "n": 42,
+      "bytes": 396844,
+      "by_class": {
+        "FALSE POSITIVE": 14,
+        "CANDIDATE": 14,
+        "CONFIRMED": 14
+      },
+      "of_total": 1406
+    },
+    "tess_train": {
+      "n": 42,
+      "bytes": 395136,
+      "by_class": {
+        "FALSE POSITIVE": 14,
+        "CANDIDATE": 14,
+        "CONFIRMED": 14
+      },
+      "of_total": 4061
+    },
+    "tess_val": {
+      "n": 42,
+      "bytes": 385907,
+      "by_class": {
+        "FALSE POSITIVE": 14,
+        "CANDIDATE": 14,
+        "CONFIRMED": 14
+      },
+      "of_total": 874
+    },
+    "tess_test": {
+      "n": 42,
+      "bytes": 386917,
+      "by_class": {
+        "FALSE POSITIVE": 14,
+        "CANDIDATE": 14,
+        "CONFIRMED": 14
+      },
+      "of_total": 856
+    }
+  }
+}

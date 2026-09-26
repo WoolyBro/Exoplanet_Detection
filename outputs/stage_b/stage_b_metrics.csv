@@ -1,0 +1,41 @@
+molecule,level,model,evaluable_folds,folds_train_single_class,n,n_pos,n_neg,accuracy,precision,recall,f1,roc_auc,reliability
+H2O,planet,gbm,11,0,11,9,2,0.8181818181818182,0.8181818181818182,1.0,0.9,0.5,exploratory: only 2 planets of the minority class
+H2O,planet,cnn,11,0,11,9,2,0.8181818181818182,0.8888888888888888,0.8888888888888888,0.8888888888888888,0.6666666666666666,exploratory: only 2 planets of the minority class
+H2O,planet,baseline,11,0,11,9,2,0.8181818181818182,0.8181818181818182,1.0,0.9,0.5,exploratory: only 2 planets of the minority class
+H2O,planet,majority_global,11,0,11,9,2,0.8181818181818182,0.8181818181818182,1.0,0.9,0.5,exploratory: only 2 planets of the minority class
+H2O,spectrum,gbm,11,0,31,26,5,0.8387096774193549,0.8387096774193549,1.0,0.9122807017543859,0.5538461538461539,exploratory: only 2 planets of the minority class
+H2O,spectrum,cnn,11,0,31,26,5,0.9032258064516129,0.9259259259259259,0.9615384615384616,0.9433962264150944,0.8076923076923076,exploratory: only 2 planets of the minority class
+H2O,spectrum,baseline,11,0,31,26,5,0.8387096774193549,0.8387096774193549,1.0,0.9122807017543859,0.5,exploratory: only 2 planets of the minority class
+H2O,spectrum,majority_global,11,0,31,26,5,0.8387096774193549,0.8387096774193549,1.0,0.9122807017543859,0.5,exploratory: only 2 planets of the minority class
+CH4,planet,gbm,9,0,9,5,4,0.5555555555555556,0.6,0.6,0.6,0.6000000000000001,meaningful (>=3 planets of each class)
+CH4,planet,cnn,9,0,9,5,4,0.5555555555555556,0.5714285714285714,0.8,0.6666666666666666,0.45,meaningful (>=3 planets of each class)
+CH4,planet,baseline,9,0,9,5,4,0.0,0.0,0.0,0.0,0.0,meaningful (>=3 planets of each class)
+CH4,planet,majority_global,9,0,9,5,4,0.5555555555555556,0.5555555555555556,1.0,0.7142857142857143,0.5,meaningful (>=3 planets of each class)
+CH4,spectrum,gbm,9,0,36,17,19,0.5277777777777778,0.5,0.5882352941176471,0.5405405405405406,0.5603715170278638,meaningful (>=3 planets of each class)
+CH4,spectrum,cnn,9,0,36,17,19,0.3888888888888889,0.391304347826087,0.5294117647058824,0.45,0.2538699690402477,meaningful (>=3 planets of each class)
+CH4,spectrum,baseline,9,0,36,17,19,0.0,0.0,0.0,0.0,0.0,meaningful (>=3 planets of each class)
+CH4,spectrum,majority_global,9,0,36,17,19,0.4722222222222222,0.4722222222222222,1.0,0.6415094339622641,0.5,meaningful (>=3 planets of each class)
+CO2,planet,gbm,8,1,8,7,1,0.875,0.875,1.0,0.9333333333333333,0.0,NOT MEANINGFUL: only one example of a class - indicative at best
+CO2,planet,cnn,8,1,8,7,1,0.875,0.875,1.0,0.9333333333333333,0.14285714285714285,NOT MEANINGFUL: only one example of a class - indicative at best
+CO2,planet,baseline,8,1,8,7,1,0.875,0.875,1.0,0.9333333333333333,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+CO2,planet,majority_global,8,1,8,7,1,0.875,0.875,1.0,0.9333333333333333,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+CO2,spectrum,gbm,8,1,26,24,2,0.9230769230769231,0.9230769230769231,1.0,0.96,0.0,NOT MEANINGFUL: only one example of a class - indicative at best
+CO2,spectrum,cnn,8,1,26,24,2,0.9230769230769231,0.9230769230769231,1.0,0.96,0.39583333333333337,NOT MEANINGFUL: only one example of a class - indicative at best
+CO2,spectrum,baseline,8,1,26,24,2,0.9230769230769231,0.9230769230769231,1.0,0.96,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+CO2,spectrum,majority_global,8,1,26,24,2,0.9230769230769231,0.9230769230769231,1.0,0.96,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,planet,gbm,5,1,5,4,1,0.6,0.75,0.75,0.75,0.0,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,planet,cnn,5,1,5,4,1,0.8,0.8,1.0,0.8888888888888888,0.0,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,planet,baseline,5,1,5,4,1,0.8,0.8,1.0,0.8888888888888888,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,planet,majority_global,5,1,5,4,1,0.8,0.8,1.0,0.8888888888888888,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,spectrum,gbm,5,1,17,15,2,0.7058823529411765,0.8571428571428571,0.8,0.8275862068965517,0.0,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,spectrum,cnn,5,1,17,15,2,0.8823529411764706,0.8823529411764706,1.0,0.9375,0.06666666666666667,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,spectrum,baseline,5,1,17,15,2,0.8823529411764706,0.8823529411764706,1.0,0.9375,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+SO2,spectrum,majority_global,5,1,17,15,2,0.8823529411764706,0.8823529411764706,1.0,0.9375,0.5,NOT MEANINGFUL: only one example of a class - indicative at best
+CO,planet,gbm,5,0,5,3,2,0.6,0.6,1.0,0.75,0.16666666666666666,exploratory: only 2 planets of the minority class
+CO,planet,cnn,5,0,5,3,2,0.6,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666,exploratory: only 2 planets of the minority class
+CO,planet,baseline,5,0,5,3,2,0.6,0.6,1.0,0.75,0.5,exploratory: only 2 planets of the minority class
+CO,planet,majority_global,5,0,5,3,2,0.6,0.6,1.0,0.75,0.5,exploratory: only 2 planets of the minority class
+CO,spectrum,gbm,5,0,19,17,2,0.7894736842105263,0.8823529411764706,0.8823529411764706,0.8823529411764706,0.17647058823529413,exploratory: only 2 planets of the minority class
+CO,spectrum,cnn,5,0,19,17,2,0.8421052631578947,0.9375,0.8823529411764706,0.9090909090909091,0.7647058823529411,exploratory: only 2 planets of the minority class
+CO,spectrum,baseline,5,0,19,17,2,0.8947368421052632,0.8947368421052632,1.0,0.9444444444444444,0.5,exploratory: only 2 planets of the minority class
+CO,spectrum,majority_global,5,0,19,17,2,0.8947368421052632,0.8947368421052632,1.0,0.9444444444444444,0.5,exploratory: only 2 planets of the minority class

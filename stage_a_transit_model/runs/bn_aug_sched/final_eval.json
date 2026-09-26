@@ -1,0 +1,120 @@
+{
+  "run": "bn_aug_sched",
+  "generated_at": "2026-09-25T08:33:52",
+  "architecture": {
+    "dropout": 0.3,
+    "width": 1.0,
+    "batchnorm": true
+  },
+  "seed_spread": {
+    "mean": 0.9121231340521355,
+    "std": 0.0012726182468636466,
+    "n": 4
+  },
+  "validation": {
+    "n": 1414,
+    "class_counts": {
+      "FALSE POSITIVE": 713,
+      "CANDIDATE": 288,
+      "CONFIRMED": 413
+    },
+    "accuracy_3class": 0.7206506364922206,
+    "confusion_3class": [
+      [
+        441,
+        224,
+        48
+      ],
+      [
+        28,
+        224,
+        36
+      ],
+      [
+        10,
+        49,
+        354
+      ]
+    ],
+    "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.921     0.619     0.740       713\n     CANDIDATE      0.451     0.778     0.571       288\n     CONFIRMED      0.808     0.857     0.832       413\n\n      accuracy                          0.721      1414\n     macro avg      0.727     0.751     0.714      1414\n  weighted avg      0.792     0.721     0.732      1414\n",
+    "precision_at_recall": [
+      {
+        "target_recall": 0.9,
+        "achievable": true,
+        "precision": 0.7704517704517705,
+        "recall": 0.9001426533523538,
+        "threshold": 0.6540927886962891
+      },
+      {
+        "target_recall": 0.95,
+        "achievable": true,
+        "precision": 0.7055084745762712,
+        "recall": 0.9500713266761769,
+        "threshold": 0.5037299394607544
+      },
+      {
+        "target_recall": 0.99,
+        "achievable": true,
+        "precision": 0.6134157105030892,
+        "recall": 0.9914407988587732,
+        "threshold": 0.09699831902980804
+      }
+    ],
+    "roc_auc_binary": 0.9142339234873843,
+    "pr_auc_binary": 0.9107690092408958,
+    "roc_auc_3class_macro_ovr": 0.9058993709005677
+  },
+  "test": {
+    "n": 1406,
+    "class_counts": {
+      "FALSE POSITIVE": 711,
+      "CANDIDATE": 283,
+      "CONFIRMED": 412
+    },
+    "accuracy_3class": 0.7304409672830725,
+    "confusion_3class": [
+      [
+        478,
+        207,
+        26
+      ],
+      [
+        24,
+        225,
+        34
+      ],
+      [
+        14,
+        74,
+        324
+      ]
+    ],
+    "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.926     0.672     0.779       711\n     CANDIDATE      0.445     0.795     0.570       283\n     CONFIRMED      0.844     0.786     0.814       412\n\n      accuracy                          0.730      1406\n     macro avg      0.738     0.751     0.721      1406\n  weighted avg      0.805     0.730     0.747      1406\n",
+    "precision_at_recall": [
+      {
+        "target_recall": 0.9,
+        "achievable": true,
+        "precision": 0.7652811735941321,
+        "recall": 0.9007194244604316,
+        "threshold": 0.6014365553855896
+      },
+      {
+        "target_recall": 0.95,
+        "achievable": true,
+        "precision": 0.7266739846322722,
+        "recall": 0.9525179856115108,
+        "threshold": 0.456037312746048
+      },
+      {
+        "target_recall": 0.99,
+        "achievable": true,
+        "precision": 0.6097345132743363,
+        "recall": 0.9913669064748202,
+        "threshold": 0.09288601577281952
+      }
+    ],
+    "roc_auc_binary": 0.915816207793259,
+    "pr_auc_binary": 0.9059602201414626,
+    "roc_auc_3class_macro_ovr": 0.8955478822428473
+  }
+}

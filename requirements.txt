@@ -1,0 +1,41 @@
+# Research environment - direct dependencies
+# ==========================================
+# Rebuilt 2026-09-20 on Python 3.14.7 after the previous environment was lost
+# (the project moved user profiles and nothing was installed any more).
+#
+# INSTALL ALL OF THESE IN ONE COMMAND:
+#
+#     python -m pip install -r requirements.txt
+#
+# Do NOT install them one at a time. lightkurve constrains pandas, so installing
+# it after the others silently DOWNGRADES pandas underneath them (this happened
+# once already - see run_log.txt, "this DOWNGRADED pandas 3.0.5 -> 2.3.3").
+# Resolving the whole set together pins pandas 2.3.3 up front, which is the
+# version every result in run_log.txt was produced under.
+#
+# torch is the CPU build (~124 MB). No nvidia-*/CUDA packages are pulled in;
+# this machine has no usable GPU and the detection model is sized for CPU.
+#
+# For a byte-exact rebuild of the whole tree (76 packages including transitive
+# ones), use requirements-lock.txt instead:
+#
+#     python -m pip install -r requirements-lock.txt
+#
+# What needs what:
+#   lightkurve   preprocessing_pipeline.py (light-curve download, quality masks, flatten)
+#   astropy      stage_b_pipeline.py (IPAC .tbl spectra), pulled in by lightkurve anyway
+#   scikit-learn split_catalogs.py (StratifiedGroupKFold), the RandomForest baseline,
+#                stage_b_pipeline.py (GBM), detection_model/cnn_lstm.py (metrics)
+#   torch        detection_model/cnn_lstm.py
+#   matplotlib   every figure-producing script (all use the Agg backend, no GUI needed)
+#   psutil       preprocessing_pipeline.py memory guard. WITHOUT IT THE GUARD IS
+#                SILENTLY DISABLED and a long build can be OOM-killed mid-star.
+#   numpy/pandas everything
+#   scipy        eda_habitability.py (KS test, Spearman); optional there, required
+#                transitively by scikit-learn and lightkurve
+
+lightkurve==2.6.0
+matplotlib==3.11.2
+psutil==7.2.2
+scikit-learn==1.9.1
+torch==2.14.0

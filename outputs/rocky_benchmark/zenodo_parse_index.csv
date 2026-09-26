@@ -1,0 +1,13 @@
+file,planet,rows,comment_lines,declared_units,column_layout,half_width_zero_rows,dropped_nonpositive_err,catalogue_depth_ppm,median_depth_over_catalogue,numeric_units,wl_min,wl_max,n_points,n_in_grid,grid_bins_covered,resolving_power_median,restarts,before_after_first3
+GJ1132b.txt,GJ 1132 b,64,1,ppm,"centre, half-width, depth, err",64,0,2443.0,1.002,ppm,2.765122,5.163318,64,60,53,101.0,0,
+GJ341b.txt,GJ 341 b,55,1,ppm,"centre, half-width, depth, err",0,0,289.0,0.875,ppm,3.91,4.99,55,55,28,222.0,0,
+GJ486b.txt,GJ 486 b,110,21,ppm,"centre, half-width, depth, err",0,0,1387.1,0.971,ppm,2.867,5.155,110,102,52,203.0,0,
+L98-59c.txt,L 98-59 c,106,1,ppm,"centre, half-width, depth, err",106,0,1486.0,1.074,ppm,2.873,5.0725,106,102,52,205.0,0,
+L98-59d.txt,L 98-59 d,56,1,ppm,"centre, half-width, depth, err",0,0,1445.0,1.349,ppm,2.8768,5.14675,56,53,49,99.0,0,
+LHS1140b-NIRISS.txt,LHS 1140 b,142,1,ppm,"centre, half-width, depth, err",0,0,5380.0,1.045,ppm,0.653384,2.65147,142,98,42,100.0,0,
+LHS1140b-NIRSpec.txt,LHS 1140 b,76,20,ppm,"bin start, bin end, depth, err  (converted: centre=(start+end)/2, half-width=(end-start)/2)",0,0,5380.0,1.017,ppm,1.678,5.1503,76,74,66,66.0,1,"[{""start"": 1.6652, ""end"": 1.6908, ""centre"": 1.678, ""half_width"": 0.012800000000000034}, {""start"": 1.6908, ""end"": 1.7168, ""centre"": 1.7038000000000002, ""half_width"": 0.013000000000000012}, {""start"": 1.7168, ""end"": 1.7433, ""centre"": 1.73005, ""half_width"": 0.013249999999999984}]"
+LHS1140c.txt,LHS 1140 c,142,1,ppm,"centre, half-width, depth, err",0,0,2900.0,0.977,ppm,0.65338,2.65147,142,98,42,100.0,0,
+LHS475b.txt,LHS 475 b,56,1,ppm,"centre, half-width, depth, err",0,0,1101.0,0.971,ppm,2.828709,5.143615,56,52,51,103.0,0,
+TOI836b.txt,TOI-836 b,106,1,ppm,"centre, half-width, depth, err",0,0,580.0,1.045,ppm,2.872809,5.072472,106,102,52,205.0,0,
+TRAPPIST1b.txt,TRAPPIST-1 b,50,1,ppm,"centre, half-width, depth, err",0,0,7378.0,0.965,ppm,0.7101151,2.808919,50,46,46,46.0,0,
+TRAPPIST1h.txt,TRAPPIST-1 h,87,1,ppm,"centre, half-width, depth, err",0,0,3375.0,1.056,ppm,0.68754,5.377918,87,80,76,54.0,0,

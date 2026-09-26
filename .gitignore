@@ -1,0 +1,83 @@
+# =============================================================================
+# What does NOT belong in the repository.
+#
+# The working folder is ~726 MB; this brings the tracked tree to roughly 15 MB.
+# The rule applied throughout: exclude anything that is (a) someone else's to
+# distribute, or (b) regenerable from tracked code plus public archives. Keep
+# everything a reader needs to understand and check the results.
+# =============================================================================
+
+# --- Third-party data: 371 MB, not ours to redistribute ----------------------
+# The mentor's data pack. Obtain it separately; every script reads it read-only
+# through data_manifest.py and none of them modify it.
+exoplanet_research_data/
+
+# --- Regenerable build products: 153 MB, 15,317 files ------------------------
+# One .npz per KOI/TOI (global + local view). Rebuild with, e.g.:
+#   python preprocessing_pipeline.py build-split train --discard-raw --s3
+#   python preprocessing_pipeline.py build-split train --mission TESS --discard-raw --s3
+# progress.jsonl is the per-star checkpoint and is also regenerable, but it is
+# what makes a build resumable - keep a copy outside the repo before deleting.
+detection_views/
+
+# --- Regenerable model cache: 116 MB -----------------------------------------
+# Consolidated view stacks. cnn_lstm.py rebuilds any of these automatically when
+# the number of source .npz files changes.
+stage_a_transit_model/cache/
+
+# --- Sweep checkpoints -------------------------------------------------------
+# 26 .pt files, ~5 MB. The two FINAL models are kept (negated below) so results
+# can be reproduced without re-running the whole sweep; the 20+ exploratory runs
+# are not, since sweep.py regenerates them.
+stage_a_transit_model/runs/*/best.pt
+!stage_a_transit_model/runs/bn_aug_sched/best.pt
+!stage_a_transit_model/runs/tess_bn_aug_sched/best.pt
+
+# --- Large derived data ------------------------------------------------------
+# 20 MB PyATMOS roll-up, rebuilt by the Stage 2 habitability scripts.
+datasets/pyatmos_final.csv
+
+# --- Duplicated split files --------------------------------------------------
+# splits/<mission>/{train,val,test}.csv are byte-equivalent to the rows the master
+# catalogue already carries under its `split` column - verified identical columns,
+# counts and star->KOI mapping. 21.7 MB of pure duplication. Ignored here as well as
+# listed by tools/clean_workspace.py, so they cannot be committed by accident even
+# if they are still on disk.
+splits/kepler/
+splits/tess/
+splits/k2/
+
+# --- Run noise ---------------------------------------------------------------
+stdout_*.txt
+stderr_*.txt
+tess_chain.log
+build_pid.txt
+stage_a_transit_model/logs/
+_cleanup_backup_*/
+
+# --- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# --- Editors / OS ------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# =============================================================================
+# Deliberately TRACKED, despite being outputs:
+#   eda/*.md              the written results
+#   eda/*.png             the figures those results refer to
+#   outputs/**            small result tables (Stage B, Stage C, labels)
+#   detection_model/runs/**/report.json, *.csv, final_eval.json
+#   run_log.txt           the project's running record of decisions and findings
+#   splits/*.csv          the split definitions - without these no result is
+#                         reproducible, because train/val/test membership is read
+#                         from them and never recomputed. ~43 MB; see README for
+#                         how to slim them if the repo needs to be smaller.
+# =============================================================================

@@ -1,0 +1,16 @@
+{
+  "run": "bn_aug_sched",
+  "generated_at": "2026-09-25T08:30:22",
+  "architecture": {
+    "dropout": 0.3,
+    "width": 1.0,
+    "batchnorm": true
+  },
+  "recall_target": 0.9,
+  "threshold": 0.6540927886962891,
+  "precision_at_target": 0.7704517704517705,
+  "n_val": 1414,
+  "n_false_positives": 713,
+  "n_fooled": 188,
+  "n_rejected": 525
+}

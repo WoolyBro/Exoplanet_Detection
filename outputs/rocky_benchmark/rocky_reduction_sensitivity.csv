@@ -1,0 +1,186 @@
+planet,local_file,authors,instrument,molecule,z,z_inflated,delta_ppm,sigma_delta_ppm
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_1.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,2.25,2.25,42.4,18.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_1.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,-1.66,-1.66,-43.1,26.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_1.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-1.71,-1.3,-39.7,23.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_1.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,-0.01,-0.01,-0.2,36.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_2.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,-0.02,-0.02,-0.4,18.5
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_2.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,-0.31,-0.31,-7.9,25.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_2.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-0.91,-0.91,-21.0,23.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_2.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,-1.38,-1.31,-50.1,36.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_3.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,1.01,1.01,18.8,18.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_3.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,-3.23,-3.23,-81.8,25.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_3.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-2.6,-2.17,-59.2,22.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_3.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,1.14,1.14,41.7,36.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_4.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,0.61,0.61,11.2,18.5
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_4.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,-0.34,-0.34,-8.6,25.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_4.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-0.15,-0.15,-3.5,22.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_4.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,-1.11,-1.05,-40.6,36.7
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_5.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,0.95,0.95,18.4,19.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_5.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,-1.36,-1.36,-36.3,26.7
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_5.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-1.1,-0.93,-26.8,24.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_5.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,0.34,0.32,13.2,39.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_6.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,0.31,0.31,5.8,19.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_6.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,0.36,0.36,9.2,25.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_6.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-0.08,-0.08,-1.9,23.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_6.tbl,May et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,-1.62,-1.51,-61.6,38.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_1.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,0.18,0.18,3.5,20.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_1.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-1.73,-1.73,-45.9,26.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_1.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-1.3,-1.12,-31.7,24.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_1.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO,0.55,0.5,21.5,39.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_2.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,0.06,0.06,1.3,19.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_2.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,0.18,0.18,4.7,25.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_2.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,0.11,0.11,2.7,24.7
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_2.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO,-1.73,-1.6,-65.8,38.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_3.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CH4,1.1,1.06,21.1,19.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_3.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,SO2,0.83,0.7,22.5,27.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_3.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO2,1.21,0.93,29.0,24.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_3.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO,-1.22,-0.88,-50.5,41.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_4.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CH4,1.39,1.39,25.4,18.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_4.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,SO2,-0.34,-0.34,-9.6,28.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_4.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO2,1.74,1.6,40.5,23.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_4.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO,1.26,1.26,51.6,41.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_5.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,1.03,1.03,19.1,18.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_5.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-2.45,-2.45,-61.3,25.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_5.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-1.74,-1.39,-38.6,22.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_5.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO,0.74,0.7,26.4,35.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_6.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,0.07,0.07,1.3,18.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_6.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-0.38,-0.38,-9.3,24.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_6.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,0.23,0.23,5.0,22.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_6.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO,-1.2,-1.06,-42.9,35.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_7.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CH4,0.92,0.75,17.1,18.5
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_7.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,SO2,0.98,0.74,25.4,26.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_7.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO2,1.17,0.83,26.2,22.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_7.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO,-0.73,-0.46,-28.2,38.9
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_8.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CH4,1.6,1.6,29.6,18.5
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_8.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,SO2,-1.05,-1.05,-27.3,26.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_8.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO2,2.03,1.98,45.5,22.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_8.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO,1.3,1.3,50.1,38.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_9.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,1.89,1.89,36.6,19.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_9.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-1.22,-1.22,-32.4,26.5
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_9.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-0.97,-0.76,-23.0,23.7
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_9.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO,-0.22,-0.22,-8.4,37.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_10.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,0.05,0.05,1.0,19.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_10.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-0.0,-0.0,-0.1,27.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_10.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-0.45,-0.45,-10.4,23.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_10.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395H,CO,-1.47,-1.24,-54.9,37.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_11.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CH4,1.12,0.94,21.5,19.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_11.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,SO2,1.61,1.22,44.5,27.7
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_11.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO2,0.3,0.22,7.2,23.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_11.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO,-1.56,-1.11,-64.3,41.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_12.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CH4,1.64,1.64,29.2,17.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_12.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,SO2,-0.64,-0.64,-20.2,31.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_12.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO2,1.27,1.27,28.9,22.9
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_12.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec) - G395M,CO,1.1,1.1,41.6,38.0
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_13.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CH4,1.58,1.58,15.1,9.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_13.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),SO2,-0.53,-0.53,-7.1,13.3
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_13.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CO2,0.8,0.71,9.5,11.9
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_13.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CO,-0.58,-0.58,-11.5,19.9
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_14.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CH4,1.82,1.82,16.8,9.2
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_14.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),SO2,-1.5,-1.5,-19.0,12.7
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_14.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CO2,0.58,0.46,6.4,11.1
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_14.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CO,0.03,0.03,0.5,18.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_15.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CH4,2.28,2.22,21.5,9.4
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_15.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),SO2,-0.24,-0.24,-3.4,13.8
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_15.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CO2,-0.15,-0.14,-1.8,11.6
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_15.tbl,Bennett et al. 2025,Near Infrared Spectrograph (NIRSpec),CO,-1.1,-1.05,-21.2,19.2
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_12.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,-1.74,-1.74,-27.1,15.6
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_12.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,-0.37,-0.32,-5.9,16.0
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_11.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,-1.96,-1.91,-24.8,12.6
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_11.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,-0.97,-0.8,-12.6,13.0
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_10.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,1.45,1.45,19.1,13.2
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_10.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,1.1,1.1,15.0,13.5
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_9.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,-1.41,-1.41,-11.6,8.2
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_9.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,-0.13,-0.11,-1.1,8.5
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_8.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,2.42,2.42,30.4,12.6
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_8.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,2.13,2.13,27.3,12.8
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_7.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,2.91,2.91,35.0,12.0
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_7.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,2.73,2.73,33.5,12.2
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_6.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,0.56,0.47,6.8,12.1
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_6.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,0.47,0.45,5.7,12.3
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_5.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,3.14,2.95,22.3,7.1
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_5.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,2.84,2.83,20.6,7.2
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_4.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,0.97,0.97,15.0,15.6
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_4.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,1.16,1.16,18.4,15.8
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_3.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,-1.58,-1.58,-24.4,15.4
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_3.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,-1.04,-1.03,-16.3,15.7
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_2.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,-0.02,-0.02,-0.4,15.1
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_2.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,-0.12,-0.12,-1.8,15.4
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_1.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO2,-0.39,-0.39,-3.5,8.9
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_1.tbl,Kirk et al. 2024,Near Infrared Camera (NIRCam),CO,-0.01,-0.01,-0.1,9.0
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_1.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,3.55,3.14,21.3,6.0
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_1.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,0.83,0.83,6.6,8.0
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_1.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,0.23,0.23,1.7,7.1
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_1.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,-0.37,-0.37,-4.0,11.0
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_2.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,0.64,0.64,5.6,8.7
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_2.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,-1.76,-1.76,-21.8,12.4
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_2.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-0.64,-0.64,-6.7,10.5
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_3.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CH4,0.71,0.47,4.2,5.9
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_3.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),SO2,-1.21,-1.21,-8.9,7.4
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_3.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CO2,-1.16,-0.97,-8.3,7.2
+GJ 486 b,GJ_486_b_Transmission_GJ_486_b_3.12681_5146_3.tbl,Moran et al. 2023,Near Infrared Spectrograph (NIRSpec),CO,-2.58,-2.5,-29.3,11.4
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_1.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,1.56,1.56,16.0,10.3
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_1.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,-0.68,-0.68,-9.7,14.1
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_1.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,0.96,0.96,12.0,12.6
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_1.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,2.25,2.16,51.8,23.0
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_2.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,-0.95,-0.81,-9.7,10.2
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_2.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,-0.44,-0.39,-6.2,13.9
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_2.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,1.15,1.09,14.4,12.5
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_2.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,-1.53,-1.53,-34.2,22.4
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_3.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,2.03,2.03,20.0,9.8
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_3.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,-1.76,-1.76,-24.0,13.6
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_3.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,0.26,0.26,3.2,12.3
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_3.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,1.49,1.29,34.2,23.0
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_4.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,-0.05,-0.04,-0.5,9.8
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_4.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,-0.09,-0.09,-1.3,13.5
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_4.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,0.76,0.75,9.2,12.2
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_4.tbl,Scarsdale et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,-1.61,-1.61,-36.3,22.6
+L 98-59 d,L_98-59_d_Transmission_L_98_59_d_3.12374_5499_1.tbl,Gressier et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,-1.31,-0.99,-23.1,17.6
+L 98-59 d,L_98-59_d_Transmission_L_98_59_d_3.12374_5499_1.tbl,Gressier et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,0.76,0.76,18.4,24.2
+L 98-59 d,L_98-59_d_Transmission_L_98_59_d_3.12374_5499_1.tbl,Gressier et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,0.14,0.13,2.9,21.0
+L 98-59 d,L_98-59_d_Transmission_L_98_59_d_3.12374_5499_1.tbl,Gressier et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,1.74,1.74,61.1,35.2
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5422_1.tbl,Cadieux et al. 2024,Near Infrared Imager and Slitless Spectrograph (NIRISS),H2O,-1.64,-1.46,-54.2,33.1
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5422_1.tbl,Cadieux et al. 2024,Near Infrared Imager and Slitless Spectrograph (NIRISS),CH4,3.69,2.88,71.8,19.5
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_1.tbl,Damiano et al. 2024,Near Infrared Spectrograph (NIRSpec),H2O,0.83,0.66,11.3,13.6
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_1.tbl,Damiano et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,0.63,0.41,6.2,9.9
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_2.tbl,Damiano et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,-0.91,-0.91,-15.7,17.3
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_2.tbl,Damiano et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,-1.0,-0.95,-21.4,21.4
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_2.tbl,Damiano et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,0.63,0.46,13.4,21.3
+LHS 1140 b,LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_2.tbl,Damiano et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,0.73,0.72,24.3,33.3
+LHS 1140 c,LHS_1140_c_Transmission_LHS_1140_c_3.12258_5422_2.tbl,Cadieux et al. 2024,Near Infrared Imager and Slitless Spectrograph (NIRISS),H2O,2.02,1.54,116.7,57.8
+LHS 1140 c,LHS_1140_c_Transmission_LHS_1140_c_3.12258_5422_2.tbl,Cadieux et al. 2024,Near Infrared Imager and Slitless Spectrograph (NIRISS),CH4,-0.72,-0.57,-24.2,33.7
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_2.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,-0.46,-0.43,-5.3,11.6
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_2.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-1.49,-1.41,-23.7,15.9
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_2.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-1.37,-1.24,-18.7,13.7
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_2.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO,9.47,8.36,179.7,19.0
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_1.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,-0.8,-0.8,-7.2,8.9
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_1.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,0.27,0.27,3.2,12.0
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_1.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-0.82,-0.82,-8.9,10.8
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_1.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO,-1.86,-1.86,-33.9,18.3
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_3.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,-0.53,-0.52,-6.3,11.9
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_3.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-1.12,-1.12,-18.7,16.7
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_3.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-1.1,-1.1,-16.6,15.1
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_3.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO,-0.19,-0.19,-4.7,25.0
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_4.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CH4,-0.37,-0.37,-4.8,12.8
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_4.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,SO2,-0.95,-0.95,-15.8,16.5
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_4.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO2,-1.05,-1.05,-17.8,17.0
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_4.tbl,Lustig-Yaeger et al. 2023,Near Infrared Spectrograph (NIRSpec) - G395H,CO,-0.64,-0.64,-16.3,25.6
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_1.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,-0.41,-0.39,-3.8,9.4
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_1.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,1.96,1.96,26.1,13.3
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_1.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,0.45,0.44,5.3,11.9
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_1.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,1.37,1.32,30.8,22.4
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_2.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,0.43,0.43,4.4,10.2
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_2.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,-1.75,-1.6,-24.6,14.0
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_2.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,-1.77,-1.47,-22.3,12.6
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_2.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,1.36,1.16,31.7,23.3
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_3.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,-0.46,-0.45,-4.3,9.3
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_3.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,1.11,1.11,14.8,13.3
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_3.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,0.77,0.73,9.2,11.9
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_3.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,1.33,1.19,30.0,22.5
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_4.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,0.32,0.31,3.1,9.7
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_4.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,-1.34,-1.11,-18.6,13.9
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_4.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,-1.12,-0.9,-14.0,12.5
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_4.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,1.41,1.31,34.1,24.2
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_5.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CH4,0.12,0.11,0.9,6.9
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_5.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),SO2,0.17,0.16,1.6,9.7
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_5.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO2,-0.84,-0.67,-7.3,8.7
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_5.tbl,Alderson et al. 2024,Near Infrared Spectrograph (NIRSpec),CO,1.97,1.71,31.7,16.1

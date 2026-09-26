@@ -1,0 +1,111 @@
+{
+  "run": "toi_mentor",
+  "generated_at": "2026-09-17T09:12:11",
+  "features": [
+    "pl_orbper",
+    "pl_trandurh",
+    "pl_trandep",
+    "pl_rade",
+    "pl_insol",
+    "pl_eqt",
+    "st_tmag",
+    "st_teff",
+    "st_logg",
+    "st_rad"
+  ],
+  "dropped": {
+    "leaky (mentor-named)": [],
+    "review-flagged (Step 3)": [
+      "toi_created",
+      "rowupdate",
+      "release_date"
+    ],
+    "label/split/id/position": [
+      "tfopwg_disp",
+      "label_harmonized",
+      "split",
+      "star_group_id",
+      "tid",
+      "toi",
+      "toidisplay",
+      "toipfx",
+      "ctoi_alias",
+      "ra",
+      "dec",
+      "rastr",
+      "decstr"
+    ]
+  },
+  "rf_params": {
+    "n_estimators": 300,
+    "random_state": 42,
+    "class_weight": "balanced_subsample"
+  },
+  "binary_mapping": "planet-like = CANDIDATE or CONFIRMED; P = P(CANDIDATE) + P(CONFIRMED)",
+  "top_features": {
+    "st_tmag": 0.15,
+    "pl_rade": 0.1029,
+    "pl_eqt": 0.1023,
+    "pl_trandep": 0.0971,
+    "pl_insol": 0.0945,
+    "pl_trandurh": 0.0944,
+    "st_rad": 0.0928,
+    "st_logg": 0.0919,
+    "pl_orbper": 0.0892,
+    "st_teff": 0.0849
+  },
+  "results": {
+    "val": {
+      "n": 1223,
+      "accuracy_3class": 0.7146361406377759,
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.667     0.324     0.436       210\n     CANDIDATE      0.734     0.911     0.813       798\n     CONFIRMED      0.608     0.367     0.458       215\n\n      accuracy                          0.715      1223\n     macro avg      0.669     0.534     0.569      1223\n  weighted avg      0.700     0.715     0.686      1223\n",
+      "confusion_3class": [
+        [
+          68,
+          132,
+          10
+        ],
+        [
+          30,
+          727,
+          41
+        ],
+        [
+          4,
+          132,
+          79
+        ]
+      ],
+      "accuracy_binary": 0.8520032706459526,
+      "roc_auc_binary": 0.8215343393033423,
+      "pr_auc_binary": 0.9478254059819733,
+      "report_binary": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.693     0.248     0.365       210\n   PLANET-LIKE      0.862     0.977     0.916      1013\n\n      accuracy                          0.852      1223\n     macro avg      0.778     0.612     0.641      1223\n  weighted avg      0.833     0.852     0.822      1223\n"
+    },
+    "test": {
+      "n": 1223,
+      "accuracy_3class": 0.7187244480784954,
+      "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.624     0.251     0.358       211\n     CANDIDATE      0.729     0.928     0.817       797\n     CONFIRMED      0.699     0.400     0.509       215\n\n      accuracy                          0.719      1223\n     macro avg      0.684     0.527     0.561      1223\n  weighted avg      0.706     0.719     0.684      1223\n",
+      "confusion_3class": [
+        [
+          53,
+          147,
+          11
+        ],
+        [
+          31,
+          740,
+          26
+        ],
+        [
+          1,
+          128,
+          86
+        ]
+      ],
+      "accuracy_binary": 0.8454619787408013,
+      "roc_auc_binary": 0.803696869790008,
+      "pr_auc_binary": 0.9371711236546104,
+      "report_binary": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.662     0.213     0.323       211\n   PLANET-LIKE      0.856     0.977     0.913      1012\n\n      accuracy                          0.845      1223\n     macro avg      0.759     0.595     0.618      1223\n  weighted avg      0.823     0.845     0.811      1223\n"
+    }
+  }
+}

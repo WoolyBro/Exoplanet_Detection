@@ -1,0 +1,12 @@
+planet,file,authors,instrument,wl_min,wl_max,rows_raw,artifact_all_null,artifact_all_zero,partial_null_dropped,depth_source,rows_kept,n_in_grid,n_missing_err,reason
+WASP-17 b,WASP-17_b_Transmission_WASP_17_b_3.11446_5275_2.tbl,Grant et al. 2023,Mid-Infrared Instrument (MIRI) - LRS,5.125,11.875,28,0,0,0,PL_TRANDEP,28,0,0,no data inside 1.0-5.0 um
+WASP-17 b,WASP-17_b_Transmission_WASP_17_b_3.11446_5275_1.tbl,Grant et al. 2023,Mid-Infrared Instrument (MIRI) - LRS,5.125,11.875,28,0,0,0,PL_TRANDEP,28,0,0,no data inside 1.0-5.0 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5352_1.tbl,Powell et al. 2024,Mid-Infrared Instrument (MIRI) - LRS,5.125,11.875,28,0,0,0,PL_TRANDEP,28,0,0,no data inside 1.0-5.0 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5352_2.tbl,Powell et al. 2024,Mid-Infrared Instrument (MIRI) - LRS,5.125,11.375,26,0,0,0,PL_TRANDEP,26,0,0,no data inside 1.0-5.0 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5352_3.tbl,Powell et al. 2024,Mid-Infrared Instrument (MIRI) - LRS,5.125,11.875,28,0,0,0,PL_TRANDEP,28,0,0,no data inside 1.0-5.0 um
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_1.tbl,Welbanks et al. 2024,Mid-Infrared Instrument (MIRI) - LRS,5.064,13.628,58,0,0,0,PL_TRANDEP,58,0,0,no data inside 1.0-5.0 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5502_3.tbl,Carter et al. 2024,Near Infrared Imager and Slitless Spectrograph (NIRISS),0.63298,0.84841,27,0,0,0,PL_TRANDEP,27,0,0,no data inside 1.0-5.0 um
+WASP-17 b,WASP-17_b_Transmission_WASP_17_b_3.11446_5567_3.tbl,Louie et al. 2025,Near Infrared Imager and Slitless Spectrograph (NIRISS),0.63031,0.94955,705,0,0,0,PL_TRANDEP,705,0,0,no data inside 1.0-5.0 um
+WASP-17 b,WASP-17_b_Transmission_WASP_17_b_3.11446_5567_1.tbl,Louie et al. 2025,Near Infrared Imager and Slitless Spectrograph (NIRISS),0.62905,0.86222,32,0,0,0,PL_TRANDEP,32,0,0,no data inside 1.0-5.0 um
+K2-18 b,K2-18_b_Transmission_K2_18_b_3.11793_5638_1.tbl,Madhusudhan et al. 2025,Mid-Infrared Instrument (MIRI) - LRS,5.77634,11.79137,29,0,0,0,PL_TRANDEP,29,0,0,no data inside 1.0-5.0 um
+K2-18 b,K2-18_b_Transmission_K2_18_b_3.11793_5638_2.tbl,Madhusudhan et al. 2025,Mid-Infrared Instrument (MIRI) - LRS,5.77605,11.7913,29,0,0,0,PL_TRANDEP,29,0,0,no data inside 1.0-5.0 um
