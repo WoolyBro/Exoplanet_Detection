@@ -74,10 +74,14 @@ desktop.ini
 #   eda/*.md              the written results
 #   eda/*.png             the figures those results refer to
 #   outputs/**            small result tables (Stage B, Stage C, labels)
-#   detection_model/runs/**/report.json, *.csv, final_eval.json
+#   stage_a_transit_model/runs/**/report.json, *.csv, final_eval.json
+#   detection_views_sample/  252 real views, so the code runs after a plain clone
 #   run_log.txt           the project's running record of decisions and findings
 #   splits/*.csv          the split definitions - without these no result is
 #                         reproducible, because train/val/test membership is read
 #                         from them and never recomputed. ~43 MB; see README for
 #                         how to slim them if the repo needs to be smaller.
 # =============================================================================
+
+# --- release bundle (uploaded as a Release asset, never committed) ------------
+detection_views_full.zip
