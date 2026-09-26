@@ -116,13 +116,18 @@ ROC-AUC, and the printed numbers should be read as "the pipeline works", nothing
 the sample with `python tools/make_sample_views.py`.
 
 ### 3. Reproduce the real numbers — one ~150 MB download
-The full view set is published as a release asset, [`v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views), because 15,185
+The full view set is published as release assets, [`v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views), because 15,185
 binary files do not belong in git history. Unpack it at the repository root:
 
 ```bash
-gh release download v1.0-views --repo WoolyBro/Exoplanet_Detection   # or download it from the release page
-unzip detection_views_full.zip                                      # creates detection_views/
+gh release download v1.0-views --repo WoolyBro/Exoplanet_Detection   # or use the release page
+for z in views_*.zip; do unzip -o -q "$z"; done                      # creates detection_views/
 ```
+
+The bundle is split by split, so nothing has to be fetched that will not be used — Kepler alone is
+`views_kepler_train.zip` (66 MB), `views_kepler_val.zip` and `views_kepler_test.zip` (14 MB each);
+the TESS three are 42, 9 and 9 MB. `VIEWS_MANIFEST.json` on the release lists the view count in
+each. (It is split because a single 155 MB asset would not upload reliably.)
 
 **Quickest check — no training at all.** Both final checkpoints are committed, so the reported
 test numbers can be regenerated directly from the selected artefact:

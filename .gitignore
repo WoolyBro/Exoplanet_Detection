@@ -83,5 +83,12 @@ desktop.ini
 #                         how to slim them if the repo needs to be smaller.
 # =============================================================================
 
-# --- release bundle (uploaded as a Release asset, never committed) ------------
+# --- release bundles (uploaded as Release assets, never committed) ------------
+# The combined archive, the per-split archives that package_release.py --per-split
+# writes, and the staging files both use. The staging patterns matter: an
+# interrupted run leaves a ~150 MB file behind, and without them `git add -A`
+# would commit it into history permanently.
 detection_views_full.zip
+detection_views_full.tmp
+release_assets/
+*.zip.part
