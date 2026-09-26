@@ -17,6 +17,10 @@ is the machinery that produced them.
 [`run_log.txt`](run_log.txt) is the running record: every build, every result, every bug found
 and what it changed. It is the honest history, including the things that went wrong.
 
+**Reproducing it:** the results above need no download at all — they are committed here. To
+re-run the modelling, fetch the view bundle from [release `v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views) (~150 MB) and
+see [Running this without a 30-hour download](#running-this-without-a-30-hour-download).
+
 ---
 
 ## Headline numbers
@@ -80,7 +84,7 @@ detection_views/             ← 15,317 built views (.npz). Regenerable; not in 
 
 ## Running this without a 30-hour download
 
-The training inputs are 15,185 view files (143 MB) distilled from about **120 GB** of
+The training inputs are 15,185 view files (~150 MB zipped) distilled from about **120 GB** of
 photometry. That 120 GB was streamed and discarded star by star as the views were written, so
 it was never stored — but rebuilding the views from scratch means downloading it again, which
 takes roughly 30 hours. Nobody should have to do that to review the work. Three ways in,
@@ -111,10 +115,23 @@ python stage_a_transit_model/cnn_lstm.py --epochs 3 \
 ROC-AUC, and the printed numbers should be read as "the pipeline works", nothing more. Rebuild
 the sample with `python tools/make_sample_views.py`.
 
-### 3. Reproduce the real numbers — one 143 MB download
-The full view set is published separately (see the release/archive link at the top of this
-repository) because 15,185 binary files do not belong in git history. Unpack it into
-`detection_views/` and every command below reproduces the reported figures:
+### 3. Reproduce the real numbers — one ~150 MB download
+The full view set is published as a release asset, [`v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views), because 15,185
+binary files do not belong in git history. Unpack it at the repository root:
+
+```bash
+gh release download v1.0-views --repo WoolyBro/Exoplanet_Detection   # or download it from the release page
+unzip detection_views_full.zip                                      # creates detection_views/
+```
+
+**Quickest check — no training at all.** Both final checkpoints are committed, so the reported
+test numbers can be regenerated directly from the selected artefact:
+
+```bash
+python stage_a_transit_model/final_eval.py --run stage_a_transit_model/runs/bn_aug_sched
+```
+
+To re-run the modelling itself, every command below reproduces the reported figures:
 
 ```bash
 python stage_a_transit_model/baselines.py
@@ -125,6 +142,12 @@ python stage_b_atmospheres/stage_b_pipeline.py
 python stage_b_atmospheres/stage_b_level2.py
 python stage_c_priority_fusion/build_priority_table.py
 ```
+
+The first four commands need only this repository plus the view bundle. The last three also read
+the mentor's `exoplanet_research_data/` pack, which is not redistributed here (see
+[Data handling](#data-handling)); without it those three exit with a missing-file error. Stage D
+(`stage_d_habitability/`) does not run for anyone yet — its manifest entries still point at
+absolute `D:/Files/...` paths.
 
 ### 4. Rebuild the views from the archives — the 30 hours
 Only needed to verify the view construction itself, not the modelling:
