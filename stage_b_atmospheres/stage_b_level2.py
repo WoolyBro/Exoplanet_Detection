@@ -66,6 +66,11 @@ R_SUN = 6.957e8
 # comparable at all; it is wrong for a genuinely high-metallicity or secondary atmosphere,
 # which is why the planets it is doubtful for are named explicitly in the report.
 MU_H2HE = 2.3
+# For a rocky planet with a high-mu secondary atmosphere, 2.3 is not merely doubtful, it is
+# ruled out: stage_b_rocky_benchmark uses mu = 28 (N2, Earth-like) as its primary value for
+# exactly these planets and brackets it 18-44. Using 2.3 there overstates one scale height by
+# 28/2.3 = 12.2x, so a caller whose planet list mixes types must pass `mu` per planet.
+MU_SECONDARY = 28.0
 
 # Molecular bands and their local continuum windows, in microns.
 BANDS = {
@@ -80,8 +85,15 @@ BANDS = {
 # =========================================================================== #
 # Physics
 # =========================================================================== #
-def planet_parameters(planets: list[str]) -> pd.DataFrame:
-    """Teq, radius, mass and stellar radius for each planet, with scale height derived."""
+def planet_parameters(planets: list[str], mu=MU_H2HE) -> pd.DataFrame:
+    """Teq, radius, mass and stellar radius for each planet, with scale height derived.
+
+    `mu` is the mean molecular weight used for the scale height: either a scalar (the default
+    MU_H2HE = 2.3, correct for the H2/He-dominated planets this module analyses) or a callable
+    taking the radii in Earth radii and returning one mu per planet, for callers whose planet
+    list mixes gas giants with rocky planets. The value used is returned in `mu_assumed`, and
+    both bracketing amplitudes are returned too, so the assumption's size is always visible.
+    """
     cat = pd.read_csv(PARAMS, low_memory=False)
     cols = ["pl_name", "pl_eqt", "pl_rade", "pl_bmasse", "st_rad", "st_teff"]
     sub = cat.loc[cat.pl_name.isin(planets), cols].copy()
@@ -99,13 +111,23 @@ def planet_parameters(planets: list[str]) -> pd.DataFrame:
     teq = sub.pl_eqt.to_numpy()
 
     g = G_GRAV * mp / rp ** 2                     # surface gravity, m/s^2
-    h = K_B * teq / (MU_H2HE * M_U * g)           # atmospheric scale height, m
-    # One scale height of absorption changes the transit depth by ~2 Rp H / Rs^2.
-    a_h = 2 * rp * h / rs ** 2
+    mu_arr = np.asarray(mu(sub.pl_rade.to_numpy()) if callable(mu)
+                        else np.full(len(sub), float(mu)), float)
 
+    def amplitude(mu_values):
+        """Scale height H = kT / (mu m_u g), and one H of absorption ~ 2 Rp H / Rs^2, in ppm."""
+        h = K_B * teq / (mu_values * M_U * g)
+        return h, 2 * rp * h / rs ** 2 * 1e6
+
+    h, a_h = amplitude(mu_arr)
     sub["gravity_ms2"] = g
+    sub["mu_assumed"] = mu_arr
     sub["scale_height_km"] = h / 1e3
-    sub["amplitude_1H_ppm"] = a_h * 1e6
+    sub["amplitude_1H_ppm"] = a_h
+    # Bracket, so no reader has to take one mu on trust: the same quantity under the H2/He and
+    # the N2-secondary assumptions, differing by MU_SECONDARY / MU_H2HE = 12.2x.
+    sub["amplitude_1H_ppm_mu2p3"] = amplitude(np.full(len(sub), MU_H2HE))[1]
+    sub["amplitude_1H_ppm_mu28"] = amplitude(np.full(len(sub), MU_SECONDARY))[1]
     return sub.reset_index(drop=True)
 
 
