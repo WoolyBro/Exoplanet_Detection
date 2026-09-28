@@ -3320,3 +3320,55 @@ Traceback (most recent call last):
     raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
 FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
   D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv
+
+================================================================================
+2026-09-28 - INJECTION-RECOVERY (guide 7.1). The null control is the finding.
+================================================================================
+New: stage_a_transit_model/injection_recovery.py, outputs/injection_recovery/,
+eda/injection_recovery.png, report section 6e.
+
+WHY NOT THE DR25 INJ1 SET: it exists in two forms and neither answers "how complete is
+THIS model?". The injected light curves span ~160,000 targets - an enormous download. The
+recovery table records what the KEPLER PIPELINE recovered, not this model. Injecting
+synthetic transits into real photometry measures this model directly, and mirrors what
+stage_b_rocky_benchmark already does for spectra. Cost: not comparable with published INJ1
+completeness numbers, which is stated in the report.
+
+METHOD: limb-darkened transits (u1=0.4, u2=0.25, b=0.3) injected into real Kepler photometry
+for 25 test-split stars at 8 depths = 200 injections. Injection happens BEFORE detrending with
+its ephemeris handed to the Savitzky-Golay filter, so the filter masks it exactly as it masks a
+real transit; otherwise the detrender eats the signal and the model gets blamed. The star's own
+KOIs are masked out so a recovery cannot be a real planet showing through. Transit shape
+verified curved, not boxy (0.36/0.83/0.94/1.00 across the crossing) - a flat box would be
+easier to detect than any real transit and would flatter the model.
+
+*** THE NULL CONTROL (0 ppm: nothing injected, same star, same random period) ***
+  median score 0.764; 21/25 = 84% scored ABOVE the model's own 0.654 threshold.
+  Two earlier versions of this experiment, run WITHOUT the null, reported "75% recovery flat
+  across 100-6400 ppm" and then "100% recovery at 5 ppm". Both were baseline, not detection.
+  The null is the only reason that is visible. It is now the first row of the table and the
+  recovery-fraction column is reported but deliberately NOT plotted as a completeness curve.
+
+WHAT IT MEANS: the model is a CANDIDATE VETTER, NOT A BLIND TRANSIT SEARCH. Every training
+row - including the FALSE POSITIVEs - is something the Kepler pipeline already flagged as
+transit-like, so an arbitrary fold at a random period is out of distribution and the model has
+no basis for scoring it low. Nothing in the 0.9158 test ROC-AUC reveals this, because that is
+measured on curated KOIs: the vetting task it was trained for. Practical consequence: run this
+model on candidates FROM a transit search, never as the search itself.
+
+THE SIGNAL THAT SURVIVES (paired: each injection against its OWN star's null, which removes
+the per-star offset that swamps the unpaired numbers):
+    5 ppm  +0.0000  13/25 stars   |  80 ppm  +0.0448  17/25
+   10 ppm  -0.0004  12/25         | 160 ppm  +0.1146  22/25
+   20 ppm  +0.0003  14/25         | 320 ppm  +0.1827  24/25
+   40 ppm  -0.0002  12/25
+  Responds from 80 ppm; clear at 160+; a coin flip below 40. An Earth across a Sun-like star
+  is ~84 ppm, so the response threshold sits right at the Earth-analogue boundary - a
+  statement about THIS model on four years of Kepler photometry, not about Kepler's pipeline.
+
+WHY DEPTH IS THE WRONG AXIS: the views are depth-normalised (deepest bin = -1), so absolute
+depth is erased before the model sees anything. What varies with injected depth is whether the
+injection dominates the fold. That is why the first two runs were flat, and why the grid had to
+be pushed down to 5 ppm before the transition appeared.
+
+Checklist 7.1 now reads as done, on its own terms.

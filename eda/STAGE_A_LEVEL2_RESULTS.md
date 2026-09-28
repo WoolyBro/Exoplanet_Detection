@@ -235,6 +235,72 @@ Two "genuine misses" should not be counted as model errors: K07865.01 (R_p 61 R�
 K00971.01 (R_p 134 R⊕). Jupiter is 11 R⊕, so these radii are physically impossible; the model
 scoring them low is more likely correct than the catalogue entry.
 
+## 6e. Injection-recovery, and what the null control exposed (guide 7.1)
+
+Synthetic limb-darkened transits (u1=0.4, u2=0.25, b=0.3) injected into **real Kepler
+photometry** for 25 test-split stars at 8 depths — 200 injections. The signal goes in before
+detrending, with its ephemeris handed to the Savitzky-Golay filter so it is masked exactly as
+a real transit is; otherwise the filter would eat the injection and the model would take the
+blame. The star's own KOIs are masked out, so a recovery cannot be a real planet showing
+through. Code: `stage_a_transit_model/injection_recovery.py`. Figure:
+`eda/injection_recovery.png`.
+
+**This is not the DR25 INJ1 set.** INJ1's injected light curves span ~160,000 targets, and its
+recovery table records what the *Kepler pipeline* recovered, not what this model recovers.
+Injecting directly measures this model, at the cost of not being comparable with published
+INJ1 completeness numbers.
+
+### The null control is the result
+
+| injected depth | median score | "recovered" | **paired excess over that star's own null** | stars responding |
+|---|---|---|---|---|
+| **0 — nothing injected** | **0.764** | **84 %** | — | — |
+| 5 ppm | 0.759 | 84 % | +0.0000 | 13/25 |
+| 10 ppm | 0.759 | 84 % | −0.0004 | 12/25 |
+| 20 ppm | 0.757 | 80 % | +0.0003 | 14/25 |
+| 40 ppm | 0.785 | 84 % | −0.0002 | 12/25 |
+| 80 ppm | 0.857 | 84 % | **+0.0448** | 17/25 |
+| 160 ppm | 0.924 | 92 % | **+0.1146** | **22/25** |
+| 320 ppm | 0.987 | 92 % | **+0.1827** | **24/25** |
+
+**With nothing injected at all, the model scores 84 % of these folds above its own
+90 %-recall threshold, median 0.764.** An earlier version of this experiment, run without the
+0 ppm row, reported "100 % recovery at 5 ppm" — which was entirely baseline. The null is the
+only reason that is visible, and it is why the recovery-fraction column is reported here but
+not plotted as a completeness curve.
+
+### What it means
+
+**The model is a candidate vetter, not a blind transit search.** Every training row — including
+the FALSE POSITIVEs — is something the Kepler pipeline already flagged as transit-like. An
+arbitrary fold at a random period is outside that distribution, so the model has no basis for
+scoring it low. Nothing in the 0.9158 test ROC-AUC reveals this, because that number is
+measured on curated KOIs: the vetting task, which is the task it was trained for.
+
+Practical consequence: this model should be run **on candidates from a transit search**, never
+as the search itself. Pointed at arbitrary ephemerides it will return high scores for noise.
+
+### The signal that survives
+
+Pairing each injection against its own star's null removes the per-star offset and leaves a
+real measurement: the model starts responding at **80 ppm** and responds clearly at 160 ppm
+(22/25 stars) and 320 ppm (24/25). Below 40 ppm it is a coin flip — indistinguishable from
+folded noise.
+
+For scale, an Earth across a Sun-like star is ~84 ppm, so the response threshold sits right at
+the Earth-analogue boundary. That is a statement about this model on four years of Kepler
+photometry, not about Kepler's own pipeline.
+
+### Why depth is the wrong axis, strictly speaking
+
+The views are depth-normalised — the deepest bin is set to −1 — so absolute depth is erased
+before the model sees anything. What actually varies with injected depth is whether the
+injection *dominates the fold*. Two earlier runs of this experiment returned flat recovery
+across 100–6400 ppm for exactly that reason, and the depth grid was pushed down until the
+transition appeared.
+
+---
+
 ## 7. Checklist status (mentor's evaluation & reporting list)
 
 - [x] Splits by star/system, no leakage across folds — verified star-disjoint in code, asserted at load
@@ -247,6 +313,8 @@ scoring them low is more likely correct than the catalogue entry.
 - [x] t-SNE on embeddings, with a measured separability check rather than the picture alone (7.4)
 - [x] False negatives bucketed as undetectable / noise-dominated / genuine, against base rates (7.3)
 - [x] Cross-mission evaluation (7.2) — see Stage C §1b and `TESS_AND_CROSS_MISSION_RESULTS.md`
+- [x] Injection-recovery (7.1) — §6e. Synthetic transits into real photometry rather than the
+      DR25 INJ1 set; the 0 ppm null control is the headline finding
 - [x] TESS views: all three splits built — train 4,061 / val 874 / test 856 (5,791 views, 71 % yield).
       The TESS model and the four-way transfer matrix are in `TESS_AND_CROSS_MISSION_RESULTS.md`.
 - [~] Uncertainty-aware — **done for spectra, not for photometry.** Stage B carries an explicit

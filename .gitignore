@@ -92,3 +92,6 @@ detection_views_full.zip
 detection_views_full.tmp
 release_assets/
 *.zip.part
+
+# injection-recovery run output
+inj_run.log
