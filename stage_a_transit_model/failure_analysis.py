@@ -64,7 +64,14 @@ FLAGS = {
 
 
 def load_run_model(run_dir: Path):
-    """Rebuild the architecture recorded in the run and load its best weights."""
+    """Rebuild the architecture recorded in the run and load its best weights.
+
+    `arch` must be read back too. Without it every checkpoint was rebuilt as the default
+    dual_cnn_lstm, so the architecture-ablation runs (global_cnn, dual_cnn and their seed
+    repeats) failed to load with a state_dict mismatch: those models have no local branch
+    and/or no LSTM, so the tensor names simply are not there. Runs saved before `arch`
+    existed have no such key and correctly fall back to the default.
+    """
     import torch
 
     ckpt = torch.load(run_dir / "best.pt", map_location="cpu", weights_only=False)
@@ -72,10 +79,11 @@ def load_run_model(run_dir: Path):
     dropout = float(saved.get("dropout", 0.3))
     width = float(saved.get("width", 1.0))
     batchnorm = str(saved.get("batchnorm", "False")).lower() in ("true", "1")
-    model = build_model(dropout, batchnorm=batchnorm, width=width)
+    arch = str(saved.get("arch", "dual_cnn_lstm"))
+    model = build_model(dropout, batchnorm=batchnorm, width=width, arch=arch)
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
-    return model, {"dropout": dropout, "width": width, "batchnorm": batchnorm}
+    return model, {"dropout": dropout, "width": width, "batchnorm": batchnorm, "arch": arch}
 
 
 def score_views(model, vs, batch: int = 256) -> np.ndarray:

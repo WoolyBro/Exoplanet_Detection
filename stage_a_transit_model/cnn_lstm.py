@@ -105,13 +105,30 @@ class ViewSet:
                        self.label_index[positions], self.object_id[positions], self.star_id[positions])
 
 
+def _views_fingerprint(files: list[Path]) -> str:
+    """Cheap identity for a set of view files: count, total bytes and newest mtime.
+
+    Not a content hash - reading 15,000 files to decide whether to read 15,000 files would
+    defeat the cache. Total size catches rebuilt arrays of a different length, and the newest
+    mtime catches a rebuild that happens to produce identical sizes. Both come from the
+    directory entries that glob() already walked.
+    """
+    total = newest = 0
+    for f in files:
+        st = f.stat()
+        total += st.st_size
+        newest = max(newest, int(st.st_mtime))
+    return f"n={len(files)};bytes={total};mtime={newest}"
+
+
 def consolidate_views(views_dir: Path, cache: Path | None = None, verbose: bool = True) -> ViewSet:
     """Read every .npz in `views_dir` into one aligned block, caching the result.
 
     Identity comes from each file's own metadata (object_id, star_id), not from the
     file name, so this cannot drift from preprocessing_pipeline's naming rule. The
-    cache is invalidated when the number of .npz files changes, so a resumed build
-    is picked up on the next run.
+    cache is invalidated whenever the file count, the total bytes or the newest mtime
+    changes (see _views_fingerprint), so both a resumed build and a same-count rebuild
+    are picked up on the next run.
 
     The cache is written under stage_a_transit_model/cache/, never into `views_dir`: that
     directory is the build's own output, and preprocessing_pipeline.summarize_build
@@ -124,16 +141,26 @@ def consolidate_views(views_dir: Path, cache: Path | None = None, verbose: bool 
         raise FileNotFoundError(f"no view files in {views_dir}; run preprocessing_pipeline.py build-train first")
 
     cache = cache or MODEL_DIR / "cache" / f"{views_dir.name}_consolidated.npz"
+    # Cache key: the count alone is not enough. Rebuilding a split with the same number of
+    # KOIs - a re-run after a pipeline change, or a resume that replaced failed stars with
+    # successful ones - leaves the count identical while every array differs, and the stale
+    # cache would be reused silently. Total bytes and the newest mtime catch that for a few
+    # milliseconds of stat() calls.
+    fingerprint = _views_fingerprint(files)
     cache.parent.mkdir(parents=True, exist_ok=True)
     if cache.is_file():
         with np.load(cache, allow_pickle=False) as z:
-            if int(z["n_source_files"]) == len(files):
+            cached = str(z["fingerprint"]) if "fingerprint" in z.files else None
+            if cached == fingerprint:
                 if verbose:
                     print(f"  loaded cache {cache.name} ({len(z['object_id'])} rows from {len(files)} view files)")
                 return ViewSet(z["global_view"], z["local_view"], z["label_index"],
                                z["object_id"].astype(str), z["star_id"])
             if verbose:
-                print(f"  cache stale ({int(z['n_source_files'])} -> {len(files)} view files); rebuilding")
+                old = int(z["n_source_files"]) if "n_source_files" in z.files else "?"
+                why = ("no fingerprint: cache predates this check" if cached is None
+                       else f"{old} -> {len(files)} files, or contents changed")
+                print(f"  cache stale ({why}); rebuilding")
 
     gv = np.zeros((len(files), GLOBAL_BINS), np.float32)
     lv = np.zeros((len(files), LOCAL_BINS), np.float32)
@@ -154,7 +181,8 @@ def consolidate_views(views_dir: Path, cache: Path | None = None, verbose: bool 
 
     out = ViewSet(gv, lv, li, np.array(oid, dtype=object).astype(str), np.array(sid, np.int64))
     np.savez_compressed(cache, global_view=gv, local_view=lv, label_index=li,
-                        object_id=out.object_id, star_id=out.star_id, n_source_files=len(files))
+                        object_id=out.object_id, star_id=out.star_id, n_source_files=len(files),
+                        fingerprint=fingerprint)
     if verbose:
         print(f"  consolidated {len(files)} view files in {time.time() - started:.0f}s -> {cache.name}")
     return out
@@ -369,7 +397,13 @@ def threshold_sweep(y_true: np.ndarray, proba: np.ndarray, n_points: int = 201) 
         tn = int(((pred == 0) & (y_bin == 0)).sum())
         prec = tp / (tp + fp) if tp + fp else float("nan")
         rec = tp / (tp + fn) if tp + fn else float("nan")
-        f1 = 2 * prec * rec / (prec + rec) if prec and rec and np.isfinite(prec) and np.isfinite(rec) else float("nan")
+        # F1 is 0 when precision and recall are both defined but the model found nothing;
+        # only an UNDEFINED precision or recall gives NaN. Testing `if prec and rec` made a
+        # genuine zero falsy and punched NaN holes in the published sweep table.
+        if np.isfinite(prec) and np.isfinite(rec):
+            f1 = 2 * prec * rec / (prec + rec) if (prec + rec) > 0 else 0.0
+        else:
+            f1 = float("nan")
         rows.append({"threshold": t, "tp": tp, "fp": fp, "fn": fn, "tn": tn,
                      "precision": prec, "recall": rec, "f1": f1,
                      "accuracy": (tp + tn) / len(y_bin)})
@@ -647,8 +681,11 @@ def main(argv: list[str] | None = None) -> int:
     elif args.test_views.is_dir() and any(args.test_views.glob("*.npz")):
         print("\n[6] official test views found - evaluating once")
         test_vs = drop_unusable(consolidate_views(args.test_views))
-        gte = torch.from_numpy(test_vs.global_view)
-        lte = torch.from_numpy(test_vs.local_view)
+        # .to(args.device): predict() runs the model, which training moved onto args.device.
+        # Leaving these on the CPU crashed with a device mismatch under --device cuda, which
+        # the CPU default hid.
+        gte = torch.from_numpy(test_vs.global_view).to(args.device)
+        lte = torch.from_numpy(test_vs.local_view).to(args.device)
         test_metrics = evaluate(test_vs.label_index.astype(int), predict(gte, lte))
         print(f"  test 3-class accuracy {test_metrics['accuracy_3class']:.3f} | "
               f"binary ROC-AUC {test_metrics['roc_auc_binary']}")

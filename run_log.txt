@@ -2841,3 +2841,273 @@ FIX STEP 5: Overwrite K2 outputs (Kepler/TESS untouched)
   data_manifest still points at absolute D:/Files paths so Stage D cannot run; cnn_lstm's test-eval tensors are
   not moved to --device; the view cache is validated by file count only.
 
+
+================================================================================
+2026-09-28 - Review fixes: 4 code bugs, 1 stale claim, 1 missing artefact
+================================================================================
+
+1. load_run_model ignored the checkpoint's saved `arch` (FIXED)
+   It read dropout, width and batchnorm but not arch, so every checkpoint was rebuilt as
+   the default dual_cnn_lstm. The six architecture-ablation checkpoints (arch_global_cnn,
+   arch_dual_cnn and their seed repeats) have no local branch and/or no LSTM, so those
+   tensor names are absent and load_state_dict raised RuntimeError. Anyone re-scoring them
+   hit a wall; the ablation numbers themselves were always safe, recorded at training time.
+   Verified: all 26 checkpoints now load, 0 failures, each reporting the arch it was
+   trained with. Runs saved before --arch existed have no such key and fall back correctly.
+
+2. --device cuda crashed on the test evaluation (FIXED)
+   cnn_lstm.py built the test tensors with torch.from_numpy(...) and left them on the CPU,
+   while predict() runs a model that training had moved to args.device. The CPU default
+   hid it. Now .to(args.device).
+
+3. The view cache was keyed on file count alone (FIXED)
+   A rebuild that produced the same number of views - a re-run after a pipeline change, or
+   a resume that replaced failed stars with successful ones - silently reused stale arrays.
+   Replaced with _views_fingerprint(): count, total bytes and newest mtime, all from stat()
+   calls glob() already made. Not a content hash: reading 15,000 files to decide whether to
+   read 15,000 files would defeat the cache. Verified by rewriting one file at constant
+   count - the fingerprint changes. Caches written before this have no fingerprint key and
+   are treated as stale, so the first run after this rebuilds them once.
+
+4. threshold_sweep turned a genuine F1 of 0 into NaN (FIXED)
+   `if prec and rec and ...` made a real 0.0 falsy. F1 is now 0.0 when precision and recall
+   are both defined but the model found nothing, and NaN only when one of them is undefined.
+   *** Scope, checked rather than assumed: across all 28 published sweep files, the number
+   of rows carrying this bug is ZERO. Every existing NaN is a row where precision or recall
+   is genuinely undefined (at a threshold where nothing is predicted positive), which is
+   correct. The pathological case needs a score that ranks negatives above positives, which
+   no trained model here produces. The fix removes a latent bug; it corrects no published
+   number, and none were regenerated. ***
+
+5. STALE CLAIM in eda/STAGE_A_LEVEL2_RESULTS.md section 7 (FIXED)
+   The checklist still read "TESS views: train built (4,061 views); val and test in
+   progress". Both were finished on 26 Sep. As written a reader would have taken the whole
+   TESS half as unfinished when the TESS model, its test number and the four-way transfer
+   matrix all exist. Now records all three splits (4,061 / 874 / 856 = 5,791 views).
+
+6. The TESS model had no final_eval.json (FIXED)
+   It had report.json but was never put through final_eval.py, so its test number existed
+   only inside cross_mission.csv while the Kepler model got the formal treatment. Run now:
+     TESS test  ROC-AUC 0.7843 | PR-AUC 0.9526 | 3-class accuracy 0.5006
+     val -> test: ROC-AUC +0.0142, PR-AUC +0.0019, accuracy +0.0303
+   0.7843 matches cross_mission.csv exactly, so the two paths agree. This is not a second
+   look at TESS test: cross_mission.py had already scored it, and this formalises the same
+   evaluation in the same format as Kepler's.
+
+STILL GENUINELY OPEN (declared in the report's own checklist, not silently dropped):
+  * Injection-recovery (INJ1) - the set was never downloaded. Deferred, not attempted.
+  * Flux errors are not propagated into the views. The views carry depth only, so per-cadence
+    uncertainties never reach the model. Closing it means adding an error channel to
+    preprocessing_pipeline.py and rebuilding all 15,185 views.
+
+
+========================================================================================
+STELLARHOSTS DEDUPLICATION (rebuild, stellarhosts.csv)
+========================================================================================
+  manifest role: STAGE_1_SUPPLEMENTARY (reference/cross-check only - NOT a feature source)
+  loaded exoplanet_research_data\03_stellar_parameters\stellarhosts.csv: 47,903 rows x 136 columns
+  unique hostname: 5,243 | stars with >1 row: 4,739 | max rows for one star: 55 (Kepler-11)
+
+  deduplicated: 47,903 -> 5,243 rows
+
+  tie-break resolution (multi-row stars only):
+                 stage  stars_uniquely_decided
+1. core params present                     423
+     2. reference year                    3794
+ 3. most filled fields                     182
+       4. earliest row                     340
+
+  parameter completeness, before vs after:
+    st_teff      rows  82.1% -> stars  89.6%
+    st_rad       rows  80.9% -> stars  89.0%
+    st_mass      rows  61.1% -> stars  95.8%
+    st_logg      rows  67.9% -> stars  66.0%
+    st_spectype  rows   7.5% -> stars  17.6%
+    cb_flag      rows 100.0% -> stars 100.0%
+    all of st_teff+st_rad+st_mass   rows  55.3% -> stars  88.5%
+
+  wrote outputs\derived\stellarhosts_deduplicated.csv (5,243 rows x 136 columns, 4.9 MB)
+  REMINDER: reference and cross-checks only; never join this onto a detection catalog as features.
+
+
+########################################################################################
+# K2 FIX: keep default_flag == 1 only (fix_k2_default_flag.py, run 2026-09-28 14:14:56)
+########################################################################################
+
+========================================================================================
+FIX STEP 1: Filter K2 to default_flag == 1
+========================================================================================
+  file: k2_planets_candidates.csv  (leading '#' comment lines: no)
+  2 row(s) with blank epic_hostname grouped by hostname instead
+  row filter default_flag == 1: 4070 -> 1806 rows
+  1 row(s) with blank epic_hostname grouped by hostname instead
+
+  rows before filter: 4070
+  rows after filter : 1806
+  unique planets (pl_name)      : 1806  (duplicated pl_name rows: 0)
+  unique stars (star_group_id): 1560
+
+  WASP-47 rows after filter: 4 (was 50)
+      epic_hostname    pl_name  default_flag disposition   pl_orbper hostname label_harmonized
+116  EPIC 206103150  WASP-47 b             1   CONFIRMED    4.159151  WASP-47        CONFIRMED
+117  EPIC 206103150  WASP-47 c             1   CONFIRMED  589.570000  WASP-47        CONFIRMED
+118  EPIC 206103150  WASP-47 d             1   CONFIRMED    9.030501  WASP-47        CONFIRMED
+119  EPIC 206103150  WASP-47 e             1   CONFIRMED    0.789610  WASP-47        CONFIRMED
+
+========================================================================================
+FIX STEP 2: Re-split filtered K2 (grouped_stratified_split, unchanged)
+========================================================================================
+  train  1264 rows (70.0%)
+  val     270 rows (15.0%)
+  test    272 rows (15.1%)
+  note: on-disk K2 split is already filtered (fix was applied before)
+
+========================================================================================
+FIX STEP 3: K2 leakage check on the filtered split
+========================================================================================
+  k2      train & val   shared stars: 0 (on raw epic_hostname: 0)  PASS
+  k2      train & test  shared stars: 0 (on raw epic_hostname: 0)  PASS
+  k2        val & test  shared stars: 0 (on raw epic_hostname: 0)  PASS
+
+  K2: all 3 star-ID intersections are empty (train/val, train/test, val/test).
+
+========================================================================================
+FIX STEP 4: K2 class balance, OLD (all solutions) vs NEW (default_flag == 1)
+========================================================================================
+
+  OLD - unfiltered, one row per published solution
+       rows  % rows  stars     CONFIRMED     CANDIDATE FALSE POSITIVE
+split                                                                
+train  2847    70.0   1098  1666 (58.5%)   960 (33.7%)     221 (7.8%)
+val     611    15.0    230   357 (58.4%)   207 (33.9%)      47 (7.7%)
+test    612    15.0    232   358 (58.5%)   207 (33.8%)      47 (7.7%)
+all    4070   100.0   1560  2381 (58.5%)  1374 (33.8%)     315 (7.7%)
+
+  NEW - default_flag == 1, one row per planet
+       rows  % rows  stars    CONFIRMED    CANDIDATE FALSE POSITIVE
+split                                                              
+train  1264    70.0   1091  406 (32.1%)  682 (54.0%)    176 (13.9%)
+val     270    15.0    235   87 (32.2%)  147 (54.4%)     36 (13.3%)
+test    272    15.1    234   87 (32.0%)  147 (54.0%)     38 (14.0%)
+all    1806   100.0   1560  580 (32.1%)  976 (54.0%)    250 (13.8%)
+
+  Side by side
+        OLD                                                           NEW                                                      
+       rows % rows stars     CONFIRMED     CANDIDATE FALSE POSITIVE  rows % rows stars    CONFIRMED    CANDIDATE FALSE POSITIVE
+split                                                                                                                          
+train  2847   70.0  1098  1666 (58.5%)   960 (33.7%)     221 (7.8%)  1264   70.0  1091  406 (32.1%)  682 (54.0%)    176 (13.9%)
+val     611   15.0   230   357 (58.4%)   207 (33.9%)      47 (7.7%)   270   15.0   235   87 (32.2%)  147 (54.4%)     36 (13.3%)
+test    612   15.0   232   358 (58.5%)   207 (33.8%)      47 (7.7%)   272   15.1   234   87 (32.0%)  147 (54.0%)     38 (14.0%)
+all    4070  100.0  1560  2381 (58.5%)  1374 (33.8%)     315 (7.7%)  1806  100.0  1560  580 (32.1%)  976 (54.0%)    250 (13.8%)
+
+========================================================================================
+FIX STEP 5: Overwrite K2 outputs (Kepler/TESS untouched)
+========================================================================================
+  wrote splits\k2_planets_candidates_split.csv  (1806 rows)
+  wrote splits\k2\train.csv  (1264 rows)
+  wrote splits\k2\val.csv  (270 rows)
+  wrote splits\k2\test.csv  (272 rows)
+  appended this output to run_log.txt
+
+
+########################################################################################
+# INARA DERIVED-COLUMN AUDIT (audit_inara_leakage.py, run 2026-09-28 14:22:45)
+########################################################################################
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\audit_inara_leakage.py", line 350, in <lambda>
+    run_logged(lambda: main(write=not dry), append_to_log=not dry)
+                       ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\audit_inara_leakage.py", line 161, in main
+    df = dm.load_stage2_catalogs()[INARA_FILE]
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 220, in load_stage2_catalogs
+    return _load_role("STAGE_2_TRAINING")
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 198, in _load_role
+    raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
+FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
+  D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv
+
+
+########################################################################################
+# PYATMOS FIX: replace run_summary_final.csv with pyatmos_final.csv (build_pyatmos_final.py, run 2026-09-28 14:22:46)
+########################################################################################
+
+========================================================================================
+STEP 1: Load pyatmos_summary.csv
+========================================================================================
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\build_pyatmos_final.py", line 75, in main
+    summary = pd.read_csv(SUMMARY_CSV, low_memory=False)
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ~~~~~~~~~~^
+        f,
+        ^^
+    ...<6 lines>...
+        storage_options=self.options.get("storage_options", None),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+        handle,
+    ...<3 lines>...
+        newline="",
+    )
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\ayush\\Downloads\\pyatmos_summary.csv'
+
+
+########################################################################################
+# STAGE 2 HABITABILITY EDA (eda_habitability.py, run 2026-09-28 14:22:48)
+########################################################################################
+
+========================================================================================
+LOAD via data_manifest.load_stage2_catalogs()
+========================================================================================
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\eda_habitability.py", line 90, in main
+    frames = dm.load_stage2_catalogs()
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 220, in load_stage2_catalogs
+    return _load_role("STAGE_2_TRAINING")
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 198, in _load_role
+    raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
+FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
+  D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv
+
+
+########################################################################################
+# HABITABILITY DATA PREP (prepare_habitability_data.py, run 2026-09-28 14:22:51)
+########################################################################################
+
+========================================================================================
+STEP 1: Load INARA via data_manifest.load_stage2_catalogs()
+========================================================================================
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\prepare_habitability_data.py", line 283, in main
+    inara = dm.load_stage2_catalogs()[INARA_FILE]
+            ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 220, in load_stage2_catalogs
+    return _load_role("STAGE_2_TRAINING")
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 198, in _load_role
+    raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
+FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
+  D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv

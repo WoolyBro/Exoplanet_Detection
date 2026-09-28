@@ -246,10 +246,14 @@ scoring them low is more likely correct than the catalogue entry.
 - [x] Staged architecture ablation (5.1 plain CNN → 6.1 local view → 6.2 LSTM)
 - [x] t-SNE on embeddings, with a measured separability check rather than the picture alone (7.4)
 - [x] False negatives bucketed as undetectable / noise-dominated / genuine, against base rates (7.3)
-- [x] Cross-mission evaluation (7.2) — see Stage C §1b; the result is a **failure** worth reading
-- [ ] Uncertainty-aware: flux errors are **not** yet propagated into the views (open item)
-- [ ] Injection-recovery (INJ1) through the trained model (7.1) — not yet run
-- [~] TESS views: **train built** (4,061 views, 71 % yield); val and test in progress
+- [x] Cross-mission evaluation (7.2) — see Stage C §1b and `TESS_AND_CROSS_MISSION_RESULTS.md`
+- [x] TESS views: all three splits built — train 4,061 / val 874 / test 856 (5,791 views, 71 % yield).
+      The TESS model and the four-way transfer matrix are in `TESS_AND_CROSS_MISSION_RESULTS.md`.
+- [ ] Uncertainty-aware: flux errors are **not** propagated into the views. The views carry
+      depth only, so the per-cadence uncertainties never reach the model. Closing this means
+      adding an error channel in `preprocessing_pipeline.py` and rebuilding all 15,185 views.
+- [ ] Injection-recovery (INJ1) through the trained model (7.1) — the INJ1 set was never
+      downloaded, so this is deferred rather than attempted and unfinished.
 
 ---
 
