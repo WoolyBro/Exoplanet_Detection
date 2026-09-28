@@ -3217,3 +3217,106 @@ FIX STEP 5: Overwrite K2 outputs (Kepler/TESS untouched)
   wrote splits\k2\val.csv  (270 rows)
   wrote splits\k2\test.csv  (272 rows)
   appended this output to run_log.txt
+
+
+########################################################################################
+# INARA DERIVED-COLUMN AUDIT (audit_inara_leakage.py, run 2026-09-28 14:35:07)
+########################################################################################
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\audit_inara_leakage.py", line 350, in <lambda>
+    run_logged(lambda: main(write=not dry), append_to_log=not dry)
+                       ~~~~^^^^^^^^^^^^^^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\audit_inara_leakage.py", line 161, in main
+    df = dm.load_stage2_catalogs()[INARA_FILE]
+         ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 216, in load_stage2_catalogs
+    return _load_role("STAGE_2_TRAINING")
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 194, in _load_role
+    raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
+FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
+  D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv
+
+
+########################################################################################
+# PYATMOS FIX: replace run_summary_final.csv with pyatmos_final.csv (build_pyatmos_final.py, run 2026-09-28 14:35:09)
+########################################################################################
+
+========================================================================================
+STEP 1: Load pyatmos_summary.csv
+========================================================================================
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\build_pyatmos_final.py", line 75, in main
+    summary = pd.read_csv(SUMMARY_CSV, low_memory=False)
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+                   ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\parsers\readers.py", line 1880, in _make_engine
+    self.handles = get_handle(
+                   ~~~~~~~~~~^
+        f,
+        ^^
+    ...<6 lines>...
+        storage_options=self.options.get("storage_options", None),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\ayush\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\pandas\io\common.py", line 873, in get_handle
+    handle = open(
+        handle,
+    ...<3 lines>...
+        newline="",
+    )
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\ayush\\Downloads\\pyatmos_summary.csv'
+
+
+########################################################################################
+# STAGE 2 HABITABILITY EDA (eda_habitability.py, run 2026-09-28 14:35:12)
+########################################################################################
+
+========================================================================================
+LOAD via data_manifest.load_stage2_catalogs()
+========================================================================================
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\eda_habitability.py", line 90, in main
+    frames = dm.load_stage2_catalogs()
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 216, in load_stage2_catalogs
+    return _load_role("STAGE_2_TRAINING")
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 194, in _load_role
+    raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
+FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
+  D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv
+
+
+########################################################################################
+# HABITABILITY DATA PREP (prepare_habitability_data.py, run 2026-09-28 14:35:15)
+########################################################################################
+
+========================================================================================
+STEP 1: Load INARA via data_manifest.load_stage2_catalogs()
+========================================================================================
+Traceback (most recent call last):
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\research_log.py", line 52, in run_logged
+    main()
+    ~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\stage_d_habitability\prepare_habitability_data.py", line 283, in main
+    inara = dm.load_stage2_catalogs()[INARA_FILE]
+            ~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 216, in load_stage2_catalogs
+    return _load_role("STAGE_2_TRAINING")
+  File "C:\Users\ayush\OneDrive\Desktop\VS\Research\data_manifest.py", line 194, in _load_role
+    raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
+FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
+  D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv
