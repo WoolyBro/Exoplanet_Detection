@@ -98,7 +98,10 @@ TESS partly because it distrusts exactly the deep short-period signals TESS is f
   is the only operating-point statistic worth quoting there, and even that starts at 0.87.
 - The TESS model was trained with the configuration that won on Kepler. It was **not**
   independently swept, so it is a fair comparison but not necessarily TESS's best possible model.
-- TESS test has been evaluated once, here. It is now spent for this model.
+- TESS test has been evaluated once, here. It is now spent for this model. The formal
+  record is `runs/tess_bn_aug_sched/final_eval.json` (ROC-AUC 0.7843, PR-AUC 0.9526,
+  3-class accuracy 0.5006) — the same numbers `cross_mission.csv` reports, produced through
+  the same `final_eval.py` path the Kepler model went through, so the two are comparable.
 
 ---
 
