@@ -249,9 +249,12 @@ scoring them low is more likely correct than the catalogue entry.
 - [x] Cross-mission evaluation (7.2) — see Stage C §1b and `TESS_AND_CROSS_MISSION_RESULTS.md`
 - [x] TESS views: all three splits built — train 4,061 / val 874 / test 856 (5,791 views, 71 % yield).
       The TESS model and the four-way transfer matrix are in `TESS_AND_CROSS_MISSION_RESULTS.md`.
-- [ ] Uncertainty-aware: flux errors are **not** propagated into the views. The views carry
-      depth only, so the per-cadence uncertainties never reach the model. Closing this means
-      adding an error channel in `preprocessing_pipeline.py` and rebuilding all 15,185 views.
+- [~] Uncertainty-aware — **done for spectra, not for photometry.** Stage B carries an explicit
+      uncertainty channel and propagates it in quadrature into every band index and into the
+      anomaly normalisation. Stage A does not: the views hold binned depth only, so per-cadence
+      flux errors never reach the transit model. The pipeline already carries `flux_err` through
+      loading, flattening and masking — it is simply not binned — so closing this is a small code
+      change plus a rebuild of all 15,185 views, which means re-downloading the photometry.
 
 ---
 

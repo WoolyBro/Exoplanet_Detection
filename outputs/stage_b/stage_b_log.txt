@@ -93,4 +93,4 @@ molecule           model  n  n_pos  n_neg  accuracy    f1  roc_auc
 === Part 4: figure ===
 saved eda/stage_b_spectra_sample.png: ['WASP-39 b (WASP-39_b_Transmission_WASP_39_b_3.11466_5087_1.tbl)', 'K2-18 b (K2-18_b_Transmission_K2_18_b_3.11793_5255_1.tbl)', 'HAT-P-18 b (HAT-P-18_b_Transmission_HAT_P_18_b_3.11001_5041_1.tbl)', 'WASP-80 b (WASP-80_b_Transmission_WASP_80_b_3.11585_5432_1.tbl)']
 
-runtime 132 s
+runtime 86 s
