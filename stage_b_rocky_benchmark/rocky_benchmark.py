@@ -199,9 +199,17 @@ def main() -> None:
     st = pd.DataFrame(stats)
     st.to_csv(OUT / "rocky_band_statistics.csv", index=False)
 
-    # Step 14 robustness: reduction sensitivity from the local .tbl files
-    rs = reduction_sensitivity()
-    rs.to_csv(OUT / "rocky_reduction_sensitivity.csv", index=False)
+    # Step 14 robustness: reduction sensitivity from the local .tbl files. Those spectra live in
+    # the research pack, which is not redistributed. Without it the benchmark itself still runs
+    # in full on the committed Zenodo spectra; only this side-check is skipped, and the committed
+    # rocky_reduction_sensitivity.csv is left as it was rather than overwritten with an empty one.
+    if (sb.SPEC_DIR / "metadata" / "spectra_metadata.csv").is_file():
+        rs = reduction_sensitivity()
+        rs.to_csv(OUT / "rocky_reduction_sensitivity.csv", index=False)
+    else:
+        rs = pd.DataFrame()
+        print("\n  research pack not present: reduction-sensitivity check skipped "
+              "(committed result kept)")
 
     with open(OUT / "rocky_benchmark_config.json", "w") as fh:
         json.dump({"excluded": EXCLUDED, "bands": BANDS, "mu_primary": MU_PRIMARY, "mu_bracket": MU_BRACKET,
