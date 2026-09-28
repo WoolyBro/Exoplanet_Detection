@@ -24,7 +24,10 @@ sys.path.insert(0, str(RESEARCH / "stage_b_atmospheres"))
 import stage_b_pipeline as sb  # noqa: E402  (reused unchanged: parse_tbl, select_spectra, resample)
 
 ZEN_DIR = RESEARCH / "datasets" / "zenodo_15084226_rocky_spectra"
-PSCOMP = RESEARCH / "exoplanet_research_data" / "01_candidate_catalogs" / "pscomppars_confirmed_planets.csv"
+# The research pack is not redistributed; a fresh clone uses the committed extract of the same
+# NASA Exoplanet Archive rows (outputs/derived/planet_parameters.csv) instead.
+_PACK_PSCOMP = RESEARCH / "exoplanet_research_data" / "01_candidate_catalogs" / "pscomppars_confirmed_planets.csv"
+PSCOMP = _PACK_PSCOMP if _PACK_PSCOMP.is_file() else RESEARCH / "outputs" / "derived" / "planet_parameters.csv"
 
 # Zenodo file -> NASA Exoplanet Archive planet name (the file names carry no spaces or hyphens)
 FILES = {
