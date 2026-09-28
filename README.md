@@ -143,9 +143,9 @@ python stage_a_transit_model/baselines.py
 python stage_a_transit_model/cnn_lstm.py --batchnorm --augment --scheduler
 python stage_a_transit_model/sweep.py            # 23 runs
 python stage_a_transit_model/cross_mission.py
-python stage_b_atmospheres/stage_b_pipeline.py
+python stage_b_atmospheres/stage_b_pipeline.py        # also needs the research pack (spectra)
 python stage_b_atmospheres/stage_b_level2.py
-python stage_c_priority_fusion/build_priority_table.py
+python stage_c_priority_fusion/build_priority_table.py  # also needs the research pack (template)
 ```
 
 The first four commands need only this repository plus the view bundle. The last three also read
