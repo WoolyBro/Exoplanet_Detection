@@ -51,10 +51,7 @@ STAGE_1_SUPPLEMENTARY = [
     # training source: preprocessing_pipeline.build_dataset pulls full baselines via the API.
     f"{PACK}/02_lightcurves/",
 ]
-STAGE_1_VALIDATION_ONLY = [
-    # Planned location: not downloaded yet (Kepler DR25 injection-recovery, INJ1).
-    "D:/Files/kepler_injection_recovery_INJ1/",
-]
+STAGE_1_VALIDATION_ONLY: list[str] = []
 STAGE_2_TRAINING = [
     # PyATMOS simulation runs. Previously D:/Files/Dataset/run_summary_final.csv, which
     # was missing dir_0 entirely (7,828 runs) and had blank temperature/pressure for
@@ -106,7 +103,6 @@ PROVENANCE = {
     f"{PACK}/01_candidate_catalogs/ps_transiting_default.csv": "research pack",
     f"{PACK}/03_stellar_parameters/stellarhosts.csv": "research pack",
     f"{PACK}/02_lightcurves/": "research pack",
-    "D:/Files/kepler_injection_recovery_INJ1/": "Kepler DR25 INJ1",
     "datasets/pyatmos_final.csv": "PyATMOS (VPL)",
     "D:/Files/inara_earthlike_subset/psg_models.csv": "INARA / PSG",
     f"{PACK}/04_atmospheric_spectra/": "research pack",

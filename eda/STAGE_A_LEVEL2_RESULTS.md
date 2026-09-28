@@ -252,8 +252,6 @@ scoring them low is more likely correct than the catalogue entry.
 - [ ] Uncertainty-aware: flux errors are **not** propagated into the views. The views carry
       depth only, so the per-cadence uncertainties never reach the model. Closing this means
       adding an error channel in `preprocessing_pipeline.py` and rebuilding all 15,185 views.
-- [ ] Injection-recovery (INJ1) through the trained model (7.1) — the INJ1 set was never
-      downloaded, so this is deferred rather than attempted and unfinished.
 
 ---
 

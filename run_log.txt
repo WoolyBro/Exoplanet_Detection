@@ -420,7 +420,6 @@ STEP 8: Manifest status
   STAGE_1_SUPPLEMENTARY exoplanet_research_data/01_candidate_catalogs/pscomppars_confirmed_planets.csv       mentor      file    yes               81.9 MB
   STAGE_1_SUPPLEMENTARY        exoplanet_research_data/01_candidate_catalogs/ps_transiting_default.csv       mentor      file    yes               18.0 MB
   STAGE_1_SUPPLEMENTARY                 exoplanet_research_data/03_stellar_parameters/stellarhosts.csv       mentor      file    yes               53.4 MB
-STAGE_1_VALIDATION_ONLY                                       D:/Files/kepler_injection_recovery_INJ1/ external archive directory     NO                      
        STAGE_2_TRAINING                                                 datasets/pyatmos_final.csv external archive      file    yes 21.2 MB, 108,839 rows
        STAGE_2_TRAINING                                 D:/Files/inara_earthlike_subset/psg_models.csv external archive      file    yes      16.8 KB, 30 rows
 STAGE_2_VALIDATION_ONLY                                exoplanet_research_data/04_atmospheric_spectra/       mentor directory    yes                      
@@ -2275,7 +2274,7 @@ PROJECT STATE - ALL THREE STAGES HAVE A COMPLETE, REPORTED RESULT:
   Stage C  54-planet priority table with explicit weights, ablation, and 41 real transit
            probabilities.
 OPEN (not blocking): uncertainty propagation into the views (needs an error channel the views
-do not carry); injection-recovery 7.1; folder reorganisation step 2.
+do not carry); folder reorganisation step 2.
 
 ========================================================================================
 STELLARHOSTS DEDUPLICATION (rebuild, stellarhosts.csv)
@@ -2895,7 +2894,6 @@ FIX STEP 5: Overwrite K2 outputs (Kepler/TESS untouched)
    evaluation in the same format as Kepler's.
 
 STILL GENUINELY OPEN (declared in the report's own checklist, not silently dropped):
-  * Injection-recovery (INJ1) - the set was never downloaded. Deferred, not attempted.
   * Flux errors are not propagated into the views. The views carry depth only, so per-cadence
     uncertainties never reach the model. Closing it means adding an error channel to
     preprocessing_pipeline.py and rebuilding all 15,185 views.
@@ -3111,3 +3109,111 @@ Traceback (most recent call last):
     raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
 FileNotFoundError: STAGE_2_TRAINING: manifest files not found on disk:
   D:/Files/inara_earthlike_subset/psg_models.csv -> D:\Files\inara_earthlike_subset\psg_models.csv
+
+========================================================================================
+STELLARHOSTS DEDUPLICATION (rebuild, stellarhosts.csv)
+========================================================================================
+  manifest role: STAGE_1_SUPPLEMENTARY (reference/cross-check only - NOT a feature source)
+  loaded exoplanet_research_data\03_stellar_parameters\stellarhosts.csv: 47,903 rows x 136 columns
+  unique hostname: 5,243 | stars with >1 row: 4,739 | max rows for one star: 55 (Kepler-11)
+
+  deduplicated: 47,903 -> 5,243 rows
+
+  tie-break resolution (multi-row stars only):
+                 stage  stars_uniquely_decided
+1. core params present                     423
+     2. reference year                    3794
+ 3. most filled fields                     182
+       4. earliest row                     340
+
+  parameter completeness, before vs after:
+    st_teff      rows  82.1% -> stars  89.6%
+    st_rad       rows  80.9% -> stars  89.0%
+    st_mass      rows  61.1% -> stars  95.8%
+    st_logg      rows  67.9% -> stars  66.0%
+    st_spectype  rows   7.5% -> stars  17.6%
+    cb_flag      rows 100.0% -> stars 100.0%
+    all of st_teff+st_rad+st_mass   rows  55.3% -> stars  88.5%
+
+  wrote outputs\derived\stellarhosts_deduplicated.csv (5,243 rows x 136 columns, 4.9 MB)
+  REMINDER: reference and cross-checks only; never join this onto a detection catalog as features.
+
+
+########################################################################################
+# K2 FIX: keep default_flag == 1 only (fix_k2_default_flag.py, run 2026-09-28 14:31:38)
+########################################################################################
+
+========================================================================================
+FIX STEP 1: Filter K2 to default_flag == 1
+========================================================================================
+  file: k2_planets_candidates.csv  (leading '#' comment lines: no)
+  2 row(s) with blank epic_hostname grouped by hostname instead
+  row filter default_flag == 1: 4070 -> 1806 rows
+  1 row(s) with blank epic_hostname grouped by hostname instead
+
+  rows before filter: 4070
+  rows after filter : 1806
+  unique planets (pl_name)      : 1806  (duplicated pl_name rows: 0)
+  unique stars (star_group_id): 1560
+
+  WASP-47 rows after filter: 4 (was 50)
+      epic_hostname    pl_name  default_flag disposition   pl_orbper hostname label_harmonized
+116  EPIC 206103150  WASP-47 b             1   CONFIRMED    4.159151  WASP-47        CONFIRMED
+117  EPIC 206103150  WASP-47 c             1   CONFIRMED  589.570000  WASP-47        CONFIRMED
+118  EPIC 206103150  WASP-47 d             1   CONFIRMED    9.030501  WASP-47        CONFIRMED
+119  EPIC 206103150  WASP-47 e             1   CONFIRMED    0.789610  WASP-47        CONFIRMED
+
+========================================================================================
+FIX STEP 2: Re-split filtered K2 (grouped_stratified_split, unchanged)
+========================================================================================
+  train  1264 rows (70.0%)
+  val     270 rows (15.0%)
+  test    272 rows (15.1%)
+  note: on-disk K2 split is already filtered (fix was applied before)
+
+========================================================================================
+FIX STEP 3: K2 leakage check on the filtered split
+========================================================================================
+  k2      train & val   shared stars: 0 (on raw epic_hostname: 0)  PASS
+  k2      train & test  shared stars: 0 (on raw epic_hostname: 0)  PASS
+  k2        val & test  shared stars: 0 (on raw epic_hostname: 0)  PASS
+
+  K2: all 3 star-ID intersections are empty (train/val, train/test, val/test).
+
+========================================================================================
+FIX STEP 4: K2 class balance, OLD (all solutions) vs NEW (default_flag == 1)
+========================================================================================
+
+  OLD - unfiltered, one row per published solution
+       rows  % rows  stars     CONFIRMED     CANDIDATE FALSE POSITIVE
+split                                                                
+train  2847    70.0   1098  1666 (58.5%)   960 (33.7%)     221 (7.8%)
+val     611    15.0    230   357 (58.4%)   207 (33.9%)      47 (7.7%)
+test    612    15.0    232   358 (58.5%)   207 (33.8%)      47 (7.7%)
+all    4070   100.0   1560  2381 (58.5%)  1374 (33.8%)     315 (7.7%)
+
+  NEW - default_flag == 1, one row per planet
+       rows  % rows  stars    CONFIRMED    CANDIDATE FALSE POSITIVE
+split                                                              
+train  1264    70.0   1091  406 (32.1%)  682 (54.0%)    176 (13.9%)
+val     270    15.0    235   87 (32.2%)  147 (54.4%)     36 (13.3%)
+test    272    15.1    234   87 (32.0%)  147 (54.0%)     38 (14.0%)
+all    1806   100.0   1560  580 (32.1%)  976 (54.0%)    250 (13.8%)
+
+  Side by side
+        OLD                                                           NEW                                                      
+       rows % rows stars     CONFIRMED     CANDIDATE FALSE POSITIVE  rows % rows stars    CONFIRMED    CANDIDATE FALSE POSITIVE
+split                                                                                                                          
+train  2847   70.0  1098  1666 (58.5%)   960 (33.7%)     221 (7.8%)  1264   70.0  1091  406 (32.1%)  682 (54.0%)    176 (13.9%)
+val     611   15.0   230   357 (58.4%)   207 (33.9%)      47 (7.7%)   270   15.0   235   87 (32.2%)  147 (54.4%)     36 (13.3%)
+test    612   15.0   232   358 (58.5%)   207 (33.8%)      47 (7.7%)   272   15.1   234   87 (32.0%)  147 (54.0%)     38 (14.0%)
+all    4070  100.0  1560  2381 (58.5%)  1374 (33.8%)     315 (7.7%)  1806  100.0  1560  580 (32.1%)  976 (54.0%)    250 (13.8%)
+
+========================================================================================
+FIX STEP 5: Overwrite K2 outputs (Kepler/TESS untouched)
+========================================================================================
+  wrote splits\k2_planets_candidates_split.csv  (1806 rows)
+  wrote splits\k2\train.csv  (1264 rows)
+  wrote splits\k2\val.csv  (270 rows)
+  wrote splits\k2\test.csv  (272 rows)
+  appended this output to run_log.txt

@@ -44,11 +44,6 @@ Relative paths are inside this `Research` folder. The `D:/Files/...` paths are r
 | `exoplanet_research_data/03_stellar_parameters/stellarhosts.csv` | mentor | Host-star properties (temperature, radius, mass, gravity), used as star-level context features. |
 | `exoplanet_research_data/02_lightcurves/` | mentor | 36 real light curves (22 Kepler Quarter 9, 14 TESS single sectors) with `lightcurve_manifest.csv`, used to test the detection preprocessing on real files and verify per-KOI folding. Not the primary training source: each covers one quarter or sector, so `build_dataset` pulls full-mission light curves via the API by default (`use_local_files_first=False`) to keep data depth consistent across KOIs. |
 
-### Stage 1: Validation-only
-| File | Provenance | Role |
-|---|---|---|
-| `D:/Files/kepler_injection_recovery_INJ1/` | external archive | Kepler injection-recovery set (synthetic transits injected into real light curves), used only to measure detection completeness. **Not downloaded yet**: this path is a placeholder. |
-
 ### Stage 2: Training
 | File | Provenance | Role |
 |---|---|---|
