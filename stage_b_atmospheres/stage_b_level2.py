@@ -50,7 +50,12 @@ RESEARCH_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RESEARCH_DIR))
 
 DATASET = RESEARCH_DIR / "outputs" / "stage_b" / "stage_b_dataset.npz"
-PARAMS = RESEARCH_DIR / "exoplanet_research_data" / "01_candidate_catalogs" / "pscomppars_confirmed_planets.csv"
+# Planet parameters come from pscomppars in the research pack when it is present. The pack is
+# not redistributed, so a fresh clone falls back to outputs/derived/planet_parameters.csv: the
+# same NASA Exoplanet Archive rows, cut to the 54 planets and 12 columns this project uses.
+_PACK_PARAMS = (RESEARCH_DIR / "exoplanet_research_data" / "01_candidate_catalogs"
+                / "pscomppars_confirmed_planets.csv")
+PARAMS = _PACK_PARAMS if _PACK_PARAMS.is_file() else RESEARCH_DIR / "outputs" / "derived" / "planet_parameters.csv"
 OUT_DIR = RESEARCH_DIR / "outputs" / "stage_b_level2"
 EDA_DIR = RESEARCH_DIR / "eda"
 
