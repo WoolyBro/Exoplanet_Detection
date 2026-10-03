@@ -38,6 +38,28 @@ explained wherever those numbers appear.
 
 ---
 
+## Results in figures
+
+All twelve statistical figures, each titled by the question it answers and carrying 95 %
+intervals, are in **[`figures/`](figures/)** and regenerate with `python figures/make_figures.py`.
+Four that carry the main argument:
+
+**How well does the transit classifier separate real planets from false positives?**
+![ROC and precision-recall curves](figures/01_planet_vs_false_positive_separation.png)
+
+**Does a deep network beat simpler methods on the same light curves?**
+![Model comparison with every training seed](figures/02_deep_model_vs_simple_baselines.png)
+
+**What is the shallowest transit the classifier can actually detect?**
+![Injection-recovery](figures/10_smallest_detectable_transit.png)
+
+**Are the two detection models biased toward different kinds of planet?**
+![Opposite planet-size bias](figures/08_opposite_planet_size_bias.png)
+
+**[See all twelve figures, with sources and interpretation &rarr;](figures/README.md)**
+
+---
+
 ## Layout
 
 Folders are named for the stage they serve. The mentor-supplied data pack is kept entirely
@@ -60,7 +82,8 @@ stage_c_priority_fusion/     ← Stage C: the 54-planet priority table
 stage_d_habitability/        ← PyATMOS / INARA habitability line
 tools/                       ← operational scripts (status, cache pruning, resumable builds)
 
-eda/                         ← the reports (.md) and figures (.png)
+figures/                     ← the statistical figures + the script that makes them
+eda/                         ← the written reports (.md) and diagnostic plots
 outputs/                     ← result tables per stage
 splits/                      ← the split definitions - results are not reproducible without these
 detection_views/             ← 15,317 built views (.npz). Regenerable; not in the repository.
