@@ -301,6 +301,54 @@ transition appeared.
 
 ---
 
+## 6g. Does feeding the model the per-bin flux error help? (uncertainty-aware photometry)
+
+Until now the views held binned depth only, so per-cadence flux errors never reached the model.
+All 15,185 views were rebuilt (into `detection_views_err/`, leaving the originals untouched) with
+a per-bin 1σ — the standard error of the bin median, √(π/2)·√Σσ²/n, in the same normalised units
+as the depth — and `cnn_lstm.py --use-errors` stacks log₁₀ of it as a second input channel
+(40,451 vs 40,371 parameters). The depth channel of the rebuilt views matches the originals to
+3×10⁻⁸ (checked on 11 stars of each mission).
+
+**Design.** The winning configuration (BatchNorm + flip + scheduler), trained *with* and *without*
+the channel on the **same rebuilt views**, seeds 42/1/2/7, both missions: 16 models, **validation
+only** (both test sets are already spent; the test views were rebuilt but never read).
+
+| validation, mean ± std over 4 seeds | without | with | difference |
+|---|---|---|---|
+| Kepler ROC-AUC | 0.9111 ± 0.0014 | **0.9145 ± 0.0017** | **+0.0034** |
+| Kepler PR-AUC | 0.9080 | 0.9107 | +0.0027 |
+| Kepler precision @ 90 % recall | 0.7494 | 0.7496 | +0.0002 |
+| TESS ROC-AUC | 0.7771 ± 0.0096 | **0.7884 ± 0.0049** | **+0.0113** |
+| TESS PR-AUC (base rate 0.870) | 0.9541 | 0.9586 | +0.0045 |
+| TESS precision @ 90 % recall | 0.9076 | 0.9106 | +0.0030 |
+
+Per-seed ROC-AUC gain (seeds 42, 1, 2, 7): Kepler +0.0041, +0.0001, +0.0036, +0.0056; TESS
++0.0076, +0.0087, +0.0071, +0.0218. **With the channel is at or above without in all 8 pairs.**
+
+**How strong is that?** Modest, and it should be stated as modest. With four seeds per arm the
+gain is 2.2× (Kepler) and 1.5× (TESS) the seed-to-seed spread; a paired t-test over seeds gives
+p = 0.062 (Kepler) and 0.049 (TESS), Welch p = 0.022 and 0.097. That is consistent evidence of a
+small gain in the same direction in both missions — not a decisive one. It is comparable in size
+to the LSTM (+0.0048) and a fifth of BatchNorm (+0.015). It sharpens the ranking rather than the
+operating point: precision at 90 % recall is unchanged on Kepler.
+
+**Caveats.**
+- The "without" arm, retrained from scratch on this machine (macOS) on the rebuilt views, scored
+  0.9094 at seed 42 against 0.9142 for the original run of the same configuration (Windows). The
+  data are identical (6,574 / 1,414 rows), so this is cross-platform training variation; it is
+  why the comparison is made against the new "without" arm, never against the old numbers.
+- 20 TESS views (18 train, 2 val; none in Kepler) have a local window with no data, so their
+  error channel is undefined; it is fed as "maximum uncertainty". Before that was handled, every
+  TESS with-errors run stopped on epoch 1 (NaN guard).
+- Validation only, no test numbers, and no claim that a with-errors model should replace the
+  reported ones: those results stand as measured. Selection on validation across 16 runs is
+  itself slightly optimistic.
+
+Code: `tools/rebuild_with_errors.py`, `sweep.py --errors`. Table: `runs/error_channel_comparison.csv`.
+
+---
+
 ## 7. Checklist status (mentor's evaluation & reporting list)
 
 - [x] Splits by star/system, no leakage across folds — verified star-disjoint in code, asserted at load
@@ -317,12 +365,17 @@ transition appeared.
       DR25 INJ1 set; the 0 ppm null control is the headline finding
 - [x] TESS views: all three splits built — train 4,061 / val 874 / test 856 (5,791 views, 71 % yield).
       The TESS model and the four-way transfer matrix are in `TESS_AND_CROSS_MISSION_RESULTS.md`.
-- [~] Uncertainty-aware — **done for spectra, not for photometry.** Stage B carries an explicit
-      uncertainty channel and propagates it in quadrature into every band index and into the
-      anomaly normalisation. Stage A does not: the views hold binned depth only, so per-cadence
-      flux errors never reach the transit model. The pipeline already carries `flux_err` through
-      loading, flattening and masking — it is simply not binned — so closing this is a small code
-      change plus a rebuild of all 15,185 views, which means re-downloading the photometry.
+- [x] Uncertainty-aware — **done for spectra and now for photometry (§6g).** Stage B carries an explicit uncertainty channel and propagates it in quadrature
+      into every band index and into the anomaly normalisation. Every result reported for Stage A
+      above comes from views that hold binned depth only, so per-cadence flux errors never
+      reached those models. Added 2026-10-13: `preprocessing_pipeline.py` now bins `flux_err` into
+      a per-bin 1σ (standard error of the bin median, √(π/2)·√Σσ²/n, divided by the same scale
+      as the depth so both are in units of the transit depth; empty bins take the largest
+      filled-bin error), saved as `global_err` / `local_err`. The depth channel is unchanged
+      (rebuilt Kepler and TESS views match the originals to 3×10⁻⁸). `cnn_lstm.py --use-errors`
+      feeds log₁₀ of it as a second input channel (+80 parameters). The views were rebuilt into
+      `detection_views_err/`; with vs without the channel, four seeds each, validation only:
+      Kepler ROC-AUC +0.0034, TESS +0.0113, a small consistent gain (§6g).
 
 ---
 

@@ -140,6 +140,7 @@ class FoldedLightCurve:
     flux: np.ndarray
     period: float
     epoch: float
+    flux_err: np.ndarray | None = None  # per-cadence 1-sigma, same order as flux
 
 
 @dataclass
@@ -148,6 +149,7 @@ class View:
     coverage: float     # fraction of bins containing at least one cadence
     scale: float        # |min| of the median-subtracted view before normalising
     n_points: int
+    errors: np.ndarray | None = None  # per-bin 1-sigma of `values`, in the same normalised units
 
 
 @dataclass
@@ -346,7 +348,8 @@ def phase_fold(flattened_lightcurve: FlattenedLightCurve, period: float, epoch: 
     lc = flattened_lightcurve
     phase = (lc.time - epoch + 0.5 * period) % period - 0.5 * period
     order = np.argsort(phase)
-    return FoldedLightCurve(phase=phase[order], flux=lc.flux[order], period=float(period), epoch=float(epoch))
+    return FoldedLightCurve(phase=phase[order], flux=lc.flux[order], period=float(period), epoch=float(epoch),
+                            flux_err=lc.flux_err[order])
 
 
 def remove_other_transits(flat: FlattenedLightCurve, target: Ephemeris,
@@ -377,29 +380,52 @@ def remove_other_transits(flat: FlattenedLightCurve, target: Ephemeris,
 # =========================================================================== #
 # Step 3: views
 # =========================================================================== #
+# Standard error of a sample median relative to that of the mean, for Gaussian noise: sqrt(pi/2).
+MEDIAN_SE_FACTOR = float(np.sqrt(np.pi / 2))
+
+
 def _median_binned_view(x: np.ndarray, y: np.ndarray, n_bins: int, bin_width: float,
-                        x_min: float, x_max: float) -> View:
+                        x_min: float, x_max: float, e: np.ndarray | None = None) -> View:
     """Astronet-style median binning: n_bins bins of width bin_width, evenly spaced over
     [x_min, x_max]; empty bins take the median of all points in range. Then centre at 0
-    and scale so the deepest bin is -1."""
+    and scale so the deepest bin is -1.
+
+    With per-point errors `e`, each bin also gets a 1-sigma uncertainty: the standard error of
+    its median, sqrt(pi/2) * sqrt(sum e^2) / n, divided by the same scale as the values so the
+    two stay in the same units (fractions of the transit depth). This is what lets the model
+    tell a deep, well-measured dip from a noisy one that happens to look the same once
+    depth-normalised. Empty bins carry no measurement, so they get the largest uncertainty of
+    any filled bin in the view: never more certain than the worst real bin. The values are
+    computed exactly as before, so a view built with errors has identical `values`."""
     if n_bins < 2:
         raise ValueError("n_bins must be >= 2")
     in_range = (x >= x_min) & (x <= x_max)
     xs, ys = x[in_range], y[in_range]
+    es = e[in_range] if e is not None else None
     fill = float(np.median(ys)) if len(ys) else 1.0
     spacing = (x_max - x_min - bin_width) / (n_bins - 1)
     starts = x_min + spacing * np.arange(n_bins)
     lo = np.searchsorted(xs, starts, side="left")
     hi = np.searchsorted(xs, starts + bin_width, side="left")
     values = np.full(n_bins, fill)
+    errors = np.full(n_bins, np.nan) if es is not None else None
     filled = hi > lo
     for i in np.flatnonzero(filled):
         values[i] = np.median(ys[lo[i]:hi[i]])
+        if errors is not None:
+            seg = es[lo[i]:hi[i]]
+            errors[i] = MEDIAN_SE_FACTOR * np.sqrt(np.sum(seg ** 2)) / len(seg)
     values = values - np.median(values)
     scale = float(abs(values.min()))
     if scale > 0:
         values = values / scale
-    return View(values=values, coverage=float(filled.mean()), scale=scale, n_points=int(len(xs)))
+    if errors is not None:
+        finite = np.isfinite(errors)
+        errors[~finite] = errors[finite].max() if finite.any() else np.nan
+        if scale > 0:
+            errors = errors / scale
+    return View(values=values, coverage=float(filled.mean()), scale=scale, n_points=int(len(xs)),
+                errors=errors)
 
 
 def build_global_view(folded_lc: FoldedLightCurve, n_bins: int = GLOBAL_BINS, duration: float | None = None) -> View:
@@ -409,7 +435,8 @@ def build_global_view(folded_lc: FoldedLightCurve, n_bins: int = GLOBAL_BINS, du
     width = p / n_bins
     if duration is not None:
         width = max(width, LOCAL_BIN_WIDTH_FACTOR * duration)
-    return _median_binned_view(folded_lc.phase, folded_lc.flux, n_bins, width, -p / 2, p / 2)
+    return _median_binned_view(folded_lc.phase, folded_lc.flux, n_bins, width, -p / 2, p / 2,
+                               e=folded_lc.flux_err)
 
 
 def build_local_view(folded_lc: FoldedLightCurve, duration: float, n_bins: int = LOCAL_BINS) -> View:
@@ -418,7 +445,8 @@ def build_local_view(folded_lc: FoldedLightCurve, duration: float, n_bins: int =
         raise ValueError(f"invalid duration {duration}")
     p = folded_lc.period
     half = min(p / 2, LOCAL_NUM_DURATIONS * duration)
-    return _median_binned_view(folded_lc.phase, folded_lc.flux, n_bins, LOCAL_BIN_WIDTH_FACTOR * duration, -half, half)
+    return _median_binned_view(folded_lc.phase, folded_lc.flux, n_bins, LOCAL_BIN_WIDTH_FACTOR * duration, -half, half,
+                               e=folded_lc.flux_err)
 
 
 # =========================================================================== #
@@ -804,6 +832,7 @@ class ApiFetchError(RuntimeError):
 
 
 NETWORK_TIMEOUT_S = 120  # per socket operation
+MAX_CONSECUTIVE_FETCH_FAILURES = 20  # stars in a row that all failed to download -> stop (resumable)
 
 
 def _set_network_timeouts(seconds: float = NETWORK_TIMEOUT_S) -> None:
@@ -916,10 +945,13 @@ def _process_star(job: dict) -> dict:
                     "n_in_transit": res["n_in_transit"], "depth_ppm": res["depth_ppm"],
                     "depth_snr": res["depth_snr"], "transit_observed": res["transit_observed"],
                     "ephemeris_drift_h": drift, "ephemeris_reliable": res["ephemeris_reliable"],
-                    "other_kois_removed": res["other_kois_removed"], "flatten": flat.meta}
+                    "other_kois_removed": res["other_kois_removed"], "flatten": flat.meta,
+                    "has_errors": True}
             tmp = npz.with_name(npz.stem + f".tmp{os.getpid()}.npz")
             np.savez_compressed(tmp, global_view=res["global"].values.astype(np.float32),
                                 local_view=res["local"].values.astype(np.float32),
+                                global_err=res["global"].errors.astype(np.float32),
+                                local_err=res["local"].errors.astype(np.float32),
                                 label=np.array(eph.label if eph.label is not None else ""),
                                 label_index=np.int8(LABEL_INDEX.get(eph.label, -1)),
                                 metadata=np.array(json.dumps(meta, default=float)))
@@ -1145,7 +1177,7 @@ def build_dataset(split_df: pd.DataFrame, output_dir: str | Path, use_local_file
     discarded_bytes = 0
 
     def record(result: dict) -> None:
-        nonlocal stars_done, discarded_bytes
+        nonlocal stars_done, discarded_bytes, stop_reason
         stars_done += 1
         with progress_path.open("a", encoding="utf-8") as fh:
             for rec in result["records"]:
@@ -1154,6 +1186,18 @@ def build_dataset(split_df: pd.DataFrame, output_dir: str | Path, use_local_file
                                      "time": datetime.now().isoformat(timespec="seconds")}, default=str) + "\n")
                 key = rec["status"] if rec["status"] == "ok" else f"{rec['status']}: {rec['category']}"
                 counts[key] = counts.get(key, 0) + 1
+        # Circuit breaker for a network that is up but unusable. Added 2026-10-14: from ~02:30 every
+        # star of the error-channel Kepler train rebuild failed on both S3 and MAST for 10 h (1,367
+        # KOIs) while DNS still resolved, so net_ok() never paused it - and a fresh process on the
+        # same machine downloaded the same stars fine. A long run of stars that ALL failed to
+        # download is not bad luck; stopping (resumable) lets the driver restart in a fresh process.
+        if result["records"] and all(r.get("category") == "api fetch failure" for r in result["records"]):
+            net_state["consecutive_fetch_fail"] += 1
+        else:
+            net_state["consecutive_fetch_fail"] = 0
+        if net_state["consecutive_fetch_fail"] >= MAX_CONSECUTIVE_FETCH_FAILURES and stop_reason is None:
+            stop_reason = (f"{net_state['consecutive_fetch_fail']} consecutive stars failed to download; "
+                           f"network unusable from this process")
         # Records are on disk: only now is the star's raw download safe to drop.
         if discard_raw and result["star"] not in local_stars:
             discarded_bytes += discard_raw_files(result["star"], mission, cache_dir)
@@ -1169,7 +1213,7 @@ def build_dataset(split_df: pd.DataFrame, output_dir: str | Path, use_local_file
         return free < min_free_gb
 
     ram_state = {"waited": 0.0, "warned": False, "pauses": 0}
-    net_state = {"waited": 0.0, "pauses": 0, "stars_saved": 0}
+    net_state = {"waited": 0.0, "pauses": 0, "stars_saved": 0, "consecutive_fetch_fail": 0}
     stalls = 0  # set by the stall watchdog in the worker-pool path; read in the summary below
 
     def net_ok() -> bool:
@@ -1185,14 +1229,18 @@ def build_dataset(split_df: pd.DataFrame, output_dir: str | Path, use_local_file
         this costs nothing when the network is healthy.
         """
         nonlocal stop_reason
+        # A real TCP connection, not just a DNS lookup: on 2026-10-14 DNS kept resolving through a
+        # 10 h period in which every connection failed. Checks the host the build actually uses first.
+        hosts = (["stpubdata.s3.amazonaws.com"] if use_s3 else []) + ["mast.stsci.edu"]
         try:
-            socket.getaddrinfo("mast.stsci.edu", 443)
+            for host in hosts:
+                socket.create_connection((host, 443), timeout=15).close()
             net_state["waited"] = 0.0
             return True
         except OSError:
             pass
         net_state["pauses"] += 1
-        log(f"network down (cannot resolve mast.stsci.edu): waiting {net_wait_s:.0f} s rather than "
+        log(f"network down (cannot connect to {' / '.join(hosts)}): waiting {net_wait_s:.0f} s rather than "
             f"failing stars (waited {net_state['waited']:.0f}/{net_wait_max_s:.0f} s)")
         _time.sleep(net_wait_s)
         net_state["waited"] += net_wait_s
@@ -1344,10 +1392,13 @@ def build_dataset(split_df: pd.DataFrame, output_dir: str | Path, use_local_file
 
 
 def load_view_file(path: str | Path) -> dict:
-    """Read one saved .npz back (views, label, metadata dict)."""
+    """Read one saved .npz back (views, label, metadata dict). Views built before the error
+    channel existed have no global_err/local_err; those come back as None."""
     with np.load(path, allow_pickle=False) as z:
         return {"global_view": z["global_view"], "local_view": z["local_view"], "label": str(z["label"]),
-                "label_index": int(z["label_index"]), "metadata": json.loads(str(z["metadata"]))}
+                "label_index": int(z["label_index"]), "metadata": json.loads(str(z["metadata"])),
+                "global_err": z["global_err"] if "global_err" in z.files else None,
+                "local_err": z["local_err"] if "local_err" in z.files else None}
 
 
 # =========================================================================== #
@@ -1645,6 +1696,9 @@ def main(argv: list[str]) -> None:
         #        views are saved; --min-free-ram lowers the 2 GB RAM guard on small-memory machines)
         #   python preprocessing_pipeline.py summarize-split {train|val|test} [--mission ...]
         #   build-train / summarize-train are the original names for the Kepler train split and still work.
+        #   --views-root DIR writes to DIR/<mission>_<split> instead of detection_views/. Used for the
+        #       error-channel rebuild (detection_views_err/), so the views behind every reported result
+        #       are never overwritten. Relative paths are taken from the Research folder.
         split = "train" if command.endswith("-train") else (argv[2] if len(argv) > 2 else "")
         if split not in ("train", "val", "test"):
             raise SystemExit(f"{command}: give a split, one of train / val / test")
@@ -1654,7 +1708,13 @@ def main(argv: list[str]) -> None:
         prefix = mission.lower()
         cat = catalog_for(mission)
         part = cat[cat.split == split]
-        out = VIEWS_DIR / f"{prefix}_{split}"
+        views_root = VIEWS_DIR
+        if "--views-root" in argv:
+            views_root = Path(argv[argv.index("--views-root") + 1])
+            views_root = views_root if views_root.is_absolute() else RESEARCH_DIR / views_root
+        out = views_root / f"{prefix}_{split}"
+        # A non-default root gets its own spot-check figure name, so the original one is not replaced.
+        fig_tag = "" if views_root == VIEWS_DIR else f"_{views_root.name}"
         if command.startswith("build"):
             # Default dropped 4 -> 2 on 2026-09-18: with 4 workers each holding a full Kepler light
             # curve plus its flattened copy, a worker was killed (BrokenProcessPool) at 4.1/13.8 GB free.
@@ -1667,10 +1727,10 @@ def main(argv: list[str]) -> None:
             if (index.status == "not processed").any():
                 print(f"build incomplete (stopped early); rerun build-split {split} to resume")
                 return
-        report = summarize_build(part, out, figure_path=EDA_DIR / f"{prefix}_{split}_build_sample.png")
+        report = summarize_build(part, out, figure_path=EDA_DIR / f"{prefix}_{split}{fig_tag}_build_sample.png")
         print(report)
         with LOG_PATH.open("a", encoding="utf-8") as fh:
-            fh.write(f"\n\n{'#' * 88}\n# {mission.upper()} {split.upper()} BUILD REPORT (preprocessing_pipeline.py, "
+            fh.write(f"\n\n{'#' * 88}\n# {mission.upper()} {split.upper()} BUILD REPORT{fig_tag.replace('_', ' ').upper()} (preprocessing_pipeline.py, "
                      f"{datetime.now():%Y-%m-%d %H:%M:%S})\n{'#' * 88}\n" + "\n".join("  " + l for l in report.splitlines()) + "\n")
     else:
         raise SystemExit(f"unknown command {command}")

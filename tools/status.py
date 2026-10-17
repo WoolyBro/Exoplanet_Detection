@@ -182,7 +182,10 @@ def main() -> int:
     else:
         print("  nothing running (no preprocessing_pipeline build process found)")
 
-    dirs = sorted(d for d in VIEWS.glob("*") if d.is_dir() and not d.name.startswith("_"))
+    # detection_views_err/ holds the error-channel rebuild (tools/rebuild_with_errors.py).
+    roots = [VIEWS, RESEARCH_DIR / "detection_views_err"]
+    dirs = sorted(d for root in roots if root.is_dir() for d in root.glob("*")
+                  if d.is_dir() and not d.name.startswith("_"))
     if not dirs:
         print("\n  no view folders yet")
         return 0

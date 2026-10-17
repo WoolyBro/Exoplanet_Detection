@@ -3372,3 +3372,32 @@ injection dominates the fold. That is why the first two runs were flat, and why 
 be pushed down to 5 ppm before the transition appeared.
 
 Checklist 7.1 now reads as done, on its own terms.
+================================================================================
+2026-10-17 - ERROR-CHANNEL EXPERIMENT COMPLETE (validation only)
+================================================================================
+Rebuild: all six splits into detection_views_err/ (Kepler 6,567 / 1,414 / 1,406 views; TESS
+  4,084 / 872 / 862). Took ~2 days wall-clock instead of ~18 h, for three reasons recorded here:
+  (1) 2026-10-14 ~02:30-13:00: every Kepler-train star failed on BOTH S3 and MAST (1,367 KOIs) while
+  DNS still resolved, so the network guard never paused the build; a fresh process on the same
+  machine downloaded the same stars in 13 s. Fixed: net_ok() now makes real TCP connections to
+  the hosts in use, and a build stops (resumably) after 20 consecutive all-fetch-failed stars so
+  the driver restarts it in a fresh process; the driver also re-runs a split with transient
+  fetch failures. Verified by simulating 25 failing stars (stopped after 20). The failed stars were
+  all retried and succeeded.
+  (2) 2026-10-14 16:29 -> 2026-10-15 14:43: the build and driver were killed (battery / session),
+  nothing restarted them; ~22 h lost. Relaunched; resumed from the checkpoint with nothing repeated.
+  (3) a test build froze for 31 min at 'Clamshell Sleep' earlier (lid closed on battery).
+Comparison (sweep.py --errors; 16 models; both arms on the SAME rebuilt views; winning config; seeds
+  42/1/2/7; validation only): see eda/STAGE_A_LEVEL2_RESULTS.md section 6g.
+    Kepler ROC-AUC  0.9111 +/- 0.0014 -> 0.9145 +/- 0.0017  (+0.0034, 2.2x seed spread; paired p 0.062)
+    TESS   ROC-AUC  0.7771 +/- 0.0096 -> 0.7884 +/- 0.0049  (+0.0113, 1.5x seed spread; paired p 0.049)
+    with >= without in 8 of 8 seed pairs; P@R90 unchanged on Kepler (0.7494 vs 0.7496).
+  Reading: a small, consistent gain in both missions; suggestive, not decisive at 4 seeds.
+Bug found and fixed on the way: 18 TESS train + 2 TESS val views have a local window with no data
+  (transit not covered), so their error channel is all-NaN (0 in Kepler). Every TESS --use-errors run
+  stopped on epoch 1 (NaN guard) until error_channel() mapped a non-finite error to the maximum
+  uncertainty. No rebuild needed; applied identically to every run.
+Reproduction note: the retrained "without" arm scored 0.9094 at seed 42 on macOS vs 0.9142 for the
+  original Windows run of the same configuration on identical data (6,574 / 1,414 rows): platform
+  training variation. The comparison therefore uses the new "without" arm, not the old numbers.
+No test number was produced or changed. The reported Kepler and TESS results stand as measured.

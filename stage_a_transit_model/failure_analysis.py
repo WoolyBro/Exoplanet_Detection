@@ -52,7 +52,7 @@ import data_manifest as dm  # noqa: E402
 from stage_a_transit_model.baselines import shape_features  # noqa: E402
 from stage_a_transit_model.cnn_lstm import (  # noqa: E402
     CLASSES, KOI_SPLIT_FILE, PLANET_LIKE_IDX, VIEWS_ROOT,
-    build_model, consolidate_views, drop_unusable, planet_like_score, precision_at_recall,
+    build_model, consolidate_views, drop_unusable, model_inputs, planet_like_score, precision_at_recall,
 )
 
 FLAGS = {
@@ -80,17 +80,22 @@ def load_run_model(run_dir: Path):
     width = float(saved.get("width", 1.0))
     batchnorm = str(saved.get("batchnorm", "False")).lower() in ("true", "1")
     arch = str(saved.get("arch", "dual_cnn_lstm"))
-    model = build_model(dropout, batchnorm=batchnorm, width=width, arch=arch)
+    # Same pattern for the error channel: checkpoints from before it existed have no key -> False.
+    use_errors = str(saved.get("use_errors", "False")).lower() in ("true", "1")
+    model = build_model(dropout, batchnorm=batchnorm, width=width, arch=arch, use_errors=use_errors)
     model.load_state_dict(ckpt["state_dict"])
     model.eval()
-    return model, {"dropout": dropout, "width": width, "batchnorm": batchnorm, "arch": arch}
+    info = {"dropout": dropout, "width": width, "batchnorm": batchnorm, "arch": arch}
+    if use_errors:
+        info["use_errors"] = True
+    return model, info
 
 
 def score_views(model, vs, batch: int = 256) -> np.ndarray:
     import torch
 
-    g = torch.from_numpy(vs.global_view)
-    l = torch.from_numpy(vs.local_view)
+    g_np, l_np = model_inputs(vs, getattr(model, "use_errors", False))
+    g, l = torch.from_numpy(g_np), torch.from_numpy(l_np)
     out = []
     with torch.no_grad():
         for i in range(0, len(g), batch):

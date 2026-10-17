@@ -87,6 +87,9 @@ eda/                         ← the written reports (.md) and diagnostic plots
 outputs/                     ← result tables per stage
 splits/                      ← the split definitions - results are not reproducible without these
 detection_views/             ← 15,317 built views (.npz). Regenerable; not in the repository.
+detection_views_err/         ← the same splits rebuilt with a per-bin flux-error channel
+                               (tools/rebuild_with_errors.py). Depth channel identical; adds
+                               global_err / local_err. Not in the repository.
 ```
 
 ### Stage A — `stage_a_transit_model/`
