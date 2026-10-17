@@ -1,0 +1,138 @@
+{
+  "protocol": "stage_b_atmospheres/METHANE_EXTENSION_PROTOCOL.md",
+  "labels": {
+    "planets_labelled": 49,
+    "known": 22,
+    "new_scorable": 19,
+    "new_unscorable_no_ch4_band": [
+      "GJ 341 b",
+      "LP 791-18 c",
+      "TRAPPIST-1 d"
+    ]
+  },
+  "primary_new_planets": {
+    "n": 19,
+    "n_pos": 4,
+    "gbm": {
+      "roc_auc": 0.95,
+      "perm_p": 0.0021,
+      "ci95": [
+        0.821,
+        1.0
+      ]
+    },
+    "cnn": {
+      "roc_auc": 0.867,
+      "perm_p": 0.0139,
+      "ci95": [
+        0.668,
+        1.0
+      ]
+    },
+    "strength": {
+      "roc_auc": 0.733,
+      "perm_p": 0.0924,
+      "ci95": [
+        0.333,
+        1.0
+      ]
+    }
+  },
+  "secondary_new_without_featureless": {
+    "n": 9,
+    "n_pos": 4,
+    "gbm": {
+      "roc_auc": 1.0,
+      "perm_p": 0.0071,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "cnn": {
+      "roc_auc": 1.0,
+      "perm_p": 0.0071,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "strength": {
+      "roc_auc": 0.7,
+      "perm_p": 0.2053,
+      "ci95": [
+        0.238,
+        1.0
+      ]
+    }
+  },
+  "secondary_all_planets": {
+    "n": 28,
+    "n_pos": 9,
+    "gbm": {
+      "roc_auc": 0.912,
+      "perm_p": 0.0001,
+      "ci95": [
+        0.762,
+        1.0
+      ]
+    },
+    "cnn": {
+      "roc_auc": 0.848,
+      "perm_p": 0.0012,
+      "ci95": [
+        0.684,
+        0.984
+      ]
+    },
+    "strength": {
+      "roc_auc": 0.696,
+      "perm_p": 0.0528,
+      "ci95": [
+        0.476,
+        0.894
+      ]
+    }
+  },
+  "post_hoc_coarse_spectra": {
+    "note": "NOT pre-registered; < 3 grid bins in any CH4 band",
+    "planets": [
+      {
+        "planet": "LP 791-18 c",
+        "ch4_band_bins": 4,
+        "gbm": 0.895,
+        "cnn": 0.723,
+        "label": "1"
+      },
+      {
+        "planet": "TRAPPIST-1 d",
+        "ch4_band_bins": 2,
+        "gbm": 0.003,
+        "cnn": 0.061,
+        "label": "0"
+      }
+    ]
+  },
+  "calibration_all_planets_nested_lopo": {
+    "gbm": {
+      "brier_raw": 0.11,
+      "brier_calibrated": 0.126,
+      "brier_base_rate": 0.235,
+      "ece_raw": 0.136,
+      "ece_calibrated": 0.145,
+      "accuracy_0.5_raw": 0.857,
+      "accuracy_0.5_calibrated": 0.821,
+      "roc_auc_calibrated": 0.877
+    },
+    "cnn": {
+      "brier_raw": 0.158,
+      "brier_calibrated": 0.194,
+      "brier_base_rate": 0.235,
+      "ece_raw": 0.127,
+      "ece_calibrated": 0.125,
+      "accuracy_0.5_raw": 0.821,
+      "accuracy_0.5_calibrated": 0.75,
+      "roc_auc_calibrated": 0.784
+    }
+  }
+}

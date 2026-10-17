@@ -1,0 +1,22 @@
+planet,CH4,featureless,source,significance,note
+TrES-4 b,0,0,"arXiv:2503.24280 (Meech+ 2025) Sec 4.1.1, Table 3",not detected; 2-sigma upper limits log X < -7.0 to -7.5,'insufficient evidence in favour of CH4'; 'no evidence for ... CH4'
+WASP-15 b,unknown,0,arXiv:2410.08116 (Kirk+ 2025) Sec 5-6,not stated observationally,CH4 only as model opacity / equilibrium-fixed; GCM predicts low CH4
+WASP-94 A b,unknown,0,arXiv:2505.11224 (Ahrer+ 2025) Sec 5.1.1 vs Table 6,conflicting,text: 'evidence for CH4 at 4 sigma ... unlikely'; Table 6: 2-sigma upper limit
+HAT-P-30 b,unknown,0,"arXiv:2601.13104 (Claringbold+ 2026) Sec 4.2.2, 4.4",ambiguous,"2-sigma upper limit log X < -6.1, but 'apparent presence of CH4' discussed"
+NGTS-2 b,0,0,"arXiv:2603.18332 (Fairman+ 2026) Sec 4.4, Fig 9",3-sigma upper limit,CH4 among 'species without detections'; < 1 sigma
+KELT-7 b,unknown,0,arXiv:2509.12479 (Ahrer+ 2025) Sec 4.1,no result reported,CH4 a free parameter in pRT only; no constraint given
+HIP 67522 b,0,0,"arXiv:2409.16355 (Thao+ 2024) Sec VII.2, Fig 11",absent (feature not observed),"'large CH4 feature at 3.3 um, which is not observed' - used to rule out high C/O"
+HAT-P-14 b,0,0,arXiv:2504.08903 (Liu+ 2025) Sec IV.4,non-detection; log X < -4.36 (95 %),CH4 weakly disfavoured (-1.96 sigma); 'non-detection of other gas species'
+TOI-776 b,0,1,"arXiv:2501.14596 (Alderson+ 2025) Abstract, Sec V.1, Fig 4",flat; no feature claimed,'flat line is preferred for Visit 1'; Visit 2 flat with NRS offset
+TOI-270 b,0,0,arXiv:2509.14224 (Coulombe+ 2025) Sec V.1,pure CH4 disfavoured vs flat (ln B = -5.3),rise attributed to H2O; same rule as LHS 475 b (pure CH4 disfavoured)
+WASP-121 b,unknown,0,arXiv:2506.02199 (Gapp+ 2025),not mentioned in transmission analysis,"retrieved H2O, CO2, CO, SiH, SiO, H-"
+L 168-9 b,0,1,"arXiv:2411.03154 (Alam+ 2025) Sec IV, VI",featureless,'lack of discernible atmospheric features'; flat line best fit
+WASP-96 b,unknown,0,arXiv:2305.16887 (Taylor+ 2023) Sec 4.1.1,unconstrained,"'NH3, HCN or CH4 ... remain mostly unconstrained'"
+TRAPPIST-1 e,unknown,0,arXiv:2509.05414 (Espinoza+ 2025) Sec III-IV,no CH4 constraint,secondary atmospheres deferred to companion paper
+GJ 486 b,unknown,0,arXiv:2305.00868 (Moran+ 2023),not addressed,water-rich atmosphere vs starspots degenerate
+L 98-59 d,0,0,"arXiv:2408.15855 (Gressier+ 2024) Sec IV.1, Table 1",upper limit log X < -6.0; 3.3 um features not observed,best fit H2S/SO2
+GJ 9827 d,0,0,"arXiv:2410.03527 (Piaulet-Ghorayeb+ 2024) Sec VII.1, Table 2",not detected; log X < -3.6,upper limit from non-detection of 2.3 um CH4 band; 'no detection of any C-bearing species'
+LHS 1140 c,0,0,arXiv:2406.15136 (Cadieux+ 2024) Appendix C,CH4-rich ruled out; log CH4 < -2.25 (2 sigma),NIRISS 0.65-2.65 um
+L 98-59 b,unknown,0,arXiv:2501.18680 (Bello-Arufe+ 2025) Sec IV.1-IV.3,unconstrained,"'the present data do not constrain the N2, CH4, or H2S abundances'"
+TRAPPIST-1 b,unknown,0,arXiv:2412.16541 (Rathcke+ 2025),not mentioned,features at 1.4/1.8 um attributed to stellar contamination
+WASP-127 b,unknown,0,"arXiv:2501.02081 (Fu+ 2025, population survey)",not addressed,survey focused on CO2 and SO2 bands

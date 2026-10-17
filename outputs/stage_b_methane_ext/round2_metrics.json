@@ -1,0 +1,199 @@
+{
+  "protocol": "stage_b_atmospheres/METHANE_EXTENSION_PROTOCOL_ROUND2.md",
+  "n_labelled_new": 32,
+  "n_scorable": 29,
+  "by_grid": {
+    "grid_A (seed 20261017)": {
+      "primary_all_new_labelled": {
+        "n": 29,
+        "n_pos": 4,
+        "gbm": {
+          "roc_auc": 0.97,
+          "perm_p": 0.0003,
+          "ci95": [
+            0.884,
+            1.0
+          ]
+        },
+        "cnn": {
+          "roc_auc": 0.91,
+          "perm_p": 0.0028,
+          "ci95": [
+            0.783,
+            1.0
+          ]
+        },
+        "strength": {
+          "roc_auc": 0.71,
+          "perm_p": 0.1009,
+          "ci95": [
+            0.282,
+            1.0
+          ]
+        }
+      },
+      "round2_planets_only": {
+        "n": 10,
+        "n_pos": 0,
+        "gbm": null,
+        "cnn": null,
+        "strength": null
+      },
+      "confound_test_strong_feature_half": {
+        "strength_threshold": 1.593,
+        "n": 14,
+        "n_pos": 3,
+        "gbm": {
+          "roc_auc": 0.97,
+          "perm_p": 0.0056,
+          "ci95": [
+            0.833,
+            1.0
+          ]
+        },
+        "cnn": {
+          "roc_auc": 0.788,
+          "perm_p": 0.0858,
+          "ci95": [
+            0.5,
+            1.0
+          ]
+        },
+        "strength": {
+          "roc_auc": 0.697,
+          "perm_p": 0.1842,
+          "ci95": [
+            0.279,
+            1.0
+          ]
+        }
+      },
+      "no_featureless": {
+        "n": 17,
+        "n_pos": 4,
+        "gbm": {
+          "roc_auc": 1.0,
+          "perm_p": 0.0005,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "cnn": {
+          "roc_auc": 0.981,
+          "perm_p": 0.0009,
+          "ci95": [
+            0.9,
+            1.0
+          ]
+        },
+        "strength": {
+          "roc_auc": 0.654,
+          "perm_p": 0.2069,
+          "ci95": [
+            0.262,
+            1.0
+          ]
+        }
+      }
+    },
+    "grid_B (seed 7770001)": {
+      "primary_all_new_labelled": {
+        "n": 29,
+        "n_pos": 4,
+        "gbm": {
+          "roc_auc": 0.98,
+          "perm_p": 0.0002,
+          "ci95": [
+            0.92,
+            1.0
+          ]
+        },
+        "cnn": {
+          "roc_auc": 0.87,
+          "perm_p": 0.0086,
+          "ci95": [
+            0.721,
+            0.981
+          ]
+        },
+        "strength": {
+          "roc_auc": 0.71,
+          "perm_p": 0.1009,
+          "ci95": [
+            0.333,
+            1.0
+          ]
+        }
+      },
+      "round2_planets_only": {
+        "n": 10,
+        "n_pos": 0,
+        "gbm": null,
+        "cnn": null,
+        "strength": null
+      },
+      "confound_test_strong_feature_half": {
+        "strength_threshold": 1.593,
+        "n": 14,
+        "n_pos": 3,
+        "gbm": {
+          "roc_auc": 0.97,
+          "perm_p": 0.0056,
+          "ci95": [
+            0.846,
+            1.0
+          ]
+        },
+        "cnn": {
+          "roc_auc": 0.727,
+          "perm_p": 0.1483,
+          "ci95": [
+            0.455,
+            1.0
+          ]
+        },
+        "strength": {
+          "roc_auc": 0.697,
+          "perm_p": 0.1842,
+          "ci95": [
+            0.242,
+            1.0
+          ]
+        }
+      },
+      "no_featureless": {
+        "n": 17,
+        "n_pos": 4,
+        "gbm": {
+          "roc_auc": 1.0,
+          "perm_p": 0.0005,
+          "ci95": [
+            1.0,
+            1.0
+          ]
+        },
+        "cnn": {
+          "roc_auc": 0.962,
+          "perm_p": 0.0015,
+          "ci95": [
+            0.827,
+            1.0
+          ]
+        },
+        "strength": {
+          "roc_auc": 0.654,
+          "perm_p": 0.2069,
+          "ci95": [
+            0.2,
+            1.0
+          ]
+        }
+      }
+    }
+  },
+  "grid_agreement": {
+    "spearman_gbm_A_vs_B": 0.9,
+    "max_abs_diff_gbm": 0.295
+  }
+}

@@ -1,0 +1,48 @@
+{
+ "planets_total": 21,
+ "labels_file": "outputs/labels/ch4_labels_round2.csv",
+ "phases": [
+  {
+   "name": "round-2 protocol addendum",
+   "status": "done",
+   "started": "2026-10-17T21:33:35",
+   "estimate_min": 5,
+   "finished": "2026-10-17T21:34:08"
+  },
+  {
+   "name": "label planets",
+   "status": "done",
+   "estimate_min": 60,
+   "started": "2026-10-17T21:34:08",
+   "finished": "2026-10-17T21:37:17"
+  },
+  {
+   "name": "second synthetic grid (seed 7770001, background)",
+   "status": "done",
+   "started": "2026-10-17T21:33:35",
+   "estimate_min": 45,
+   "finished": "2026-10-17T22:15:11"
+  },
+  {
+   "name": "literature search (prior work, support)",
+   "status": "done",
+   "estimate_min": 20,
+   "started": "2026-10-17T21:37:17",
+   "finished": "2026-10-17T21:38:03"
+  },
+  {
+   "name": "score round 2 + robustness",
+   "status": "done",
+   "estimate_min": 15,
+   "started": "2026-10-17T22:15:11",
+   "finished": "2026-10-17T22:20:30"
+  },
+  {
+   "name": "write-up, tests",
+   "status": "done",
+   "estimate_min": 20,
+   "finished": "2026-10-17T22:20:30"
+  }
+ ],
+ "note": "complete - see eda/METHANE_EXTENSION_RESULTS.md sections 7-8"
+}
