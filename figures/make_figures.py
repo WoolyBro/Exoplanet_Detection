@@ -463,15 +463,16 @@ def fig_molecules() -> None:
 
 def fig_ranking() -> None:
     ab = pd.read_csv(ROOT / "outputs" / "stage_c" / "ablation.csv").sort_values("spearman_vs_full")
-    nice = {"small": "planet size", "temperate": "temperature near 300 K",
-            "observable": "atmospheric signal strength", "evidence": "molecules detected"}
+    nice = {"hz": "habitable-zone membership (Kopparapu 2014)", "terrestrial": "terrestrial size (R < 1.5 R_earth)",
+            "observable": "transmission signal, TSM (Kempton 2018)"}
+    n_ranked = int(json.loads((ROOT / "outputs" / "stage_c" / "stage_c_summary.json").read_text())["n_ranked"])
     fig, ax = plt.subplots(figsize=(11, 4.4))
     y = np.arange(len(ab))
     ax.hlines(y, 1.0, ab.spearman_vs_full, color=BLUE, lw=2)
     ax.scatter(ab.spearman_vs_full, y, s=64, color=BLUE, edgecolor=SURFACE, linewidth=2, zorder=3)
     for yi, (_, r) in zip(y, ab.iterrows()):
-        ax.annotate(f"rho {r.spearman_vs_full:.3f}  -  {int(r.planets_changing_band)} of "
-                    f"{int(r.n_scored)} planets change priority band",
+        ax.annotate(f"rho {r.spearman_vs_full:.3f}  -  top-10 overlap {int(r.top10_overlap)}/10 "
+                    f"({n_ranked} transiting planets ranked)",
                     xy=(1.0, yi), xycoords=("axes fraction", "data"), xytext=(10, 0),
                     textcoords="offset points", va="center", fontsize=9, color=INK_2)
     ax.axvline(1.0, color=INK_3, lw=1.0)
@@ -480,9 +481,9 @@ def fig_ranking() -> None:
     ax.set_xlim(0.6, 1.005)
     ax.set_xlabel("Spearman correlation with the full ranking (1.0 = ranking unchanged)")
     ax.grid(axis="y", visible=False)
-    title(fig, "How much does the planet priority ranking depend on each scientific criterion?",
-          "Planet size and temperature drive it most; detected molecules barely move it, because "
-          "only 13 of the 54 planets have a JWST spectrum. Each criterion removed in turn.")
+    title(fig, "How much does the follow-up priority ranking depend on each criterion?",
+          "Habitable-zone membership drives it most. A ranking with stated weights for transmission "
+          "follow-up - not a habitability probability. Each criterion removed in turn.")
     fig.tight_layout(rect=(0, 0, 1, 0.86))
     save(fig, "12_priority_ranking_sensitivity.png")
 

@@ -1,275 +1,125 @@
-# Stage C — priority fusion over the 54-planet table
+# Stage C — transmission-follow-up priority for 54 known planets
 
-**Date:** 2026-09-25
-**Code:** `stage_c_priority_fusion/build_priority_table.py` → `outputs/stage_c/`
-**Figure:** `eda/stage_c_priority_overview.png`
-**Inputs:** Stage A run `bn_aug_sched`, Stage B LOPO predictions, Stage B Level 2 scale heights,
-pscomppars. The template in `05_final_ML_dataset_DO_NOT_USE/` was read only.
+**Rebuilt:** 2026-10-17, after an audit found the earlier version scientifically unsound (§4).
+**Code:** `stage_c_priority_fusion/target_physics.py` (the physics), `build_priority_table.py` (the ranking)
+**Outputs:** `outputs/stage_c/final_priority_table.csv`, `ablation.csv`, `stage_c_summary.json`
+**Figure:** `eda/stage_c_priority_overview.png`; `figures/12_priority_ranking_sensitivity.png`
+**Tests:** `tests/test_target_physics.py` (published solar-system values reproduced)
+
+> **What this is and is not.** This is a *ranking of transiting planets for transmission-spectroscopy
+> follow-up*, favouring ones that are in the habitable zone and terrestrial in size, with stated
+> weights. It is **not** a probability that any planet is habitable, and it says nothing about
+> atmospheres, water, or life. Being in the habitable zone (HZ) means receiving a flux at which
+> liquid surface water is *possible* for a suitable atmosphere — no more.
 
 ---
 
-## 1. The headline is a coverage problem, not a modelling one
+## 1. Method
 
-The template ships `transit_ML_probability = 0.99` for **all 54 planets**. That is not a
-prediction — it encodes "this planet is confirmed". Carrying it forward would have been the
-single most misleading thing this table could do, so it was not carried forward.
+Every input comes from the NASA Exoplanet Archive composite table (`pscomppars`), and every formula
+from a published source. Measurement errors are propagated by Monte Carlo (4,000 draws, split-normal
+on the catalogue's upper and lower errors).
 
-What the models can actually fill:
-
-| column | model output | why the rest are empty |
-|---|---|---|
-| `transit_ML_probability` | **2 / 54** | Kepler stared at one ~115 deg² field; the other 52 are WASP/HD/HAT-P/GJ targets it never observed |
-| `H2O_score`, `CO2_score`, `CH4_score` | **13 / 54** | no JWST spectrum in the pack |
-| `O3_score` | **0 / 54** | zero positive examples anywhere — not modellable, by construction |
-
-And of the two transit scores, only **one is a fair measurement**:
-
-| planet | KOI | p(planet-like) | provenance |
+| Component | Weight | Definition | Source |
 |---|---|---|---|
-| Kepler-62 f | K00701.04 | **0.8829** | test split → genuinely held out |
-| Kepler-296 f | K01422.04 | 0.8942 | train split → **in-sample, not a fair score** |
+| habitable zone | 0.40 | P(in conservative HZ) + ½ × P(in optimistic HZ only) | Kopparapu et al. 2014, ApJL 787 L29 |
+| terrestrial size | 0.30 | P(R_p < 1.5 R⊕) | radius bin of Kempton et al. 2018 |
+| observability | 0.30 | Transmission Spectroscopy Metric ÷ its follow-up cut, capped at 1 | Kempton et al. 2018, PASP |
 
-**Every other cell is left empty with a reason recorded in `notes`.** No number appears in this
-table that a model did not produce.
+**Habitable zone.**
+- Effective-flux boundaries: S_eff(T★) = S☉ + aT + bT² + cT³ + dT⁴, with T = T_eff − 5780 K. The 1 M⊕ coefficients of Kopparapu et al. (2014) were checked against the authors' calculator on 2026-10-17.
+- Conservative zone: runaway greenhouse to maximum greenhouse. Optimistic zone: recent Venus to early Mars.
+- Applied to the planet's incident flux (`pl_insol`). Where its error is missing (20 of 54), the error is propagated from L★ and a.
+- Check: for the Sun this gives 0.95–1.67 AU, and places Venus outside and Earth and Mars inside (tested).
 
-This is the honest state of the project: Stages A and B both work, but they were trained on the
-populations that have data (Kepler KOIs; 13 JWST-observed planets), and the Stage C target list
-is a different population — bright, ground-discovered planets chosen because JWST *can* observe
-them. The TESS build now running is the route that closes most of this gap, because TESS is
-all-sky and does cover these targets.
+**Transmission Spectroscopy Metric.**
+- TSM = scale × R_p³ T_eq / (M_p R★²) × 10^(−m_J/5).
+- T_eq is recomputed under **one** convention, zero albedo and full redistribution: T_eq = T★ √(R★/a) (¼)^¼.
+- Scale factors are 0.190 / 1.26 / 1.28 / 1.15 for the four radius bins, and the follow-up cuts are 12 (R < 1.5 R⊕) and 92 (larger). Both were read from the paper.
+- Unmeasured masses use the Chen & Kipping relation as given there.
+- Recomputing T_eq replaces the catalogue `pl_eqt`, which for these 54 planets came from 45 different papers with inconsistent assumptions.
 
----
+**Eligibility.** Transmission spectroscopy needs a transit. **10 of the 54 do not transit:** radial-velocity planets GJ 1132 c, L 98-59 f, GJ 1061 d, GJ 1002 b and GJ 251 c, and imaged planets HR 8799 b–e and 51 Eri b. They are listed with their HZ physics but not ranked; their radii are estimates from mass, not measurements.
 
-## 1a. FINAL STATE (2026-09-26): 41 of 54 now carry a real transit probability
-
-Once the TESS splits finished and a TESS model was trained, the 54 targets were re-scored with
-it. These are TESS light curves, so the TESS-trained model is the **same-mission** model and is
-the primary column.
-
-| column | filled | what it is |
-|---|---|---|
-| `transit_ML_probability_TESS` | **41 / 54** | **primary** — TESS-trained model on TESS light curves |
-| `transit_ML_probability_kepler_model` | 41 / 54 | the Kepler model on the same views, kept because its bias is *opposite* (§1c) |
-| `transit_ML_probability` | 2 / 54 | the strict column: only KOIs scored inside their own official split |
-| `H2O/CO2/CH4_score` | 13 / 54 | Stage B, out-of-fold |
-| `O3_score` | 0 / 54 | zero positive examples — not modellable |
-
-13 of the 54 remain unscored: 10 lack a complete ephemeris in pscomppars, 2 were refused by the
-ephemeris-reliability check, 1 has no SPOC light curve. Those cells stay empty.
-
-## 1b. The Kepler model was wrong for these targets — and the TESS model fixes it
-
-None of the 54 are in the TOI split being downloaded (they are WASP/HD/HAT-P/GJ planets, not
-TOI candidates), so the big build will not score them. But all 54 TIC ids resolve from
-pscomppars locally, so they were fetched directly: **41 of 54 scored** (44 had complete
-ephemerides; 2 excluded for ephemeris drift, 1 had no SPOC light curve). Eight minutes on the
-AWS mirror. Code: `stage_c_priority_fusion/score_priority_targets.py`.
-
-These live in their **own column**, `transit_ML_probability_TESS_crossmission`, and were
-deliberately *not* merged into `transit_ML_probability`. Here is why.
-
-Every one of these 54 is a **confirmed planet**, so a model that transferred cleanly should
-score them all high. Only **71 %** scored ≥ 0.5 (median 0.763). The 29 % it rejects are not
-random:
-
-| | rejected (n=12) | accepted (n=29) |
-|---|---|---|
-| median transit depth | **14,678 ppm** | 6,445 ppm |
-| median period | **1.2 d** | 4.2 d |
-| median radius | **16.6 R⊕** | 2.0 R⊕ |
-| median T_eq | **2,036 K** | 586 K |
-
-Correlations with the score: T_eq **−0.660**, radius −0.570, period +0.560, depth −0.410.
-The rejected list is KELT-9 b (0.060), HD 189733 b (0.124), 55 Cnc e (0.158), WASP-19 b,
-WASP-12 b, WASP-18 b, WASP-33 b, WASP-43 b, WASP-121 b, WASP-17 b, WASP-31 b, HD 209458 b —
-i.e. **the canonical hot Jupiters**.
-
-**This is not a bug; it is correct generalisation from the wrong population.** In the Kepler
-training split, **93 % of KOIs deeper than 10,000 ppm are FALSE POSITIVES** (against 42 % for
-shallower ones), because in Kepler's field a very deep transit is overwhelmingly an eclipsing
-binary. The model learned that rule properly — and it is exactly wrong for targets that
-ground-based surveys (WASP, HAT, KELT) were *built* to find, since those surveys select for
-deep, short-period giants.
-
-Consequences, stated plainly:
-- The Kepler model **cannot be used** to score this priority table. Its errors are
-  systematic and correlated with precisely the property that defines the target list.
-- A TESS-trained model may not fix this either, if the TOI training split is similarly short of
-  hot Jupiters. That should be **checked** on the TOI depth distribution before assuming.
-- 55 Cnc e is the one rejection that this explanation does not cover (332 ppm, shallow). Its
-  0.74 d period is the likely cause, but that is a guess and is flagged as one.
-
-This is the most useful negative result in the project so far, and it only became visible
-because the scores were checked against a population whose labels were known in advance.
-
-**The fix, confirmed.** The TESS model was predicted (from the training distributions, before
-it was trained) not to carry this prior, because in the TOI split only 11.5 % of transits
-deeper than 10,000 ppm are false positives — *below* its 17.2 % base rate. Re-scoring the same
-41 targets:
-
-| planet | Kepler model | TESS model |
-|---|---|---|
-| KELT-9 b | 0.060 | **0.629** |
-| HD 189733 b | 0.124 | **0.662** |
-| 55 Cnc e | 0.158 | **0.723** |
-| WASP-19 b | 0.174 | **0.714** |
-| WASP-12 b | 0.199 | **0.770** |
-| WASP-18 b | 0.244 | **0.782** |
-
-Fraction of these confirmed planets scored ≥ 0.5 rises from **71 % to 93 %**.
-
-## 1c. But the two models have OPPOSITE biases — neither is neutral
-
-The TESS model did not simply turn out better. Measured across all 41 targets:
-
-| Spearman vs score | Kepler model | TESS model |
-|---|---|---|
-| planet radius | **−0.570** | **+0.302** |
-| transit depth | −0.410 | +0.221 |
-| orbital period | +0.560 | −0.192 |
-
-Every correlation flips sign. By planet size:
-
-| bucket | Kepler model | TESS model | change |
-|---|---|---|---|
-| small, R_p < 4 R⊕ (n=17) | **0.786** | 0.633 | −0.153 |
-| mid, 4–8 R⊕ (n=2) | 0.958 | 0.830 | −0.128 |
-| giant, R_p ≥ 8 R⊕ (n=22) | 0.511 | **0.741** | +0.230 |
-
-Each model is more confident on whatever its training population was rich in — Kepler's median
-transit is 410 ppm, TESS's is 4,851 ppm. **This directly affects the top of this table:** the
-TRAPPIST-1 planets rank first on the priority score, and they are exactly where the TESS model
-is *least* confident (0.48–0.58, against the Kepler model's 0.73–0.88). The primary column is
-the methodologically correct one, but for the small rocky targets that dominate the High band
-it is the more pessimistic of the two, and that should be read as model uncertainty rather than
-evidence about those planets.
-
-Taking the maximum of the two scores recovers 100 % of the confirmed planets at ≥ 0.5. That is
-**not adopted**: on a set containing no negatives, a max over two scores can only go up, so it
-demonstrates nothing about precision. It is recorded here as an observation, not a method.
-
-## 2. Priority from explicit weights
-
-Replacing the template's heuristic bands. Every component is a measured quantity scaled to 0–1:
-
-| component | weight | definition |
-|---|---|---|
-| `small` | 0.25 | log-scaled radius, 1 at Earth size → 0 at Jupiter size |
-| `temperate` | 0.25 | Gaussian peaked at 300 K (a prioritisation preference, **not** a habitability claim) |
-| `observable` | 0.30 | log-scaled `2·R_p·H/R_s²` — one scale height of absorption, in ppm |
-| `evidence` | 0.20 | strongest out-of-fold molecular probability from Stage B |
-
-Weights are **renormalised over the components a planet actually has**. This matters: 41 of 54
-planets have no spectral evidence term, and scoring them as evidence = 0 would push every
-un-observed planet to the bottom purely because nobody has pointed JWST at it yet. That would
-be a statement about the observing log, not about the planet.
-
-### Top targets
-
-| rank | planet | score | R_p (R⊕) | T_eq (K) | 1 H (ppm) | µ | components |
-|---|---|---|---|---|---|---|---|
-| 1 | TOI-270 d | 0.721 | 2.00 | 383 | 49.0 | 2.3 | + evidence |
-| 2 | TRAPPIST-1 c | 0.717 | 1.10 | 340 | 19.2 | 28 | + evidence |
-| 3 | GJ 1214 b | 0.705 | 2.73 | 567 | 285.3 | 2.3 | small+temperate+observable |
-| 4 | TRAPPIST-1 d | 0.682 | 0.79 | 286 | 20.2 | 28 | small+temperate+observable |
-| 5 | K2-18 b | 0.668 | 2.37 | 284 | 24.3 | 2.3 | + evidence |
-| 6 | TRAPPIST-1 b | 0.668 | 1.12 | 398 | 22.5 | 28 | small+temperate+observable |
-| 7 | TRAPPIST-1 e | 0.659 | 0.92 | 250 | 15.7 | 28 | small+temperate+observable |
-| 8 | GJ 3470 b | 0.652 | 4.57 | 594 | 132.0 | 2.3 | + evidence |
-
-TRAPPIST-1 still occupies four of the top seven, and the reason is physical rather than
-sentimental: the host is 0.119 R☉, and `A_H = 2·R_p·H/R_s²` scales as 1/R_s². A small rocky
-planet around a very small star produces a *larger* signal than the same planet around a
-Sun-like star. That is precisely why TRAPPIST-1 is the most-observed rocky system in the sky,
-and the score recovers it from first principles without being told.
-
-It no longer sweeps the first six places, and the reason is a **correction made 2026-09-27**: the
-scale-height amplitude previously used µ = 2.3 (H₂/He) for all 54 planets, which overstates one
-scale height by 28/2.3 = 12.2× for a rocky planet with a high-µ secondary atmosphere. µ is now
-assigned per planet — 28 (N₂, Earth-like) below the 1.8 R⊕ radius valley, 2.3 above it — which
-matches what `stage_b_rocky_benchmark` already used for these same planets: GJ 1132 b now reads
-8.75 ppm against the benchmark's 8.75, where before it read 106.6. Ten of the 54 changed band;
-the five rocky planets that lost the most (GJ 1132 b and c, LHS 475 b, LHS 1140 b, L 98-59 f) all
-fell from High to Medium. Both bracketing amplitudes are carried in the table as
-`amplitude_1H_ppm_mu2p3` and `_mu28`.
-
-The 1.8 R⊕ threshold is an assumption and it is load-bearing for one entry: TOI-270 d sits at
-2.00 R⊕, just above it, and takes µ = 2.3. Placing the valley at 2.0 R⊕ instead would move it to
-µ = 28 and drop it out of first place.
-
-Bands are terciles of this sample of 54 (18 High / 18 Medium / 18 Low) — relative to this list,
-not absolute.
+**Ranks with uncertainty.** The score is computed for every draw, so each planet gets a median rank and a 90 % rank interval. Ties share the better rank: three planets tied at the top are all rank 1, never 1/2/3 by row order.
 
 ---
 
-## 3. Ablation
+## 2. Result
 
-Each contributor dropped in turn, re-scored, compared to the full ranking:
+**44 transiting planets are ranked.** Eleven planets are in the conservative HZ with P ≥ 0.5, and fifteen in the optimistic one; this counts transiting and non-transiting planets together.
 
-| dropped | weight | Spearman vs full | planets changing band |
-|---|---|---|---|
-| **small** | 0.25 | **0.749** | 22 |
-| temperate | 0.25 | 0.766 | 21 |
-| observable | 0.30 | 0.879 | 12 |
-| evidence | 0.20 | 0.969 | 10 |
+| Rank (90 % interval) | Planet | P(cons. HZ) | P(opt. HZ) | P(R < 1.5 R⊕) | TSM / cut | T_eq (K) |
+|---|---|---|---|---|---|---|
+| 1 (1–1) | TRAPPIST-1 e | 1.00 | 1.00 | 1.00 | 20.2 / 12 | 250 |
+| 1 (1–1) | TRAPPIST-1 f | 1.00 | 1.00 | 1.00 | 17.2 / 12 | 218 |
+| 1 (1–1) | TRAPPIST-1 g | 1.00 | 1.00 | 1.00 | 15.4 / 12 | 197 |
+| 4 (4–7) | LP 890-9 c | 0.69 | 1.00 | 0.99 | 7.9 / 12 | 271 |
+| 5 (4–5) | TRAPPIST-1 d | 0.00 | 1.00 | 1.00 | 25.9 / 12 | 286 |
+| 6 (5–14) | TOI-700 d | 0.82 | 1.00 | 1.00 | 3.6 / 12 | 268 |
+| 7 (6–15) | Kepler-62 f | 1.00 | 1.00 | 0.90 | 0.40 / 12 | 224 |
+| 8 (7–13) | LHS 1140 b | 1.00 | 1.00 | 0.00 | 67.5 / 92 | 225 |
+| 9 (7–15) | TOI-700 e | 0.01 | 0.95 | 1.00 | 4.3 / 12 | 295 |
+| 10 (8–11) | GJ 1132 b, GJ 486 b, LHS 475 b, TRAPPIST-1 b, TRAPPIST-1 c | 0.00 | 0.00 | 1.00 | above cut | 340–696 |
 
-The ranking depends most on **planet size**, then temperature, then observability. Before the µ
-correction above, `observable` looked like the dominant term (ρ = 0.907); at a single µ = 2.3 it
-was inflated for exactly the small planets `small` already favours, so the two terms were partly
-measuring the same thing. With µ assigned per planet they separate, and the preference terms turn
-out to carry more of the ordering than the physics term does — which is worth knowing, because
-preferences are arguable and physics is not.
+**Reading it.**
+- **TRAPPIST-1 e, f and g are the only planets that satisfy all three criteria at once.** Each is in the conservative HZ, terrestrial, and above Kempton's follow-up cut. The reason is physical: the host is 0.119 R☉, and the transmission signal scales as R★⁻².
+- **The next tier is in the HZ but harder to observe.** LP 890-9 c (TSM 7.9), TOI-700 d (3.6) and Kepler-62 f (0.40) are all below the cut; Kepler-62 f because its host is faint (J = 12.3) and 0.64 R☉. Their wide rank intervals reflect exactly that trade.
+- **LHS 1140 b is in the conservative HZ with certainty but is not terrestrial-size by this criterion** (1.73 R⊕).
+- **The hot rocky planets at rank 10** (GJ 1132 b, GJ 486 b, LHS 475 b, TRAPPIST-1 b/c) are excellent transmission targets but not in the HZ. The ranking reflects that rather than hiding it.
 
-`evidence` still moves the ranking least (ρ = 0.969), a direct consequence of §1: it is present
-for only 11 (H₂O), 8 (CO₂) and 9 (CH₄) of 54 planets, so it cannot move a ranking it barely
-participates in. Those counts fell from 13 each on 2026-09-27, when the import was restricted to
-the LOPO rows Stage B could actually evaluate — 136 of 265 rows carry `label_known = False`
-because the spectrum does not cover that molecule's band, and Stage B masks them out of its own
-loss and metrics. Importing their predictions put numbers in cells Stage B had declined to score.
+**Caveats carried in `physics_notes`.**
+- TRAPPIST-1's T_eff = 2,566 K is 34 K below the HZ fit's validity range, so the boundaries are evaluated at 2,600 K.
+- Six transiting planets' masses come from the Chen & Kipping mass–radius relation, not a measurement (LP 890-9 c, TOI-700 d, TOI-700 e, Kepler-62 f, LHS 475 b, Kepler-296 f). Two of them, Kepler-62 f and LP 890-9 c, have only catalogue mass *upper limits* (< 35 and < 25.3 M⊕). A version of 2026-10-17 used those limits as masses, which understated their TSM about tenfold (corrected the same day; `tests/test_target_physics.py` guards it).
+- Planets above 10 R⊕ use the 4–10 R⊕ TSM scale factor, an extrapolation.
 
-No contributor changes the ranking beyond recognition (ρ ≥ 0.75), so the ordering is reasonably
-robust to the exact weights — which also means the weights are not doing heroic work, and the
-result should not be over-interpreted as a finely-tuned optimum.
+## 3. Ablation — what the order depends on
 
----
+| Criterion removed | Spearman vs full ranking | Top-10 overlap |
+|---|---|---|
+| habitable zone | 0.711 | 6 / 10 |
+| terrestrial size | 0.867 | 8 / 10 |
+| observability (TSM) | 0.960 | 9 / 10 |
 
-## 4. What would change this table
-
-1. **Finish the TESS build** (running, ~20 h left). TESS covers most of these 54 targets, so it
-   is the one change that could move `transit_ML_probability` from 2/54 towards most of them.
-   That requires a TESS-trained model, not the Kepler one — cross-mission transfer is an
-   assumption, and should be tested rather than assumed.
-2. **More JWST spectra** would extend `evidence` beyond 13 planets. The pack's
-   `download_spectra.py` skips existing files, so re-running it is cheap.
-3. **O₃ will not be modellable** until positive examples exist. It stays empty, deliberately.
+Habitable-zone membership drives the ranking most. The weights are a stated preference; the ablation shows what changes if they are argued with.
 
 ---
 
-## 5. Limitations
+## 4. What was wrong with the previous version, and why it changed
 
-- `temperate` peaks at 300 K by choice. It is a prioritisation preference and carries no
-  habitability claim.
-- `evidence` uses the maximum molecular probability, so a planet with one confident detection
-  scores the same as one with three. Defensible for "is there anything to look at", crude as
-  a chemistry summary.
-- Scale-height amplitudes use µ = 28 (N₂) below 1.8 R⊕ and µ = 2.3 (H₂/He) above it. The
-  threshold is an assumption, not a measurement; `amplitude_1H_ppm_mu2p3` and `_mu28` in the
-  table bracket it, and TOI-270 d's first place depends on which side of it that planet falls.
-- The `evidence` term is a Stage B model output, and Stage B's own conclusion is that the model
-  has **no skill above a constant majority prediction** at planet level. It is a ranking signal,
-  not a detection claim, and `gas_provenance` now says so in every row. Three planets carry a
-  score ≥ 0.5 for a molecule their verified label records as a non-detection — TRAPPIST-1 c
-  (H₂O 0.93, CH₄ 0.57), K2-18 b (H₂O 1.00, CO₂ 1.00) and WASP-39 b (CH₄ 0.71) — and are flagged
-  in the `score_vs_verified_label` column rather than left for a reader to notice.
-- Bands are terciles, so "High" means "top third of these 54", not an absolute standard.
-- Kepler-296 f's transit score is in-sample and is labelled as such; it should not be quoted.
+The version of 2026-09-25 to 2026-10-16 had four defects, found in the 2026-10-17 audit:
+
+1. **The "temperate" term was a 400 K-wide Gaussian around 300 K**, applied to catalogue equilibrium temperatures from 45 different papers. A 600 K planet scored 0.76. There was no habitable-zone physics.
+2. **20 % of the weight came from Stage B molecule probabilities.** Stage B's own conclusion is that the model has no skill above a constant, and three planets scored ≥ 0.5 for molecules that the literature records as *not* detected.
+3. **Ten planets that do not transit were given transmission-observability scores.** GJ 1002 b ranked 11th.
+4. **The planet list was read from the excluded `05_final_ML_dataset_DO_NOT_USE/` folder.** It now lives in `stage_c_priority_fusion/target_list.csv`.
+
+The molecule model is no longer an input. Literature detections and non-detections from `outputs/labels/verified_gas_labels.csv` are shown in `lit_detected` / `lit_not_detected` for information.
 
 ---
 
-## 6. Reproducing
+## 5. Vetting scores of the 54 (informational — not in the ranking)
+
+All 54 are confirmed planets, so the vetting models' scores on their TESS light curves are a **sanity check on the vetters**, not evidence about the planets. These findings, from 2026-09-26, still stand:
+
+- The **Kepler-trained** vetter rejected the canonical hot Jupiters (KELT-9 b 0.06, HD 189733 b 0.12, WASP-19 b 0.17 …). Only 71 % of these confirmed planets scored ≥ 0.5.
+  - The cause is measured in its training data: 93.4 % of Kepler KOIs deeper than 10,000 ppm are false positives (base rate 49.9 %).
+- The **TESS-trained** vetter, whose training data show the opposite (11.5 % against a 17.2 % base rate), scores 93 % of them ≥ 0.5.
+- The two models' biases are opposite across these 41 planets: Spearman with planet radius is −0.570 (Kepler model) vs +0.302 (TESS model).
+- Both columns are kept in the table (`vetting_score_*_model`). Neither feeds the ranking.
+
+---
+
+## 6. Limitations
+
+- **The weights are a preference, not a measurement.** The ablation (§3) and the rank intervals are how the ranking should be read.
+- **HZ boundaries depend on the climate-model assumptions** of Kopparapu et al.: a 1 M⊕ planet, an N₂–CO₂–H₂O atmosphere, no clouds. They are *not* habitability.
+- **The TSM assumes a cloud-free atmosphere** of fixed composition per size bin. Clouds or a high mean molecular weight can suppress the signal by large factors.
+- **Fifty-four planets are a mentor-chosen list**, not a complete or unbiased sample. Bands and ranks are relative to this list only.
+
+## 7. Reproducing
 
 ```bash
 python stage_c_priority_fusion/build_priority_table.py
+python -m pytest tests/test_target_physics.py
 ```
-Writes `outputs/stage_c/{final_priority_table.csv, ablation.csv, stage_c_summary.json}`
-and `eda/stage_c_priority_overview.png`. Reads the template read-only.
