@@ -1,0 +1,230 @@
+{
+  "run": "20261017_225719",
+  "smoke": false,
+  "generated_at": "2026-10-17T23:01:46",
+  "args": {
+    "mission": "TESS",
+    "train_views": "/Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_v2/tess_train",
+    "val_views": "/Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_v2/tess_val",
+    "test_views": "/Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_v2/tess_test",
+    "eval_test": "False",
+    "smoke": "False",
+    "smoke_holdout": "0.15",
+    "limit": "0",
+    "epochs": "60",
+    "batch_size": "64",
+    "lr": "0.001",
+    "weight_decay": "0.0001",
+    "dropout": "0.3",
+    "width": "1.0",
+    "arch": "dual_cnn_lstm",
+    "clip": "5.0",
+    "augment": "True",
+    "batchnorm": "True",
+    "use_errors": "False",
+    "class_weight": "sqrt",
+    "deterministic": "True",
+    "split_version": "v2",
+    "views_root": "detection_views_v2",
+    "scheduler": "True",
+    "monitor": "roc",
+    "patience": "10",
+    "min_delta": "0.0001",
+    "seed": "2",
+    "device": "cpu",
+    "threads": "3",
+    "out": "stage_a_transit_model/runs/v2_tess_dual_cnn_lstm_cwsqrt_s2",
+    "no_save": "False"
+  },
+  "n_train_rows": 4095,
+  "n_val_rows": 847,
+  "official_train_balance_pct": {
+    "FALSE POSITIVE": 17.22,
+    "CANDIDATE": 65.25,
+    "CONFIRMED": 17.52
+  },
+  "built_subset_balance_pct": {
+    "FALSE POSITIVE": 13.33,
+    "CANDIDATE": 65.13,
+    "CONFIRMED": 21.54
+  },
+  "training": {
+    "history": [
+      {
+        "epoch": 1,
+        "train_loss": 1.0295492289587855,
+        "val_accuracy_3class": 0.6446280991735537,
+        "val_roc_auc_binary": 0.6964632006648812,
+        "val_pr_auc_binary": 0.9248645078523299
+      },
+      {
+        "epoch": 2,
+        "train_loss": 0.9750530617311597,
+        "val_accuracy_3class": 0.6493506493506493,
+        "val_roc_auc_binary": 0.7498037676609104,
+        "val_pr_auc_binary": 0.9454220602184955
+      },
+      {
+        "epoch": 3,
+        "train_loss": 0.9380597164854407,
+        "val_accuracy_3class": 0.6446280991735537,
+        "val_roc_auc_binary": 0.7694616308061686,
+        "val_pr_auc_binary": 0.9491121243280567
+      },
+      {
+        "epoch": 4,
+        "train_loss": 0.9163907151669264,
+        "val_accuracy_3class": 0.6245572609208973,
+        "val_roc_auc_binary": 0.7799658324868408,
+        "val_pr_auc_binary": 0.9527277215000982
+      },
+      {
+        "epoch": 5,
+        "train_loss": 0.9042027518153191,
+        "val_accuracy_3class": 0.6481700118063755,
+        "val_roc_auc_binary": 0.7826669129190137,
+        "val_pr_auc_binary": 0.9498992810119409
+      },
+      {
+        "epoch": 6,
+        "train_loss": 0.9023413490504026,
+        "val_accuracy_3class": 0.615112160566706,
+        "val_roc_auc_binary": 0.7834056699602917,
+        "val_pr_auc_binary": 0.9533229927330794
+      },
+      {
+        "epoch": 7,
+        "train_loss": 0.8977318396791816,
+        "val_accuracy_3class": 0.6387249114521841,
+        "val_roc_auc_binary": 0.7720819096869518,
+        "val_pr_auc_binary": 0.9514829499365905
+      },
+      {
+        "epoch": 8,
+        "train_loss": 0.8948422400280833,
+        "val_accuracy_3class": 0.6221959858323495,
+        "val_roc_auc_binary": 0.782932403730723,
+        "val_pr_auc_binary": 0.95226983019681
+      },
+      {
+        "epoch": 9,
+        "train_loss": 0.8905034475028515,
+        "val_accuracy_3class": 0.6257378984651711,
+        "val_roc_auc_binary": 0.7816164927509466,
+        "val_pr_auc_binary": 0.9505782024274081
+      },
+      {
+        "epoch": 10,
+        "train_loss": 0.8830030132085085,
+        "val_accuracy_3class": 0.6505312868949232,
+        "val_roc_auc_binary": 0.7805314433465694,
+        "val_pr_auc_binary": 0.9533680690203344
+      },
+      {
+        "epoch": 11,
+        "train_loss": 0.8774950355291367,
+        "val_accuracy_3class": 0.6469893742621016,
+        "val_roc_auc_binary": 0.7801158925108506,
+        "val_pr_auc_binary": 0.9532728773381132
+      },
+      {
+        "epoch": 12,
+        "train_loss": 0.87103664688766,
+        "val_accuracy_3class": 0.654073199527745,
+        "val_roc_auc_binary": 0.7793309631544926,
+        "val_pr_auc_binary": 0.9518532465193923
+      },
+      {
+        "epoch": 13,
+        "train_loss": 0.8695512088015676,
+        "val_accuracy_3class": 0.628099173553719,
+        "val_roc_auc_binary": 0.7818935266414258,
+        "val_pr_auc_binary": 0.9537268391773324
+      },
+      {
+        "epoch": 14,
+        "train_loss": 0.8664291817694902,
+        "val_accuracy_3class": 0.6233766233766234,
+        "val_roc_auc_binary": 0.7686997876073506,
+        "val_pr_auc_binary": 0.9483064206712896
+      },
+      {
+        "epoch": 15,
+        "train_loss": 0.8539422871544957,
+        "val_accuracy_3class": 0.6316410861865407,
+        "val_roc_auc_binary": 0.7789500415550835,
+        "val_pr_auc_binary": 0.9511128396219739
+      },
+      {
+        "epoch": 16,
+        "train_loss": 0.8541593095287681,
+        "val_accuracy_3class": 0.6375442739079102,
+        "val_roc_auc_binary": 0.7790770154215533,
+        "val_pr_auc_binary": 0.9532441508239902
+      }
+    ],
+    "best_epoch": 6,
+    "best_monitor": 0.7834056699602917,
+    "monitor": "val binary ROC-AUC",
+    "n_params": 40371,
+    "class_weights": [
+      1.5811388300841898,
+      0.7154096893543218,
+      1.2440333788202982
+    ]
+  },
+  "val_metrics": {
+    "n": 847,
+    "class_counts": {
+      "FALSE POSITIVE": 119,
+      "CANDIDATE": 546,
+      "CONFIRMED": 182
+    },
+    "accuracy_3class": 0.615112160566706,
+    "confusion_3class": [
+      [
+        56,
+        57,
+        6
+      ],
+      [
+        88,
+        412,
+        46
+      ],
+      [
+        10,
+        119,
+        53
+      ]
+    ],
+    "report_3class": "                precision    recall  f1-score   support\n\nFALSE POSITIVE      0.364     0.471     0.410       119\n     CANDIDATE      0.701     0.755     0.727       546\n     CONFIRMED      0.505     0.291     0.369       182\n\n      accuracy                          0.615       847\n     macro avg      0.523     0.505     0.502       847\n  weighted avg      0.611     0.615     0.605       847\n",
+    "precision_at_recall": [
+      {
+        "target_recall": 0.9,
+        "achievable": true,
+        "precision": 0.9024725274725275,
+        "recall": 0.9024725274725275,
+        "threshold": 0.5266815423965454
+      },
+      {
+        "target_recall": 0.95,
+        "achievable": true,
+        "precision": 0.8839285714285714,
+        "recall": 0.9519230769230769,
+        "threshold": 0.4202117323875427
+      },
+      {
+        "target_recall": 0.99,
+        "achievable": true,
+        "precision": 0.8667466986794717,
+        "recall": 0.9917582417582418,
+        "threshold": 0.27393078804016113
+      }
+    ],
+    "roc_auc_binary": 0.7834056699602917,
+    "pr_auc_binary": 0.9533229927330794,
+    "roc_auc_3class_macro_ovr": 0.7088568999454283
+  },
+  "test_metrics": null
+}

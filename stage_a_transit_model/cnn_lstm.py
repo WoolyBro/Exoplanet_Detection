@@ -68,6 +68,13 @@ KOI_SPLIT_FILE = "koi_cumulative_split.csv"   # kept: other modules import this 
 # Per-mission catalogue wiring. `object_id` is how the built view names itself, and it must be
 # reconstructed from the catalogue exactly as preprocessing_pipeline.ephemeris_from_row wrote
 # it, or the split check below rejects every row.
+# Split versions: v1 = star-grouped (split_catalogs.py; every result before 2026-10-17);
+# v2 = star- AND signal-family-grouped (split_signal_families.py; no cross-split signal twins).
+SPLIT_FILES = {
+    ("Kepler", "v1"): "koi_cumulative_split.csv", ("Kepler", "v2"): "koi_cumulative_split_v2.csv",
+    ("TESS", "v1"): "toi_tess_candidates_split.csv", ("TESS", "v2"): "toi_tess_candidates_split_v2.csv",
+}
+
 MISSIONS = {
     "Kepler": {"split_file": "koi_cumulative_split.csv",
                "object_id": lambda df: df["kepoi_name"].astype(str),
@@ -254,7 +261,7 @@ def drop_unusable(vs: ViewSet, verbose: bool = True) -> ViewSet:
 # =========================================================================== #
 # Split assignment (read, never computed)
 # =========================================================================== #
-def official_split_map(mission: str = "Kepler") -> tuple[dict[str, str], pd.Series]:
+def official_split_map(mission: str = "Kepler", version: str = "v1") -> tuple[dict[str, str], pd.Series]:
     """object_id -> official split, plus the official train-split label balance.
 
     Read from the `split` column of that mission's split catalog via the manifest
@@ -265,7 +272,7 @@ def official_split_map(mission: str = "Kepler") -> tuple[dict[str, str], pd.Seri
 
     cfg = MISSIONS[mission]
     with contextlib.redirect_stdout(io.StringIO()):
-        cat = dm.load_stage1_catalogs()[cfg["split_file"]]
+        cat = dm.load_stage1_catalogs()[SPLIT_FILES[(mission, version)]]
     mapping = dict(zip(cfg["object_id"](cat), cat["split"].astype(str)))
     balance = cat.loc[cat["split"] == "train", "label_harmonized"].value_counts(normalize=True)
     return mapping, balance.reindex(CLASSES).fillna(0.0) * 100
@@ -471,11 +478,24 @@ def threshold_sweep(y_true: np.ndarray, proba: np.ndarray, n_points: int = 201) 
 # =========================================================================== #
 # Training
 # =========================================================================== #
-def class_weights(label_index: np.ndarray) -> np.ndarray:
-    """Inverse-frequency weights from the rows actually being trained on."""
+def class_weights(label_index: np.ndarray, scheme: str = "inverse") -> np.ndarray:
+    """Per-class loss weights from the rows actually being trained on.
+
+    inverse - mean count / class count (the original choice, used for every result before v2)
+    sqrt    - its square root: a softer correction
+    none    - all ones
+    Added as an option because on TESS the inverse weights made 3-class accuracy worse than a
+    constant predictor; the scheme is now a tested choice rather than an assumed one.
+    """
+    if scheme == "none":
+        return np.ones(len(CLASSES))
     counts = np.array([(label_index == i).sum() for i in range(len(CLASSES))], float)
     counts = np.where(counts > 0, counts, np.nan)
     w = np.nanmean(counts) / counts
+    if scheme == "sqrt":
+        w = np.sqrt(w)
+    elif scheme != "inverse":
+        raise ValueError(f"unknown class-weight scheme {scheme!r}")
     return np.where(np.isfinite(w), w, 0.0)
 
 
@@ -497,8 +517,9 @@ def train(model, train_vs: ViewSet, val_vs: ViewSet, args) -> dict:
     gtr, ltr, ytr = tensors(train_vs)
     gva, lva, yva = tensors(val_vs)
 
-    w = class_weights(train_vs.label_index)
-    print(f"  class weights (inverse frequency): " + ", ".join(f"{c} {v:.3f}" for c, v in zip(CLASSES, w)))
+    scheme = getattr(args, "class_weight", "inverse")
+    w = class_weights(train_vs.label_index, scheme)
+    print(f"  class weights ({scheme}): " + ", ".join(f"{c} {v:.3f}" for c, v in zip(CLASSES, w)))
     criterion = nn.CrossEntropyLoss(weight=torch.tensor(w, dtype=torch.float32, device=device))
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_decay)
 
@@ -622,6 +643,14 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p.add_argument("--use-errors", action="store_true",
                    help="feed the per-bin flux uncertainty as a second input channel. Needs views built "
                         "with an error channel; point --views-root (or the --*-views flags) at them")
+    p.add_argument("--class-weight", choices=["inverse", "sqrt", "none"], default="inverse",
+                   help="loss weighting per class (default inverse frequency, as in every v1 result)")
+    p.add_argument("--deterministic", action="store_true",
+                   help="torch.use_deterministic_algorithms(True). Removes run-to-run nondeterminism on one "
+                        "machine; it does not make results identical across CPUs or operating systems")
+    p.add_argument("--split-version", choices=["v1", "v2"], default="v1",
+                   help="which split definition the views must belong to: v1 star-grouped (all results "
+                        "reported before 2026-10-17), v2 star- and signal-family-grouped")
     p.add_argument("--views-root", type=Path, default=None,
                    help="folder holding <mission>_{train,val,test}; default detection_views/. "
                         "Use detection_views_err for the error-channel views")
@@ -657,6 +686,8 @@ def main(argv: list[str] | None = None) -> int:
     import torch
 
     torch.manual_seed(args.seed)
+    if args.deterministic:
+        torch.use_deterministic_algorithms(True)
     np.random.seed(args.seed)
     torch.set_num_threads(max(1, args.threads))
 
@@ -672,7 +703,7 @@ def main(argv: list[str] | None = None) -> int:
 
     print("\n[1] views")
     vs = drop_unusable(consolidate_views(args.train_views))
-    split_map, official_balance = official_split_map(args.mission)
+    split_map, official_balance = official_split_map(args.mission, args.split_version)
 
     # Every row must be a known KOI/TOI of the official TRAIN split. A row whose split
     # is anything else means the build wrote outside its remit: stop rather than train on it.

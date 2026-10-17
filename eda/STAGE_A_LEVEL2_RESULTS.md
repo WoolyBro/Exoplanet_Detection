@@ -8,6 +8,8 @@
 
 ---
 
+> **Superseded for the headline result** by `STAGE_A_V2_FINAL_RESULTS.md` (2026-10-18). The numbers below use split v1, which leaked through cross-star signal twins. They are kept as the project's history and for the analyses not repeated on v2.
+
 ## 1. Headline
 
 | | val (1,414) | **test (1,406)** |

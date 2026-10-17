@@ -27,12 +27,17 @@ whether it exists on disk.
 
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import pandas as pd
 
 RESEARCH_DIR = Path(__file__).resolve().parent
 PACK = "exoplanet_research_data"  # mentor-approved pack (read-only)
+# External (non-pack) Stage 2 data. These lived on a D: drive of the original Windows machine; the
+# location is now an environment variable so the manifest names the same files on any machine.
+# Unset -> the original location, so nothing changes where that drive exists.
+EXTERNAL = os.environ.get("EXO_EXTERNAL_DATA", "D:/Files").rstrip("/\\")
 
 # --------------------------------------------------------------------------- #
 # Roles
@@ -41,6 +46,11 @@ STAGE_1_TRAINING = [
     "splits/koi_cumulative_split.csv",
     "splits/k2_planets_candidates_split.csv",
     "splits/toi_tess_candidates_split.csv",
+    # Split v2 (split_signal_families.py): the same rows, grouped by star AND by signal family, so
+    # no signal twin (same period + epoch on two different stars) spans two splits. v1 stays for
+    # reproducing the results reported before 2026-10-17.
+    "splits/koi_cumulative_split_v2.csv",
+    "splits/toi_tess_candidates_split_v2.csv",
 ]
 STAGE_1_SUPPLEMENTARY = [
     f"{PACK}/01_candidate_catalogs/pscomppars_confirmed_planets.csv",
@@ -60,13 +70,13 @@ STAGE_2_TRAINING = [
     # surface-level gas composition as a reference population rather than generating
     # spectra from vertical profiles.
     "datasets/pyatmos_final.csv",
-    "D:/Files/inara_earthlike_subset/psg_models.csv",     # INARA (PSG models)
+    f"{EXTERNAL}/inara_earthlike_subset/psg_models.csv",  # INARA (PSG models)
 ]
 STAGE_2_VALIDATION_ONLY = [
     f"{PACK}/04_atmospheric_spectra/",  # real observed spectra, from mentor's package
 ]
 STAGE_2_REFERENCE_ONLY = [
-    "D:/Files/Habitable World Catalogue.csv",
+    f"{EXTERNAL}/Habitable World Catalogue.csv",
 ]
 
 # Never to be used by any stage (the user renamed it to say so).
@@ -99,14 +109,16 @@ PROVENANCE = {
     "splits/koi_cumulative_split.csv": "research pack",
     "splits/k2_planets_candidates_split.csv": "research pack",
     "splits/toi_tess_candidates_split.csv": "research pack",
+    "splits/koi_cumulative_split_v2.csv": "research pack (re-split, split_signal_families.py)",
+    "splits/toi_tess_candidates_split_v2.csv": "research pack (re-split, split_signal_families.py)",
     f"{PACK}/01_candidate_catalogs/pscomppars_confirmed_planets.csv": "research pack",
     f"{PACK}/01_candidate_catalogs/ps_transiting_default.csv": "research pack",
     f"{PACK}/03_stellar_parameters/stellarhosts.csv": "research pack",
     f"{PACK}/02_lightcurves/": "research pack",
     "datasets/pyatmos_final.csv": "PyATMOS (VPL)",
-    "D:/Files/inara_earthlike_subset/psg_models.csv": "INARA / PSG",
+    f"{EXTERNAL}/inara_earthlike_subset/psg_models.csv": "INARA / PSG",
     f"{PACK}/04_atmospheric_spectra/": "research pack",
-    "D:/Files/Habitable World Catalogue.csv": "PHL Habitable Worlds Catalogue",
+    f"{EXTERNAL}/Habitable World Catalogue.csv": "PHL Habitable Worlds Catalogue",
 }
 
 
@@ -191,7 +203,10 @@ def _load_role(role: str) -> dict[str, pd.DataFrame]:
     paths = {entry: _table_path(entry) for entry in ROLES[role]}
     missing = [f"{entry} -> {p}" for entry, p in paths.items() if not p.is_file()]
     if missing:
-        raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing))
+        hint = ("\n  External Stage 2 data is looked up under EXO_EXTERNAL_DATA (currently "
+                f"{EXTERNAL!r}); set it to the folder holding inara_earthlike_subset/ and the "
+                "Habitable World Catalogue.") if role.startswith("STAGE_2") else ""
+        raise FileNotFoundError(f"{role}: manifest files not found on disk:\n  " + "\n  ".join(missing) + hint)
 
     frames = {}
     for entry, path in paths.items():
