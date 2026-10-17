@@ -19,6 +19,8 @@ exoplanet_research_data/
 # progress.jsonl is the per-star checkpoint and is also regenerable, but it is
 # what makes a build resumable - keep a copy outside the repo before deleting.
 detection_views/
+# The same views rebuilt WITH the per-bin flux-error channel (tools/rebuild_with_errors.py).
+detection_views_err/
 
 # --- Regenerable model cache: 116 MB -----------------------------------------
 # Consolidated view stacks. cnn_lstm.py rebuilds any of these automatically when
@@ -51,6 +53,7 @@ splits/k2/
 stdout_*.txt
 stderr_*.txt
 tess_chain.log
+rebuild_errors_chain.log
 build_pid.txt
 stage_a_transit_model/logs/
 _cleanup_backup_*/
@@ -95,3 +98,4 @@ release_assets/
 
 # injection-recovery run output
 inj_run.log
+err_sweep.log

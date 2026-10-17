@@ -96,13 +96,50 @@ class ViewSet:
     label_index: np.ndarray  # (n,) int8
     object_id: np.ndarray    # (n,) str
     star_id: np.ndarray      # (n,) int64
+    # Per-bin 1-sigma of the views, same units (fractions of the transit depth). None for views
+    # built before preprocessing_pipeline saved an error channel.
+    global_err: np.ndarray | None = None
+    local_err: np.ndarray | None = None
 
     def __len__(self) -> int:
         return len(self.object_id)
 
+    @property
+    def has_errors(self) -> bool:
+        return self.global_err is not None and self.local_err is not None
+
     def take(self, positions: np.ndarray) -> "ViewSet":
+        pick = (lambda a: None if a is None else a[positions])
         return ViewSet(self.global_view[positions], self.local_view[positions],
-                       self.label_index[positions], self.object_id[positions], self.star_id[positions])
+                       self.label_index[positions], self.object_id[positions], self.star_id[positions],
+                       pick(self.global_err), pick(self.local_err))
+
+
+# The error channel spans orders of magnitude (0.001 for a deep, well-measured transit to >1 for
+# one at the noise floor), so the network sees log10 of it, clipped and scaled to roughly [-2, 1].
+ERR_LOG_MIN, ERR_LOG_MAX = -4.0, 2.0
+
+
+def error_channel(err: np.ndarray) -> np.ndarray:
+    """Per-bin uncertainty -> network input. A non-finite error means the view has NO measurement
+    in that window at all (the local window of a transit the light curve never covered: 18 TESS
+    train and 2 TESS val views, 0 Kepler). It is mapped to the maximum, "completely uncertain",
+    never left as NaN: those NaNs made every TESS --use-errors run stop on epoch 1 (NaN guard)."""
+    err = np.where(np.isfinite(err), err, 10.0 ** ERR_LOG_MAX)
+    return (np.clip(np.log10(np.maximum(err, 10.0 ** ERR_LOG_MIN)), ERR_LOG_MIN, ERR_LOG_MAX) / 2.0
+            ).astype(np.float32)
+
+
+def model_inputs(vs: ViewSet, use_errors: bool) -> tuple[np.ndarray, np.ndarray]:
+    """(global, local) arrays exactly as the model takes them: (n, L) depth only, or
+    (n, 2, L) with the transformed error channel stacked under the depth."""
+    if not use_errors:
+        return vs.global_view, vs.local_view
+    if not vs.has_errors:
+        raise SystemExit("--use-errors needs views built with an error channel "
+                         "(preprocessing_pipeline.py build-split ... --views-root detection_views_err)")
+    return (np.stack([vs.global_view, error_channel(vs.global_err)], axis=1),
+            np.stack([vs.local_view, error_channel(vs.local_err)], axis=1))
 
 
 def _views_fingerprint(files: list[Path]) -> str:
@@ -155,7 +192,9 @@ def consolidate_views(views_dir: Path, cache: Path | None = None, verbose: bool 
                 if verbose:
                     print(f"  loaded cache {cache.name} ({len(z['object_id'])} rows from {len(files)} view files)")
                 return ViewSet(z["global_view"], z["local_view"], z["label_index"],
-                               z["object_id"].astype(str), z["star_id"])
+                               z["object_id"].astype(str), z["star_id"],
+                               z["global_err"] if "global_err" in z.files else None,
+                               z["local_err"] if "local_err" in z.files else None)
             if verbose:
                 old = int(z["n_source_files"]) if "n_source_files" in z.files else "?"
                 why = ("no fingerprint: cache predates this check" if cached is None
@@ -164,6 +203,9 @@ def consolidate_views(views_dir: Path, cache: Path | None = None, verbose: bool 
 
     gv = np.zeros((len(files), GLOBAL_BINS), np.float32)
     lv = np.zeros((len(files), LOCAL_BINS), np.float32)
+    ge = np.zeros((len(files), GLOBAL_BINS), np.float32)
+    le = np.zeros((len(files), LOCAL_BINS), np.float32)
+    n_with_err = 0
     li = np.zeros(len(files), np.int8)
     oid, sid = [], []
     started = time.time()
@@ -173,16 +215,26 @@ def consolidate_views(views_dir: Path, cache: Path | None = None, verbose: bool 
             if g.shape != (GLOBAL_BINS,) or l.shape != (LOCAL_BINS,):
                 raise ValueError(f"{path.name}: unexpected view shapes {g.shape}, {l.shape}")
             gv[i], lv[i], li[i] = g, l, int(z["label_index"])
+            if "global_err" in z.files and "local_err" in z.files:
+                ge[i], le[i] = z["global_err"], z["local_err"]
+                n_with_err += 1
             meta = json.loads(str(z["metadata"]))
         oid.append(meta["object_id"])
         sid.append(int(meta["star_id"]))
         if verbose and (i + 1) % 1000 == 0:
             print(f"    read {i + 1}/{len(files)} view files ({time.time() - started:.0f}s)", flush=True)
 
-    out = ViewSet(gv, lv, li, np.array(oid, dtype=object).astype(str), np.array(sid, np.int64))
+    # Errors are all-or-nothing: a folder mixing old and new views would silently feed zeros as
+    # "perfectly measured" bins for the old ones, so a partial error channel is dropped, loudly.
+    has_err = n_with_err == len(files)
+    if 0 < n_with_err < len(files) and verbose:
+        print(f"  WARNING: only {n_with_err}/{len(files)} views carry an error channel; ignoring it")
+    out = ViewSet(gv, lv, li, np.array(oid, dtype=object).astype(str), np.array(sid, np.int64),
+                  ge if has_err else None, le if has_err else None)
+    extra = {"global_err": ge, "local_err": le} if has_err else {}
     np.savez_compressed(cache, global_view=gv, local_view=lv, label_index=li,
                         object_id=out.object_id, star_id=out.star_id, n_source_files=len(files),
-                        fingerprint=fingerprint)
+                        fingerprint=fingerprint, **extra)
     if verbose:
         print(f"  consolidated {len(files)} view files in {time.time() - started:.0f}s -> {cache.name}")
     return out
@@ -243,7 +295,7 @@ def star_grouped_holdout(vs: ViewSet, fraction: float, seed: int) -> tuple[np.nd
 # Model
 # =========================================================================== #
 def build_model(dropout: float, batchnorm: bool = False, width: float = 1.0,
-                arch: str = "dual_cnn_lstm"):
+                arch: str = "dual_cnn_lstm", use_errors: bool = False):
     """Dual-branch CNN + BiLSTM. Imported lazily so --help works without torch.
 
     `width` scales every conv/LSTM size, so capacity can be swept without editing the file.
@@ -254,6 +306,10 @@ def build_model(dropout: float, batchnorm: bool = False, width: float = 1.0,
         global_cnn     - one CNN over the global view only, mean-pooled. No local view, no LSTM.
         dual_cnn       - both views, both CNN-only, concatenated.
         dual_cnn_lstm  - both views, each CNN followed by a BiLSTM (the default, unchanged).
+
+    `use_errors` gives every branch a second input channel, the per-bin uncertainty (see
+    model_inputs). Everything after the first convolution is unchanged, so with-errors and
+    without-errors models differ only in what the first layer can see.
     """
     if arch not in ("global_cnn", "dual_cnn", "dual_cnn_lstm"):
         raise ValueError(f"unknown arch {arch!r}")
@@ -271,7 +327,7 @@ def build_model(dropout: float, batchnorm: bool = False, width: float = 1.0,
         def __init__(self, channels: list[int], kernel: int, pool: int):
             super().__init__()
             layers = []
-            in_c = 1
+            in_c = 2 if use_errors else 1
             for out_c in channels:
                 layers += [nn.Conv1d(in_c, out_c, kernel, padding=kernel // 2)]
                 layers += [nn.BatchNorm1d(out_c)] if batchnorm else []
@@ -298,7 +354,7 @@ def build_model(dropout: float, batchnorm: bool = False, width: float = 1.0,
             self.out_features = 2 * hidden if use_lstm else self.conv.out_channels
 
         def forward(self, x):
-            h = self.conv(x.unsqueeze(1))          # (B, C, L')
+            h = self.conv(x if x.dim() == 3 else x.unsqueeze(1))   # (B, C, L')
             seq = h.transpose(1, 2)                # (B, L', C) -> phase-ordered sequence
             if self.lstm is None:
                 return seq.mean(dim=1)
@@ -326,7 +382,9 @@ def build_model(dropout: float, batchnorm: bool = False, width: float = 1.0,
                 feats = torch.cat([feats, self.local_branch(l)], dim=1)
             return self.head(feats)
 
-    return TransitCNNLSTM()
+    model = TransitCNNLSTM()
+    model.use_errors = use_errors  # read by every scorer, so inputs always match the checkpoint
+    return model
 
 
 # =========================================================================== #
@@ -428,9 +486,12 @@ def train(model, train_vs: ViewSet, val_vs: ViewSet, args) -> dict:
     device = torch.device(args.device)
     model = model.to(device)
 
+    use_errors = getattr(args, "use_errors", False)
+
     def tensors(vs: ViewSet):
-        return (torch.from_numpy(vs.global_view).to(device),
-                torch.from_numpy(vs.local_view).to(device),
+        g, l = model_inputs(vs, use_errors)
+        return (torch.from_numpy(g).to(device),
+                torch.from_numpy(l).to(device),
                 torch.from_numpy(vs.label_index.astype(np.int64)).to(device))
 
     gtr, ltr, ytr = tensors(train_vs)
@@ -474,8 +535,9 @@ def train(model, train_vs: ViewSet, val_vs: ViewSet, args) -> dict:
                 flip = torch.from_numpy(rng.random(len(idx)) < 0.5).to(device)
                 if flip.any():
                     gb, lb = gb.clone(), lb.clone()
-                    gb[flip] = torch.flip(gb[flip], dims=[1])
-                    lb[flip] = torch.flip(lb[flip], dims=[1])
+                    # Last axis = phase, whether or not an error channel is stacked in front of it.
+                    gb[flip] = torch.flip(gb[flip], dims=[-1])
+                    lb[flip] = torch.flip(lb[flip], dims=[-1])
             optimizer.zero_grad()
             loss = criterion(model(gb, lb), ytr[idx])
             if not torch.isfinite(loss):
@@ -557,6 +619,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
                         "transit: ingress and egress are symmetric about mid-transit, so a mirrored view is "
                         "still a physically real view of the same event.")
     p.add_argument("--batchnorm", action="store_true", help="BatchNorm after each conv in the CNN stacks")
+    p.add_argument("--use-errors", action="store_true",
+                   help="feed the per-bin flux uncertainty as a second input channel. Needs views built "
+                        "with an error channel; point --views-root (or the --*-views flags) at them")
+    p.add_argument("--views-root", type=Path, default=None,
+                   help="folder holding <mission>_{train,val,test}; default detection_views/. "
+                        "Use detection_views_err for the error-channel views")
     p.add_argument("--scheduler", action="store_true",
                    help="ReduceLROnPlateau on the monitored validation metric (factor 0.5, patience 3)")
     p.add_argument("--monitor", choices=["roc", "pr"], default="roc",
@@ -572,9 +640,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     args = p.parse_args(argv)
     # View folders follow the mission unless the caller named them explicitly.
     prefix = MISSIONS[args.mission]["views_prefix"]
+    root = args.views_root or VIEWS_ROOT
+    root = root if root.is_absolute() else RESEARCH_DIR / root
     for split in ("train", "val", "test"):
         if getattr(args, f"{split}_views") is None:
-            setattr(args, f"{split}_views", VIEWS_ROOT / f"{prefix}_{split}")
+            setattr(args, f"{split}_views", root / f"{prefix}_{split}")
     if args.smoke:
         args.epochs = min(args.epochs, 4)
         args.limit = args.limit or 600
@@ -645,7 +715,8 @@ def main(argv: list[str] | None = None) -> int:
         print("  this holdout is a smoke-test device; real val/test numbers need the val/test views built")
 
     print("\n[3] training")
-    model = build_model(args.dropout, batchnorm=args.batchnorm, width=args.width, arch=args.arch)
+    model = build_model(args.dropout, batchnorm=args.batchnorm, width=args.width, arch=args.arch,
+                        use_errors=args.use_errors)
     result = train(model, train_vs, val_vs, args)
 
     print("\n[4] evaluation on the validation rows (best epoch)")
@@ -684,8 +755,9 @@ def main(argv: list[str] | None = None) -> int:
         # .to(args.device): predict() runs the model, which training moved onto args.device.
         # Leaving these on the CPU crashed with a device mismatch under --device cuda, which
         # the CPU default hid.
-        gte = torch.from_numpy(test_vs.global_view).to(args.device)
-        lte = torch.from_numpy(test_vs.local_view).to(args.device)
+        g_np, l_np = model_inputs(test_vs, args.use_errors)
+        gte = torch.from_numpy(g_np).to(args.device)
+        lte = torch.from_numpy(l_np).to(args.device)
         test_metrics = evaluate(test_vs.label_index.astype(int), predict(gte, lte))
         print(f"  test 3-class accuracy {test_metrics['accuracy_3class']:.3f} | "
               f"binary ROC-AUC {test_metrics['roc_auc_binary']}")

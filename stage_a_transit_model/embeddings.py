@@ -35,7 +35,9 @@ import pandas as pd
 RESEARCH_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(RESEARCH_DIR))
 
-from stage_a_transit_model.cnn_lstm import CLASSES, VIEWS_ROOT, consolidate_views, drop_unusable  # noqa: E402
+from stage_a_transit_model.cnn_lstm import (  # noqa: E402
+    CLASSES, VIEWS_ROOT, consolidate_views, drop_unusable, model_inputs,
+)
 from stage_a_transit_model.failure_analysis import load_run_model  # noqa: E402
 
 EDA_DIR = RESEARCH_DIR / "eda"
@@ -52,8 +54,8 @@ def extract(model, vs, batch: int = 256) -> np.ndarray:
 
     # head = [Dropout, Linear, ReLU, Dropout, Linear]; index 2 is the ReLU after the first Linear.
     handle = model.head[2].register_forward_hook(hook)
-    g = torch.from_numpy(vs.global_view)
-    l = torch.from_numpy(vs.local_view)
+    g_np, l_np = model_inputs(vs, getattr(model, "use_errors", False))
+    g, l = torch.from_numpy(g_np), torch.from_numpy(l_np)
     with torch.no_grad():
         for i in range(0, len(g), batch):
             model(g[i:i + batch], l[i:i + batch])

@@ -177,8 +177,14 @@ def main() -> int:
                 tmp.unlink(missing_ok=True)
 
             # .values is the normalised view array (View.flux does not exist).
-            g = torch.from_numpy(res["global"].values.astype(np.float32)[None, :])
-            l = torch.from_numpy(res["local"].values.astype(np.float32)[None, :])
+            gv, lv = res["global"], res["local"]
+            if getattr(model, "use_errors", False):
+                from stage_a_transit_model.cnn_lstm import error_channel
+                g = torch.from_numpy(np.stack([gv.values.astype(np.float32), error_channel(gv.errors)])[None])
+                l = torch.from_numpy(np.stack([lv.values.astype(np.float32), error_channel(lv.errors)])[None])
+            else:
+                g = torch.from_numpy(gv.values.astype(np.float32)[None, :])
+                l = torch.from_numpy(lv.values.astype(np.float32)[None, :])
             with torch.no_grad():
                 proba = torch.softmax(model(g, l), dim=1).numpy()[0]
             score = float(proba[PLANET_LIKE_IDX].sum())

@@ -18,6 +18,8 @@ skipped, so the sweep can be interrupted and restarted without losing work.
 Usage
     python stage_a_transit_model/sweep.py              # run every pending configuration
     python stage_a_transit_model/sweep.py --table      # just print the comparison table
+    python stage_a_transit_model/sweep.py --errors     # the error-channel experiment (ERROR_WAVE)
+    python stage_a_transit_model/sweep.py --errors --table
 """
 
 from __future__ import annotations
@@ -87,6 +89,22 @@ WAVE4: list[tuple[str, list[str]]] = [
 
 CONFIGS: list[tuple[str, list[str]]] = WAVE1 + WAVE2 + WAVE3 + WAVE4
 
+# Error-channel experiment, run separately (--errors) because it needs the rebuilt views in
+# detection_views_err/ (tools/rebuild_with_errors.py). The comparison is WITH vs WITHOUT the error
+# channel, both trained on those same rebuilt views, at the winning configuration, four seeds each,
+# for each mission - so the only thing that differs between the two arms is the error channel.
+# (The rebuilt depth channel matches the original views to 3e-8, so the "off" arm is also a
+# reproduction check of the reported model.) Validation only: both test sets are already spent.
+ERR_ROOT = ["--views-root", "detection_views_err"]
+ERROR_WAVE: list[tuple[str, list[str]]] = [
+    (f"err_{tag}_{arm}{'' if seed == 42 else f'_s{seed}'}",
+     BN_AUG + ERR_ROOT + mission_flags + (["--use-errors"] if arm == "on" else [])
+     + ([] if seed == 42 else ["--seed", str(seed)]))
+    for tag, mission_flags in [("kepler", []), ("tess", ["--mission", "TESS"])]
+    for arm in ("off", "on")
+    for seed in (42, 1, 2, 7)
+]
+
 COMMON = ["--threads", "8", "--epochs", "60", "--patience", "10"]
 
 
@@ -113,10 +131,10 @@ def run_one(name: str, flags: list[str], python: str) -> bool:
     return ok
 
 
-def collect() -> pd.DataFrame:
+def collect(configs: list[tuple[str, list[str]]] | None = None) -> pd.DataFrame:
     """Read every finished run's val metrics into one comparison table."""
     rows = []
-    for name, flags in CONFIGS:
+    for name, flags in (configs or CONFIGS):
         path = RUNS / name / "report.json"
         if not path.is_file():
             continue
@@ -159,22 +177,52 @@ def print_table(df: pd.DataFrame) -> None:
               f"Selection below is still made on val only.")
 
 
+def error_summary(df: pd.DataFrame) -> None:
+    """Mean +/- std over seeds for each mission x arm, and the on-minus-off difference in units of
+    the seed spread - the only honest way to say whether the error channel did anything."""
+    d = df.assign(mission=df.config.str.extract(r"^err_(\w+?)_(?:on|off)")[0],
+                  arm=df.config.str.extract(r"_(on|off)(?:_s\d+)?$")[0])
+    print("\nerror channel, validation, mean +/- std over seeds")
+    for mission, g in d.groupby("mission"):
+        stats = {}
+        for arm in ("off", "on"):
+            a = g[g.arm == arm]
+            if len(a):
+                stats[arm] = a
+                print(f"  {mission:<7} {arm:<4} n={len(a)}  ROC-AUC {a.val_roc_auc.mean():.4f} +/- {a.val_roc_auc.std(ddof=1) if len(a) > 1 else float('nan'):.4f}"
+                      f"  PR-AUC {a.val_pr_auc.mean():.4f}  P@R90 {a['P@R90'].mean():.3f}")
+        if len(stats) == 2:
+            diff = stats["on"].val_roc_auc.mean() - stats["off"].val_roc_auc.mean()
+            pooled = ((stats["on"].val_roc_auc.var(ddof=1) + stats["off"].val_roc_auc.var(ddof=1)) / 2) ** 0.5
+            print(f"  {mission:<7} on - off: {diff:+.4f} ROC-AUC = {diff / pooled if pooled > 0 else float('nan'):+.1f}x the seed spread")
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--table", action="store_true", help="print the comparison table and exit")
+    p.add_argument("--errors", action="store_true",
+                   help="run/tabulate the error-channel experiment (ERROR_WAVE) instead of the main sweep")
     p.add_argument("--python", default=sys.executable)
     args = p.parse_args(argv)
+    configs = ERROR_WAVE if args.errors else CONFIGS
 
     if not args.table:
         print("=" * 88)
-        print(f"CNN+LSTM sweep | {len(CONFIGS)} configurations | started {datetime.now():%Y-%m-%d %H:%M:%S}")
+        print(f"CNN+LSTM sweep | {len(configs)} configurations | started {datetime.now():%Y-%m-%d %H:%M:%S}")
         print("Scored on VALIDATION only - the test views are not touched by this driver.")
         print("=" * 88)
-        for name, flags in CONFIGS:
+        for name, flags in configs:
             run_one(name, flags, args.python)
 
-    df = collect()
+    df = collect(configs)
     print_table(df)
+    if args.errors:
+        if not df.empty:
+            error_summary(df)
+            out = RUNS / "error_channel_comparison.csv"
+            df.to_csv(out, index=False)
+            print(f"\nsaved {out.relative_to(RESEARCH_DIR)}")
+        return 0
     if not df.empty:
         out = RUNS / "sweep_comparison.csv"
         df.to_csv(out, index=False)
