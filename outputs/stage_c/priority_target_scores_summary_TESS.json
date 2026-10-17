@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-10-13T20:30:42",
+  "model_run": "tess_bn_aug_sched",
+  "trained_on": "TESS 2-minute photometry",
+  "scored_on": "TESS 2-minute photometry",
+  "score_column": "transit_ML_probability_TESS",
+  "n_attempted": 44,
+  "n_scored": 41,
+  "fraction_ge_0.5": 0.926829268292683,
+  "median_planet_like": 0.7280633449554443,
+  "scores_file": "priority_target_scores_TESS.csv",
+  "caveat": "All targets are confirmed planets, so this is a sanity check with no negative class - it cannot yield precision or recall."
+}

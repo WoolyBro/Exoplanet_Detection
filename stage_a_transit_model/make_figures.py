@@ -74,7 +74,7 @@ def seed_groups(df: pd.DataFrame) -> dict[str, list[float]]:
 def panel_ladder(ax, sweep: pd.DataFrame, baselines: dict) -> None:
     rows = [("majority", baselines["majority"]["roc_auc_binary"], 0.0),
             ("logistic\n(raw views)", baselines["logistic"]["roc_auc_binary"], 0.0),
-            ("11 shape feats\n+ GBM", baselines["shape_gbm"]["roc_auc_binary"], 0.0)]
+            ("12 shape feats\n+ GBM", baselines["shape_gbm"]["roc_auc_binary"], 0.0)]
     groups = seed_groups(sweep)
     for name in ["base_01", "bn", "bn_aug_sched", "drop45"]:
         if name in groups:

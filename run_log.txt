@@ -3373,6 +3373,166 @@ be pushed down to 5 ppm before the transition appeared.
 
 Checklist 7.1 now reads as done, on its own terms.
 ================================================================================
+2026-10-13 - Six review pitfalls fixed (machine: macOS, Python 3.14, same pinned packages)
+================================================================================
+Environment: rebuilt from requirements-lock.txt on a Mac (pywin32-ctypes dropped, boto3 added).
+  Both final models reproduce their recorded validation numbers exactly (Kepler ROC 0.9142,
+  PR 0.9108, acc 0.7207; TESS 0.7701 / 0.9506 / 0.4703), as do the ablation checkpoints.
+1. "11 shape features" -> 12. shape_features() returns 12 columns and the importance table has
+   12 rows; the reports, README, figures and the baselines docstring said 11 (the docstring also
+   still listed odd/even, which is not computed). Corrected everywhere; figure 02 relabelled.
+   No number changes.
+2. failure_analysis.py still asked for secondary_depth / quadrature_dip (renamed to
+   secondary_sig / quadrature_sig on 2026-09-25), so those rows were silently missing. Fixed and
+   re-run on val: every earlier number reproduces (188/713 fooled, flag rates, Spearman 0.746).
+   New rows: secondary_sig median 0.060 among fooled FPs vs 0.151 among rejected ones (the
+   rejected FPs carry more secondary-eclipse signal, as expected for EBs); quadrature_sig 0.100
+   vs 0.087 (no difference).
+3. README called 15,317 "views". 15,317 is every FILE in detection_views/; the views are 15,185
+   split views (9,394 Kepler + 5,791 TESS) plus 41 Stage C target views and 20 smoke-test views.
+4. Stale Stage C summary. score_priority_targets.py wrote one shared file name for whichever
+   model ran last, so priority_target_scores_summary.json described the Kepler run (71 %) while
+   the table used the TESS one; priority_target_transit_scores.csv was a byte copy of the Kepler
+   CSV. Outputs are now named per model (priority_target_scores_{TESS,KEPLER}.csv +
+   priority_target_scores_summary_{TESS,KEPLER}.json); the two stale files are removed; banner
+   and docstring no longer say "Kepler-trained". Re-scored both: identical to the committed CSVs
+   to 1e-6 (TESS model 93 % >= 0.5, median 0.728; Kepler model 71 %, median 0.763).
+5. Calibration. New stage_a_transit_model/calibrate.py: none / Platt / isotonic compared by
+   star-grouped 5-fold CV on VALIDATION (out-of-fold Brier: Kepler 0.1468 / 0.1187 / 0.1189;
+   TESS 0.1691 / 0.0988 / 0.0997) -> Platt for both, fitted on all of validation, applied once
+   to the saved test predictions (no model re-run).
+     Kepler test: Brier 0.1304 -> 0.1170, log loss 0.4127 -> 0.3682, ECE 0.0961 -> 0.0314
+     TESS test  : Brier 0.1596 -> 0.1025, log loss 0.4904 -> 0.3404, ECE 0.2231 -> 0.0175
+     ROC-AUC unchanged (0.9158, 0.7843): a monotone map cannot move a ranking.
+   Mid-range Kepler test scores are now slightly UNDER-confident - reported, not tuned away.
+   This is a second look at each test set, but only at a map fitted and chosen on validation.
+   Figure 05 now shows raw vs calibrated; report section 6f.
+6. Flux-error channel. preprocessing_pipeline.py bins flux_err into a per-bin 1-sigma (standard
+   error of the bin median, sqrt(pi/2)*sqrt(sum e^2)/n, divided by the view's scale; empty bins
+   take the largest filled-bin error), saved as global_err / local_err. Verified on 11 real
+   Kepler/TESS val KOIs rebuilt from S3: depth channel matches the existing views to <= 3e-8,
+   same cadence counts and SNR; error falls with SNR as it should (SNR 2299 -> 0.0008 of the
+   depth, SNR 17 -> 0.145). cnn_lstm.py --use-errors stacks log10(err) as a 2nd input channel
+   (+80 parameters); every scorer (failure_analysis, embeddings, injection_recovery, calibrate,
+   cross_mission, final_eval, Stage C) reads use_errors from the checkpoint; old checkpoints load
+   unchanged; an error model given old views stops with a clear message. Smoke-trained end to end.
+   Rebuild goes to detection_views_err/ (tools/rebuild_with_errors.py, --views-root), never over
+   detection_views/. Comparison: sweep.py --errors = with vs without the channel on the SAME
+   rebuilt views, winning config, seeds 42/1/2/7, both missions, VALIDATION ONLY.
+   Throughput on this Mac: 4 workers ~1,000 stars/h while awake. A test build froze for 31 min at
+   "Clamshell Sleep" (lid closed on battery) and resumed on wake: the rebuild must run plugged
+   in, lid open; the driver wraps each build in caffeinate -i -s.
+Also fixed: cnn_lstm.py crashed on its final print when --out was outside the project (after
+saving everything).
+
+
+########################################################################################
+# KEPLER VAL BUILD REPORT DETECTION VIEWS ERR (preprocessing_pipeline.py, 2026-10-13 22:58:10)
+########################################################################################
+  KOIs attempted: 1440 (split rows) in 1 session(s), wall-clock 1.55 h
+    saved (ok): 1414
+    excluded: circumbinary planet: 2
+    excluded: unreliable ephemeris: 24
+  class balance, split vs saved:
+    FALSE POSITIVE  split   728 ( 50.6%) | saved   713 ( 50.4%) | kept  97.9% of class | shift -0.1 pp
+    CONFIRMED       split   415 ( 28.8%) | saved   413 ( 29.2%) | kept  99.5% of class | shift +0.4 pp
+    CANDIDATE       split   297 ( 20.6%) | saved   288 ( 20.4%) | kept  97.0% of class | shift -0.3 pp
+    class balance preserved within 2 pp
+  disk: views 23.9 MB (1414 .npz) + logs/index 0.7 MB in /Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_err/kepler_val; light-curve cache 0.00 GB in /Users/ayushmondal/lightkurve_cache
+  saved views with transit_observed False: 0; ephemeris reliability unknown: 73
+  spot-check figure: /Users/ayushmondal/Desktop/Ideapad/VS/Research/eda/kepler_val_detection_views_err_build_sample.png (K03660.01, K01482.01, K06187.01, K07326.01, K00374.01, K01116.01, K01329.01, K07873.01, K06151.01, K03878.02)
+
+
+########################################################################################
+# KEPLER TRAIN BUILD REPORT DETECTION VIEWS ERR (preprocessing_pipeline.py, 2026-10-15 14:59:36)
+########################################################################################
+  KOIs attempted: 6690 (split rows) in 3 session(s), wall-clock 17.76 h
+    saved (ok): 6574
+    excluded: unreliable ephemeris: 115
+    failed: flatten failure (ValueError): 1
+    example failures: K06549.01: ValueError: cannot reshape array of size 0 into shape (0,newaxis)
+  class balance, split vs saved:
+    FALSE POSITIVE  split  3385 ( 50.6%) | saved  3321 ( 50.5%) | kept  98.1% of class | shift -0.1 pp
+    CONFIRMED       split  1921 ( 28.7%) | saved  1913 ( 29.1%) | kept  99.6% of class | shift +0.4 pp
+    CANDIDATE       split  1384 ( 20.7%) | saved  1340 ( 20.4%) | kept  96.8% of class | shift -0.3 pp
+    class balance preserved within 2 pp
+  disk: views 111.0 MB (6574 .npz) + logs/index 4.1 MB in /Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_err/kepler_train; light-curve cache 0.08 GB in /Users/ayushmondal/lightkurve_cache
+  saved views with transit_observed False: 0; ephemeris reliability unknown: 323
+  spot-check figure: /Users/ayushmondal/Desktop/Ideapad/VS/Research/eda/kepler_train_detection_views_err_build_sample.png (K01782.01, K00218.01, K06021.01, K07329.01, K00488.01, K01108.02, K00168.01, K04246.02, K06150.01, K04895.02)
+
+
+########################################################################################
+# TESS VAL BUILD REPORT DETECTION VIEWS ERR (preprocessing_pipeline.py, 2026-10-15 15:39:33)
+########################################################################################
+  KOIs attempted: 1224 (split rows) in 1 session(s), wall-clock 0.67 h
+    saved (ok): 872
+    excluded: unreliable ephemeris: 166
+    failed: api: no light curve found: 168
+    failed: missing/invalid ephemeris: 18
+    example failures: TOI 1090.01: LookupError: no TESS SPOC light curves on S3 for 361034196; TOI 1126.01: LookupError: no TESS SPOC light curves on S3 for 405862830; TOI 1299.01: LookupError: no TESS SPOC light curves on S3 for 258777134; TOI 1367.01: LookupError: no TESS SPOC light curves on S3 for 129539786; TOI 1375.01: LookupError: no TESS SPOC light curves on S3 for 190442486
+  class balance, split vs saved:
+    FALSE POSITIVE  split   210 ( 17.2%) | saved   114 ( 13.1%) | kept  54.3% of class | shift -4.1 pp
+    CONFIRMED       split   215 ( 17.6%) | saved   178 ( 20.4%) | kept  82.8% of class | shift +2.8 pp
+    CANDIDATE       split   798 ( 65.2%) | saved   580 ( 66.5%) | kept  72.7% of class | shift +1.3 pp
+    FLAG: exclusions/failures shifted class balance by more than 2 pp: FALSE POSITIVE -4.1 pp, CONFIRMED +2.8 pp
+  disk: views 14.4 MB (872 .npz) + logs/index 0.7 MB in /Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_err/tess_val; light-curve cache 0.08 GB in /Users/ayushmondal/lightkurve_cache
+  saved views with transit_observed False: 4; ephemeris reliability unknown: 4
+  spot-check figure: /Users/ayushmondal/Desktop/Ideapad/VS/Research/eda/tess_val_detection_views_err_build_sample.png (TOI 3005.01, TOI 1447.01, TOI 4257.01, TOI 6024.01, TOI 574.01, TOI 132.01, TOI 1797.02, TOI 6139.01, TOI 642.01, TOI 4892.01)
+
+
+########################################################################################
+# TESS TRAIN BUILD REPORT DETECTION VIEWS ERR (preprocessing_pipeline.py, 2026-10-15 18:42:32)
+########################################################################################
+  KOIs attempted: 5700 (split rows) in 1 session(s), wall-clock 3.05 h
+    saved (ok): 4084
+    excluded: unreliable ephemeris: 747
+    failed: api: no light curve found: 791
+    failed: missing/invalid ephemeris: 78
+    example failures: TOI 1029.01: LookupError: no TESS SPOC light curves on S3 for 374908020; TOI 1102.01: LookupError: no TESS SPOC light curves on S3 for 311890977; TOI 1113.01: LookupError: no TESS SPOC light curves on S3 for 290348382; TOI 1118.01: LookupError: no TESS SPOC light curves on S3 for 90919952; TOI 1121.01: LookupError: no TESS SPOC light curves on S3 for 24094603
+  class balance, split vs saved:
+    FALSE POSITIVE  split   980 ( 17.2%) | saved   550 ( 13.5%) | kept  56.1% of class | shift -3.7 pp
+    CONFIRMED       split   995 ( 17.5%) | saved   893 ( 21.9%) | kept  89.7% of class | shift +4.4 pp
+    CANDIDATE       split  3713 ( 65.3%) | saved  2633 ( 64.6%) | kept  70.9% of class | shift -0.7 pp
+    FLAG: exclusions/failures shifted class balance by more than 2 pp: FALSE POSITIVE -3.7 pp, CONFIRMED +4.4 pp
+  disk: views 67.7 MB (4084 .npz) + logs/index 3.0 MB in /Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_err/tess_train; light-curve cache 0.08 GB in /Users/ayushmondal/lightkurve_cache
+  saved views with transit_observed False: 25; ephemeris reliability unknown: 13
+  spot-check figure: /Users/ayushmondal/Desktop/Ideapad/VS/Research/eda/tess_train_detection_views_err_build_sample.png (TOI 3753.01, TOI 1200.01, TOI 401.01, TOI 4856.01, TOI 5529.01, TOI 1244.01, TOI 1726.02, TOI 6293.02, TOI 6407.01, TOI 5277.01)
+
+
+########################################################################################
+# KEPLER TEST BUILD REPORT DETECTION VIEWS ERR (preprocessing_pipeline.py, 2026-10-15 20:09:21)
+########################################################################################
+  KOIs attempted: 1434 (split rows) in 1 session(s), wall-clock 1.45 h
+    saved (ok): 1406
+    excluded: unreliable ephemeris: 28
+  class balance, split vs saved:
+    FALSE POSITIVE  split   726 ( 50.6%) | saved   711 ( 50.6%) | kept  97.9% of class | shift -0.1 pp
+    CONFIRMED       split   412 ( 28.7%) | saved   412 ( 29.3%) | kept 100.0% of class | shift +0.6 pp
+    CANDIDATE       split   296 ( 20.6%) | saved   283 ( 20.1%) | kept  95.6% of class | shift -0.5 pp
+    class balance preserved within 2 pp
+  disk: views 23.7 MB (1406 .npz) + logs/index 0.7 MB in /Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_err/kepler_test; light-curve cache 0.08 GB in /Users/ayushmondal/lightkurve_cache
+  saved views with transit_observed False: 0; ephemeris reliability unknown: 64
+  spot-check figure: /Users/ayushmondal/Desktop/Ideapad/VS/Research/eda/kepler_test_detection_views_err_build_sample.png (K01953.01, K00190.01, K06041.01, K07066.01, K00433.02, K00988.02, K01416.01, K01053.02, K06216.01, K03504.02)
+
+
+########################################################################################
+# TESS TEST BUILD REPORT DETECTION VIEWS ERR (preprocessing_pipeline.py, 2026-10-15 20:54:51)
+########################################################################################
+  KOIs attempted: 1224 (split rows) in 1 session(s), wall-clock 0.76 h
+    saved (ok): 862
+    excluded: unreliable ephemeris: 174
+    failed: api: no light curve found: 173
+    failed: missing/invalid ephemeris: 15
+    example failures: TOI 1164.01: LookupError: no TESS SPOC light curves on S3 for 16102323; TOI 1332.01: LookupError: no TESS SPOC light curves on S3 for 387664868; TOI 1427.01: LookupError: no TESS SPOC light curves on S3 for 2041563029; TOI 1500.01: LookupError: no TESS SPOC light curves on S3 for 377420580; TOI 1501.01: LookupError: no TESS SPOC light curves on S3 for 329145325
+  class balance, split vs saved:
+    FALSE POSITIVE  split   211 ( 17.3%) | saved   120 ( 13.9%) | kept  56.9% of class | shift -3.3 pp
+    CONFIRMED       split   215 ( 17.6%) | saved   177 ( 20.6%) | kept  82.3% of class | shift +3.0 pp
+    CANDIDATE       split   797 ( 65.2%) | saved   564 ( 65.5%) | kept  70.8% of class | shift +0.3 pp
+    FLAG: exclusions/failures shifted class balance by more than 2 pp: FALSE POSITIVE -3.3 pp, CONFIRMED +3.0 pp
+  disk: views 14.4 MB (862 .npz) + logs/index 0.7 MB in /Users/ayushmondal/Desktop/Ideapad/VS/Research/detection_views_err/tess_test; light-curve cache 0.08 GB in /Users/ayushmondal/lightkurve_cache
+  saved views with transit_observed False: 2; ephemeris reliability unknown: 7
+  spot-check figure: /Users/ayushmondal/Desktop/Ideapad/VS/Research/eda/tess_test_detection_views_err_build_sample.png (TOI 3137.01, TOI 1178.01, TOI 4461.01, TOI 5496.01, TOI 5788.01, TOI 1296.01, TOI 178.03, TOI 6012.01, TOI 6406.01, TOI 5140.01)
+================================================================================
 2026-10-17 - ERROR-CHANNEL EXPERIMENT COMPLETE (validation only)
 ================================================================================
 Rebuild: all six splits into detection_views_err/ (Kepler 6,567 / 1,414 / 1,406 views; TESS

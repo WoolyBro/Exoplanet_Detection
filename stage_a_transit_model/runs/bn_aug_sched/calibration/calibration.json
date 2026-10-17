@@ -1,0 +1,61 @@
+{
+  "run": "bn_aug_sched",
+  "generated_at": "2026-10-13T20:31:54",
+  "architecture": {
+    "dropout": 0.3,
+    "width": 1.0,
+    "batchnorm": true,
+    "arch": "dual_cnn_lstm"
+  },
+  "fitted_on": "kepler_val",
+  "selected_by": "star-grouped 5-fold CV Brier on validation",
+  "seed": 42,
+  "calibrator": {
+    "method": "platt",
+    "a": 0.8346885442733765,
+    "b": -1.0209888219833374
+  },
+  "validation_cv": {
+    "none": {
+      "brier": 0.14679553227849013,
+      "log_loss": 0.45607931047799355,
+      "ece": 0.12282168466501962,
+      "roc_auc": 0.9142339234873843,
+      "n": 1414.0,
+      "positive_rate": 0.4957567185289958
+    },
+    "platt": {
+      "brier": 0.11869846274250052,
+      "log_loss": 0.37430979348065035,
+      "ece": 0.02918268766377937,
+      "roc_auc": 0.913819768593454,
+      "n": 1414.0,
+      "positive_rate": 0.4957567185289958
+    },
+    "isotonic": {
+      "brier": 0.11887747701423025,
+      "log_loss": 0.38331376716842663,
+      "ece": 0.01845208038787387,
+      "roc_auc": 0.9094281261191687,
+      "n": 1414.0,
+      "positive_rate": 0.4957567185289958
+    }
+  },
+  "test_raw": {
+    "brier": 0.1303771560534449,
+    "log_loss": 0.41269003892824574,
+    "ece": 0.09607287409509245,
+    "roc_auc": 0.915816207793259,
+    "n": 1406,
+    "positive_rate": 0.49431009957325744
+  },
+  "test_calibrated": {
+    "brier": 0.11697784754506987,
+    "log_loss": 0.3681922162487779,
+    "ece": 0.03140629684804084,
+    "roc_auc": 0.915816207793259,
+    "n": 1406,
+    "positive_rate": 0.49431009957325744
+  },
+  "note": "Monotone post-hoc map of the planet-like score; the model is unchanged. Fitted and selected on validation only; applied once to the already-saved test predictions."
+}

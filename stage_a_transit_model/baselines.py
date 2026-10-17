@@ -18,8 +18,8 @@ reported side by side in the results write-up; neither subsumes the other.
 Baselines here, in increasing order of what they are allowed to know:
   1. majority class        - the floor. Any model below this has learned nothing.
   2. logistic regression   - linear decision on the standardized raw views.
-  3. shape features + GBM  - 11 hand-derived, physically interpretable numbers
-                             (depth, V-shape, odd/even, secondary, scatter...).
+  3. shape features + GBM  - 12 hand-derived, physically interpretable numbers
+                             (depth, V-shape, secondary, quadrature, asymmetry, scatter...).
                              This one doubles as the failure-analysis instrument:
                              its features are exactly the quantities the Kepler
                              false-positive flags encode.
@@ -53,7 +53,7 @@ from stage_a_transit_model.cnn_lstm import (  # noqa: E402  (single source of tr
 # Physically interpretable shape features
 # =========================================================================== #
 def shape_features(vs: ViewSet) -> pd.DataFrame:
-    """Eleven numbers per KOI, each one something a human vetter actually looks at.
+    """Twelve numbers per KOI, each one something a human vetter actually looks at.
 
     Views are already normalised (median 0, deepest bin -1), so these are shape
     descriptors, not absolute depths. Names map onto the Kepler FP flags:

@@ -778,7 +778,10 @@ def main(argv: list[str] | None = None) -> int:
                   "training": {k: v for k, v in result.items()},
                   "val_metrics": val_metrics, "test_metrics": test_metrics}
         (run_dir / "report.json").write_text(json.dumps(report, indent=2, default=float), encoding="utf-8")
-        print(f"\nsaved {run_dir.relative_to(RESEARCH_DIR)}/ (best.pt, report.json, history.csv, threshold_sweep.csv)")
+        # Path.relative_to raises for a run directory outside the project (e.g. --out /tmp/x), which
+        # used to crash the run here, after every artefact was already saved.
+        shown = run_dir.relative_to(RESEARCH_DIR) if run_dir.is_relative_to(RESEARCH_DIR) else run_dir
+        print(f"\nsaved {shown}/ (best.pt, report.json, history.csv, threshold_sweep.csv)")
 
     if args.smoke:
         print("\nSMOKE TEST COMPLETE: shapes, loss, early stopping, evaluation and threshold sweep all ran. "

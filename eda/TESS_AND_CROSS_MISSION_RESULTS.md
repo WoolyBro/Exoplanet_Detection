@@ -14,7 +14,7 @@ star-disjoint, on top of the 9,394 Kepler views.
 |---|---|---|---|---|
 | majority class | **0.6648** | 0.5000 | 0.8696 | 0.870 |
 | logistic regression on views | 0.4611 | 0.5859 | 0.8900 | 0.877 |
-| 11 shape features + GBM | 0.5892 | 0.6952 | 0.9225 | 0.898 |
+| 12 shape features + GBM | 0.5892 | 0.6952 | 0.9225 | 0.898 |
 | CNN+LSTM (`tess_bn_aug_sched`) | 0.4700 | **0.7701** | **0.9506** | **0.908** |
 
 **Two things must be said before the PR-AUC of 0.95 is quoted anywhere.**
@@ -52,7 +52,7 @@ construction (2001-bin global + 201-bin local, depth-normalised), so no adaptati
 only **0.026 ROC-AUC** on TESS and **0.036** on Kepler. Both models carry genuinely
 mission-independent structure — which is the point of normalising the views.
 
-**The TESS-trained model scores 0.8802 on Kepler**, which beats Kepler's own 11-feature
+**The TESS-trained model scores 0.8802 on Kepler**, which beats Kepler's own 12-feature
 shape baseline (0.8800). A model that never saw a Kepler light curve is competitive with a
 hand-built Kepler feature set.
 
@@ -88,6 +88,11 @@ TESS partly because it distrusts exactly the deep short-period signals TESS is f
 ---
 
 ## 4. Honest limitations
+
+- **Raw scores are badly calibrated on TESS** (test ECE 0.223): class weighting pushes them far
+  below the 86 % base rate. A Platt map fitted on TESS validation (`calibrate.py`, see Stage A
+  §6f) brings test Brier 0.160 → 0.103 and ECE 0.223 → 0.018, ranking unchanged. Use
+  `runs/tess_bn_aug_sched/calibration/` whenever the score is read as a probability.
 
 - **Selection bias in the TESS build.** 71 % yield overall, but class-dependent: FALSE POSITIVE
   55.9 % kept, CANDIDATE 70.6 %, CONFIRMED 88.7 % (+4.3 pp shift). Confirmed planets have

@@ -1,13 +1,14 @@
 {
   "run": "bn_aug_sched",
-  "generated_at": "2026-09-25T08:30:22",
+  "generated_at": "2026-10-13T20:29:01",
   "architecture": {
     "dropout": 0.3,
     "width": 1.0,
-    "batchnorm": true
+    "batchnorm": true,
+    "arch": "dual_cnn_lstm"
   },
   "recall_target": 0.9,
-  "threshold": 0.6540927886962891,
+  "threshold": 0.6540928483009338,
   "precision_at_target": 0.7704517704517705,
   "n_val": 1414,
   "n_false_positives": 713,

@@ -86,7 +86,9 @@ figures/                     ← the statistical figures + the script that makes
 eda/                         ← the written reports (.md) and diagnostic plots
 outputs/                     ← result tables per stage
 splits/                      ← the split definitions - results are not reproducible without these
-detection_views/             ← 15,317 built views (.npz). Regenerable; not in the repository.
+detection_views/             ← 15,185 split views (.npz: 9,394 Kepler + 5,791 TESS), plus the 41
+                               Stage C target views and per-build indexes/logs (15,317 files in
+                               all). Regenerable; not in the repository.
 detection_views_err/         ← the same splits rebuilt with a per-bin flux-error channel
                                (tools/rebuild_with_errors.py). Depth channel identical; adds
                                global_err / local_err. Not in the repository.
@@ -97,13 +99,14 @@ detection_views_err/         ← the same splits rebuilt with a per-bin flux-err
 | file | role |
 |---|---|
 | `cnn_lstm.py` | the model, training loop, metrics. `--mission Kepler\|TESS`, `--arch` for the ablation |
-| `baselines.py` | majority / logistic / 11 interpretable shape features — **run before believing the CNN** |
+| `baselines.py` | majority / logistic / 12 interpretable shape features — **run before believing the CNN** |
 | `sweep.py` | the 23-run hyperparameter and architecture sweep, resumable |
 | `failure_analysis.py` | which false positives fool it, against the Kepler FP flags |
 | `error_buckets.py` | false negatives split into undetectable / noise-dominated / genuine |
 | `embeddings.py` | t-SNE **and** a measured separability check (the picture is not the evidence) |
 | `cross_mission.py` | every model on every mission's test set |
 | `final_eval.py` | the single held-out test evaluation |
+| `calibrate.py` | post-hoc probability calibration (Platt/isotonic, chosen and fitted on validation) |
 | `make_figures.py` | the summary figure |
 
 ---
@@ -213,6 +216,10 @@ These are in the reports too, but they are the load-bearing caveats:
 5. **`stage_d_habitability/` will not run as-is.** Those scripts read PyATMOS/INARA data from a
    `D:` drive on a previous machine; the paths are recorded in `data_manifest.py` and the data
    is not in this repository.
+6. **The raw planet-like score is a ranking, not a probability.** Mid-range scores overstate the
+   chance of a planet (Kepler test Brier 0.130). Read it as a probability only through the
+   calibrator in `runs/<run>/calibration/` (`calibrate.py`: Platt scaling fitted on validation;
+   Kepler Brier 0.117, TESS 0.103).
 
 ---
 

@@ -15,10 +15,10 @@ training seed, so run-to-run noise is visible next to each difference.
 | # | Question | Answer in one line |
 |---|---|---|
 | 1 | [How well does the classifier separate planets from false positives?](#1-how-well-does-the-transit-classifier-separate-real-planets-from-false-positives) | Kepler ROC-AUC 0.916 [0.900–0.931]; TESS 0.784 [0.740–0.826] |
-| 2 | [Does a deep network beat simpler methods?](#2-does-a-deep-network-beat-simpler-methods-on-the-same-light-curves) | Yes, by 0.034 ROC-AUC over 11 hand-built features |
+| 2 | [Does a deep network beat simpler methods?](#2-does-a-deep-network-beat-simpler-methods-on-the-same-light-curves) | Yes, by 0.034 ROC-AUC over 12 hand-built features |
 | 3 | [Which architecture parts improve detection?](#3-which-parts-of-the-network-architecture-actually-improve-detection) | The zoomed local view, far more than the LSTM |
 | 4 | [Where does it confuse the three dispositions?](#4-where-does-the-classifier-confuse-the-three-dispositions) | Mostly around "Candidate", the undecided class |
-| 5 | [Can its output be read as a probability?](#5-can-the-classifiers-output-be-read-as-a-probability) | Not directly — mid-range scores are over-confident |
+| 5 | [Can its output be read as a probability?](#5-can-the-classifiers-output-be-read-as-a-probability) | Raw, no; after Platt scaling fitted on validation, largely yes (Brier 0.130 → 0.117) |
 | 6 | [Does a model from one telescope work on another?](#6-does-a-transit-classifier-trained-on-one-telescope-work-on-another) | Largely; transfer costs 0.026–0.036 ROC-AUC |
 | 7 | [Why does a Kepler model distrust deep transits?](#7-why-does-a-kepler-trained-model-distrust-deep-hot-jupiter-like-transits) | In Kepler's data, deep transits are 93 % false positives |
 | 8 | [Are the two models biased toward different planets?](#8-are-the-two-detection-models-biased-toward-different-kinds-of-planet) | Yes, in opposite directions by planet size |
@@ -55,9 +55,14 @@ Components added one at a time with every other setting held fixed.
 
 ### 5. Can the classifier's output be read as a probability?
 ![Reliability diagram with Wilson intervals](05_probability_calibration.png)
-The ranking is good (figure 1) but the score is not a calibrated probability. Anyone thresholding
-it as "70 % chance of a planet" would be wrong; it needs recalibration (e.g. isotonic) first.
-*Source:* `stage_a_transit_model/runs/bn_aug_sched/test_predictions.csv`
+The ranking is good (figure 1) but the raw score is not a calibrated probability: mid-range
+scores overstate the chance of a planet. A Platt map (logistic regression on the logit of the
+score), chosen over isotonic and over no calibration by star-grouped cross-validation on
+**validation**, and fitted on validation only, brings Kepler test Brier 0.130 → 0.117 and ECE
+0.096 → 0.031 without changing the ranking (ROC-AUC 0.9158 before and after). Mid-range scores
+are now slightly under-confident on test. For TESS the same procedure gives Brier 0.160 → 0.103,
+ECE 0.223 → 0.018.
+*Source:* `stage_a_transit_model/runs/bn_aug_sched/calibration/` (`calibrate.py`)
 
 ### 6. Does a transit classifier trained on one telescope work on another?
 ![Cross-mission transfer matrix](06_cross_mission_transfer.png)

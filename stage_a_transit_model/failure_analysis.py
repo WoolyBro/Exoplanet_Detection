@@ -127,8 +127,8 @@ def group_compare(df: pd.DataFrame, mask_fooled: pd.Series) -> pd.DataFrame:
         rows.append({"signal": f"{col}  {label}", "fooled_pct": f, "rejected_pct": c, "diff_pp": f - c})
     for col, label in [("global_scatter", "out-of-transit scatter (variability)"),
                        ("local_snr", "local depth / wing scatter"),
-                       ("secondary_depth", "secondary eclipse depth (phase 0.5)"),
-                       ("quadrature_dip", "dip at quadrature (phase 0.25)"),
+                       ("secondary_sig", "secondary-eclipse dip, sigma (phase 0.5)"),
+                       ("quadrature_sig", "dip at quadrature, sigma (phase 0.25)"),
                        ("transit_asymmetry", "left/right transit asymmetry"),
                        ("v_shape", "floor/depth (1=box, low=V)")]:
         if col in df.columns:
@@ -245,7 +245,7 @@ def main(argv: list[str] | None = None) -> int:
     out_dir.mkdir(parents=True, exist_ok=True)
     keep = ["kepoi_name", "star_id", "true_label", "model_score", "pred_index", "koi_score",
             *[c for c in FLAGS if c in df.columns],
-            "global_scatter", "local_snr", "secondary_depth", "quadrature_dip",
+            "global_scatter", "local_snr", "secondary_sig", "quadrature_sig",
             "transit_asymmetry", "v_shape", "local_floor"]
     df[[c for c in keep if c in df.columns]].to_csv(out_dir / "val_predictions.csv", index=False)
     cmp.to_csv(out_dir / "fooled_vs_rejected.csv", index=False)
