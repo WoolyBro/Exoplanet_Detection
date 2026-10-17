@@ -34,8 +34,17 @@
 #   scipy        eda_habitability.py (KS test, Spearman); optional there, required
 #                transitively by scikit-learn and lightkurve
 
+#   boto3        preprocessing_pipeline.py --s3 (public AWS mirror of MAST). WITHOUT IT EVERY
+#                BUILD SILENTLY FALLS BACK TO MAST, measured 17x slower. Missing until 2026-10-17.
+#   pytest       tests/ (python -m pytest tests)
+#
+# requirements-lock.txt is the Windows tree the reported v1 results came from;
+# requirements-lock-macos.txt is the macOS tree every split-v2 result came from.
+
+boto3==1.43.75
 lightkurve==2.6.0
 matplotlib==3.11.2
 psutil==7.2.2
+pytest==9.1.1
 scikit-learn==1.9.1
 torch==2.14.0

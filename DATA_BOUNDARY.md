@@ -27,7 +27,7 @@ When the manifest is imported, it also checks that no file has two roles.
 
 ## Files by role
 
-Relative paths are inside this `Research` folder. The `D:/Files/...` paths are raw data kept outside it and only read, never modified.
+Relative paths are inside this `Research` folder. The `D:/Files/...` paths are raw data kept outside it and only read, never modified. Since 2026-10-17 `D:/Files` is just the default of the environment variable `EXO_EXTERNAL_DATA`, so the same files can live anywhere.
 
 ### Stage 1: Training
 | File | Provenance | Role |
