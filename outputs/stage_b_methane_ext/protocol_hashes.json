@@ -1,0 +1,7 @@
+{
+ "ch4_labels_extended.csv": "2fdf9782d4ccbecb91760770261da60e5ac32fbd33e6ba09c252cc2fe2c52213",
+ "frozen_at": "2026-10-17T21:18:40",
+ "rule": "labels fixed before any new planet is scored",
+ "ch4_labels_round2.csv": "c2abbfbcdf22f7932961998fb525ffce373342ad518c83c469219ce2dce19026",
+ "round2_frozen_at": "2026-10-17T21:37:17"
+}

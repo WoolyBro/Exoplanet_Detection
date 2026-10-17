@@ -1,0 +1,2577 @@
+{
+  "by_planet": {
+    "TRAPPIST-1 e": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 3.85,
+            "n5_68": [
+              2.45,
+              5.94
+            ],
+            "years": 0.24,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 9.34,
+            "n5_68": [
+              5.95,
+              14.41
+            ],
+            "years": 0.58,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 49.0,
+            "n5_68": [
+              31.23,
+              75.59
+            ],
+            "years": 3.03,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 10.52,
+            "n5_68": [
+              6.7,
+              16.23
+            ],
+            "years": 0.65,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 13.46,
+            "n5_68": [
+              8.58,
+              20.76
+            ],
+            "years": 0.83,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 123.29,
+            "n5_68": [
+              78.56,
+              190.17
+            ],
+            "years": 7.63,
+            "in_mission": true
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 7.72,
+            "n5_68": [
+              4.92,
+              11.91
+            ],
+            "years": 0.48,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 181.19,
+            "n5_68": [
+              115.45,
+              279.48
+            ],
+            "years": 11.21,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 10.05,
+            "n5_68": [
+              6.4,
+              15.49
+            ],
+            "years": 0.62,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1085.01,
+            "n5_68": [
+              691.39,
+              1673.61
+            ],
+            "years": 67.12,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 94.49,
+            "n5_68": [
+              60.21,
+              145.74
+            ],
+            "years": 5.85,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 24.01,
+            "n5_68": [
+              15.3,
+              37.04
+            ],
+            "years": 1.49,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 10.93,
+            "n5_68": [
+              6.97,
+              16.86
+            ],
+            "years": 0.68,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 672.58,
+            "n5_68": [
+              428.58,
+              1037.45
+            ],
+            "years": 41.61,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 563.32,
+            "n5_68": [
+              358.96,
+              868.91
+            ],
+            "years": 34.85,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1298.32,
+            "n5_68": [
+              827.32,
+              2002.65
+            ],
+            "years": 80.32,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 33.8,
+            "n5_68": [
+              21.54,
+              52.14
+            ],
+            "years": 2.09,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 58.7,
+            "n5_68": [
+              37.41,
+              90.55
+            ],
+            "years": 3.63,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 11873.05,
+            "n5_68": [
+              7565.74,
+              18314.06
+            ],
+            "years": 734.53,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2069.72,
+            "n5_68": [
+              1318.86,
+              3192.51
+            ],
+            "years": 128.04,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "TRAPPIST-1 f": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 5.0,
+            "n5_68": [
+              3.26,
+              7.66
+            ],
+            "years": 0.47,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 12.6,
+            "n5_68": [
+              8.23,
+              19.29
+            ],
+            "years": 1.18,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 58.84,
+            "n5_68": [
+              38.42,
+              90.08
+            ],
+            "years": 5.49,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 14.39,
+            "n5_68": [
+              9.39,
+              22.02
+            ],
+            "years": 1.34,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 18.56,
+            "n5_68": [
+              12.12,
+              28.42
+            ],
+            "years": 1.73,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 155.69,
+            "n5_68": [
+              101.66,
+              238.37
+            ],
+            "years": 14.54,
+            "in_mission": true
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 9.98,
+            "n5_68": [
+              6.51,
+              15.28
+            ],
+            "years": 0.93,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 202.74,
+            "n5_68": [
+              132.38,
+              310.41
+            ],
+            "years": 18.93,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 13.82,
+            "n5_68": [
+              9.02,
+              21.16
+            ],
+            "years": 1.29,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1307.07,
+            "n5_68": [
+              853.46,
+              2001.18
+            ],
+            "years": 122.04,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 112.27,
+            "n5_68": [
+              73.31,
+              171.89
+            ],
+            "years": 10.48,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 33.28,
+            "n5_68": [
+              21.73,
+              50.95
+            ],
+            "years": 3.11,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 14.0,
+            "n5_68": [
+              9.14,
+              21.44
+            ],
+            "years": 1.31,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 730.67,
+            "n5_68": [
+              477.09,
+              1118.68
+            ],
+            "years": 68.22,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 533.9,
+            "n5_68": [
+              348.61,
+              817.43
+            ],
+            "years": 49.85,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1705.58,
+            "n5_68": [
+              1113.67,
+              2611.32
+            ],
+            "years": 159.24,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 46.82,
+            "n5_68": [
+              30.57,
+              71.69
+            ],
+            "years": 4.37,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 76.29,
+            "n5_68": [
+              49.82,
+              116.81
+            ],
+            "years": 7.12,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 14539.88,
+            "n5_68": [
+              9493.86,
+              22261.15
+            ],
+            "years": 1357.53,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2353.85,
+            "n5_68": [
+              1536.95,
+              3603.84
+            ],
+            "years": 219.77,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "TRAPPIST-1 g": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 5.97,
+            "n5_68": [
+              3.84,
+              9.13
+            ],
+            "years": 0.75,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 16.33,
+            "n5_68": [
+              10.51,
+              24.99
+            ],
+            "years": 2.05,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 63.92,
+            "n5_68": [
+              41.12,
+              97.8
+            ],
+            "years": 8.01,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 18.08,
+            "n5_68": [
+              11.63,
+              27.66
+            ],
+            "years": 2.26,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 24.97,
+            "n5_68": [
+              16.07,
+              38.21
+            ],
+            "years": 3.13,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 177.16,
+            "n5_68": [
+              113.97,
+              271.07
+            ],
+            "years": 22.19,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 11.92,
+            "n5_68": [
+              7.67,
+              18.23
+            ],
+            "years": 1.49,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 174.72,
+            "n5_68": [
+              112.4,
+              267.33
+            ],
+            "years": 21.88,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 18.82,
+            "n5_68": [
+              12.11,
+              28.8
+            ],
+            "years": 2.36,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1354.54,
+            "n5_68": [
+              871.37,
+              2072.51
+            ],
+            "years": 169.66,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 123.73,
+            "n5_68": [
+              79.59,
+              189.31
+            ],
+            "years": 15.5,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 43.14,
+            "n5_68": [
+              27.75,
+              66.01
+            ],
+            "years": 5.4,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 16.57,
+            "n5_68": [
+              10.66,
+              25.35
+            ],
+            "years": 2.08,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 762.6,
+            "n5_68": [
+              490.58,
+              1166.82
+            ],
+            "years": 95.52,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 502.52,
+            "n5_68": [
+              323.27,
+              768.88
+            ],
+            "years": 62.94,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2054.73,
+            "n5_68": [
+              1321.8,
+              3143.83
+            ],
+            "years": 257.37,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 61.87,
+            "n5_68": [
+              39.8,
+              94.67
+            ],
+            "years": 7.75,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 91.1,
+            "n5_68": [
+              58.61,
+              139.39
+            ],
+            "years": 11.41,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 16368.46,
+            "n5_68": [
+              10529.77,
+              25044.51
+            ],
+            "years": 2050.25,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2524.27,
+            "n5_68": [
+              1623.86,
+              3862.26
+            ],
+            "years": 316.18,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "LP 890-9 c": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 29.76,
+            "n5_68": [
+              8.27,
+              103.92
+            ],
+            "years": 2.55,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 73.8,
+            "n5_68": [
+              20.51,
+              257.66
+            ],
+            "years": 6.33,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 390.72,
+            "n5_68": [
+              108.61,
+              1364.22
+            ],
+            "years": 33.51,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 79.09,
+            "n5_68": [
+              21.98,
+              276.14
+            ],
+            "years": 6.78,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 107.89,
+            "n5_68": [
+              29.99,
+              376.71
+            ],
+            "years": 9.25,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 957.02,
+            "n5_68": [
+              266.03,
+              3341.49
+            ],
+            "years": 82.07,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 59.25,
+            "n5_68": [
+              16.47,
+              206.89
+            ],
+            "years": 5.08,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1369.93,
+            "n5_68": [
+              380.81,
+              4783.22
+            ],
+            "years": 117.49,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 77.85,
+            "n5_68": [
+              21.64,
+              271.81
+            ],
+            "years": 6.68,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 8350.6,
+            "n5_68": [
+              2321.29,
+              29156.73
+            ],
+            "years": 716.15,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 779.68,
+            "n5_68": [
+              216.74,
+              2722.31
+            ],
+            "years": 66.87,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 189.91,
+            "n5_68": [
+              52.79,
+              663.09
+            ],
+            "years": 16.29,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 82.34,
+            "n5_68": [
+              22.89,
+              287.51
+            ],
+            "years": 7.06,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 5058.62,
+            "n5_68": [
+              1406.19,
+              17662.53
+            ],
+            "years": 433.83,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 5312.21,
+            "n5_68": [
+              1476.69,
+              18547.99
+            ],
+            "years": 455.58,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 10400.05,
+            "n5_68": [
+              2891.0,
+              36312.55
+            ],
+            "years": 891.91,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 273.64,
+            "n5_68": [
+              76.07,
+              955.44
+            ],
+            "years": 23.47,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 447.36,
+            "n5_68": [
+              124.36,
+              1561.98
+            ],
+            "years": 38.37,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 95274.64,
+            "n5_68": [
+              26484.39,
+              332658.5
+            ],
+            "years": 8170.78,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 19071.69,
+            "n5_68": [
+              5301.54,
+              66590.21
+            ],
+            "years": 1635.59,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "TRAPPIST-1 d": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2.41,
+            "n5_68": [
+              1.55,
+              3.71
+            ],
+            "years": 0.1,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 5.99,
+            "n5_68": [
+              3.84,
+              9.21
+            ],
+            "years": 0.25,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 35.47,
+            "n5_68": [
+              22.73,
+              54.53
+            ],
+            "years": 1.46,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 6.1,
+            "n5_68": [
+              3.91,
+              9.37
+            ],
+            "years": 0.25,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 8.55,
+            "n5_68": [
+              5.48,
+              13.15
+            ],
+            "years": 0.35,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 83.3,
+            "n5_68": [
+              53.38,
+              128.06
+            ],
+            "years": 3.42,
+            "in_mission": true
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 5.06,
+            "n5_68": [
+              3.24,
+              7.77
+            ],
+            "years": 0.21,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 128.07,
+            "n5_68": [
+              82.08,
+              196.89
+            ],
+            "years": 5.26,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 6.41,
+            "n5_68": [
+              4.11,
+              9.86
+            ],
+            "years": 0.26,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 721.25,
+            "n5_68": [
+              462.23,
+              1108.82
+            ],
+            "years": 29.61,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 63.42,
+            "n5_68": [
+              40.64,
+              97.5
+            ],
+            "years": 2.6,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 14.92,
+            "n5_68": [
+              9.56,
+              22.94
+            ],
+            "years": 0.61,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 7.23,
+            "n5_68": [
+              4.63,
+              11.11
+            ],
+            "years": 0.3,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 508.22,
+            "n5_68": [
+              325.7,
+              781.3
+            ],
+            "years": 20.87,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 441.58,
+            "n5_68": [
+              282.99,
+              678.86
+            ],
+            "years": 18.13,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 766.85,
+            "n5_68": [
+              491.45,
+              1178.92
+            ],
+            "years": 31.49,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 21.29,
+            "n5_68": [
+              13.64,
+              32.72
+            ],
+            "years": 0.87,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 37.74,
+            "n5_68": [
+              24.19,
+              58.02
+            ],
+            "years": 1.55,
+            "in_mission": true
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 7890.61,
+            "n5_68": [
+              5056.84,
+              12130.61
+            ],
+            "years": 323.99,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1452.94,
+            "n5_68": [
+              931.14,
+              2233.68
+            ],
+            "years": 59.66,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "TOI-700 d": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 86.12,
+            "n5_68": [
+              31.45,
+              236.62
+            ],
+            "years": 32.68,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 145.8,
+            "n5_68": [
+              53.24,
+              400.6
+            ],
+            "years": 55.33,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_G395",
+            "n5": 1167.43,
+            "n5_68": [
+              426.26,
+              3207.56
+            ],
+            "years": 443.02,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 207.42,
+            "n5_68": [
+              75.73,
+              569.9
+            ],
+            "years": 78.71,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 164.58,
+            "n5_68": [
+              60.09,
+              452.19
+            ],
+            "years": 62.46,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 7135.29,
+            "n5_68": [
+              2688.28,
+              19062.45
+            ],
+            "years": 2707.74,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 218.24,
+            "n5_68": [
+              79.69,
+              599.63
+            ],
+            "years": 82.82,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 5512.34,
+            "n5_68": [
+              2076.83,
+              14726.63
+            ],
+            "years": 2091.86,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 181.21,
+            "n5_68": [
+              66.17,
+              497.88
+            ],
+            "years": 68.77,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 44043.25,
+            "n5_68": [
+              16593.69,
+              117664.74
+            ],
+            "years": 16713.8,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 1887.67,
+            "n5_68": [
+              689.24,
+              5186.47
+            ],
+            "years": 716.35,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 283.86,
+            "n5_68": [
+              103.64,
+              779.91
+            ],
+            "years": 107.72,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 433.25,
+            "n5_68": [
+              163.23,
+              1157.45
+            ],
+            "years": 164.41,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRISS_SOSS",
+            "n5": 10298.33,
+            "n5_68": [
+              3879.99,
+              27512.73
+            ],
+            "years": 3908.07,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 6343.24,
+            "n5_68": [
+              2316.09,
+              17428.34
+            ],
+            "years": 2407.17,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 13303.64,
+            "n5_68": [
+              4857.53,
+              36552.33
+            ],
+            "years": 5048.54,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 335.34,
+            "n5_68": [
+              122.44,
+              921.35
+            ],
+            "years": 127.26,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 2721.96,
+            "n5_68": [
+              1025.52,
+              7271.91
+            ],
+            "years": 1032.94,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_G395",
+            "n5": 290344.23,
+            "n5_68": [
+              106012.7,
+              797733.56
+            ],
+            "years": 110181.57,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 23465.21,
+            "n5_68": [
+              8567.8,
+              64471.71
+            ],
+            "years": 8904.72,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "Kepler-62 f": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2796.42,
+            "n5_68": [
+              843.51,
+              9620.48
+            ],
+            "years": 7579.35,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 8155.73,
+            "n5_68": [
+              2460.1,
+              28058.09
+            ],
+            "years": 22105.15,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 33834.39,
+            "n5_68": [
+              10205.82,
+              116400.1
+            ],
+            "years": 91704.1,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 7830.54,
+            "n5_68": [
+              2362.01,
+              26939.34
+            ],
+            "years": 21223.76,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 13664.46,
+            "n5_68": [
+              4121.76,
+              47009.7
+            ],
+            "years": 37035.9,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 85672.46,
+            "n5_68": [
+              25842.28,
+              294738.05
+            ],
+            "years": 232205.0,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 5636.09,
+            "n5_68": [
+              1700.07,
+              19389.79
+            ],
+            "years": 15275.96,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 96780.29,
+            "n5_68": [
+              29192.86,
+              332952.22
+            ],
+            "years": 262311.47,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 8857.52,
+            "n5_68": [
+              2671.79,
+              30472.43
+            ],
+            "years": 24007.25,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 675649.66,
+            "n5_68": [
+              203803.3,
+              2324430.38
+            ],
+            "years": 1831268.02,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 70115.09,
+            "n5_68": [
+              21149.55,
+              241216.22
+            ],
+            "years": 190038.62,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 23430.49,
+            "n5_68": [
+              7067.58,
+              80607.66
+            ],
+            "years": 63505.55,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 6895.08,
+            "n5_68": [
+              2079.84,
+              23721.08
+            ],
+            "years": 18688.3,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 226554.56,
+            "n5_68": [
+              68338.03,
+              779413.26
+            ],
+            "years": 614049.18,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 494780.57,
+            "n5_68": [
+              149245.86,
+              1702188.38
+            ],
+            "years": 1341043.88,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1113429.38,
+            "n5_68": [
+              335855.39,
+              3830519.32
+            ],
+            "years": 3017817.86,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 37618.9,
+            "n5_68": [
+              11347.38,
+              129419.89
+            ],
+            "years": 101961.55,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 39670.41,
+            "n5_68": [
+              11966.2,
+              136477.69
+            ],
+            "years": 107521.93,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 7741171.03,
+            "n5_68": [
+              2335050.65,
+              Infinity
+            ],
+            "years": 20981523.03,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2140130.44,
+            "n5_68": [
+              645550.0,
+              7362668.11
+            ],
+            "years": 5800568.92,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "LHS 1140 b": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 14.68,
+            "n5_68": [
+              6.55,
+              31.76
+            ],
+            "years": 3.68,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 26.23,
+            "n5_68": [
+              11.7,
+              56.74
+            ],
+            "years": 6.58,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_G395",
+            "n5": 192.36,
+            "n5_68": [
+              85.79,
+              416.17
+            ],
+            "years": 48.25,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 37.52,
+            "n5_68": [
+              16.73,
+              81.17
+            ],
+            "years": 9.41,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 29.25,
+            "n5_68": [
+              13.05,
+              63.29
+            ],
+            "years": 7.34,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 1362.55,
+            "n5_68": [
+              630.39,
+              2890.99
+            ],
+            "years": 341.78,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 36.01,
+            "n5_68": [
+              16.06,
+              77.9
+            ],
+            "years": 9.03,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 1038.75,
+            "n5_68": [
+              480.58,
+              2203.96
+            ],
+            "years": 260.56,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 32.72,
+            "n5_68": [
+              14.59,
+              70.8
+            ],
+            "years": 8.21,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 8895.54,
+            "n5_68": [
+              4115.55,
+              18874.09
+            ],
+            "years": 2231.36,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 296.15,
+            "n5_68": [
+              132.08,
+              640.73
+            ],
+            "years": 74.29,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 52.96,
+            "n5_68": [
+              23.62,
+              114.58
+            ],
+            "years": 13.28,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 85.23,
+            "n5_68": [
+              39.43,
+              180.83
+            ],
+            "years": 21.38,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRISS_SOSS",
+            "n5": 1701.36,
+            "n5_68": [
+              787.14,
+              3609.87
+            ],
+            "years": 426.77,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 760.23,
+            "n5_68": [
+              339.06,
+              1644.77
+            ],
+            "years": 190.7,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 2423.01,
+            "n5_68": [
+              1080.67,
+              5242.24
+            ],
+            "years": 607.79,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 59.81,
+            "n5_68": [
+              26.68,
+              129.41
+            ],
+            "years": 15.0,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 556.18,
+            "n5_68": [
+              257.32,
+              1180.08
+            ],
+            "years": 139.51,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_G395",
+            "n5": 43599.52,
+            "n5_68": [
+              19445.55,
+              94328.65
+            ],
+            "years": 10936.51,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 3449.93,
+            "n5_68": [
+              1538.68,
+              7464.01
+            ],
+            "years": 865.38,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "TOI-700 e": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 64.53,
+            "n5_68": [
+              23.76,
+              177.83
+            ],
+            "years": 18.2,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 115.1,
+            "n5_68": [
+              42.39,
+              317.2
+            ],
+            "years": 32.46,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_G395",
+            "n5": 1045.14,
+            "n5_68": [
+              384.88,
+              2880.27
+            ],
+            "years": 294.73,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 143.43,
+            "n5_68": [
+              52.82,
+              395.29
+            ],
+            "years": 40.45,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 131.08,
+            "n5_68": [
+              48.27,
+              361.23
+            ],
+            "years": 36.96,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 5981.53,
+            "n5_68": [
+              2148.8,
+              16906.19
+            ],
+            "years": 1686.77,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 175.66,
+            "n5_68": [
+              64.69,
+              484.08
+            ],
+            "years": 49.53,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 4584.03,
+            "n5_68": [
+              1646.76,
+              12956.28
+            ],
+            "years": 1292.68,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 142.39,
+            "n5_68": [
+              52.44,
+              392.42
+            ],
+            "years": 40.15,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 35068.86,
+            "n5_68": [
+              12598.08,
+              99118.58
+            ],
+            "years": 9889.29,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 1458.95,
+            "n5_68": [
+              537.27,
+              4020.67
+            ],
+            "years": 411.42,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 218.65,
+            "n5_68": [
+              80.52,
+              602.58
+            ],
+            "years": 61.66,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 356.07,
+            "n5_68": [
+              127.91,
+              1006.4
+            ],
+            "years": 100.41,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRISS_SOSS",
+            "n5": 9481.05,
+            "n5_68": [
+              3405.96,
+              26797.22
+            ],
+            "years": 2673.62,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 5847.89,
+            "n5_68": [
+              2153.52,
+              16115.96
+            ],
+            "years": 1649.08,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 9137.45,
+            "n5_68": [
+              3364.93,
+              25181.54
+            ],
+            "years": 2576.73,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 264.43,
+            "n5_68": [
+              97.38,
+              728.73
+            ],
+            "years": 74.57,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 2169.77,
+            "n5_68": [
+              779.46,
+              6132.62
+            ],
+            "years": 611.87,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_G395",
+            "n5": 242143.85,
+            "n5_68": [
+              89171.14,
+              667314.75
+            ],
+            "years": 68283.7,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 19683.16,
+            "n5_68": [
+              7248.46,
+              54244.06
+            ],
+            "years": 5550.58,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "Kepler-296 f": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1597.78,
+            "n5_68": [
+              392.94,
+              6195.31
+            ],
+            "years": 1026.16,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 4411.82,
+            "n5_68": [
+              1084.98,
+              17106.54
+            ],
+            "years": 2833.45,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 20834.86,
+            "n5_68": [
+              5123.84,
+              80785.78
+            ],
+            "years": 13381.01,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 4185.25,
+            "n5_68": [
+              1029.26,
+              16228.01
+            ],
+            "years": 2687.94,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 6814.45,
+            "n5_68": [
+              1675.85,
+              26422.59
+            ],
+            "years": 4376.53,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 49003.17,
+            "n5_68": [
+              12051.17,
+              190006.56
+            ],
+            "years": 31471.88,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 3256.24,
+            "n5_68": [
+              800.8,
+              12625.87
+            ],
+            "years": 2091.3,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 63947.53,
+            "n5_68": [
+              15726.39,
+              247952.3
+            ],
+            "years": 41069.77,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 4654.51,
+            "n5_68": [
+              1144.67,
+              18047.56
+            ],
+            "years": 2989.32,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 386279.95,
+            "n5_68": [
+              94996.44,
+              1497774.93
+            ],
+            "years": 248085.09,
+            "in_mission": false
+          }
+        }
+      },
+      "h2_rich": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 7.68,
+            "n5_68": [
+              1.89,
+              29.79
+            ],
+            "years": 4.93,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 23.34,
+            "n5_68": [
+              5.74,
+              90.5
+            ],
+            "years": 14.99,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 2248.19,
+            "n5_68": [
+              552.89,
+              8717.21
+            ],
+            "years": 1443.88,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 11.39,
+            "n5_68": [
+              2.8,
+              44.17
+            ],
+            "years": 7.32,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 32.32,
+            "n5_68": [
+              7.95,
+              125.33
+            ],
+            "years": 20.76,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 3889.44,
+            "n5_68": [
+              956.52,
+              15081.06
+            ],
+            "years": 2497.96,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 37949.44,
+            "n5_68": [
+              9332.77,
+              147146.44
+            ],
+            "years": 24372.71,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 12001.23,
+            "n5_68": [
+              2951.42,
+              46533.97
+            ],
+            "years": 7707.69,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 4126.77,
+            "n5_68": [
+              1014.88,
+              16001.28
+            ],
+            "years": 2650.38,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 168128.97,
+            "n5_68": [
+              41347.35,
+              651908.94
+            ],
+            "years": 107979.43,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 301205.5,
+            "n5_68": [
+              74074.38,
+              1167904.37
+            ],
+            "years": 193446.73,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 530964.81,
+            "n5_68": [
+              130578.26,
+              2058780.87
+            ],
+            "years": 341007.74,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 17994.69,
+            "n5_68": [
+              4425.37,
+              69773.23
+            ],
+            "years": 11556.94,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 21886.49,
+            "n5_68": [
+              5382.46,
+              84863.4
+            ],
+            "years": 14056.41,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 4430357.02,
+            "n5_68": [
+              1089541.74,
+              Infinity
+            ],
+            "years": 2845359.99,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_PRISM",
+            "n5": 1023396.0,
+            "n5_68": [
+              251680.09,
+              3968150.2
+            ],
+            "years": 657267.58,
+            "in_mission": false
+          }
+        }
+      }
+    },
+    "K2-18 b": {
+      "archean": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 46.37,
+            "n5_68": [
+              16.43,
+              135.69
+            ],
+            "years": 15.49,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 84.57,
+            "n5_68": [
+              29.97,
+              247.49
+            ],
+            "years": 28.25,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRSpec_G395",
+            "n5": 705.47,
+            "n5_68": [
+              250.03,
+              2064.52
+            ],
+            "years": 235.64,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 102.5,
+            "n5_68": [
+              36.33,
+              299.95
+            ],
+            "years": 34.24,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 93.31,
+            "n5_68": [
+              33.07,
+              273.06
+            ],
+            "years": 31.17,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 4008.9,
+            "n5_68": [
+              1379.65,
+              11463.3
+            ],
+            "years": 1339.03,
+            "in_mission": false
+          }
+        }
+      },
+      "co2_rich": {
+        "clear": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 126.29,
+            "n5_68": [
+              44.76,
+              369.58
+            ],
+            "years": 42.18,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 3128.2,
+            "n5_68": [
+              1076.57,
+              8944.99
+            ],
+            "years": 1044.86,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 102.57,
+            "n5_68": [
+              36.35,
+              300.17
+            ],
+            "years": 34.26,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 21994.02,
+            "n5_68": [
+              7569.2,
+              62891.14
+            ],
+            "years": 7346.31,
+            "in_mission": false
+          }
+        }
+      },
+      "h2_rich": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 0.18,
+            "n5_68": [
+              0.06,
+              0.53
+            ],
+            "years": 0.06,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 0.44,
+            "n5_68": [
+              0.16,
+              1.29
+            ],
+            "years": 0.15,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_G395",
+            "n5": 57.19,
+            "n5_68": [
+              20.27,
+              167.36
+            ],
+            "years": 19.1,
+            "in_mission": true
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 0.31,
+            "n5_68": [
+              0.11,
+              0.92
+            ],
+            "years": 0.11,
+            "in_mission": true
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 0.58,
+            "n5_68": [
+              0.21,
+              1.71
+            ],
+            "years": 0.19,
+            "in_mission": true
+          },
+          "H2O": {
+            "mode": "NIRSpec_G395",
+            "n5": 145.54,
+            "n5_68": [
+              51.58,
+              425.93
+            ],
+            "years": 48.61,
+            "in_mission": false
+          }
+        }
+      },
+      "modern_earth": {
+        "clear": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 974.86,
+            "n5_68": [
+              345.51,
+              2852.87
+            ],
+            "years": 325.62,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 161.52,
+            "n5_68": [
+              57.25,
+              472.68
+            ],
+            "years": 53.95,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 241.36,
+            "n5_68": [
+              83.06,
+              690.15
+            ],
+            "years": 80.62,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRISS_SOSS",
+            "n5": 5535.17,
+            "n5_68": [
+              1904.92,
+              15827.62
+            ],
+            "years": 1848.82,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 3795.22,
+            "n5_68": [
+              1345.1,
+              11106.46
+            ],
+            "years": 1267.66,
+            "in_mission": false
+          }
+        },
+        "cloudy": {
+          "CH4": {
+            "mode": "NIRSpec_G395",
+            "n5": 6147.46,
+            "n5_68": [
+              2178.77,
+              17990.11
+            ],
+            "years": 2053.34,
+            "in_mission": false
+          },
+          "CO2": {
+            "mode": "NIRSpec_G395",
+            "n5": 185.67,
+            "n5_68": [
+              65.81,
+              543.35
+            ],
+            "years": 62.02,
+            "in_mission": false
+          },
+          "H2O": {
+            "mode": "NIRISS_SOSS",
+            "n5": 1383.34,
+            "n5_68": [
+              476.07,
+              3955.6
+            ],
+            "years": 462.05,
+            "in_mission": false
+          },
+          "O2": {
+            "mode": "NIRSpec_G395",
+            "n5": 160380.48,
+            "n5_68": [
+              56841.78,
+              469342.29
+            ],
+            "years": 53569.32,
+            "in_mission": false
+          },
+          "O3": {
+            "mode": "NIRSpec_G395",
+            "n5": 11721.22,
+            "n5_68": [
+              4154.21,
+              34301.32
+            ],
+            "years": 3915.05,
+            "in_mission": false
+          }
+        }
+      }
+    }
+  },
+  "validation_k2_18b": {
+    "CH4": {
+      "forecast_snr_1_soss_plus_1_g395": 13.35,
+      "snr_with_real_published_noise": 9.28
+    },
+    "CO2": {
+      "forecast_snr_1_soss_plus_1_g395": 7.87,
+      "snr_with_real_published_noise": 4.12
+    },
+    "H2O": {
+      "forecast_snr_1_soss_plus_1_g395": 0.7,
+      "snr_with_real_published_noise": 0.45
+    },
+    "real_spectra_used": 2,
+    "published": {
+      "CH4": "5 sigma",
+      "CO2": "3 sigma",
+      "H2O": "not detected (95 % upper limit)",
+      "source": "Madhusudhan et al. 2023, ApJL 956, L13"
+    }
+  }
+}

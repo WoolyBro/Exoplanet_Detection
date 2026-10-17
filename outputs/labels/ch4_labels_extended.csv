@@ -1,0 +1,50 @@
+planet,CH4,featureless,source,significance,note
+TOI-5205 b,1,0,arXiv:2502.06966 (Canas+ 2026 AJ 171 260),~10 sigma (co-added retrieval),CH4 and H2S in 3-5 um; strong stellar contamination below 3 um
+TOI-421 b,0,0,arXiv:2501.01498 (Davenport+ 2025 ApJL),not detected,H2O detected; CH4 and CO2 not detected
+HAT-P-12 b,0,0,arXiv:2507.18722 (Crouzet+ 2025),not detected,"CO2 12.2, CO 4.1, H2O 6.0 sigma; CH4 not detected, appears lacking"
+GJ 1214 b,unknown,0,arXiv:2410.10183 (Schlawin+ 2024 ApJL 974 L33),CO2+CH4 jointly 3.3-3.6 sigma vs featureless,authors: possible; more observations needed -> tentative
+TOI-270 b,unknown,0,arXiv:2509.14224 (Coulombe+ 2025 AJ),not addressed,steam atmosphere vs flat ln B 0.3-3.2; CH4 not discussed in abstract
+TOI-1130 b,unknown,0,arXiv:2605.02036 (Barat+ 2026),~2 sigma (tentative),"H2O 7.5, CO2 3.3, SO2 3.6 sigma; CH4 tentative"
+TOI-1685 b,0,1,arXiv:2512.15338 (Fisher+ 2025 MNRAS 545),flat line preferred,no evidence for an atmosphere; H2-rich excluded; likely bare rock
+TOI-199 b,1,0,arXiv:2511.15835 (Bello-Arufe+ 2026 AJ),Bayes factor ~700 (~4 sigma),"CH4 in cloudy atmosphere ~13x solar; CO, CO2 not detected"
+TOI-260 b,0,1,arXiv:2602.22329 (Meech+ 2026),no clear molecular signatures,mostly flat; possible 3.17 um feature suspected systematic
+TOI-776 c,0,1,arXiv:2502.20501 (Teske+ 2025),no strong evidence for molecular features,rules out metallicity < 180-240x solar for clouds below 1 mbar
+TOI-836 c,0,1,arXiv:2404.01264 (Wallack+ 2024 AJ),featureless,metallicity < 175x solar ruled out without aerosols
+TOI-836 b,0,1,arXiv:2404.00093 (Alderson+ 2024 AJ),featureless (flat line fits as well),metallicity < 250x solar ruled out at 0.1 bar
+TRAPPIST-1 d,0,1,arXiv:2508.08416 (Piaulet-Ghorayeb+ 2025 ApJ),not detected (flat),"no CH4, CO2 or H2O detected; 200-300 ppm visit-varying stellar contamination"
+TOI-776 b,unknown,0,arXiv:2501.14596 (Alderson+ 2025),not addressed,metallicity limits differ between the two visits
+TRAPPIST-1 e,unknown,0,arXiv:2509.05414 (Espinoza+ 2025),not addressed,H2-rich (>=80 % H2) cloudy atmospheres ruled out >3 sigma; stellar contamination marginalised with GP
+TRAPPIST-1 b,unknown,0,arXiv:2412.16541 (Rathcke+ 2025 ApJL 979 L19),not addressed,used as airless reference for stellar-contamination correction; spectrum dominated by stellar features
+TrES-4 b,unknown,0,arXiv:2503.24280 (Meech+ 2025 MNRAS 539),not addressed,"H2O 8.4, CO 3.1, CO2 4.0 sigma; CH4 not mentioned in abstract"
+V1298 Tau b,1,0,arXiv:2507.08837 (Barat+ 2025 AJ 170 165),6 sigma,"CO2 35, H2O 30, CO 10, CH4 6, SO2 4, OCS 3.5 sigma"
+WASP-166 b,0,0,arXiv:2501.00609 (Mayo+ 2025 AJ),non-detection,"H2O 15.2, CO2 14.7 sigma; CH4, CO, C2H2, HCN, SO2, H2S not detected"
+WASP-121 b,unknown,0,arXiv:2506.02199 (Gapp+ 2025 AJ 169 341),not addressed in transmission,SiO 5.2 sigma; CH4 reported only in a separate nightside EMISSION study
+WASP-15 b,unknown,0,arXiv:2410.08116 (Kirk+ 2025 MNRAS 537),not addressed,"H2O 4.2, CO2 8.9 sigma, SO2, possible OCS"
+WASP-94 A b,unknown,0,arXiv:2505.11224 (Ahrer+ 2025 MNRAS 540),not addressed,"H2O ~4, CO2 ~11 sigma, CO ~3 tentative"
+NGTS-2 b,unknown,0,arXiv:2603.18332 (Fairman+ 2026 MNRAS),not addressed,"muted spectrum, weak H2O and CO2"
+LP 791-18 c,1,0,"Roy+ 2025, Nature Astronomy (JWST NIRSpec PRISM)",~4.5 sigma,methane plus strong haze slope; no CO2; robust to stellar-contamination modelling
+GJ 3090 b,0,0,arXiv:2504.20428 (Ahrer+ 2025 ApJL 985 L10),lack of CH4 (tentative muted features),He 10833 detected 5.5 sigma; metallicity > 100x solar favoured
+GJ 357 b,0,1,arXiv:2507.07165 (Adams Redai+ 2025 AJ); arXiv:2505.24462 (Taylor+ 2025 MNRAS),no detectable features,mu < 8 g/mol and metallicity < 300x solar ruled out at 3 sigma
+GJ 1132 b,0,1,arXiv:2508.10579 (Bennett+ 2025 AJ 170 205),featureless (flat line best),likely bare rock; earlier steam hint attributed to spot changes
+GJ 486 b,unknown,0,arXiv:2305.00868 (Moran+ 2023 ApJL 948 L11),not addressed,water-rich atmosphere vs stellar contamination degenerate
+LTT 3780 c,1,0,arXiv:2512.15844 (Rigby+ 2025; TOI-732 c),ln B 3.2-8.8 (3.0-4.6 sigma),"CH4 ~1 % in H2-rich atmosphere; degenerate with higher-order hydrocarbons; NH3, HCN not detected"
+HD 15337 c,0,1,arXiv:2602.22327 (Wallack+ 2026 AJ),featureless,step function (NRS1/NRS2 offset) best; metallicity < 310-600x solar ruled out
+HAT-P-14 b,unknown,0,arXiv:2504.08903 (Liu+ 2025 AJ 169 335),not addressed,"H2O 3.09 sigma, grey cloud 1.9 sigma"
+HAT-P-30 b,unknown,0,arXiv:2601.13104 (Claringbold+ 2026 MNRAS 546),not addressed,"H2O and CO2, muted features, sub-solar C/O"
+HIP 67522 b,unknown,0,arXiv:2409.16355 (Thao+ 2024 AJ 168 297),not addressed,"H2O, CO2 >= 7 sigma, CO 3.5 sigma; H2S, SO2 ~2 sigma"
+KELT-7 b,unknown,0,arXiv:2509.12479 (Ahrer+ 2025 MNRAS 543),not addressed,weak features; tentative H2O and CO2
+L 98-59 c,0,1,arXiv:2409.07552 (Scarsdale+ 2024 AJ 168 276),flat (no features),H2-He and pure CH4 atmospheres ruled out; metallicity < 300x solar ruled out at 3 sigma
+Kepler-51 d,unknown,0,arXiv:2505.21358 (Libby-Roberts+ 2026 AJ 171 221),2.2 sigma (tentative),near-featureless haze slope; ppb-level CH4 hint
+L 98-59 b,unknown,0,arXiv:2501.18680 (Bello-Arufe+ 2025 ApJL),not addressed,SO2 atmosphere preferred 3.6 sigma over flat line
+L 98-59 d,unknown,0,arXiv:2408.15855 (Gressier+ 2024 ApJL 975 L10),not addressed,"2.6-5.6 sigma departure from flat; possible H2S, SO2"
+K2-22 b,unknown,0,arXiv:2501.08301 (Tusay+ 2025),not addressed,MIRI 4.3-11.8 um only; silicates; possible NO/CO2 near 5 um
+LHS 1140 b,0,0,Damiano+ 2024 ApJL 968 L22; arXiv:2406.15136 (Cadieux+ 2024),CH4/CO2 features of H2-rich case absent,"H2-rich ruled out >10 sigma; N2-dominated favoured, tentative 2.3 sigma Rayleigh"
+LHS 475 b,0,1,Lustig-Yaeger+ 2023 Nature Astronomy (arXiv:2301.04191),featureless; CH4-rich disfavoured (3.3 um),consistent with flat line; pure CO2 indistinguishable from flat
+GJ 341 b,0,1,arXiv:2401.06043 (Kirk+ 2024 AJ 167 90),featureless,NIRCam 3.9-5.0 um; no CH4 band on grid -> expected unscorable
+L 168-9 b,unknown,0,arXiv:2411.03154 (Alam+ 2025 AJ),not addressed,metallicity < 100x solar ruled out at 3 sigma (cloudless)
+LHS 1140 c,unknown,0,arXiv:2406.15136 (Cadieux+ 2024),not addressed,NIRISS 0.65-2.65 um only
+GJ 9827 d,unknown,0,arXiv:2410.03527 (Piaulet-Ghorayeb+ 2024 ApJL 974 L10),not addressed,H2O-dominated steam atmosphere (VMR > 31 %)
+WASP-96 b,unknown,0,arXiv:2305.17001 (Radica+ 2023 MNRAS 524); arXiv:2305.16887 (Taylor+ 2023),not addressed,"H2O, CO2, K constrained; Rayleigh slope; NIRISS 0.6-2.85 um"
+LTT 9779 b,unknown,0,arXiv:2401.15548 (Radica+ 2024 ApJL),weak preference only,muted features (flat rejected > 5 sigma); H2O- vs CH4-dominated scenarios both allowed
+WASP-127 b,unknown,0,JWST GO 2437 spectrum (Fu+ 2025 per archive); paper not located,unverified,CH4 status could not be verified from a published abstract
+WASP-43 b,unknown,0,Bell+ 2024 (MIRI LRS),not addressed,MIRI 5-12 um only; nothing on the 1-5 um grid
