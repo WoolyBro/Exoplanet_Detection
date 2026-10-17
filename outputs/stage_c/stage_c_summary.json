@@ -1,51 +1,40 @@
 {
-  "generated_at": "2026-09-28T14:34:56",
+  "generated_at": "2026-10-17T19:35:15",
   "n_planets": 54,
+  "n_transiting": 44,
+  "n_ranked": 44,
   "weights": {
-    "small": 0.25,
-    "temperate": 0.25,
-    "observable": 0.3,
-    "evidence": 0.2
+    "hz": 0.4,
+    "terrestrial": 0.3,
+    "observable": 0.3
   },
-  "transit_scored_by_model": 2,
-  "transit_held_out": 1,
-  "transit_in_sample": 1,
-  "gas_scored_by_model": 13,
-  "o3_scored": 0,
-  "band_counts": {
-    "Low": 18,
-    "Medium": 18,
-    "High": 18
+  "monte_carlo_draws": 4000,
+  "definitions": {
+    "hz": "Kopparapu et al. 2014 (ApJL 787 L29), 1 M_earth coefficients; P(conservative) + 0.5 P(optimistic only)",
+    "terrestrial": "P(R_p < 1.5 R_earth), Kempton et al. 2018 bin edge",
+    "observable": "TSM (Kempton et al. 2018, PASP, doi:10.1088/1538-3873/aadf6f) / follow-up cut, capped at 1; 0 for non-transiting planets"
   },
+  "n_in_conservative_hz_p50": 11,
+  "n_in_optimistic_hz_p50": 15,
   "ablation": [
     {
-      "dropped": "small",
-      "weight": 0.25,
-      "spearman_vs_full": 0.74895174201418,
-      "planets_changing_band": 22,
-      "n_scored": 54
+      "dropped": "hz",
+      "weight": 0.4,
+      "spearman_vs_full": 0.7110759568764737,
+      "top10_overlap": 6
     },
     {
-      "dropped": "temperate",
-      "weight": 0.25,
-      "spearman_vs_full": 0.766271489082051,
-      "planets_changing_band": 21,
-      "n_scored": 53
+      "dropped": "terrestrial",
+      "weight": 0.3,
+      "spearman_vs_full": 0.867457479252495,
+      "top10_overlap": 8
     },
     {
       "dropped": "observable",
       "weight": 0.3,
-      "spearman_vs_full": 0.878859495311428,
-      "planets_changing_band": 12,
-      "n_scored": 54
-    },
-    {
-      "dropped": "evidence",
-      "weight": 0.2,
-      "spearman_vs_full": 0.9689715636197301,
-      "planets_changing_band": 10,
-      "n_scored": 54
+      "spearman_vs_full": 0.9604439133456018,
+      "top10_overlap": 9
     }
   ],
-  "integrity_note": "The template shipped transit_ML_probability = 0.99 for all 54 planets, which encodes 'confirmed', not a prediction. Cells with no model behind them are left empty here rather than carried forward."
+  "note": "A ranking with stated weights for transmission follow-up; not a probability of habitability. The molecule model and the vetting scores are not inputs to the score."
 }

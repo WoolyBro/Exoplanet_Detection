@@ -1,5 +1,4 @@
-dropped,weight,spearman_vs_full,planets_changing_band,n_scored
-small,0.25,0.74895174201418,22,54
-temperate,0.25,0.766271489082051,21,53
-observable,0.3,0.878859495311428,12,54
-evidence,0.2,0.9689715636197301,10,54
+dropped,weight,spearman_vs_full,top10_overlap
+hz,0.4,0.7110759568764737,6
+terrestrial,0.3,0.867457479252495,8
+observable,0.3,0.9604439133456018,9
