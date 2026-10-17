@@ -23,7 +23,7 @@ on the catalogue's upper and lower errors).
 | Component | Weight | Definition | Source |
 |---|---|---|---|
 | habitable zone | 0.40 | P(in conservative HZ) + ½ × P(in optimistic HZ only) | Kopparapu et al. 2014, ApJL 787 L29 |
-| terrestrial size | 0.30 | P(R_p < 1.5 R⊕) | radius bin of Kempton et al. 2018 |
+| terrestrial size **and able to keep an atmosphere** (since 2026-10-18) | 0.30 | P(R_p < 1.5 R⊕ **and** on the atmosphere side of the cosmic shoreline) | Kempton et al. 2018 bin; Zahnle & Catling 2017 (§2b) |
 | observability | 0.30 | Transmission Spectroscopy Metric ÷ its follow-up cut, capped at 1 | Kempton et al. 2018, PASP |
 
 **Habitable zone.**
@@ -46,6 +46,8 @@ on the catalogue's upper and lower errors).
 ---
 
 ## 2. Result
+
+> The ranks in this section are the 2026-10-17 ranking, before atmosphere retention. The current ranking, with the cosmic shoreline, is in §2b; the planet-level physics below is unchanged.
 
 **44 transiting planets are ranked.** Eleven planets are in the conservative HZ with P ≥ 0.5, and fifteen in the optimistic one; this counts transiting and non-transiting planets together.
 
@@ -73,13 +75,61 @@ on the catalogue's upper and lower errors).
 - Six transiting planets' masses come from the Chen & Kipping mass–radius relation, not a measurement (LP 890-9 c, TOI-700 d, TOI-700 e, Kepler-62 f, LHS 475 b, Kepler-296 f). Two of them, Kepler-62 f and LP 890-9 c, have only catalogue mass *upper limits* (< 35 and < 25.3 M⊕). A version of 2026-10-17 used those limits as masses, which understated their TSM about tenfold (corrected the same day; `tests/test_target_physics.py` guards it).
 - Planets above 10 R⊕ use the 4–10 R⊕ TSM scale factor, an extrapolation.
 
+## 2b. Can they keep an atmosphere? The cosmic shoreline (added 2026-10-18)
+
+**Why.** The habitable zone says whether liquid water is *possible* under an atmosphere. It does not say whether the planet can keep one. JWST has now found no thick atmosphere on 13 rocky planets, all around M dwarfs (table below). The best-known explanation is the **cosmic shoreline** (Zahnle & Catling 2017, ApJ 843, 122): bodies with low escape velocity and high cumulative XUV exposure lose their atmospheres.
+
+**Definition** (`stage_c_priority_fusion/cosmic_shoreline.py`).
+- **Escape velocity:** v_esc = 11.19 km/s × √(M_p/R_p).
+- **Cumulative XUV fluence**, relative to Earth: I_XUV = I · (L★/L☉)^−0.6. This is Zahnle & Catling's eq. 27; it encodes that faint stars stay active for longer.
+- **The shoreline:** I_XUV = I₀ v_esc⁴, with log I₀ uniform between log 7×10⁻⁴ (through Mars) and −3, as in arXiv:2508.08253.
+- **Monte Carlo** over mass (Chen & Kipping masses carry their intrinsic scatter), radius, instellation and luminosity. Also included: the XUV scaling's own uncertainty, 0.48 dex (it agrees with age-based estimates to a factor of ~3; arXiv:2508.08253), and the zero point.
+
+**Validation, before it touched the ranking** (`validate_shoreline.py`; figure `eda/cosmic_shoreline.png`; sources in `stage_c_priority_fusion/rocky_atmosphere_observations.csv`):
+
+| Shoreline definition | JWST/Spitzer "no thick atmosphere" planets on its airless side | Atmosphere-evidence planets on its atmosphere side | Solar System correct |
+|---|---|---|---|
+| **XUV, slope 4 (used)** | **13 / 13** | 1 / 5 | **7 / 8** (Ganymede misses by 0.03–0.2 dex) |
+| empirical, slope 5.89 (arXiv:2508.12865) | 10 / 13 (puts LTT 1445 A b, LHS 1140 c, TOI-1468 b on the wrong side) | 1 / 5 | 7 / 8 (Titan wrong) |
+| bolometric I = 10⁻⁴ v_esc⁴ | 11 / 13 | 1 / 5 | 5 / 8 |
+
+- **The XUV shoreline is contradicted by no bare-rock result.** The four "atmosphere" planets on its airless side are not counter-examples to *retention*:
+  - 55 Cnc e's atmosphere is thought to be resupplied by a magma ocean (Hu et al. 2024).
+  - L 98-59 b and d and LHS 1478 b are tentative (2.6–3.6σ), and two of them are proposed volcanic atmospheres.
+- **Limit:** almost every observed planet lies on the airless side. The validation tests the shoreline's "airless" predictions far better than its "keeps an atmosphere" predictions. Only LHS 1140 b, with a tentative atmosphere, sits on the atmosphere side.
+
+**How it enters the score.** It is combined with size: the component is P(R_p < 1.5 R⊕ *and* atmosphere side), and the weights are unchanged. A separate fourth term was tried first and rejected: it put hot Jupiters in the top 15 for trivially keeping their H/He envelopes.
+
+**What changed.** These are median ranks. `rank_without_retention` in the table is the previous ranking.
+
+| Planet | Rank now (90 %) | Before | P(atmosphere side) | Shoreline margin (dex) | Empirical / bolometric P |
+|---|---|---|---|---|---|
+| TRAPPIST-1 g | 2 (1–5) | 1 | 0.42 | +0.10 | 0.87 / 1.00 |
+| TOI-700 d | 3 (1–10) | 6 | **0.72** | −0.34 | 0.93 / 0.90 |
+| Kepler-62 f | 3 (1–9) | 7 | **0.98** | −1.51 | 1.00 / 0.98 |
+| TRAPPIST-1 f | 3 (1–5) | 1 | 0.19 | +0.41 | 0.63 / 1.00 |
+| TRAPPIST-1 e | 4 (2–5) | 1 | **0.03** | +0.89 | 0.17 / 1.00 |
+| LP 890-9 c | 4 (1–9) | 4 | 0.47 | +0.05 | 0.80 / 0.93 |
+| LHS 1140 b | 6 (5–8) | 8 | 0.99 | −1.05 | 1.00 / 1.00 (but 1.73 R⊕) |
+| TRAPPIST-1 d | 8 (7–10) | 5 | 0.00 | +1.50 | 0.01 / 0.00 |
+| GJ 1132 b, GJ 486 b, LHS 475 b, TRAPPIST-1 b, c | 12 | 9 | 0.00–0.02 | +1.0 to +1.5 | — |
+
+**Reading it.**
+1. **TRAPPIST-1 e loses the top spot.** Its cumulative XUV is ~58× Earth's, because a faint, long-active star gives ~90× more XUV per unit of bolometric light. That puts it 0.9 dex past the shoreline.
+   - **This verdict depends on the XUV-history assumption.** The empirical shoreline gives 0.17, and the bolometric one, which ignores M-dwarf activity, gives 1.00.
+   - Read it as "the TRAPPIST-1 planets are at risk", not as "TRAPPIST-1 e is bare". The tentative JWST hints for e (Espinoza et al. 2025; Glidden et al. 2025) are the direct test.
+2. **TRAPPIST-1 g is the best TRAPPIST-1 target** for an atmosphere (0.42). It is the farthest out and the most massive of the three, the classic shoreline expectation.
+3. **The habitable-zone planets of quieter stars rise:** TOI-700 d (M2, 0.72) and Kepler-62 f (K2, 0.98). They are much harder to observe, though (TSM 3.6 and 0.4).
+4. **The hot rocky planets fall** (GJ 1132 b, GJ 486 b, LHS 475 b, TRAPPIST-1 b, c). JWST found no thick atmosphere on GJ 1132 b, GJ 486 b and TRAPPIST-1 b and c, which agrees with the shoreline.
+
 ## 3. Ablation — what the order depends on
 
 | Criterion removed | Spearman vs full ranking | Top-10 overlap |
 |---|---|---|
-| habitable zone | 0.711 | 6 / 10 |
-| terrestrial size | 0.867 | 8 / 10 |
-| observability (TSM) | 0.960 | 9 / 10 |
+| habitable zone | 0.140 | 2 / 10 |
+| retention (back to size only) | 0.865 | 9 / 10 |
+| observability (TSM) | 0.940 | 10 / 10 |
+| terrestrial-with-atmosphere | 0.987 | 9 / 10 |
 
 Habitable-zone membership drives the ranking most. The weights are a stated preference; the ablation shows what changes if they are argued with.
 

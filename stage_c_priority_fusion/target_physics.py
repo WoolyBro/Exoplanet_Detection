@@ -106,7 +106,9 @@ def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_dr
     Insolation: pl_insol with its own errors; where those are missing, its fractional uncertainty is
     taken from S = L / a^2 (st_lum is log10 L/L_sun; error propagated from st_lum and pl_orbsmax), and
     the row says so. Mass: measured where pl_bmassprov is "Mass" and pl_bmasselim is 0; anything else
-    (a limit, Msini, a catalogue M-R estimate, missing) -> Chen & Kipping from radius, flagged.
+    (a limit, Msini, a catalogue M-R estimate, missing) -> Chen & Kipping from radius, with its
+    intrinsic scatter, flagged. Atmosphere retention: position relative to the cosmic shoreline
+    (cosmic_shoreline.py), with luminosity from st_lum (or R_s and T_eff when missing).
     """
     rng = np.random.default_rng(seed)
     d = df.reset_index(drop=True)
@@ -141,7 +143,10 @@ def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_dr
     limit = d.pl_bmasselim.fillna(0).to_numpy() != 0 if "pl_bmasselim" in d else np.zeros(len(d), bool)
     measured = (prov == "Mass") & d.pl_bmasse.notna().to_numpy() & ~limit
     M = split_normal(d.pl_bmasse, d.pl_bmasseerr1, d.pl_bmasseerr2, n, rng)
-    M = np.where(measured[:, None], M, chen_kipping_mass(R))
+    # Chen & Kipping masses carry the relation's intrinsic scatter: radius scatter at fixed mass
+    # (0.0403 / 0.146 dex, Terran / Neptunian) over the slope (0.279 / 0.589) = 0.144 / 0.248 dex in mass.
+    ck_scatter = 10 ** (rng.normal(0.0, 1.0, R.shape) * np.where(R < 1.23, 0.144, 0.248))
+    M = np.where(measured[:, None], M, chen_kipping_mass(R) * ck_scatter)
     for i in np.flatnonzero(~measured):
         why = f"catalogue gives only a limit of {d.pl_bmasse[i]:.3g}" if limit[i] else f"catalogue: {prov[i]}"
         notes[i].append(f"mass from Chen & Kipping ({why})")
@@ -154,8 +159,27 @@ def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_dr
         notes[i].append("R_p > 10 R_earth: TSM uses the 4-10 R_earth scale factor (extrapolated)")
 
     obs_draw = np.where(transiting[:, None], np.clip(np.nan_to_num(tsm_draw / cut, nan=0.0), 0.0, 1.0), 0.0)
+    # ---- atmosphere retention: the cosmic shoreline (cosmic_shoreline.py) ----
+    import cosmic_shoreline as cs
+    nan_col = pd.Series(np.nan, index=d.index)
+    st_lum = d["st_lum"] if "st_lum" in d else nan_col
+    has_lum = st_lum.notna().to_numpy()
+    log_l = split_normal(st_lum.fillna(0.0), d.get("st_lumerr1", nan_col), d.get("st_lumerr2", nan_col), n, rng,
+                         positive=False)
+    log_l_sb = np.log10(Rs ** 2 * (T / 5772.0) ** 4)                         # Stefan-Boltzmann fallback
+    L = 10 ** np.where(has_lum[:, None], log_l, log_l_sb)
+    for i in np.flatnonzero(~has_lum):
+        notes[i].append("stellar luminosity from R_s and T_eff (catalogue st_lum missing)")
+    shore = cs.draws(M, R, S, L, n, rng)
+    shore_summary = cs.summarise(shore)
+    for i in np.flatnonzero(~transiting):
+        notes[i].append("shoreline uses an estimated radius")
+
     draws = {"hz": cons.astype(float) + 0.5 * (opt & ~cons), "terrestrial": (R < 1.5).astype(float),
-             "observable": obs_draw}
+             "observable": obs_draw, "retention": (shore["primary"] < 0).astype(float),
+             # a terrestrial-size planet that can also keep an atmosphere: the shoreline is a statement about
+             # rocky bodies, so on its own it would reward giants for trivially keeping H/He envelopes
+             "terrestrial_atm": ((R < 1.5) & (shore["primary"] < 0)).astype(float)}
 
     q = lambda x, p: np.nanpercentile(x, p, axis=1) if np.isfinite(x).any() else np.full(len(x), np.nan)
     with np.errstate(all="ignore"):
@@ -172,6 +196,9 @@ def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_dr
             "tsm_median": q(tsm_draw, 50), "tsm_p16": q(tsm_draw, 16), "tsm_p84": q(tsm_draw, 84),
             "tsm_followup_cut": np.nanmedian(cut, axis=1),
             "p_tsm_above_cut": np.where(transiting, np.nanmean(tsm_draw > cut, axis=1), np.nan),
+            "v_esc_kms": np.median(cs.v_esc_kms(M, R), axis=1),
+            "cumulative_xuv_earth": np.median(cs.cumulative_xuv(S, L), axis=1),
+            **shore_summary,
             "physics_notes": ["; ".join(x) for x in notes],
         })
     return (out, draws) if return_draws else out

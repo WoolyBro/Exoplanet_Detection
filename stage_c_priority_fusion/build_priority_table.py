@@ -19,6 +19,12 @@ uncertainty propagated by Monte Carlo:
   hz           0.40  P(conservative HZ) + 0.5 x P(optimistic-only HZ)      Kopparapu et al. 2014
   terrestrial  0.30  P(R_p < 1.5 R_earth)                                   Kempton et al. 2018 bins
   observable   0.30  TSM / Kempton follow-up cut, capped at 1; 0 if the planet does not transit
+Changed 2026-10-18: "terrestrial" is now "terrestrial_atm" = P(R_p < 1.5 R_earth AND the planet lies on
+the atmosphere-retaining side of the cosmic shoreline) (Zahnle & Catling 2017; cosmic_shoreline.py).
+Weights unchanged. Before entering the score, the shoreline was checked against JWST/Spitzer rocky
+planets: all 13 with no thick atmosphere lie on its airless side (validate_shoreline.py). It is
+combined with size rather than added as a fourth term, because a giant planet trivially "retains"
+an H/He envelope. A separate term put hot Jupiters in the top 15.
 The weights are a stated preference; the ablation shows how much each one drives the order. The
 score is computed for every Monte-Carlo draw, so each planet gets a rank interval, not just a rank.
 
@@ -52,7 +58,8 @@ OUT_DIR = RESEARCH_DIR / "outputs" / "stage_c"
 EDA_DIR = RESEARCH_DIR / "eda"
 MOLECULES = ["H2O", "CO2", "CH4", "CO", "SO2"]
 
-WEIGHTS = {"hz": 0.40, "terrestrial": 0.30, "observable": 0.30}
+WEIGHTS = {"hz": 0.40, "terrestrial_atm": 0.30, "observable": 0.30}
+WEIGHTS_WITHOUT_RETENTION = {"hz": 0.40, "terrestrial": 0.30, "observable": 0.30}     # the 2026-10-17 ranking
 N_DRAWS = 4000
 
 
@@ -125,7 +132,7 @@ def make_figure(final: pd.DataFrame, abl: pd.DataFrame) -> None:
     top = final[final.eligible].head(15).iloc[::-1]
     y = np.arange(len(top))
     left = np.zeros(len(top))
-    for comp, col in [("hz", "#3b7a57"), ("terrestrial", "#c8902a"), ("observable", "#2d6fa8")]:
+    for comp, col in [("hz", "#3b7a57"), ("terrestrial_atm", "#c8902a"), ("observable", "#2d6fa8")]:
         vals = top[f"c_{comp}"].to_numpy() * WEIGHTS[comp] / sum(WEIGHTS.values())
         ax.barh(y, vals, left=left, color=col, height=0.72, label=comp)
         left += vals
@@ -187,7 +194,12 @@ def main() -> int:
     r_el = ranks(s)
     r = np.full(s_all.shape, np.nan)
     r[eligible] = r_el
-    phys["c_hz"], phys["c_terrestrial"], phys["c_observable"] = (draws[k].mean(axis=1) for k in WEIGHTS)
+    for k in list(WEIGHTS) + ["terrestrial", "retention"]:
+        phys[f"c_{k}"] = draws[k].mean(axis=1)
+    r_old = np.full(s_all.shape, np.nan)
+    r_old[eligible] = ranks(score_draws(draws, WEIGHTS_WITHOUT_RETENTION)[eligible])
+    with np.errstate(all="ignore"):
+        phys["rank_without_retention"] = np.nanmedian(r_old, axis=1)
     phys["priority_score"] = np.where(eligible, np.median(s_all, axis=1), np.nan)
     phys["score_p5"] = np.where(eligible, np.percentile(s_all, 5, axis=1), np.nan)
     phys["score_p95"] = np.where(eligible, np.percentile(s_all, 95, axis=1), np.nan)
@@ -206,12 +218,13 @@ def main() -> int:
     print(f"  ranked: {int(final.eligible.sum())} transiting planets; listed, not ranked: {int((~final.eligible).sum())}")
 
     print("\n[2] weights:", WEIGHTS)
-    print(f"\n  {'planet':<14} {'score':>6} {'rank (90%)':>12} {'P(HZcons)':>9} {'P(HZopt)':>8} "
-          f"{'P(R<1.5)':>8} {'TSM':>7} {'cut':>4}  notes")
+    print(f"\n  {'planet':<14} {'score':>6} {'rank (90%)':>12} {'old':>4} {'P(HZcons)':>9} {'P(HZopt)':>8} "
+          f"{'P(R<1.5)':>8} {'TSM':>7} {'cut':>4} {'P(keep)':>7} {'margin':>6}")
     for _, row in final[final.eligible].head(15).iterrows():
         print(f"  {row.pl_name:<14} {row.priority_score:>6.3f} {int(row.rank_median):>4} ({int(row.rank_p5):>2}-"
-              f"{int(row.rank_p95):>2}) {row.p_hz_conservative:>9.2f} {row.p_hz_optimistic:>8.2f} "
-              f"{row.p_radius_lt_1p5:>8.2f} {row.tsm_median:>7.1f} {row.tsm_followup_cut:>4.0f}  {row.physics_notes[:60]}")
+              f"{int(row.rank_p95):>2}) {int(row.rank_without_retention):>4} {row.p_hz_conservative:>9.2f} {row.p_hz_optimistic:>8.2f} "
+              f"{row.p_radius_lt_1p5:>8.2f} {row.tsm_median:>7.1f} {row.tsm_followup_cut:>4.0f} {row.p_retain_primary:>7.2f} "
+              f"{row.shoreline_margin_primary_dex:>6.2f}")
 
     # ---- ablation ------------------------------------------------------------------------------ #
     from scipy.stats import spearmanr
@@ -225,12 +238,18 @@ def main() -> int:
         abl.append({"dropped": drop, "weight": WEIGHTS[drop],
                     "spearman_vs_full": float(spearmanr(full, alt).statistic),
                     "top10_overlap": len(top10 & set(np.argsort(-alt)[:10]))})
+    alt = np.median(score_draws({k: v[eligible] for k, v in draws.items()}, WEIGHTS_WITHOUT_RETENTION), axis=1)
+    abl.append({"dropped": "retention (terrestrial_atm -> terrestrial)", "weight": 0.0,
+                "spearman_vs_full": float(spearmanr(full, alt).statistic),
+                "top10_overlap": len(top10 & set(np.argsort(-alt)[:10]))})
     abl = pd.DataFrame(abl).sort_values("spearman_vs_full")
     print("\n[3] ablation")
     print(abl.round(3).to_string(index=False))
 
     cols = ["pl_name", "eligible", "priority_score", "score_p5", "score_p95", "rank_median", "rank_p5", "rank_p95", "p_top10",
-            "c_hz", "c_terrestrial", "c_observable",
+            "c_hz", "c_terrestrial_atm", "c_observable", "c_terrestrial", "c_retention", "rank_without_retention",
+            "p_retain_primary", "shoreline_margin_primary_dex", "p_retain_empirical", "p_retain_bolometric",
+            "v_esc_kms", "cumulative_xuv_earth",
             "p_hz_conservative", "p_hz_optimistic", "insol_earth", "hz_inner_runaway", "hz_outer_maxgreen",
             "p_radius_lt_1p5", "pl_rade", "pl_bmasse", "pl_bmassprov", "teq_kempton_K",
             "transiting", "discoverymethod", "tsm_median", "tsm_p16", "tsm_p84", "tsm_followup_cut", "p_tsm_above_cut",
@@ -247,9 +266,12 @@ def main() -> int:
         "weights": WEIGHTS, "monte_carlo_draws": N_DRAWS,
         "definitions": {
             "hz": "Kopparapu et al. 2014 (ApJL 787 L29), 1 M_earth coefficients; P(conservative) + 0.5 P(optimistic only)",
-            "terrestrial": "P(R_p < 1.5 R_earth), Kempton et al. 2018 bin edge",
+            "terrestrial_atm": "P(R_p < 1.5 R_earth [Kempton et al. 2018 bin] AND atmosphere side of the cosmic shoreline)",
             "observable": "TSM (Kempton et al. 2018, PASP, doi:10.1088/1538-3873/aadf6f) / follow-up cut, capped at 1; "
-                          "0 for non-transiting planets"},
+                          "0 for non-transiting planets",
+            "retention_definition": "P(atmosphere side of the cosmic shoreline): I_XUV = I (L/L_sun)^-0.6 (Zahnle & Catling 2017 eq. 27) "
+                         "vs I0 v_esc^4, log10 I0 ~ U(log10 7e-4, -3); XUV scaling scatter 0.48 dex; see validate_shoreline.py"},
+        "weights_without_retention": WEIGHTS_WITHOUT_RETENTION,
         "n_in_conservative_hz_p50": int((final.p_hz_conservative >= 0.5).sum()),
         "n_in_optimistic_hz_p50": int((final.p_hz_optimistic >= 0.5).sum()),
         "ablation": abl.to_dict("records"),

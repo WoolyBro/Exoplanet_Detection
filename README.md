@@ -18,8 +18,12 @@ A three-stage pipeline:
   - a **detectability forecast**, with a noise model calibrated and validated on 117 real
     single-transit JWST spectra, of how many transits would detect CO₂, CH₄ and O₃ on each
     habitable-zone target.
-- **Stage C** ranks 44 transiting planets for transmission follow-up by habitable-zone membership
-  (Kopparapu et al. 2014), terrestrial size and the TSM (Kempton et al. 2018), with uncertainty.
+- **Stage C** ranks 44 transiting planets for transmission follow-up, with uncertainty, by three criteria:
+  - habitable-zone membership (Kopparapu et al. 2014);
+  - being terrestrial-size *and* able to keep an atmosphere. This uses the cosmic shoreline of
+    Zahnle & Catling 2017, checked against the 13 JWST/Spitzer rocky planets with no thick
+    atmosphere, all of which it places on the airless side;
+  - the TSM (Kempton et al. 2018).
   It is a ranking with stated weights. **Nothing in this project computes a probability of
   habitability**, and being in the habitable zone is not being habitable.
 
@@ -230,7 +234,7 @@ the mentor's `exoplanet_research_data/` pack, which is not redistributed here (s
 (`stage_d_habitability/`) needs external INARA/PyATMOS data that is not in this repository; point
 the environment variable `EXO_EXTERNAL_DATA` at it (default: the original `D:/Files`).
 
-**Tests:** `python -m pytest tests` (36 tests: folding and view construction, the error channel,
+**Tests:** `python -m pytest tests` (41 tests: folding and view construction, the error channel,
 both splits' leakage guarantees, the data manifest, the habitable-zone / TSM physics against
 published values including mass upper limits, the forecast's noise scaling and transit-count
 solver, and the frozen methane labels and leakage-free calibration). They need the split files and, for the manifest test, nothing else.

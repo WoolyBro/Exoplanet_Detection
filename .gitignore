@@ -114,3 +114,4 @@ outputs/forecast/forecast_run.log
 outputs/stage_b_methane_ext/grid_seed2.log
 # synthetic-grid checkpoints (deleted once the grid is assembled)
 outputs/stage_b_synthetic*/parts/
+outputs/retrieval_real_run.log

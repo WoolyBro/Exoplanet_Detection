@@ -1,4 +1,5 @@
 dropped,weight,spearman_vs_full,top10_overlap
-hz,0.4,0.7110759568764737,6
-terrestrial,0.3,0.867457479252495,8
-observable,0.3,0.9604439133456018,9
+hz,0.4,0.13998539552947073,2
+retention (terrestrial_atm -> terrestrial),0.0,0.864596413744704,9
+observable,0.3,0.9400702608610864,10
+terrestrial_atm,0.3,0.986989101329558,9
