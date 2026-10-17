@@ -1,18 +1,24 @@
 {
-  "generated_at": "2026-10-17T19:35:15",
+  "generated_at": "2026-10-18T02:56:51",
   "n_planets": 54,
   "n_transiting": 44,
   "n_ranked": 44,
   "weights": {
     "hz": 0.4,
-    "terrestrial": 0.3,
+    "terrestrial_atm": 0.3,
     "observable": 0.3
   },
   "monte_carlo_draws": 4000,
   "definitions": {
     "hz": "Kopparapu et al. 2014 (ApJL 787 L29), 1 M_earth coefficients; P(conservative) + 0.5 P(optimistic only)",
-    "terrestrial": "P(R_p < 1.5 R_earth), Kempton et al. 2018 bin edge",
-    "observable": "TSM (Kempton et al. 2018, PASP, doi:10.1088/1538-3873/aadf6f) / follow-up cut, capped at 1; 0 for non-transiting planets"
+    "terrestrial_atm": "P(R_p < 1.5 R_earth [Kempton et al. 2018 bin] AND atmosphere side of the cosmic shoreline)",
+    "observable": "TSM (Kempton et al. 2018, PASP, doi:10.1088/1538-3873/aadf6f) / follow-up cut, capped at 1; 0 for non-transiting planets",
+    "retention_definition": "P(atmosphere side of the cosmic shoreline): I_XUV = I (L/L_sun)^-0.6 (Zahnle & Catling 2017 eq. 27) vs I0 v_esc^4, log10 I0 ~ U(log10 7e-4, -3); XUV scaling scatter 0.48 dex; see validate_shoreline.py"
+  },
+  "weights_without_retention": {
+    "hz": 0.4,
+    "terrestrial": 0.3,
+    "observable": 0.3
   },
   "n_in_conservative_hz_p50": 11,
   "n_in_optimistic_hz_p50": 15,
@@ -20,19 +26,25 @@
     {
       "dropped": "hz",
       "weight": 0.4,
-      "spearman_vs_full": 0.7110759568764737,
-      "top10_overlap": 6
+      "spearman_vs_full": 0.13998539552947073,
+      "top10_overlap": 2
     },
     {
-      "dropped": "terrestrial",
-      "weight": 0.3,
-      "spearman_vs_full": 0.867457479252495,
-      "top10_overlap": 8
+      "dropped": "retention (terrestrial_atm -> terrestrial)",
+      "weight": 0.0,
+      "spearman_vs_full": 0.864596413744704,
+      "top10_overlap": 9
     },
     {
       "dropped": "observable",
       "weight": 0.3,
-      "spearman_vs_full": 0.9604439133456018,
+      "spearman_vs_full": 0.9400702608610864,
+      "top10_overlap": 10
+    },
+    {
+      "dropped": "terrestrial_atm",
+      "weight": 0.3,
+      "spearman_vs_full": 0.986989101329558,
       "top10_overlap": 9
     }
   ],

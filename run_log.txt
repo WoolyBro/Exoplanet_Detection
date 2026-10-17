@@ -3670,3 +3670,16 @@ Write-up eda/STAGE_A_V2_FINAL_RESULTS.md, figure figures/13_stage_a_v2_final.png
   x depth projected out with the offset (hosts < 4000 K). CH4 signal kept: PRISM (TRAPPIST-1) 0.89-0.91, G395 0.55-0.77;
   CO2 kept 1.00 (PRISM), 0.83-0.85 (G395). Archean CH4 5-sigma: TRAPPIST-1 e 3.9 -> 4.8; TOI-700 d 86 -> 276; K2-18 b 46 -> 151.
   Correction: O3's best mode is NIRSpec (~4.7 um bands), not MIRI; the earlier label was wrong (numbers unchanged).
+
+========================================================================================
+2026-10-18  STAGE C: ATMOSPHERE RETENTION (cosmic shoreline, Zahnle & Catling 2017)
+========================================================================================
+I_XUV = I (L/Lsun)^-0.6 (ZC17 eq. 27) vs I0 v_esc^4, log I0 ~ U(log 7e-4, -3); MC incl. 0.48 dex XUV-scaling scatter,
+Chen & Kipping mass scatter (now also in TSM). Validation BEFORE use (validate_shoreline.py, 18 observed rocky planets):
+  XUV slope-4: 13/13 no-thick-atmosphere planets on airless side; Solar System 7/8 (Ganymede by 0.03-0.2 dex)
+  empirical slope 5.89: 10/13; bolometric: 11/13, Solar System 5/8 -> XUV slope-4 used.
+  atmosphere-evidence planets on airless side: 55 Cnc e (magma-ocean resupply), L 98-59 b/d, LHS 1478 b (tentative).
+Entered as terrestrial_atm = P(R<1.5 AND atmosphere side) [a separate 4th term put hot Jupiters in the top 15; rejected].
+Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 f 3 (0.19), TRAPPIST-1 e 4 (0.03, was 1),
+  LP 890-9 c 4, LHS 1140 b 6, TRAPPIST-1 d 8; hot rocks (GJ 1132 b, GJ 486 b, LHS 475 b, T-1 b/c) 9 -> 12.
+  TRAPPIST-1 e verdict depends on XUV assumption: empirical 0.17, bolometric 1.00. Tests: 41 pass.

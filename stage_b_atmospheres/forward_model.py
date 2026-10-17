@@ -50,10 +50,12 @@ SPECIES = {
 M_N2, M_H2, M_HE = 28.013, 2.016, 4.0026
 H2_FRACTION = 0.85          # H2 : He by number in an H2/He background (solar-like)
 
-# Wavelength segments (um) with the CIA tables valid inside each. Boundaries follow the tables'
+# Wavelength segments (um) with the CIA tables valid inside each (callers choose wl_range; the
+# default still starts at 0.95 um). Boundaries follow the tables'
 # own ranges: N2-N2 2-100 um, CO2-CO2 3.08-100 um, O2-O2 0.34-8.7 um, H2-H2 0.607-250 um.
 SEGMENTS = {
-    "N2":   [(0.95, 2.0, ("O2--O2",)), (2.0, 3.08, ("N2--N2", "O2--O2")),
+    # O2-O2 is valid from 0.34 um, so the first N2 segment reaches PRISM's blue end at 0.6 um
+    "N2":   [(0.60, 2.0, ("O2--O2",)), (2.0, 3.08, ("N2--N2", "O2--O2")),
              (3.08, 8.7, ("N2--N2", "CO2--CO2", "O2--O2")), (8.7, 12.0, ("N2--N2", "CO2--CO2"))],
     "H2He": [(0.95, 12.0, ("H2--H2-NatAbund__BoRi.R831_0.6-250mu", "H2--He-NatAbund__BoRi.DeltaWavenumber2_0.5-500mu"))],
 }
