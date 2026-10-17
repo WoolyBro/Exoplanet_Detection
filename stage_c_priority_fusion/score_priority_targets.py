@@ -16,14 +16,23 @@ accumulates the period uncertainty, so a high "unreliable ephemeris" exclusion r
 and is a real limitation, not a bug. The pipeline's own reliability check decides, exactly as
 it does for KOIs and TOIs.
 
-**The score this produces is CROSS-MISSION and UNVALIDATED.** The model was trained on Kepler
-30-minute photometry; TESS is 2-minute, a different noise regime and a much shorter baseline.
-Until a TESS-trained model exists (the big build), these numbers are an indication, not a
-measurement, and every output here is labelled that way.
+**Which model scores them.** The default is the TESS-trained model (`tess_bn_aug_sched`): these
+are TESS light curves, so it is the same-mission model. `--run` can point at the Kepler model
+instead, which makes the score CROSS-MISSION. Both are kept because their biases are opposite
+(see eda/STAGE_C_RESULTS.md section 1c). Every output is named after the model that produced it,
+so the two can never overwrite each other or be confused:
+    outputs/stage_c/priority_target_scores_TESS.csv      + priority_target_scores_summary_TESS.json
+    outputs/stage_c/priority_target_scores_KEPLER.csv    + priority_target_scores_summary_KEPLER.json
+build_priority_table.py reads both CSVs.
+
+Every target is a confirmed planet, so this is a transfer sanity check with no negative class:
+it cannot give a precision or a recall.
 
 Usage
-    python stage_c_priority_fusion/score_priority_targets.py            # fetch + build + score
+    python stage_c_priority_fusion/score_priority_targets.py            # fetch + build + score (TESS model)
     python stage_c_priority_fusion/score_priority_targets.py --score-only
+    python stage_c_priority_fusion/score_priority_targets.py --score-only \
+           --run stage_a_transit_model/runs/bn_aug_sched                # the Kepler model, cross-mission
 """
 
 from __future__ import annotations
@@ -109,10 +118,17 @@ def main(argv: list[str] | None = None) -> int:
     same_mission = "tess" in run.name.lower()
     column = ("transit_ML_probability_TESS" if same_mission
               else "transit_ML_probability_TESS_crossmission")
+    # Output names carry the model, so a cross-mission run can never overwrite (or be read as) the
+    # same-mission one. A single shared file name is how the summary ended up describing the
+    # Kepler run while the table used the TESS one.
+    tag = "TESS" if same_mission else "KEPLER"
+    scores_path = OUT_DIR / f"priority_target_scores_{tag}.csv"
+    summary_path = OUT_DIR / f"priority_target_scores_summary_{tag}.json"
 
     print("=" * 88)
     print("Stage C targets: fetch TESS light curves for the 54 priority planets and score them")
-    print("CROSS-MISSION: the model is Kepler-trained. These are indications, not measurements.")
+    print(f"model: {run.name} - " + ("TESS-trained, the same mission as these light curves" if same_mission
+                                     else "Kepler-trained: CROSS-MISSION, an indication, not a measurement"))
     print("=" * 88)
 
     print("\n[1] ephemerides from pscomppars")
@@ -145,18 +161,18 @@ def main(argv: list[str] | None = None) -> int:
               f"{r.p_false_positive:>7.3f} {r.p_candidate:>8.3f} {r.p_confirmed:>8.3f}")
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    scores.to_csv(OUT_DIR / "priority_target_transit_scores.csv", index=False)
+    scores.to_csv(scores_path, index=False)
 
     # These are all CONFIRMED planets, so a well-behaved model should score them high.
     # That makes the set a sanity check on cross-mission transfer, not a classification test.
     high = float((scores[column] >= 0.5).mean())
-    print(f"\n[4] sanity check: every one of these is a CONFIRMED planet, so a transferring model")
+    print(f"\n[4] sanity check: every one of these is a CONFIRMED planet, so a well-behaved model")
     print(f"  should score them high. Fraction scored >= 0.5: {high:.0%}")
     print(f"  median p(planet-like): {scores[column].median():.4f}")
-    print("  This measures cross-mission transfer, not classification skill: there are no")
-    print("  negatives here, so it cannot produce a precision or a recall.")
+    print("  This is a sanity check, not classification skill: there are no negatives here,")
+    print("  so it cannot produce a precision or a recall.")
 
-    (OUT_DIR / "priority_target_scores_summary.json").write_text(json.dumps({
+    summary_path.write_text(json.dumps({
         "generated_at": datetime.now().isoformat(timespec="seconds"),
         "model_run": run.name,
         "trained_on": "TESS 2-minute photometry" if same_mission else "Kepler 30-minute photometry",
@@ -165,11 +181,13 @@ def main(argv: list[str] | None = None) -> int:
         "n_attempted": int(len(frame)), "n_scored": int(len(scores)),
         "fraction_ge_0.5": high,
         "median_planet_like": float(scores[column].median()),
-        "caveat": ("All targets are confirmed planets, so this is a transfer sanity check with no "
-                   "negative class - it cannot yield precision or recall. Replace with a "
-                   "TESS-trained model once the TOI build finishes."),
+        "scores_file": scores_path.name,
+        "caveat": ("All targets are confirmed planets, so this is a sanity check with no negative "
+                   "class - it cannot yield precision or recall."
+                   + ("" if same_mission else " Cross-mission: the TESS-trained model is the primary "
+                      "score for these targets; this one is kept because its bias is opposite.")),
     }, indent=2), encoding="utf-8")
-    print(f"\nsaved {(OUT_DIR / 'priority_target_transit_scores.csv').relative_to(RESEARCH_DIR)}")
+    print(f"\nsaved {scores_path.relative_to(RESEARCH_DIR)} and {summary_path.name}")
     return 0
 
 

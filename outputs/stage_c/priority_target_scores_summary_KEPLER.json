@@ -1,0 +1,13 @@
+{
+  "generated_at": "2026-10-13T20:30:44",
+  "model_run": "bn_aug_sched",
+  "trained_on": "Kepler 30-minute photometry",
+  "scored_on": "TESS 2-minute photometry (CROSS-MISSION)",
+  "score_column": "transit_ML_probability_TESS_crossmission",
+  "n_attempted": 44,
+  "n_scored": 41,
+  "fraction_ge_0.5": 0.7073170731707317,
+  "median_planet_like": 0.7630516886711121,
+  "scores_file": "priority_target_scores_KEPLER.csv",
+  "caveat": "All targets are confirmed planets, so this is a sanity check with no negative class - it cannot yield precision or recall. Cross-mission: the TESS-trained model is the primary score for these targets; this one is kept because its bias is opposite."
+}

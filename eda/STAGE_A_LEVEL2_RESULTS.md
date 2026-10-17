@@ -41,11 +41,11 @@ The mentor's checklist requires baselines before deep models. All on the **same 
 |---|---|---|---|---|
 | majority class | 0.5000 | 0.4958 | 0.5042 | 0.496 |
 | logistic regression on raw views | 0.7405 | 0.6866 | 0.5955 | 0.518 |
-| 11 hand-built shape features + GBM | 0.8800 | 0.8669 | 0.7284 | 0.723 |
+| 12 hand-built shape features + GBM | 0.8800 | 0.8669 | 0.7284 | 0.723 |
 | CNN+LSTM, initial | 0.8919 | 0.8901 | 0.7020 | 0.723 |
 | **CNN+LSTM, tuned** | **0.9142** | **0.9108** | 0.7207 | **0.7705** |
 
-**Verdict: yes, but the margin is modest.** Eleven interpretable numbers get to 0.880.
+**Verdict: yes, but the margin is modest.** Twelve interpretable numbers get to 0.880.
 The tuned network adds **+0.034 ROC-AUC** and, more usefully, **+0.047 precision at 90 %
 recall** — at 90 % completeness it returns ~7 fewer false positives per 100 flagged
 candidates. That is a real gain but not a transformation, and the shape-feature model
@@ -186,7 +186,7 @@ Both gains exceed the ±0.002 within-architecture seed spread, so both are real 
 buys the smaller half of the improvement for 2.5× the whole model. If this had to run on
 limited hardware, `dual_cnn` is the configuration to ship.
 
-Note also that even `global_cnn` (0.8945) beats the 11 hand-built shape features (0.8800), so
+Note also that even `global_cnn` (0.8945) beats the 12 hand-built shape features (0.8800), so
 the CNN earns its place before any of the extras are added.
 
 ## 6c. Learned representation (guide 7.4)
@@ -299,6 +299,38 @@ injection *dominates the fold*. Two earlier runs of this experiment returned fla
 across 100–6400 ppm for exactly that reason, and the depth grid was pushed down until the
 transition appeared.
 
+## 6f. Probability calibration
+
+The planet-like score ranks well but is not a probability as it comes out of the network:
+KOIs scored 0.5–0.7 on Kepler test are planet-like only ~40 % of the time. `calibrate.py` fixes
+the probability scale without touching the model:
+
+- **Fitted and chosen on validation only.** Three options — no calibration, Platt (logistic
+  regression on logit(score), 2 parameters) and isotonic — compared by star-grouped 5-fold
+  cross-validation on validation. Out-of-fold Brier: none 0.1468, **Platt 0.1187**, isotonic
+  0.1189; Platt is chosen (isotonic has slightly lower ECE, 0.019 vs 0.029, but a worse log loss
+  and a less stable map at n = 1,414).
+- **Applied once to the already-saved test predictions** — no model is re-run on test. The map
+  is p = sigmoid(0.835 · logit(score) − 1.021).
+
+| Kepler test (1,406) | Brier | log loss | ECE | ROC-AUC |
+|---|---|---|---|---|
+| raw score | 0.1304 | 0.4127 | 0.0961 | 0.9158 |
+| Platt, fitted on validation | **0.1170** | **0.3682** | **0.0314** | 0.9158 |
+
+The ranking is untouched by construction (a monotone map), so every precision-at-recall number
+in this report stands; only what the score *means* changes. After calibration, mid-range test
+scores are slightly under-confident (observed rate a little above the predicted probability),
+a residual val→test shift that is reported rather than tuned away. Figure:
+`figures/05_probability_calibration.png`.
+
+The same procedure on the TESS model, whose inverse-frequency class weights push raw scores far
+below its 86 % planet-like base rate, chose Platt as well (p = sigmoid(1.035 · logit(score) +
+1.658)): TESS test Brier 0.1596 → 0.1025, ECE 0.2231 → 0.0175, ROC-AUC 0.7843 unchanged.
+
+This is a second look at each test set, but only at a calibration map that was fitted and
+selected on validation; nothing about the model or the map was tuned on test.
+
 ---
 
 ## 6g. Does feeding the model the per-bin flux error help? (uncertainty-aware photometry)
@@ -376,6 +408,8 @@ Code: `tools/rebuild_with_errors.py`, `sweep.py --errors`. Table: `runs/error_ch
       feeds log₁₀ of it as a second input channel (+80 parameters). The views were rebuilt into
       `detection_views_err/`; with vs without the channel, four seeds each, validation only:
       Kepler ROC-AUC +0.0034, TESS +0.0113, a small consistent gain (§6g).
+- [x] Probability calibration — §6f: Platt scaling chosen and fitted on validation; Kepler test
+      Brier 0.130 → 0.117, ECE 0.096 → 0.031, ranking unchanged.
 
 ---
 

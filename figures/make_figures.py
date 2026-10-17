@@ -153,7 +153,7 @@ def fig_ladder() -> None:
 
     rows = [("Always predict majority class", [base["majority"]["roc_auc_binary"]]),
             ("Logistic regression on raw light curves", [base["logistic"]["roc_auc_binary"]]),
-            ("Boosted trees on 11 hand-built shape features", [base["shape_gbm"]["roc_auc_binary"]])]
+            ("Boosted trees on 12 hand-built shape features", [base["shape_gbm"]["roc_auc_binary"]])]
     for fam, label in [("base_01", "CNN + LSTM, untuned"),
                        ("bn", "+ batch normalisation"),
                        ("bn_aug_sched", "+ augmentation + LR schedule (final)")]:
@@ -175,7 +175,7 @@ def fig_ladder() -> None:
     ax.set_xlabel("validation ROC-AUC, planet-like vs false positive (0.5 = chance)")
     ax.grid(axis="y", visible=False)
     title(fig, "Does a deep network beat simpler methods on the same light curves?",
-          "Yes, but modestly: +0.034 ROC-AUC over 11 interpretable features. Each dot is one "
+          "Yes, but modestly: +0.034 ROC-AUC over 12 interpretable features. Each dot is one "
           "training seed; seed-to-seed spread is about 0.001.")
     fig.tight_layout(rect=(0, 0, 1, 0.88))
     save(fig, "02_deep_model_vs_simple_baselines.png")
@@ -243,25 +243,36 @@ def fig_confusion() -> None:
 
 
 def fig_calibration() -> None:
-    d = load_predictions("bn_aug_sched")
+    # Raw score vs the Platt-scaled score from stage_a_transit_model/calibrate.py. The calibrator
+    # was fitted and selected on VALIDATION; here it is only applied to the saved test predictions.
+    run_dir = RUNS / "bn_aug_sched" / "calibration"
+    d = pd.read_csv(run_dir / "test_calibrated.csv")
+    d["y"] = d.true_label.isin(PLANET_LIKE).astype(int)
+    cal = json.loads((run_dir / "calibration.json").read_text(encoding="utf-8"))
     edges = np.linspace(0, 1, 11)
-    d["bin"] = np.clip(np.digitize(d.planet_like_score, edges) - 1, 0, 9)
-    fig, (a, b) = plt.subplots(2, 1, figsize=(8.5, 7.2), height_ratios=[3, 1], sharex=True)
-    xs, ps, los, his = [], [], [], []
-    for k, g in d.groupby("bin"):
-        p, lo, hi = wilson(int(g.y.sum()), len(g))
-        xs.append(g.planet_like_score.mean()); ps.append(p); los.append(p - lo); his.append(hi - p)
+    fig, (a, b) = plt.subplots(2, 1, figsize=(8.5, 7.6), height_ratios=[3, 1], sharex=True)
     a.plot([0, 1], [0, 1], color=NEUTRAL, ls="--", lw=1.0, label="perfect calibration")
-    a.errorbar(xs, ps, yerr=[los, his], fmt="o-", color=BLUE, ms=8, capsize=3,
-               label="observed fraction planet-like, 95% Wilson CI")
-    a.set(ylabel="fraction actually planet-like", xlim=(0, 1), ylim=(0, 1.02))
+    for col_name, label, col, off in [("planet_like_score", "raw score", ORANGE, -0.006),
+                                      ("calibrated_score", f"calibrated ({cal['calibrator']['method']}, "
+                                                           f"fitted on validation)", BLUE, 0.006)]:
+        bins = np.clip(np.digitize(d[col_name], edges) - 1, 0, 9)
+        xs, ps, los, his = [], [], [], []
+        for k in sorted(set(bins)):
+            g = d[bins == k]
+            p, lo, hi = wilson(int(g.y.sum()), len(g))
+            xs.append(g[col_name].mean() + off); ps.append(p); los.append(p - lo); his.append(hi - p)
+        brier = float(np.mean((d[col_name] - d.y) ** 2))
+        a.errorbar(xs, ps, yerr=[los, his], fmt="o-", color=col, ms=7, capsize=3,
+                   label=f"{label}: Brier {brier:.3f}")
+        b.hist(d[col_name], bins=edges, color=col, alpha=0.55, edgecolor=SURFACE, linewidth=1.5)
+    a.set(ylabel="fraction actually planet-like (95% Wilson CI)", xlim=(0, 1), ylim=(0, 1.02))
     a.legend(loc="upper left")
-    b.hist(d.planet_like_score, bins=edges, color=BLUE, edgecolor=SURFACE, linewidth=2)
     b.set(xlabel="predicted planet-like probability", ylabel="KOIs")
-    brier = float(np.mean((d.planet_like_score - d.y) ** 2))
+    raw, after = cal["test_raw"], cal["test_calibrated"]
     title(fig, "Can the classifier's output be read as a probability?",
-          f"Not directly: mid-range scores overstate the chance of a real planet (points sit below "
-          f"the diagonal). Ranking is sound, probabilities need recalibration. Kepler test, Brier {brier:.3f}.")
+          f"Raw, no: mid-range scores overstate the chance of a planet. After Platt scaling fitted on "
+          f"validation, largely yes: Kepler test Brier {raw['brier']:.3f} -> {after['brier']:.3f}, "
+          f"ECE {raw['ece']:.3f} -> {after['ece']:.3f}; ranking unchanged.")
     fig.tight_layout(rect=(0, 0, 1, 0.9))
     save(fig, "05_probability_calibration.png")
 
