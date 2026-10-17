@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import sys
 import time
@@ -107,15 +108,45 @@ ERROR_WAVE: list[tuple[str, list[str]]] = [
 
 COMMON = ["--threads", "8", "--epochs", "60", "--patience", "10"]
 
+# ---------------------------------------------------------------------------------------------- #
+# V2: everything that matters, re-run on split v2 (star- AND signal-family-grouped; no signal twin
+# crosses splits). Five seeds per configuration. Selection rule, fixed BEFORE any v2 result was seen
+# (2026-10-17), applied per mission on VALIDATION only by select_v2():
+#   1. architecture: the simplest of global_cnn < dual_cnn < dual_cnn_lstm whose mean val ROC-AUC
+#      is within one seed-std of the best architecture's mean (no errors, inverse weights);
+#   2. error channel: kept only if it beats that architecture without errors by > 1 seed-std;
+#   3. class weighting (TESS only): the scheme with the best mean val ROC-AUC, ties to "inverse";
+#   4. final model: the 5-seed ensemble of the chosen configuration, scored on test ONCE.
+# ---------------------------------------------------------------------------------------------- #
+V2_SEEDS = (42, 1, 2, 7, 11)
+V2_COMMON = ["--batchnorm", "--augment", "--scheduler", "--split-version", "v2",
+             "--views-root", "detection_views_v2", "--deterministic"]
 
-def run_one(name: str, flags: list[str], python: str) -> bool:
+
+def _v2(tag: str, flags: list[str]) -> list[tuple[str, list[str]]]:
+    return [(f"v2_{tag}{'' if s == 42 else f'_s{s}'}", V2_COMMON + flags + ["--seed", str(s)]) for s in V2_SEEDS]
+
+
+V2_WAVE: list[tuple[str, list[str]]] = []
+for _mission, _mflags in [("kepler", []), ("tess", ["--mission", "TESS"])]:
+    for _arch in ("global_cnn", "dual_cnn", "dual_cnn_lstm"):
+        V2_WAVE += _v2(f"{_mission}_{_arch}", _mflags + ["--arch", _arch])
+    for _arch in ("dual_cnn", "dual_cnn_lstm"):
+        V2_WAVE += _v2(f"{_mission}_{_arch}_err", _mflags + ["--arch", _arch, "--use-errors"])
+for _cw in ("sqrt", "none"):
+    V2_WAVE += _v2(f"tess_dual_cnn_lstm_cw{_cw}", ["--mission", "TESS", "--arch", "dual_cnn_lstm", "--class-weight", _cw])
+
+
+def run_one(name: str, flags: list[str], python: str, threads: int = 8) -> bool:
     """Run one configuration; True if it produced a report."""
     run_dir = RUNS / name
     if (run_dir / "report.json").is_file():
         print(f"  [skip] {name}: report.json already present")
         return True
     LOGS.mkdir(parents=True, exist_ok=True)
-    cmd = [python, "stage_a_transit_model/cnn_lstm.py", "--out", str(run_dir.relative_to(RESEARCH_DIR))] + COMMON + flags
+    common = list(COMMON)
+    common[common.index("--threads") + 1] = str(threads)
+    cmd = [python, "stage_a_transit_model/cnn_lstm.py", "--out", str(run_dir.relative_to(RESEARCH_DIR))] + common + flags
     print(f"  [run ] {name}: {' '.join(flags) or '(defaults)'}", flush=True)
     started = time.time()
     with (LOGS / f"{name}.log").open("w", encoding="utf-8") as out, \
@@ -202,20 +233,38 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--table", action="store_true", help="print the comparison table and exit")
     p.add_argument("--errors", action="store_true",
                    help="run/tabulate the error-channel experiment (ERROR_WAVE) instead of the main sweep")
+    p.add_argument("--v2", action="store_true",
+                   help="run/tabulate the split-v2 wave (V2_WAVE) and apply the pre-registered selection rule")
+    p.add_argument("--jobs", type=int, default=1,
+                   help="configurations trained in parallel; CPU threads are shared out between them")
     p.add_argument("--python", default=sys.executable)
     args = p.parse_args(argv)
-    configs = ERROR_WAVE if args.errors else CONFIGS
+    configs = V2_WAVE if args.v2 else ERROR_WAVE if args.errors else CONFIGS
 
     if not args.table:
         print("=" * 88)
-        print(f"CNN+LSTM sweep | {len(configs)} configurations | started {datetime.now():%Y-%m-%d %H:%M:%S}")
+        print(f"CNN+LSTM sweep | {len(configs)} configurations | {args.jobs} in parallel | "
+              f"started {datetime.now():%Y-%m-%d %H:%M:%S}")
         print("Scored on VALIDATION only - the test views are not touched by this driver.")
         print("=" * 88)
-        for name, flags in configs:
-            run_one(name, flags, args.python)
+        threads = max(1, (os.cpu_count() or 2) // max(args.jobs, 1))
+        if args.jobs <= 1:
+            for name, flags in configs:
+                run_one(name, flags, args.python, threads)
+        else:
+            from concurrent.futures import ThreadPoolExecutor   # each job is its own subprocess
+
+            with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+                list(pool.map(lambda nf: run_one(nf[0], nf[1], args.python, threads), configs))
 
     df = collect(configs)
     print_table(df)
+    if args.v2:
+        if not df.empty:
+            out = RUNS / "v2_comparison.csv"
+            df.to_csv(out, index=False)
+            print(f"\nsaved {out.relative_to(RESEARCH_DIR)}")
+        return 0
     if args.errors:
         if not df.empty:
             error_summary(df)

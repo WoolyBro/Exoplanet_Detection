@@ -349,7 +349,7 @@ def phase_fold(flattened_lightcurve: FlattenedLightCurve, period: float, epoch: 
     phase = (lc.time - epoch + 0.5 * period) % period - 0.5 * period
     order = np.argsort(phase)
     return FoldedLightCurve(phase=phase[order], flux=lc.flux[order], period=float(period), epoch=float(epoch),
-                            flux_err=lc.flux_err[order])
+                            flux_err=None if lc.flux_err is None else lc.flux_err[order])
 
 
 def remove_other_transits(flat: FlattenedLightCurve, target: Ephemeris,

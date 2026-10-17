@@ -103,10 +103,13 @@ def score_views(model, vs, batch: int = 256) -> np.ndarray:
     return torch.cat(out).numpy()
 
 
-def koi_table() -> pd.DataFrame:
-    """KOI catalog columns needed here, read through the manifest loader."""
+def koi_table(version: str = "v1") -> pd.DataFrame:
+    """KOI catalog columns needed here, read through the manifest loader. `version` picks the split
+    definition the val views were built for, so the official-val check below uses the right one."""
+    from stage_a_transit_model.cnn_lstm import SPLIT_FILES
+
     with contextlib.redirect_stdout(io.StringIO()):
-        koi = dm.load_stage1_catalogs()[KOI_SPLIT_FILE]
+        koi = dm.load_stage1_catalogs()[SPLIT_FILES[("Kepler", version)]]
     cols = ["kepoi_name", "split", "label_harmonized", "koi_score", *FLAGS]
     have = [c for c in cols if c in koi.columns]
     missing = [c for c in cols if c not in koi.columns]
@@ -146,6 +149,8 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--run", type=Path, required=True, help="a run directory containing best.pt")
     p.add_argument("--val-views", type=Path, default=VIEWS_ROOT / "kepler_val")
     p.add_argument("--recall", type=float, default=0.90, help="operating point, chosen by recall not 0.5")
+    p.add_argument("--split-version", choices=["v1", "v2"], default="v1",
+                   help="split definition the val views belong to (v2: star- and signal-family-grouped)")
     args = p.parse_args(argv)
     # A relative --run is tried against the caller's cwd first, then the project root, so
     # "stage_a_transit_model/runs/x" works whether or not the shell happens to sit in Research/.
@@ -179,7 +184,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"  threshold {thr:.6f} -> precision {par['precision']:.3f}, recall {par['recall']:.3f}")
 
     print("\n[3] joining the KOI catalog flags")
-    koi = koi_table()
+    koi = koi_table(args.split_version)
     df = pd.DataFrame({"kepoi_name": vs.object_id, "star_id": vs.star_id,
                        "true_index": y, "true_label": [CLASSES[i] for i in y],
                        "model_score": score, "pred_index": proba.argmax(axis=1)})
