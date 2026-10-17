@@ -99,3 +99,18 @@ release_assets/
 # injection-recovery run output
 inj_run.log
 err_sweep.log
+detection_views_v2/
+v2_sweep.log
+
+# --- Split-v2 sweep: keep only the two FINAL 5-seed ensembles' weights (selected on validation) ---
+!stage_a_transit_model/runs/v2_kepler_dual_cnn_lstm_err*/best.pt
+!stage_a_transit_model/runs/v2_tess_dual_cnn/best.pt
+!stage_a_transit_model/runs/v2_tess_dual_cnn_s*/best.pt
+
+# --- Run logs of long background jobs (results live in the outputs they write) ---
+outputs/retrieval_run.log
+outputs/retrieval_tls_run.log
+outputs/forecast/forecast_run.log
+outputs/stage_b_methane_ext/grid_seed2.log
+# synthetic-grid checkpoints (deleted once the grid is assembled)
+outputs/stage_b_synthetic*/parts/

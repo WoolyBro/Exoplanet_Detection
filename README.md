@@ -1,18 +1,41 @@
-# Exoplanet detection → atmospheres → priority fusion
+# Transit-candidate vetting → JWST atmospheres → follow-up prioritisation
 
-A three-stage pipeline: find transiting planets in Kepler and TESS photometry (Stage A),
-characterise atmospheres from JWST transmission spectra (Stage B), then fuse both into a
-ranked target table (Stage C).
+A three-stage pipeline:
+- **Stage A** classifies Kepler and TESS *transit candidates* (KOIs/TOIs) as planet-like or false
+  positive from their phase-folded light curves. It is a **vetter of signals a transit search has
+  already found, not a transit search**: with nothing injected, it scores most random folds as
+  planet-like (`eda/STAGE_A_LEVEL2_RESULTS.md` §6e).
+- **Stage B** asks what JWST transmission spectra can show about the gases that would indicate
+  habitability:
+  - molecule classification on the real spectra (a negative result with 13 planets);
+  - physics-normalised analysis and rocky-planet detection limits;
+  - a classifier trained **only on simulated spectra** (petitRADTRANS, real JWST noise) that
+    recognises **CH₄** in the real spectra of planets it never saw (planet-level ROC-AUC 1.00,
+    p = 0.007; a gas-blind control scores 0.40). It was confirmed in a **pre-registered test on 29
+    new JWST planets**: ROC-AUC 0.97 (CI 0.88–1.00, p = 0.0003; control 0.71). It also holds on the
+    strongest-feature half (0.97 vs 0.70), where feature strength cannot stand in for CH₄, and with an
+    independent second training grid (0.98);
+  - a **detectability forecast**, with a noise model calibrated and validated on 117 real
+    single-transit JWST spectra, of how many transits would detect CO₂, CH₄ and O₃ on each
+    habitable-zone target.
+- **Stage C** ranks 44 transiting planets for transmission follow-up by habitable-zone membership
+  (Kopparapu et al. 2014), terrestrial size and the TSM (Kempton et al. 2018), with uncertainty.
+  It is a ranking with stated weights. **Nothing in this project computes a probability of
+  habitability**, and being in the habitable zone is not being habitable.
 
-**Start here:** the four result write-ups in [`eda/`](eda/) are the findings. Everything else
+**Start here:** the result write-ups in [`eda/`](eda/) are the findings. Everything else
 is the machinery that produced them.
 
 | report | what it answers |
 |---|---|
+| [`eda/STAGE_A_V2_FINAL_RESULTS.md`](eda/STAGE_A_V2_FINAL_RESULTS.md) | **the final transit-vetting result**: leakage-free split, test read once |
 | [`eda/STAGE_A_LEVEL2_RESULTS.md`](eda/STAGE_A_LEVEL2_RESULTS.md) | the transit classifier: baselines, tuning, ablation, failure analysis |
 | [`eda/TESS_AND_CROSS_MISSION_RESULTS.md`](eda/TESS_AND_CROSS_MISSION_RESULTS.md) | the TESS model, and transfer between missions |
 | [`eda/STAGE_B_RESULTS.md`](eda/STAGE_B_RESULTS.md) + [`eda/STAGE_B_LEVEL2_RESULTS.md`](eda/STAGE_B_LEVEL2_RESULTS.md) | molecule classification, then physics-informed analysis |
-| [`eda/STAGE_C_RESULTS.md`](eda/STAGE_C_RESULTS.md) | the 54-planet priority table and what is actually modelled in it |
+| [`eda/STAGE_B_LEVEL3_RESULTS.md`](eda/STAGE_B_LEVEL3_RESULTS.md) | a molecule classifier trained only on simulated spectra, tested on the real ones |
+| [`eda/METHANE_EXTENSION_RESULTS.md`](eda/METHANE_EXTENSION_RESULTS.md) | the pre-registered test of that classifier on 19 new JWST planets, and its calibration |
+| [`eda/FORECAST_RESULTS.md`](eda/FORECAST_RESULTS.md) | JWST transits needed to detect CO₂, CH₄, O₃ on each habitable-zone target |
+| [`eda/STAGE_C_RESULTS.md`](eda/STAGE_C_RESULTS.md) | the follow-up priority table: habitable zone, size, TSM, with uncertainty |
 
 [`run_log.txt`](run_log.txt) is the running record: every build, every result, every bug found
 and what it changed. It is the honest history, including the things that went wrong.
@@ -25,12 +48,23 @@ see [Running this without a 30-hour download](#running-this-without-a-30-hour-do
 
 ## Headline numbers
 
+Final evaluation on the **leakage-free split v2** (no shared stars, no cross-split signal twins),
+with the model chosen on validation by a pre-registered rule and the test set read once
+([`eda/STAGE_A_V2_FINAL_RESULTS.md`](eda/STAGE_A_V2_FINAL_RESULTS.md)):
+
 | | Kepler | TESS |
 |---|---|---|
-| test ROC-AUC (planet-like) | **0.9158** | 0.7843 |
-| lift over the base rate | **+0.412** | +0.093 |
-| precision at 90 % recall | 0.765 | 0.907 |
-| views built | 9,394 | 5,791 |
+| final model | 5-seed CNN+BiLSTM ensemble, flux-error channel | 5-seed dual-CNN ensemble |
+| test ROC-AUC (95 % star bootstrap) | **0.924** [0.909, 0.937] | 0.815 [0.777, 0.853] |
+| confirmed vs false positive only | **0.971** | 0.900 |
+| lift over the base rate (PR-AUC) | **+0.428** | +0.098 |
+| gain over a transit-shape GBM, same split | +0.034 [0.022, 0.045] | +0.094 [0.055, 0.136] |
+| precision at the validation-fixed 90 %-recall threshold | 0.792 | 0.915 |
+| calibrated (Platt, fitted on validation) test ECE | 0.023 | 0.018 |
+
+The earlier numbers (Kepler 0.9158, TESS 0.7843) came from split v1. That split leaked: 301 of
+1,406 Kepler test KOIs had a signal twin in another split. They are kept in
+`eda/STAGE_A_LEVEL2_RESULTS.md` as history.
 
 The lift column matters more than the raw score: TESS's test set is 86 % planet-like, so a
 PR-AUC of 0.95 there is barely above guessing, while Kepler's is a genuine result. This is
@@ -76,10 +110,10 @@ research_log.py              ← shared logging used by the pipeline scripts
 
 catalog_preparation/         ← Stage 1: stellar host de-duplication
 stage_a_transit_model/       ← Stage A: the CNN+LSTM transit classifier and every analysis of it
-stage_b_atmospheres/         ← Stage B: JWST spectra → molecule labels (Level 1 + Level 2)
+stage_b_atmospheres/         ← Stage B: JWST spectra → molecules (Levels 1–3) and the gas-detectability forecast
 stage_b_rocky_benchmark/     ← Stage B: rocky-planet detection limits from the Zenodo compilation
-stage_c_priority_fusion/     ← Stage C: the 54-planet priority table
-stage_d_habitability/        ← PyATMOS / INARA habitability line
+stage_c_priority_fusion/     ← Stage C: follow-up priority (habitable zone, size, TSM) with uncertainty
+stage_d_habitability/        ← PyATMOS / INARA exploration only; no model (30 INARA rows, no spectra)
 tools/                       ← operational scripts (status, cache pruning, resumable builds)
 
 figures/                     ← the statistical figures + the script that makes them
@@ -174,14 +208,32 @@ python stage_a_transit_model/sweep.py            # 23 runs
 python stage_a_transit_model/cross_mission.py
 python stage_b_atmospheres/stage_b_pipeline.py        # also needs the research pack (spectra)
 python stage_b_atmospheres/stage_b_level2.py
-python stage_c_priority_fusion/build_priority_table.py  # also needs the research pack (template)
+python stage_c_priority_fusion/build_priority_table.py  # also needs the research pack (pscomppars)
+python stage_b_atmospheres/noise_model.py              # JWST noise calibration (research pack)
+```
+
+Stage B Level 3 and the forecast compute spectra with petitRADTRANS, which compiles Fortran and so
+runs in its own environment (`~/micromamba/envs/prt`, Python 3.12, opacities in
+`~/petitRADTRANS/input_data`, 1.7 GB):
+
+```bash
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/synthetic_grid.py --n 3000 --workers 3   # ~2.2 GB RAM per worker
+python stage_b_atmospheres/train_synthetic_classifier.py
+python stage_b_atmospheres/methane_extension.py      # pre-registered test; refuses to run if the frozen labels changed
+python stage_b_atmospheres/methane_round2.py         # round 2: full-text labels + second grid (outputs/stage_b_synthetic_seed2)
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/detectability_forecast.py
 ```
 
 The first four commands need only this repository plus the view bundle. The last three also read
 the mentor's `exoplanet_research_data/` pack, which is not redistributed here (see
 [Data handling](#data-handling)); without it those three exit with a missing-file error. Stage D
-(`stage_d_habitability/`) does not run for anyone yet — its manifest entries still point at
-absolute `D:/Files/...` paths.
+(`stage_d_habitability/`) needs external INARA/PyATMOS data that is not in this repository; point
+the environment variable `EXO_EXTERNAL_DATA` at it (default: the original `D:/Files`).
+
+**Tests:** `python -m pytest tests` (36 tests: folding and view construction, the error channel,
+both splits' leakage guarantees, the data manifest, the habitable-zone / TSM physics against
+published values including mass upper limits, the forecast's noise scaling and transit-count
+solver, and the frozen methane labels and leakage-free calibration). They need the split files and, for the manifest test, nothing else.
 
 ### 4. Rebuild the views from the archives — the 30 hours
 Only needed to verify the view construction itself, not the modelling:
@@ -201,25 +253,33 @@ stays near 1 GB instead of 120 GB. Builds checkpoint per star and resume if inte
 
 These are in the reports too, but they are the load-bearing caveats:
 
-1. **Both test sets are spent.** Kepler test was evaluated once for the final model; TESS test
-   in the cross-mission run. Further tuning has to go back to validation.
-2. **Neither detection model is unbiased, and their biases are opposite.** The Kepler model's
+1. **Both v2 test sets are spent** (read once on 2026-10-18; guard file
+   `stage_a_transit_model/runs/v2_final/TEST_READ.json`). The v1 test sets were spent earlier.
+   Any further tuning has to go back to validation.
+2. **Neither vetting model is unbiased, and their biases are opposite.** The Kepler model's
    score falls with planet radius (Spearman −0.570), the TESS model's rises (+0.302). Kepler's
    training split makes deep transits 93 % likely to be false positives; TESS's makes them
    11.5 %. This is measured, not assumed, and it is why the priority table carries both columns.
 3. **The TESS build has a class-dependent yield** — 55.9 % of false positives survived the
    ephemeris-reliability check against 88.7 % of confirmed planets. That is selection bias, not
    just imbalance, and class weights do not fix it.
-4. **Stage C is mostly empty on purpose.** The template shipped `transit_ML_probability = 0.99`
-   for all 54 planets, which encodes "confirmed", not a prediction. Cells with no model behind
-   them are left blank with a reason in `notes` rather than carried forward.
-5. **`stage_d_habitability/` will not run as-is.** Those scripts read PyATMOS/INARA data from a
-   `D:` drive on a previous machine; the paths are recorded in `data_manifest.py` and the data
-   is not in this repository.
+4. **Stage C ranks for follow-up; it does not assess habitability.** Habitable-zone membership is
+   a statement about received flux. The ranking (rebuilt 2026-10-17) uses published physics with
+   uncertainty, excludes the 10 planets that do not transit, and no longer uses the Stage B
+   molecule model, which has no skill. See `eda/STAGE_C_RESULTS.md` §4 for what was wrong before.
+5. **`stage_d_habitability/` is exploration, not a result.** No habitability model was trained:
+   30 INARA rows with no spectra, and a composition-derived label would leak by construction.
 6. **The raw planet-like score is a ranking, not a probability.** Mid-range scores overstate the
    chance of a planet (Kepler test Brier 0.130). Read it as a probability only through the
    calibrator in `runs/<run>/calibration/` (`calibrate.py`: Platt scaling fitted on validation;
    Kepler Brier 0.117, TESS 0.103).
+7. **The gas forecast gives lower bounds under stated scenarios.** It uses a matched filter with a
+   known template, and leaves out stellar contamination. On K2-18 b it is ~1.4–1.9× optimistic in
+   S/N against the published detections. It says how hard a gas *would* be to detect, never
+   that a planet has it. The simulated-spectra classifier shows real skill for CH₄ only; its
+   H₂O/CO₂/CO scores are matched by a gas-blind control. Its CH₄ test set is 38 labelled planets,
+   and its probabilities are only roughly calibrated (Brier 0.110 vs 0.235 base rate; Platt scaling
+   did not improve them).
 
 ---
 

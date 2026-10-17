@@ -3561,3 +3561,112 @@ Reproduction note: the retrained "without" arm scored 0.9094 at seed 42 on macOS
   original Windows run of the same configuration on identical data (6,574 / 1,414 rows): platform
   training variation. The comparison therefore uses the new "without" arm, not the old numbers.
 No test number was produced or changed. The reported Kepler and TESS results stand as measured.
+
+========================================================================================
+SPLIT V2: grouped by star AND signal family (|dP|/P < 0.0001, epoch within 0.5 x duration)
+========================================================================================
+
+[kepler] 9564 rows, 8214 stars, 7762 signal-twin pairs
+  groups: 7204 (v1 had 8214 star groups); largest [87, 61, 52, 51, 20]; rows in groups > 20: 251
+  v1 cross-split twins: 3619
+label_harmonized  CANDIDATE  CONFIRMED  FALSE POSITIVE  rows
+split                                                       
+train                  20.7       28.7            50.6  6696
+val                    20.7       28.7            50.6  1434
+test                   20.7       28.7            50.6  1434
+  rows whose split changed from v1: 46.8%
+  kepler  stars in >1 split: 0   signal twins across splits: 0
+  wrote splits/koi_cumulative_split_v2.csv
+
+[tess] 8148 rows, 7826 stars, 151 signal-twin pairs
+  groups: 7677 (v1 had 7826 star groups); largest [5, 5, 5, 4, 4]; rows in groups > 20: 0
+  v1 cross-split twins: 77
+label_harmonized  CANDIDATE  CONFIRMED  FALSE POSITIVE  UNLABELED  rows
+split                                                                  
+train                  65.1       17.5            17.2        0.2  5701
+val                    65.2       17.5            17.2        0.1  1223
+test                   65.1       17.5            17.2        0.2  1224
+  rows whose split changed from v1: 45.5%
+  tess    stars in >1 split: 0   signal twins across splits: 0
+  wrote splits/toi_tess_candidates_split_v2.csv
+
+========================================================================================
+2026-10-17  GAS-LEVEL HABITABILITY: synthetic-spectra classifier + JWST detectability forecast
+========================================================================================
+
+INCIDENT: the Mac froze and rebooted twice (16:13, 18:59). forward_model._radtrans was cached per gas
+  combination -> one ~0.5 GB opacity object per combination per worker (239 loads), RAM exhausted,
+  WindowServer watchdog timeout, force reset. Fixed: one object per (background, segment, species
+  set), absent gases at zero VMR (identical spectra, max diff 0.0 ppm); ~2.2 GB/worker, flat.
+  synthetic_grid.py now checkpoints every sample and resumes. The v2 sweep resumed (skips finished runs).
+
+STAGE C BUG: pl_bmasselim = 1 (mass UPPER LIMIT) was used as a measured mass.
+  Kepler-62 f (<35 M_E) and LP 890-9 c (<25.3 M_E) -> Chen & Kipping now. TSM 0.03 -> 0.40 and
+  0.77 -> 7.9. LP 890-9 c rank 6 -> 4; top 3 (TRAPPIST-1 e/f/g) and ablation unchanged. Test added.
+
+NOISE MODEL (stage_b_atmospheres/noise_model.py): blackbody photon noise scaled to J x empirical
+  per-mode factor, fitted on 117 single-transit JWST archive spectra of 30 stars.
+  leave-one-star-out 68 % error: PRISM x1.24 (4 stars), G395 x1.46 (22), SOSS x1.48 (11), MIRI LRS x1.70 (3).
+
+FORECAST (detectability_forecast.py): 11 transiting HZ targets, 4 scenarios x clear/cloudy, matched
+  filter at R=100, 4000-draw MC (planet params + noise-model error). Transits for 5 sigma, clear:
+  TRAPPIST-1 d/e/f/g  Archean CH4 2-6, CO2 6-16; modern-Earth O3 440-560 (> all transits in 20 yr)
+  LHS 1140 b CH4 15, CO2 26 | TOI-700 d CO2 146 | K2-18 b (N2) CO2 85 | Kepler-62 f CO2 ~8000
+  With Greene 2016 floors (20/30/50 ppm) the bright-star targets never reach 5 sigma.
+  K2-18 b check (Madhusudhan 2023: CH4 5 sig, CO2 3 sig, H2O none): model vs real published noise
+  CH4 9.3, CO2 4.1, H2O 0.45 -> ordering right, matched filter ~1.4-1.9x optimistic.
+  Agrees with Krissansen-Totton 2018 (~10 transits, TRAPPIST-1e Archean) and Lustig-Yaeger 2019.
+
+STAGE B LEVEL 3 (synthetic_grid.py + train_synthetic_classifier.py): 3000 petitRADTRANS spectra with
+  real coverage/noise, labels = detectable (chi2 >= 9). Strict leave-one-planet-out on the 13 real planets.
+  planet-level ROC-AUC (perm p)    GBM          CNN          gas-blind 'feature strength'
+    CH4  (5 pos / 4 neg)           1.00 (0.007) 0.95 (0.015) 0.40 (0.72)   <- real gas-specific skill
+    H2O  (9/2)                     1.00 (0.018) 0.94 (0.037) 1.00 (0.018) <- explained by confound
+    CO2 (7/1), SO2 (4/1), CO (3/2) 1.00 (p 0.10-0.20, not significant)
+  Stage B Level 1 (trained on real spectra) CH4: 0.60 GBM / 0.45 CNN. Probabilities not calibrated.
+
+Write-ups: eda/FORECAST_RESULTS.md, eda/STAGE_B_LEVEL3_RESULTS.md. Tests: 32 pass.
+
+========================================================================================
+2026-10-17  METHANE CLASSIFIER: pre-registered test on 19 new JWST planets + calibration
+========================================================================================
+Protocol written first (stage_b_atmospheres/METHANE_EXTENSION_PROTOCOL.md). 49 new JWST planets labelled
+from their papers (5 CH4, 17 none [12 featureless], 27 unknown), each with source; label file frozen by
+SHA-256 before scoring. Frozen Level 3 model (GBM + CNN, all 3000 synthetic spectra, no retuning).
+  new planets (19: 4 CH4 / 15 none)   GBM 0.95 [0.82,1.00] p=0.002 | CNN 0.87 p=0.014 | gas-blind 0.73 p=0.09
+  new, featureless excluded (9)        GBM 1.00 p=0.007
+  all planets (28: 9 / 19)             GBM 0.91 [0.76,1.00] p=0.0001 | CNN 0.85 | gas-blind 0.70
+  only confident false positive: TOI-260 b (0.85) - its paper reports a possible 3.17 um feature (suspected systematic)
+  post-hoc (coarse PRISM, not pre-registered): LP 791-18 c (CH4) 0.895, TRAPPIST-1 d (flat) 0.003
+Calibration (nested LOPO Platt) did NOT help: Brier 0.110 raw -> 0.126; base rate 0.235. Raw score is usable.
+Write-up eda/METHANE_EXTENSION_RESULTS.md; tests 35 pass.
+
+========================================================================================
+2026-10-17  METHANE CLASSIFIER ROUND 2: full-text labels (hard negatives) + independent training grid
+========================================================================================
+Protocol addendum written before scoring (METHANE_EXTENSION_PROTOCOL_ROUND2.md). 21 abstract-silent planets re-read
+in full text: 10 explicit CH4 negatives (TrES-4 b, NGTS-2 b, HIP 67522 b, HAT-P-14 b, TOI-270 b, TOI-776 b,
+L 168-9 b, L 98-59 d, GJ 9827 d, LHS 1140 c), 11 still unknown. Frozen by hash. Second grid: seed 7770001, 3000 spectra.
+  29 new planets (4/25)      GBM grid A 0.97 [0.88,1.00] p=0.0003 | grid B 0.98 | CNN 0.91 | gas-blind 0.71
+  strong-feature half (14)   GBM 0.97 p=0.006 (both grids) | CNN 0.79 p=0.09 (fails) | gas-blind 0.70
+  grids agree: Spearman 0.90. Feature-rich negatives rejected: HIP 67522 b 0.019, TrES-4 b 0.002, NGTS-2 b 0.015.
+Related work: no prior simulation-trained molecule classifier tested on a population of real JWST spectra found.
+
+========================================================================================
+2026-10-18  STAGE A FINAL: split v2 sweep (60 runs, 0 failures) -> selection on val -> ONE test read
+========================================================================================
+Selection (pre-registered rule, validation only):
+  kepler: global 0.9003 | dual 0.9162 | dual+LSTM 0.9210 -> dual_cnn_lstm; +error channel 0.9282 (> 0.9237) USED
+  tess:   global 0.7728 | dual 0.7893 | dual+LSTM 0.7890 -> dual_cnn; error channel 0.7892 (< 0.7919) not used
+Test (read once 01:11, guard reads=1), 5-seed ensembles:
+  kepler  ROC 0.9238 [0.909,0.937]  CONF-vs-FP 0.971  PR lift +0.428  vs shape-GBM +0.034 [0.022,0.045]
+  tess    ROC 0.8154 [0.777,0.853]  CONF-vs-FP 0.900  PR lift +0.098  vs shape-GBM +0.094 [0.055,0.136]
+  SNR bins kepler 0.60/0.81/0.95/0.96; tess 0.65/0.83/0.87/0.79 (deep-signal drop = TESS training prior)
+  calibration (Platt on val) ECE kepler 0.078->0.023, tess 0.144->0.018; per-seed std 0.002/0.005
+  cross-mission: kepler->tess 0.811, tess->kepler 0.875
+Write-up eda/STAGE_A_V2_FINAL_RESULTS.md, figure figures/13_stage_a_v2_final.png; README headline updated.
+
+2026-10-18  FORECAST + STELLAR CONTAMINATION (first order). Spot (0.86 T_eff) and facula (T_eff+100 K) PHOENIX templates
+  x depth projected out with the offset (hosts < 4000 K). CH4 signal kept: PRISM (TRAPPIST-1) 0.89-0.91, G395 0.55-0.77;
+  CO2 kept 1.00 (PRISM), 0.83-0.85 (G395). Archean CH4 5-sigma: TRAPPIST-1 e 3.9 -> 4.8; TOI-700 d 86 -> 276; K2-18 b 46 -> 151.
+  Correction: O3's best mode is NIRSpec (~4.7 um bands), not MIRI; the earlier label was wrong (numbers unchanged).
