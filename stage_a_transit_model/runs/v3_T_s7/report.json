@@ -1,0 +1,20 @@
+{
+  "name": "v3_T_s7",
+  "config": "T",
+  "ntp": false,
+  "diag": false,
+  "arch": "transformer",
+  "seed": 7,
+  "best_epoch": 20,
+  "val_roc_auc": 0.9185628311794183,
+  "val_n": 1415,
+  "train_n": 6575,
+  "n_params": 220547,
+  "thresholds_val": {
+    "0.9": 0.6506233215332031,
+    "0.95": 0.5018879175186157,
+    "0.99": 0.1674378365278244
+  },
+  "minutes": 12.4,
+  "diag_state": null
+}

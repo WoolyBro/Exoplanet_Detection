@@ -6,13 +6,13 @@ Every expectation this project registered **before** seeing the result, with its
 - **Commit:** the protocol was committed to git before the build, training or read it governs. The hash is that commit.
 - **Hash file:** the labels were frozen by SHA-256, with a timestamp, before scoring. The protocol entered git together with the results, so the evidence for the order is the local hash file, not git. This applies to methane rounds 1–2, which predate the rule of committing protocols first.
 
-**Totals: 54 directional expectations, 40 held (74 %) and 14 failed.**
+**Totals: 56 directional expectations, 42 held (75 %) and 14 failed.**
 - **Also registered:**
   - 2 model-selection rules (V-K, V-T);
   - 1 test failure criterion (F, not met);
   - 3 CH₄ failure criteria (M1–M3; none met for the GBM, M2 met for the v1 CNN);
   - 2 decision rules (SpecNet, R1), both applied.
-- **The 74 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
+- **The 75 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
 
 ---
 
@@ -56,6 +56,13 @@ Every expectation this project registered **before** seeing the result, with its
 | N3 | Deep-vs-shallow gap shrinks by at least half | **held**: 0.22 → 0.077 |
 | N4 | K2 P1 ROC-AUC ≥ v2 − 0.01 | **failed**: 0.863 → 0.834 |
 | N5 | High-S/N validation FPs rejected: ≥ v2 − 0.05 | **held**: 0.985 → 0.940 |
+
+### Architecture comparison (`eda/ARCHITECTURE_PROTOCOL.md`, commit `a528555`; result `outputs/stage_a_mechanisms/architectures.json`)
+
+| ID | Expectation | Outcome |
+|---|---|---|
+| X1 | Neither a 1-D ResNet nor a Transformer beats v2 by more than 0.01 (validation ensemble) | **held**: −0.006 and −0.008 |
+| X2 | The best architecture gain is less than a quarter of the data gain | **held**: −0.006 vs +0.040 |
 
 ### Vetter v3 (`eda/VETTER_V3_PROTOCOL.md`, commit `ae91f4e`; result `stage_a_transit_model/runs/v3_final/v3_eval.json`)
 

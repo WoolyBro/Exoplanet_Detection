@@ -1,0 +1,20 @@
+{
+  "name": "v3_R_s7",
+  "config": "R",
+  "ntp": false,
+  "diag": false,
+  "arch": "resnet",
+  "seed": 7,
+  "best_epoch": 25,
+  "val_roc_auc": 0.9225449764627841,
+  "val_n": 1415,
+  "train_n": 6575,
+  "n_params": 497155,
+  "thresholds_val": {
+    "0.9": 0.5689164400100708,
+    "0.95": 0.44241517782211304,
+    "0.99": 0.2427600473165512
+  },
+  "minutes": 148.1,
+  "diag_state": null
+}

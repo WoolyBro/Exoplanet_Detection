@@ -1,0 +1,20 @@
+{
+  "name": "v3_T_s2",
+  "config": "T",
+  "ntp": false,
+  "diag": false,
+  "arch": "transformer",
+  "seed": 2,
+  "best_epoch": 15,
+  "val_roc_auc": 0.9222652472406712,
+  "val_n": 1415,
+  "train_n": 6575,
+  "n_params": 220547,
+  "thresholds_val": {
+    "0.9": 0.5905253887176514,
+    "0.95": 0.551821768283844,
+    "0.99": 0.19051173329353333
+  },
+  "minutes": 10.1,
+  "diag_state": null
+}

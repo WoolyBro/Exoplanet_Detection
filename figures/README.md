@@ -39,6 +39,7 @@ training seed, so run-to-run noise is visible next to each difference.
 | 16 | Kepler DR25 simulated data: planets kept, false alarms rejected | Keeps more injected planets than the Robovetter (0.935 vs 0.869) but passes 24 % of systematics false alarms. Made by `evaluate_dr25_simulated.py` (`eda/DR25_SIMULATED_RESULTS.md`) |
 | 17 | Vetter v3: does adding real false alarms and pipeline measurements fix it? | False alarms rejected 0.70 → 0.99, neighbouring-star FPs 0.49 → 0.80, equal to ExoMiner on the Kepler test; faint off-target and EB simulations still lag the Robovetter. Made by `evaluate_v3.py` (`eda/VETTER_V3_RESULTS.md`) |
 | 18 | How does the vetter decide? | Seed spread flags errors; occlusion finds the transit core and secondary eclipse; added noise raises deep K2 planets 0.72 → 0.95. Made by `critique2_analyses.py` (`eda/VETTER_MECHANISMS_RESULTS.md`) |
+| 20 | Is the architecture the limit? | No. On the same data a ResNet (497k parameters) and a Transformer (221k) score 0.927 and 0.925, against 0.932 for the 40k-parameter CNN+BiLSTM; adding pipeline measurements gives 0.972. Made by `evaluate_architectures.py` |
 | 19 | Does removing the S/N–label link fix the survey prior? | Two-thirds of it (gap 0.22 → 0.08), at a K2 cost (0.863 → 0.834). Made by `evaluate_snr_balance.py` |
 
 ---
