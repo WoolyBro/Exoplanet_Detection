@@ -49,7 +49,7 @@ is the machinery that produced them.
 and what it changed. It is the honest history, including the things that went wrong.
 
 **Reproducing it:** the results above need no download at all — they are committed here. To
-re-run the modelling, fetch the views from release [`v2.0-views`](https://github.com/WoolyBro/exoplanet/releases/tag/v2.0-views) (~510 MB, split v2 with the error channel, plus K2, DR25 and vetter v3) and
+re-run the modelling, fetch the views from release [`v2.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v2.0-views) (~510 MB, split v2 with the error channel, plus K2, DR25 and vetter v3) and
 see [Running this without a 30-hour download](#running-this-without-a-30-hour-download).
 
 ---
@@ -205,18 +205,18 @@ the sample with `python tools/make_sample_views.py`.
 ### 3. Reproduce the real numbers — the view releases
 The views are published as release assets, because tens of thousands of binary files do not belong in git history.
 
-- **[`v2.0-views`](https://github.com/WoolyBro/exoplanet/releases/tag/v2.0-views)** (~510 MB, used by every final result).
+- **[`v2.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v2.0-views)** (~510 MB, used by every final result).
   - One archive per folder: split-v2 Kepler and TESS (with the flux-error channel), K2 (EVEREST and K2SFF), the DR25 benchmark, and the vetter v3 NTP and fresh-simulation sets.
   - Fetch only what you need: Kepler alone is `views_err_kepler_{train,val,test}.zip` (112 + 24 + 24 MB).
   - `VIEWS_ERR_MANIFEST.json` gives each archive's view count and SHA-256.
 
   ```bash
-  gh release download v2.0-views --repo WoolyBro/exoplanet --pattern 'views_err_kepler_*'   # or use the release page
+  gh release download v2.0-views --repo WoolyBro/Exoplanet_Detection --pattern 'views_err_kepler_*'   # or use the release page
   for z in views_err_*.zip; do unzip -o -q "$z"; done                                     # creates detection_views_err/
   python tools/make_v2_views.py                                                          # split-v2 layout, detection_views_v2/
   ```
 
-- **[`v1.0-views`](https://github.com/WoolyBro/exoplanet/releases/tag/v1.0-views)** (~150 MB). The split-v1 views behind the history section below. Split v1 leaked through signal twins, so it is not used for the final numbers.
+- **[`v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views)** (~150 MB). The split-v1 views behind the history section below. Split v1 leaked through signal twins, so it is not used for the final numbers.
 
 **Quickest check — no training at all.** Both final checkpoints are committed, so the reported
 test numbers can be regenerated directly from the selected artefact:
