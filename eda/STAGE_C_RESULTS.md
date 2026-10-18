@@ -206,6 +206,63 @@ There are 4,096 Saltelli base samples. The output is the Spearman correlation wi
 - **The retention term barely matters (total index 0.04).** With the fitted model the top 10 is unchanged (10/10) and Spearman = 0.84 (A4 held). The term attacked by the critique is not load-bearing for the ranking.
 - **B1 failed.** Across plausible weights, the *observability* weight shapes the full 44-planet order more than the HZ weight. The HZ term decides who is in the top group (§3: removing it collapses the order); TSM decides the order within the long tail.
 
+## 3b-ii. Two more assumptions: shoreline zero point and mass–radius relation (addendum, commit `225b269`)
+
+**Code:** `sensitivity_extended.py`. **Figure:** `eda/stage_c_sensitivity_extended.png`.
+
+The Sobol analysis of §3b, repeated with two more inputs:
+- **the shoreline zero point,** shifted by up to ±1 dex on every margin. That is a 10× error, beyond the ×1.4 zero-point range and ×3 XUV history already marginalised.
+- **the mass–radius relation** for the planets without a measured mass: Chen & Kipping 2017 or Otegi et al. 2020 rocky. Mass enters the TSM and the escape velocity.
+
+| Input | First order | Total |
+|---|---|---|
+| observability weight | 0.37 | **0.57** |
+| HZ weight | 0.33 | 0.45 |
+| optimistic-HZ credit | 0.08 | 0.18 |
+| rocky + retained weight | −0.03 | 0.08 |
+| **shoreline zero point (±1 dex)** | 0.05 | **0.06** |
+| retention treatment | 0.03 | 0.04 |
+| **mass–radius relation** | −0.01 | **0.005** |
+
+**Expectations:**
+- **B3 held:** the same 7-target robust core is in the top 10 in ≥ 90 % of samples.
+- **B4 held:** the zero point's index (0.06) is far below the observability weight's (0.57).
+- **B5 held:** the mass–radius relation's index is 0.005.
+
+The physical uncertainty in *who keeps an atmosphere* moves the ranking very little. The weights, a value judgement, move it most, and the paper should say so.
+
+## 3b-iii. Validation without ground truth
+
+**No exoplanet has a habitability label, and none will for decades.** The habitability factor therefore cannot be validated like a classifier. It is checked for **consistency** against what *is* known, one component at a time.
+
+| Component | What is known | Check | Outcome |
+|---|---|---|---|
+| HZ term | Kopparapu et al. 2014 limits; Earth and Mars inside, Venus outside | The formula reproduces the published limits (`tests/test_target_physics.py`) | consistent |
+| Retention: the fixed shoreline | 20 JWST rocky planets (§2b) | Airless side 14/14, atmosphere side 1/6, AUC 0.55 | supported only on the airless side |
+| Retention: the fitted model | the same 20, by leave-one-out (§2c) | log score −0.53 vs −0.58 for the base rate | modest skill |
+| **Retention: the fitted model, out of sample** | **8 Solar System bodies, none in the fit**: Venus, Earth, Mars and Titan have atmospheres; Mercury, the Moon, Ganymede and Callisto do not | P(retain) ≥ 0.5 ⇔ atmosphere | **7/8** correct, Brier 0.14 |
+| Observability | Whether JWST programmes chose the same targets | 3 of the 7 core targets already have JWST transmission spectra (TRAPPIST-1 e and f, LHS 1140 b). Kepler-62 f is too faint for JWST; its observability term is low, yet it stays in the core through HZ and retention | consistent |
+| The whole factor | the forecast (`FORECAST_RESULTS.md`) and the retrievals (`RETRIEVAL_HZ_RESULTS.md`) | The top targets are exactly where JWST cannot yet decide | consistent; the factor ranks potential, not outcome |
+
+**The Solar System check** (not pre-registered; I estimated it by hand before running):
+
+| Body | Atmosphere | Shoreline margin (dex) | P(retain), fitted | P(retain), fixed shoreline |
+|---|---|---|---|---|
+| Earth | yes | −1.12 | 0.70 | 0.99 |
+| Venus | yes | −0.72 | 0.61 | 0.92 |
+| Titan | yes | −0.57 | 0.59 | 0.88 |
+| **Mars** | yes, thin (6 mbar) | −0.09 | **0.46 (wrong)** | 0.59 |
+| Ganymede | no | −0.12 | 0.47 | **0.60 (wrong)** |
+| Callisto | no | +0.10 | 0.41 | 0.42 |
+| Mercury | no | +1.40 | 0.14 | 0.002 |
+| Moon | no | +1.57 | 0.12 | 0.001 |
+
+**Reading it.**
+- **The fitted model transfers to the Solar System.** It was fitted on M-dwarf planets and sees a G star here, yet it gets 7/8 right. The miss is Mars, which sits on the line, has a thin atmosphere and is the hardest case.
+- **The fixed shoreline also gets 7/8 and has the better Brier score** (0.09 vs 0.14). But it was drawn through these bodies (Zahnle & Catling 2017), so for it this is in-sample.
+- **The fitted model is deliberately less confident.** No probability exceeds 0.70, because 20 planets cannot support a sharp line.
+- **Both put the line in the right place** to within the bodies that straddle it: Mars, Ganymede, Callisto.
+
 ## 3c. Candidates: where the CNN–LSTM vetter enters the factor (added 2026-10-18)
 
 **Code:** `candidate_factor.py`. **Output:** `outputs/stage_c/candidate_shortlist.csv`, hash-locked in `PROSPECTIVE_PREDICTIONS.md`.

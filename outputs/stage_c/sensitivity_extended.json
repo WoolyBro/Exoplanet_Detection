@@ -1,0 +1,168 @@
+{
+  "addendum": "HABITABILITY_FACTOR_PROTOCOL.md (commit 225b269)",
+  "n_targets": 44,
+  "n_base_samples": 4096,
+  "spearman_vs_registered": {
+    "first_order": {
+      "w_hz": 0.334,
+      "w_terrestrial_atm": -0.027,
+      "w_observable": 0.367,
+      "retention_treatment": 0.03,
+      "optimistic_hz_credit": 0.082,
+      "shoreline_zero_point": 0.048,
+      "mass_radius_relation": -0.005
+    },
+    "total": {
+      "w_hz": 0.451,
+      "w_terrestrial_atm": 0.081,
+      "w_observable": 0.574,
+      "retention_treatment": 0.04,
+      "optimistic_hz_credit": 0.178,
+      "shoreline_zero_point": 0.059,
+      "mass_radius_relation": 0.005
+    },
+    "median": 0.821,
+    "p5": 0.413
+  },
+  "p_top10": {
+    "TOI-700 d": 0.962,
+    "Kepler-62 f": 0.909,
+    "TRAPPIST-1 g": 1.0,
+    "TRAPPIST-1 f": 1.0,
+    "TRAPPIST-1 e": 1.0,
+    "LP 890-9 c": 0.999,
+    "LHS 1140 b": 0.939,
+    "TRAPPIST-1 d": 0.89,
+    "Kepler-296 f": 0.535,
+    "TOI-700 e": 0.583,
+    "K2-18 b": 0.215,
+    "WASP-39 b": 0.0,
+    "HD 209458 b": 0.0,
+    "HD 189733 b": 0.0,
+    "WASP-96 b": 0.0,
+    "WASP-107 b": 0.0,
+    "WASP-121 b": 0.0,
+    "WASP-77 A b": 0.0,
+    "WASP-127 b": 0.0,
+    "WASP-31 b": 0.0,
+    "WASP-17 b": 0.0,
+    "WASP-19 b": 0.019,
+    "WASP-12 b": 0.002,
+    "HAT-P-18 b": 0.013,
+    "HAT-P-32 b": 0.018,
+    "HAT-P-41 b": 0.0,
+    "HAT-P-11 b": 0.02,
+    "HAT-P-26 b": 0.0,
+    "GJ 3470 b": 0.05,
+    "GJ 1214 b": 0.008,
+    "GJ 1132 b": 0.087,
+    "GJ 486 b": 0.362,
+    "TOI-270 d": 0.0,
+    "LHS 475 b": 0.005,
+    "TRAPPIST-1 b": 0.098,
+    "TRAPPIST-1 c": 0.285,
+    "55 Cnc e": 0.0,
+    "KELT-9 b": 0.0,
+    "WASP-33 b": 0.0,
+    "WASP-52 b": 0.0,
+    "WASP-80 b": 0.0,
+    "WASP-6 b": 0.0,
+    "WASP-43 b": 0.0,
+    "WASP-18 b": 0.0
+  },
+  "robust_core_ge_0.9": [
+    "TOI-700 d",
+    "Kepler-62 f",
+    "TRAPPIST-1 g",
+    "TRAPPIST-1 f",
+    "TRAPPIST-1 e",
+    "LP 890-9 c",
+    "LHS 1140 b"
+  ],
+  "expectations": {
+    "B3 >= 5 targets in the top 10 in >= 90 % of samples": true,
+    "B4 zero point total index < observability weight's": true,
+    "B5 mass-radius total index < 0.05": true
+  },
+  "solar_system_consistency_not_preregistered": [
+    {
+      "body": "Mercury",
+      "has_atmosphere": false,
+      "margin_primary_median": 1.4,
+      "p_retain_fitted": 0.139,
+      "p_retain_shoreline": 0.002,
+      "fitted_correct_at_0.5": true,
+      "shoreline_correct_at_0.5": true
+    },
+    {
+      "body": "Venus",
+      "has_atmosphere": true,
+      "margin_primary_median": -0.72,
+      "p_retain_fitted": 0.614,
+      "p_retain_shoreline": 0.921,
+      "fitted_correct_at_0.5": true,
+      "shoreline_correct_at_0.5": true
+    },
+    {
+      "body": "Earth",
+      "has_atmosphere": true,
+      "margin_primary_median": -1.12,
+      "p_retain_fitted": 0.702,
+      "p_retain_shoreline": 0.991,
+      "fitted_correct_at_0.5": true,
+      "shoreline_correct_at_0.5": true
+    },
+    {
+      "body": "Moon",
+      "has_atmosphere": false,
+      "margin_primary_median": 1.57,
+      "p_retain_fitted": 0.121,
+      "p_retain_shoreline": 0.001,
+      "fitted_correct_at_0.5": true,
+      "shoreline_correct_at_0.5": true
+    },
+    {
+      "body": "Mars",
+      "has_atmosphere": true,
+      "margin_primary_median": -0.09,
+      "p_retain_fitted": 0.457,
+      "p_retain_shoreline": 0.586,
+      "fitted_correct_at_0.5": false,
+      "shoreline_correct_at_0.5": true
+    },
+    {
+      "body": "Ganymede",
+      "has_atmosphere": false,
+      "margin_primary_median": -0.12,
+      "p_retain_fitted": 0.469,
+      "p_retain_shoreline": 0.596,
+      "fitted_correct_at_0.5": true,
+      "shoreline_correct_at_0.5": false
+    },
+    {
+      "body": "Callisto",
+      "has_atmosphere": false,
+      "margin_primary_median": 0.1,
+      "p_retain_fitted": 0.411,
+      "p_retain_shoreline": 0.423,
+      "fitted_correct_at_0.5": true,
+      "shoreline_correct_at_0.5": true
+    },
+    {
+      "body": "Titan",
+      "has_atmosphere": true,
+      "margin_primary_median": -0.57,
+      "p_retain_fitted": 0.586,
+      "p_retain_shoreline": 0.881,
+      "fitted_correct_at_0.5": true,
+      "shoreline_correct_at_0.5": true
+    }
+  ],
+  "solar_system_correct": {
+    "fitted": "7/8",
+    "shoreline": "7/8",
+    "brier_fitted": 0.141,
+    "brier_shoreline": 0.091,
+    "note": "the shoreline was drawn through Solar System bodies (Zahnle & Catling 2017): in-sample for it, out-of-sample for the fitted model"
+  }
+}
