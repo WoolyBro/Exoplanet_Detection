@@ -1,0 +1,121 @@
+{
+  "protocol": "stage_b_atmospheres/METHANE_SPECNET_PROTOCOL.md",
+  "stress_test": {
+    "roc_auc_all": 0.918,
+    "fpr_at_0.5_no_ch4_present": 0.045,
+    "fpr_at_0.5_no_ch4_strong_contamination_f>=0.1": 0.067,
+    "fpr_at_0.5_no_ch4_no_contamination": 0.019,
+    "n_no_ch4": 314,
+    "n_no_ch4_strong": 120,
+    "roc_auc_contaminated_only": 0.906
+  },
+  "new_29": {
+    "n": 29,
+    "n_pos": 4,
+    "specnet": {
+      "roc_auc": 0.8,
+      "perm_p": 0.0302,
+      "ci95": [
+        0.464,
+        1.0
+      ]
+    },
+    "gbm": {
+      "roc_auc": 1.0,
+      "perm_p": 0.0,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "cnn": {
+      "roc_auc": 0.97,
+      "perm_p": 0.0003,
+      "ci95": [
+        0.889,
+        1.0
+      ]
+    },
+    "strength": {
+      "roc_auc": 0.71,
+      "perm_p": 0.1009,
+      "ci95": [
+        0.286,
+        1.0
+      ]
+    }
+  },
+  "confound_test_strong_feature_half": {
+    "strength_threshold": 1.593,
+    "n": 14,
+    "n_pos": 3,
+    "specnet": {
+      "roc_auc": 0.758,
+      "perm_p": 0.1144,
+      "ci95": [
+        0.385,
+        1.0
+      ]
+    },
+    "gbm": {
+      "roc_auc": 1.0,
+      "perm_p": 0.0029,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    },
+    "cnn": {
+      "roc_auc": 0.97,
+      "perm_p": 0.0056,
+      "ci95": [
+        0.833,
+        1.0
+      ]
+    },
+    "strength": {
+      "roc_auc": 0.697,
+      "perm_p": 0.1842,
+      "ci95": [
+        0.25,
+        1.0
+      ]
+    }
+  },
+  "all_labelled": {
+    "n": 40,
+    "n_pos": 10,
+    "specnet": {
+      "roc_auc": 0.78,
+      "perm_p": 0.0039,
+      "ci95": [
+        0.61,
+        0.938
+      ]
+    },
+    "gbm": {
+      "roc_auc": 1.0,
+      "perm_p": 0.0,
+      "ci95": [
+        1.0,
+        1.0
+      ]
+    }
+  },
+  "n_all_labelled": 40,
+  "min_ch4_score_specnet": 0.15258440375328064,
+  "max_nonch4_score_specnet": 0.7923541069030762,
+  "spearman_with_feature_strength": {
+    "specnet": 0.338,
+    "cnn_v3": 0.533,
+    "gbm_v3": 0.247
+  },
+  "expectations": {
+    "S1 new-29 ROC-AUC >= 0.95": false,
+    "S2 confound half >= 0.90, p < 0.05": false,
+    "S3 all labelled >= 0.95": false,
+    "S4 stress false-CH4 <= 3 %": false,
+    "S5 less tied to feature strength than the v3 CNN": true
+  },
+  "decision": "SpecNet failed a pre-registered criterion; the GBM stays the headline"
+}
