@@ -92,6 +92,7 @@ MANUAL_EXCLUSIONS = {"circumbinary planet": EXCLUSIONS_DIR / "excluded_circumbin
 QUALITY_BITMASK = {
     "Kepler": KeplerQualityFlags.HARD_BITMASK,
     "TESS": TessQualityFlags.HARD_BITMASK | 8192,
+    "K2": KeplerQualityFlags.HARD_BITMASK,        # K2 uses the Kepler quality flags
 }
 
 # ---- Detrending ------------------------------------------------------------ #
@@ -114,12 +115,20 @@ LABEL_INDEX = {"FALSE POSITIVE": 0, "CANDIDATE": 1, "CONFIRMED": 2}
 TESS_BJD_OFFSET = 2457000.0    # TOI epochs are BJD; TESS light curves use BTJD
 MAX_DRIFT_FRACTION = 0.5       # ephemeris unreliable if propagated timing error > 0.5x duration
 
+# K2 (added 2026-10-18, ONLY as a blind external test set: eda/K2_BLIND_TEST_PROTOCOL.md). Raw K2 photometry
+# carries the pointing-drift sawtooth of the two-wheel mission, which this pipeline does not correct, so K2
+# rows use community-corrected light curves instead: EVEREST 2.0 (Luger et al. 2016, 2018; pixel-level
+# decorrelation) by default, K2SFF (Vanderburg & Johnson 2014) for the robustness check (K2_LC_AUTHOR).
+# Per-cadence errors: EVEREST's own raw-photometry errors (FRAW_ERR / FRAW); for K2SFF, which ships none,
+# the official K2 pipeline's SAP_FLUX_ERR / SAP_FLUX on the same cadence. Ephemerides come from
+# tools/k2_ephemerides.py (external_data/k2/k2_ephemerides.csv), which fills the split's gaps from the
+# archive's other published parameter sets. Nothing K2 is ever used for training or model selection.
+K2_LC_AUTHOR = os.environ.get("K2_LC_AUTHOR", "EVEREST")
+K2_BJD_OFFSET = 2454833.0      # K2 light curves use BKJD, like Kepler
+K2_EPHEMERIDES = RESEARCH_DIR / "external_data" / "k2" / "k2_ephemerides.csv"
 K2_OUT_OF_SCOPE = (
-    "K2 light-curve modeling is out of scope for this project: K2 light curves carry large "
-    "pointing-drift systematics (from the spacecraft's two-wheel operation) that need dedicated "
-    "correction (e.g. K2SFF or EVEREST) before transits can be folded, which this pipeline does not "
-    "do. K2 catalog data (splits/k2_planets_candidates_split.csv) remains usable for EDA and "
-    "statistics only.")
+    "K2 rows need the ephemeris table from tools/k2_ephemerides.py (external_data/k2/k2_ephemerides.csv); "
+    "K2 is used only as a blind external test set, with EVEREST or K2SFF light curves.")
 
 
 # =========================================================================== #
@@ -197,7 +206,11 @@ def ephemeris_from_row(row: pd.Series | dict, mission: str) -> Ephemeris:
                          period_err=abs(float(row.get("pl_orbpererr1", np.nan))),
                          epoch_err=abs(float(row.get("pl_tranmiderr1", np.nan))))
     if mission == "K2":
-        raise NotImplementedError(K2_OUT_OF_SCOPE)
+        return Ephemeris(object_id=str(row["pl_name"]), star_id=int(row["epic"]), mission=mission,
+                         period=float(row["pl_orbper"]), epoch=float(row["pl_tranmid"]) - K2_BJD_OFFSET,
+                         duration=float(row["pl_trandur"]) / 24.0, label=row.get("label_harmonized"),
+                         period_err=abs(float(row.get("pl_orbpererr1", np.nan))),
+                         epoch_err=abs(float(row.get("pl_tranmiderr1", np.nan))))
     raise ValueError(f"unknown mission {mission!r}")
 
 
@@ -217,15 +230,23 @@ def stage1_catalogs() -> dict[str, pd.DataFrame]:
 
 
 def catalog_for(mission: str) -> pd.DataFrame:
-    name = {"Kepler": "koi_cumulative_split.csv", "TESS": "toi_tess_candidates_split.csv",
-            "K2": "k2_planets_candidates_split.csv"}[mission]
+    if mission == "K2":            # the split's ephemerides with its gaps filled (tools/k2_ephemerides.py)
+        if not K2_EPHEMERIDES.is_file():
+            raise NotImplementedError(K2_OUT_OF_SCOPE)
+        return _k2_catalog()
+    name = {"Kepler": "koi_cumulative_split.csv", "TESS": "toi_tess_candidates_split.csv"}[mission]
     return stage1_catalogs()[name]
+
+
+@lru_cache(maxsize=1)
+def _k2_catalog() -> pd.DataFrame:
+    return pd.read_csv(K2_EPHEMERIDES)
 
 
 def star_ephemerides(star_id: int, mission: str) -> list[Ephemeris]:
     """Every KOI/TOI on a star from the FULL catalog (not just the slice being processed)."""
     cat = catalog_for(mission)
-    col = "kepid" if mission == "Kepler" else "tid"
+    col = _star_col(mission)
     return [ephemeris_from_row(r, mission) for r in cat[cat[col] == star_id].to_dict("records")]
 
 
@@ -334,6 +355,11 @@ def load_and_flatten(light_curve_path: str | Path, mission: str | None = None,
     flat, outliers = flat.remove_outliers(sigma_lower=np.inf, sigma_upper=UPPER_OUTLIER_SIGMA, return_mask=True)
     meta["n_upper_outliers_clipped"] = int(outliers.sum())
     meta["n_final"] = len(flat)
+    # How well the per-cadence errors describe the real scatter (robust point-to-point / median error).
+    # Metadata only; it does not change any view. Kepler PDCSAP: median 1.09 (1.02-1.35) over 40 stars.
+    fl, fe = flat.flux.value.astype(float), flat.flux_err.value.astype(float)
+    meta["p2p_scatter_over_error"] = (round(float(np.median(np.abs(np.diff(fl))) * 1.4826 / np.sqrt(2) / np.nanmedian(fe)), 4)
+                                      if len(fl) > 2 and np.nanmedian(fe) > 0 else None)
     return FlattenedLightCurve(time=flat.time.value.astype(float), flux=flat.flux.value.astype(float),
                                flux_err=flat.flux_err.value.astype(float), mission=mission, meta=meta)
 
@@ -518,6 +544,10 @@ def raw_cache_paths(star: int, mission: str, cache_dir: Path | None = None) -> l
     mast_redownload/ retry folders, the S3 folder and the stitched CSV. Nothing belonging to
     another star matches."""
     cache_dir = Path(cache_dir or LK_CACHE)
+    if mission == "K2":            # HLSP (EVEREST/K2SFF) and official K2 files, plus the stitched CSVs
+        base = cache_dir / "mast" / "mastDownload"
+        paths = [f for pat in (f"HLSP/*{star}*/*.fits", f"K2/ktwo{star}*/*.fits") for f in base.glob(pat)]
+        return paths + [p for p in (cache_dir / "csv").glob(f"k2_EPIC{star}_*") if p.is_file()]
     prefix = {"Kepler": "kepler_KIC", "TESS": "tess_TIC"}[mission]
     fits = f"Kepler/kplr{star:09d}_*/*.fits" if mission == "Kepler" else f"TESS/*{star:016d}*/*.fits"
     paths = list((cache_dir / "mast" / "mastDownload").glob(fits))
@@ -768,7 +798,7 @@ def fetch_lightcurve_via_api(kepid_or_tic_id: int | str, mission: str, cache_dir
     cache_dir = Path(cache_dir or LK_CACHE)
     star = int(str(kepid_or_tic_id).split()[-1])
     if mission == "K2":
-        raise NotImplementedError(K2_OUT_OF_SCOPE)
+        return fetch_k2_lightcurve(star, cache_dir, author=K2_LC_AUTHOR, overwrite=overwrite, attempts=attempts)
     prefix = {"Kepler": "kepler_KIC", "TESS": "tess_TIC"}.get(mission)
     if prefix is None:
         raise ValueError(f"unknown mission {mission!r}")
@@ -815,6 +845,74 @@ def fetch_lightcurve_via_api(kepid_or_tic_id: int | str, mission: str, cache_dir
             if collection is None or len(collection) == 0:
                 raise LookupError(f"download returned nothing for {mission} {star}")
             return _write_stitched_csv(collection, out, star)
+        except LookupError:
+            raise
+        except Exception as exc:  # network / archive / corrupt-file errors: retry
+            last_exc = exc
+            if attempt < attempts:
+                _time.sleep(30 * 3 ** (attempt - 1))
+    raise ApiFetchError(f"{type(last_exc).__name__}: {last_exc}") from last_exc
+
+
+def fetch_k2_lightcurve(star: int, cache_dir: Path, author: str = "EVEREST", overwrite: bool = False,
+                        attempts: int = 3) -> Path:
+    """Corrected K2 photometry for one EPIC star, stitched over its campaigns into the pipeline's CSV
+    format (time in BKJD, flux normalised per campaign, flux_err, quality). See K2_LC_AUTHOR.
+
+    EVEREST: flux = FLUX (PLD-corrected), relative error = FRAW_ERR / FRAW, quality = its QUALITY
+    (Kepler bits). K2SFF: flux = FCOR, cadences flagged MOVING dropped; relative error and quality from
+    the official K2 light curve of the same campaign, joined on CADENCENO (a campaign without an official
+    file is skipped rather than given invented errors)."""
+    cache_dir = Path(cache_dir)
+    out = cache_dir / "csv" / f"k2_EPIC{star}_{author}.csv"
+    if out.is_file() and not overwrite:
+        return out
+    last_exc = None
+    for attempt in range(1, attempts + 1):
+        try:
+            download_dir = str(cache_dir / "mast")
+            res = lk.search_lightcurve(f"EPIC {star}", mission="K2", author=author, exptime=1800)
+            if len(res) == 0:
+                raise LookupError(f"no {author} K2 light curves for EPIC {star}")
+            corrected = res.download_all(quality_bitmask="none", download_dir=download_dir)
+            official = {}
+            if author == "K2SFF":
+                off = lk.search_lightcurve(f"EPIC {star}", mission="K2", author="K2", exptime=1800)
+                if len(off):
+                    for lc in off.download_all(quality_bitmask="none", download_dir=download_dir):
+                        official[lc.meta.get("CAMPAIGN")] = lc
+            frames = []
+            for lc in corrected:
+                camp = lc.meta.get("CAMPAIGN")
+                d = pd.DataFrame({"time": np.asarray(lc.time.value, float), "flux": np.asarray(lc.flux.value, float),
+                                  "cadenceno": np.asarray(lc.cadenceno.value, np.int64)})
+                if author == "EVEREST":
+                    d["rel_err"] = np.asarray(lc.fraw_err.value, float) / np.asarray(lc.fraw.value, float)
+                    d["quality"] = np.asarray(lc.quality.value, np.int64)
+                else:
+                    d = d[np.asarray(lc["moving"].value, float) == 0]
+                    ref = official.get(camp)
+                    if ref is None:
+                        continue
+                    r = pd.DataFrame({"cadenceno": np.asarray(ref.cadenceno.value, np.int64),
+                                      "rel_err": np.asarray(ref.sap_flux_err.value, float) / np.asarray(ref.sap_flux.value, float),
+                                      "quality": np.asarray(ref.quality.value, np.int64)})
+                    d = d.merge(r, on="cadenceno", how="left")
+                med = np.nanmedian(d.flux)
+                if not np.isfinite(med) or med == 0:
+                    continue
+                d["flux"] = d.flux / med
+                d["flux_err"] = d.rel_err * d.flux
+                d["quality"] = d.quality.fillna(0).astype(np.int64)
+                frames.append(d[["time", "flux", "flux_err", "quality"]])
+            if not frames:
+                raise LookupError(f"no usable {author} campaign for EPIC {star}")
+            data = pd.concat(frames).sort_values("time")
+            out.parent.mkdir(parents=True, exist_ok=True)
+            tmp = out.with_suffix(f".tmp{os.getpid()}")
+            data.to_csv(tmp, index=False)
+            os.replace(tmp, out)
+            return out
         except LookupError:
             raise
         except Exception as exc:  # network / archive / corrupt-file errors: retry
@@ -873,7 +971,7 @@ def _kill_pool_workers() -> int:
 
 
 def _star_col(mission: str) -> str:
-    return {"Kepler": "kepid", "TESS": "tid"}[mission]
+    return {"Kepler": "kepid", "TESS": "tid", "K2": "epic"}[mission]
 
 
 def _npz_name(object_id: str) -> str:
@@ -1092,11 +1190,9 @@ def build_dataset(split_df: pd.DataFrame, output_dir: str | Path, use_local_file
     are requeued and the pool is rebuilt. A normal star takes well under a minute, so the default 20 min
     only fires on a hang.
 
-    Raises NotImplementedError for K2 split rows (see K2_OUT_OF_SCOPE).
+    K2 rows (blind external test only) need the ephemeris table of tools/k2_ephemerides.py; see K2_LC_AUTHOR.
     """
     mission = mission_of(split_df)
-    if mission == "K2":
-        raise NotImplementedError(K2_OUT_OF_SCOPE)
     output_dir = Path(output_dir)
     if not dry_run:
         output_dir.mkdir(parents=True, exist_ok=True)

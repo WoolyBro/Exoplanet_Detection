@@ -1,0 +1,34 @@
+{
+  "rows": 1805,
+  "complete": 1755,
+  "duration_source": {
+    "catalogue": 1345,
+    "other set": 277,
+    "estimated": 154,
+    "missing": 29
+  },
+  "period_source": {
+    "catalogue": 1782,
+    "NaN": 22,
+    "other set": 1
+  },
+  "epoch_source": {
+    "catalogue": 1781,
+    "other set": 18,
+    "NaN": 6
+  },
+  "complete_by_label": {
+    "CANDIDATE": 943,
+    "CONFIRMED": 571,
+    "FALSE POSITIVE": 241
+  },
+  "duration_estimator_check": {
+    "n": 1478,
+    "median_est_over_catalogue": 0.999,
+    "p16_p84": [
+      0.895,
+      1.252
+    ],
+    "fraction_within_30pct": 0.79
+  }
+}
