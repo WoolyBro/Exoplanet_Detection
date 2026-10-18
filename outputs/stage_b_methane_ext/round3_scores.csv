@@ -1,0 +1,12 @@
+planet,file,scored,instrument,reason,gbm_v1,gbm_v3
+HAT-P-12 b,HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_6155_3.tbl,True,Near Infrared Imager and Slitless Spectrograph (NIRISS),,0.00202217457785558,0.017288139173933608
+TOI-3235 b,TOI-3235_b_Transmission_TOI_3235_b_3.15961_6151_1.tbl,True,Near Infrared Spectrograph (NIRSpec) - PRISM,,0.9428834889781671,0.8994744647949003
+TRAPPIST-1 f,TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_1.tbl,True,Near Infrared Imager and Slitless Spectrograph (NIRISS),,0.0006570535864797332,0.03525358003132107
+TRAPPIST-1 f,TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_2.tbl,True,Near Infrared Imager and Slitless Spectrograph (NIRISS),,0.0009692827103171332,0.02387913709416461
+TRAPPIST-1 f,TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_3.tbl,True,Near Infrared Imager and Slitless Spectrograph (NIRISS),,0.0013996065553428766,0.02802554122909869
+TRAPPIST-1 f,TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_4.tbl,True,Near Infrared Imager and Slitless Spectrograph (NIRISS),,0.003718324935043195,0.05683531637920933
+TRAPPIST-1 f,TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_5.tbl,True,Near Infrared Imager and Slitless Spectrograph (NIRISS),,0.026010559332645396,0.02421878343365986
+TRAPPIST-1 f,TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_6.tbl,True,Near Infrared Imager and Slitless Spectrograph (NIRISS),,0.000921491179079303,0.021110790967373356
+HATS-6 b,HATS-6_b_Transmission_HATS_6_b_3.11756_6158_1.tbl,True,Near Infrared Spectrograph (NIRSpec) - PRISM,,0.9802820998274872,0.9942288463208705
+HATS-6 b,HATS-6_b_Transmission_HATS_6_b_3.11756_6158_2.tbl,True,Near Infrared Spectrograph (NIRSpec) - PRISM,,0.9824170162008836,0.96240727392543
+HATS-6 b,HATS-6_b_Transmission_HATS_6_b_3.11756_6158_3.tbl,True,Near Infrared Spectrograph (NIRSpec) - PRISM,,0.9982446132780382,0.9901353051690484

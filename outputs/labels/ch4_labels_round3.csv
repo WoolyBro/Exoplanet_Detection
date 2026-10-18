@@ -1,0 +1,4 @@
+planet,CH4,featureless,source,significance,note
+HATS-6 b,1,0,arXiv:2608.16990 (Guzman Caloca+ 2026 AJ 172 193),strong evidence; log X = -5.38 +- 0.19,"H2O, CH4, NH3 strong evidence; sub-solar metallicity; NIRSpec PRISM"
+TOI-3235 b,unknown,0,arXiv:2608.04194 (Ko+ 2026 AJ 172 174),model-dependent,CH4 constrained only with deterministic stellar-contamination model; GP version gives no robust constraints
+TRAPPIST-1 f,0,0,arXiv:2608.17207 (Lim+ 2026 AJ 172 200) Sec VIII.3,pure CH4 1-bar rejected at 6.8 sigma; not detected,"NIRISS SOSS, 5 visits; no TLS contamination found; H2/He > 20 mbar ruled out"

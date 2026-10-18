@@ -189,3 +189,20 @@ v3 places every CH₄ planet (lowest: GJ 3470 b, 0.17) above every non-CH₄ pla
 ~/micromamba/envs/prt/bin/python stage_b_atmospheres/synthetic_grid.py --n 800 --seed 27182001 --tls --haze --out outputs/stage_b_synthetic_stress
 python stage_b_atmospheres/methane_tls_robustness.py
 ```
+
+---
+
+## 10. Round 3: planets new to the archive (refresh of 2026-10-18; pre-registered: `METHANE_EXTENSION_PROTOCOL_ROUND3.md`)
+
+**The refresh.** `tools/refresh_archive_spectra.py` downloaded the archive's current Atmospheric Spectroscopy table: 1,875 spectra, against the pack's 1,826. It also downloaded the 49 new spectrum files into `external_data/archive_spectra_2026-10-18/`, after checking that a re-downloaded pack file is byte-identical. Of the 49, 13 are JWST transmission spectra, covering three planets new to this project and new spectra of HAT-P-12 b. Labels were frozen by hash before scoring.
+
+| Planet | CH₄ label (source) | v3 P(CH₄) | v1 P(CH₄) | Outcome |
+|---|---|---|---|---|
+| **HATS-6 b** | **1**: "strong evidence", log X = −5.38 ± 0.19 (Guzmán Caloca et al. 2026, arXiv:2608.16990) | **0.982** | 0.987 | correct (above the class boundary) |
+| **TRAPPIST-1 f** | **0**: pure CH₄ 1 bar rejected at 6.8σ, never detected (Lim et al. 2026, arXiv:2608.17207); 6 NIRISS spectra | **0.032** | 0.006 | correct |
+| HAT-P-12 b (new NIRISS spectrum) | 0 (round 1) | 0.017 | 0.002 | consistent |
+| TOI-3235 b | unknown: CH₄ constrained only with a deterministic contamination model (Ko et al. 2026, arXiv:2608.04194) | 0.899 | 0.943 | prediction: CH₄ present |
+
+All planets with a label fall on the correct side of the v3 class boundary from rounds 1–2 (CH₄ planets ≥ 0.17, others ≤ 0.08). TOI-3235 b is a genuine prediction: the contamination-trained model calls CH₄, as does the paper's deterministic retrieval. HAT-P-12 b's two new MIRI spectra have no CH₄ band on the 1–5 µm grid.
+
+**The CH₄ test set now totals 40 labelled planets: 10 with CH₄, 30 without.** Every one is ranked correctly by v3.

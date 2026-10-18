@@ -1,0 +1,123 @@
+{
+  "refresh_folder": "archive_spectra_2026-10-18",
+  "spectra": [
+    {
+      "planet": "HAT-P-12 b",
+      "file": "HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_6155_1.tbl",
+      "scored": false,
+      "instrument": "Mid-Infrared Instrument (MIRI)",
+      "reason": "fewer than 3 grid bins in a CH4 band"
+    },
+    {
+      "planet": "HAT-P-12 b",
+      "file": "HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_6155_2.tbl",
+      "scored": false,
+      "instrument": "Mid-Infrared Instrument (MIRI)",
+      "reason": "fewer than 3 grid bins in a CH4 band"
+    },
+    {
+      "planet": "HAT-P-12 b",
+      "file": "HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_6155_3.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Imager and Slitless Spectrograph (NIRISS)",
+      "reason": ""
+    },
+    {
+      "planet": "TOI-3235 b",
+      "file": "TOI-3235_b_Transmission_TOI_3235_b_3.15961_6151_1.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Spectrograph (NIRSpec) - PRISM",
+      "reason": ""
+    },
+    {
+      "planet": "TRAPPIST-1 f",
+      "file": "TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_1.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Imager and Slitless Spectrograph (NIRISS)",
+      "reason": ""
+    },
+    {
+      "planet": "TRAPPIST-1 f",
+      "file": "TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_2.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Imager and Slitless Spectrograph (NIRISS)",
+      "reason": ""
+    },
+    {
+      "planet": "TRAPPIST-1 f",
+      "file": "TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_3.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Imager and Slitless Spectrograph (NIRISS)",
+      "reason": ""
+    },
+    {
+      "planet": "TRAPPIST-1 f",
+      "file": "TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_4.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Imager and Slitless Spectrograph (NIRISS)",
+      "reason": ""
+    },
+    {
+      "planet": "TRAPPIST-1 f",
+      "file": "TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_5.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Imager and Slitless Spectrograph (NIRISS)",
+      "reason": ""
+    },
+    {
+      "planet": "TRAPPIST-1 f",
+      "file": "TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_6.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Imager and Slitless Spectrograph (NIRISS)",
+      "reason": ""
+    },
+    {
+      "planet": "HATS-6 b",
+      "file": "HATS-6_b_Transmission_HATS_6_b_3.11756_6158_1.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Spectrograph (NIRSpec) - PRISM",
+      "reason": ""
+    },
+    {
+      "planet": "HATS-6 b",
+      "file": "HATS-6_b_Transmission_HATS_6_b_3.11756_6158_2.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Spectrograph (NIRSpec) - PRISM",
+      "reason": ""
+    },
+    {
+      "planet": "HATS-6 b",
+      "file": "HATS-6_b_Transmission_HATS_6_b_3.11756_6158_3.tbl",
+      "scored": true,
+      "instrument": "Near Infrared Spectrograph (NIRSpec) - PRISM",
+      "reason": ""
+    }
+  ],
+  "planets": {
+    "HAT-P-12 b": {
+      "label": "0 (round 1)",
+      "gbm_v1": 0.002,
+      "gbm_v3": 0.017,
+      "n_spectra": 1
+    },
+    "HATS-6 b": {
+      "label": "1",
+      "gbm_v1": 0.987,
+      "gbm_v3": 0.982,
+      "n_spectra": 3
+    },
+    "TOI-3235 b": {
+      "label": "unknown",
+      "gbm_v1": 0.943,
+      "gbm_v3": 0.899,
+      "n_spectra": 1
+    },
+    "TRAPPIST-1 f": {
+      "label": "0",
+      "gbm_v1": 0.006,
+      "gbm_v3": 0.032,
+      "n_spectra": 6
+    }
+  },
+  "unscored_labelled": []
+}
