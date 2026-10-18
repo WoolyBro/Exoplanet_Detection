@@ -85,6 +85,7 @@ explained wherever those numbers appear.
 
 All twelve statistical figures, each titled by the question it answers and carrying 95 %
 intervals, are in **[`figures/`](figures/)** and regenerate with `python figures/make_figures.py`.
+The Stage A figures show the final v2 ensembles and their single test read (regenerated 2026-10-18).
 Four that carry the main argument:
 
 **How well does the transit classifier separate real planets from false positives?**
@@ -265,10 +266,11 @@ These are in the reports too, but they are the load-bearing caveats:
 1. **Both v2 test sets are spent** (read once on 2026-10-18; guard file
    `stage_a_transit_model/runs/v2_final/TEST_READ.json`). The v1 test sets were spent earlier.
    Any further tuning has to go back to validation.
-2. **Neither vetting model is unbiased, and their biases are opposite.** The Kepler model's
-   score falls with planet radius (Spearman −0.570), the TESS model's rises (+0.302). Kepler's
-   training split makes deep transits 93 % likely to be false positives; TESS's makes them
-   11.5 %. This is measured, not assumed, and it is why the priority table carries both columns.
+2. **Neither vetting model is unbiased, and their biases are opposite.** On the same 41
+   confirmed planets, the final Kepler ensemble's score falls with planet radius (Spearman −0.37)
+   and the TESS ensemble's rises (+0.35). The v1 single models gave −0.57 and +0.30.
+   - The cause is in the training data. Kepler's v2 training split makes transits deeper than 10,000 ppm 94 % likely to be false positives; TESS's makes them 12 %.
+   - This is measured, not assumed, and it is why the priority table carries both columns.
 3. **The TESS build has a class-dependent yield** — 55.9 % of false positives survived the
    ephemeris-reliability check against 88.7 % of confirmed planets. That is selection bias, not
    just imbalance, and class weights do not fix it.
@@ -276,13 +278,17 @@ These are in the reports too, but they are the load-bearing caveats:
    a statement about received flux. The ranking (rebuilt 2026-10-17) uses published physics with
    uncertainty, excludes the 10 planets that do not transit, and no longer uses the Stage B
    molecule model, which has no skill. See `eda/STAGE_C_RESULTS.md` §4 for what was wrong before.
-5. **`stage_d_habitability/` is exploration, not a result.** No habitability model was trained:
+5. **The vetter is a vetter, not a search, and it cannot see centroids.**
+   - Folding a star at an arbitrary period already scores a median 0.68. It must be run on signals a pipeline has already detected; it responds to injected transits from 40 ppm.
+   - False positives whose only warning sign is light from a neighbouring star are rejected 49 % of the time, against 95 % for eclipsing binaries (`figures/09`).
+   - That gap is where ExoMiner, which reads centroid diagnostics, beats it.
+6. **`stage_d_habitability/` is exploration, not a result.** No habitability model was trained:
    30 INARA rows with no spectra, and a composition-derived label would leak by construction.
-6. **The raw planet-like score is a ranking, not a probability.** Mid-range scores overstate the
-   chance of a planet (Kepler test Brier 0.130). Read it as a probability only through the
-   calibrator in `runs/<run>/calibration/` (`calibrate.py`: Platt scaling fitted on validation;
-   Kepler Brier 0.117, TESS 0.103).
-7. **The gas forecast gives lower bounds under stated scenarios.** It uses a matched filter with a
+7. **The raw planet-like score is a ranking, not a probability.** On test, the raw Kepler ensemble
+   overstates mid-range scores and the TESS ensemble understates them (ECE 0.078 and 0.144).
+   - Read it as a probability only after the Platt map fitted on validation (`calibrated_score` in `runs/v2_final/*_test_predictions.csv`).
+   - With the map, test ECE is 0.023 (Kepler) and 0.018 (TESS), and the Brier score is 0.110 and 0.098.
+8. **The gas forecast gives lower bounds under stated scenarios.** It uses a matched filter with a
    known template, and leaves out stellar contamination. On K2-18 b it is ~1.4–1.9× optimistic in
    S/N against the published detections. It says how hard a gas *would* be to detect, never
    that a planet has it. The simulated-spectra classifier shows real skill for CH₄ only; its

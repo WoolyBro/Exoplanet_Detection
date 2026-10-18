@@ -93,9 +93,12 @@ def inject(time: np.ndarray, flux: np.ndarray, period: float, epoch: float,
     return flux * model
 
 
-def star_sample(n: int, seed: int) -> pd.DataFrame:
+def star_sample(n: int, seed: int, split_version: str = "v1") -> pd.DataFrame:
     """Kepler test-split stars, one row per star, with their real KOI ephemerides."""
     koi = pp.catalog_for("Kepler")
+    if split_version == "v2":       # the leakage-free split: test stars no v2 model was trained on
+        v2 = pd.read_csv(RESEARCH / "splits" / "koi_cumulative_split_v2.csv", usecols=["kepoi_name", "split"])
+        koi = koi.drop(columns="split").merge(v2, on="kepoi_name", how="inner")
     test = koi[koi.split == "test"]
     rng = np.random.default_rng(seed)
     stars = test.kepid.dropna().unique()
@@ -111,7 +114,15 @@ def main() -> int:
     ap.add_argument("--run", type=Path, default=RUN)
     ap.add_argument("--score-only", action="store_true",
                     help="reuse light curves already in the cache")
+    ap.add_argument("--runs", type=Path, nargs="+", default=None,
+                    help="several run directories: their planet-like scores are averaged (an ensemble)")
+    ap.add_argument("--split-version", choices=["v1", "v2"], default="v1")
+    ap.add_argument("--out", type=Path, default=None, help="output folder (default outputs/injection_recovery)")
+    ap.add_argument("--threshold", type=float, default=None, help="recovery threshold (default: the run's val P@R90)")
     args = ap.parse_args()
+    global OUT_DIR
+    if args.out is not None:
+        OUT_DIR = Path(args.out).resolve()        # relative_to(RESEARCH) below needs an absolute path
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     rng = np.random.default_rng(args.seed)
@@ -121,12 +132,14 @@ def main() -> int:
 
     import torch
 
-    model, arch = load_run_model(args.run)
+    runs = args.runs or [args.run]
+    models = [load_run_model(r)[0] for r in runs]
+    model, arch = models[0], load_run_model(runs[0])[1]
     print("=" * 88)
-    print(f"Injection-recovery | model {args.run.name} {arch}")
+    print(f"Injection-recovery | {len(models)} model(s): {', '.join(r.name for r in runs)} {arch} | split {args.split_version}")
     print("=" * 88)
 
-    part = star_sample(args.stars, args.seed)
+    part = star_sample(args.stars, args.seed, args.split_version)
     stars = sorted(part.kepid.unique())
     print(f"\n[1] {len(stars)} Kepler test-split stars, {len(DEPTHS_PPM)} depths each "
           f"= {len(stars) * len(DEPTHS_PPM)} injections")
@@ -186,8 +199,8 @@ def main() -> int:
                 g = torch.from_numpy(gv.values.astype(np.float32)[None, :])
                 l = torch.from_numpy(lv.values.astype(np.float32)[None, :])
             with torch.no_grad():
-                proba = torch.softmax(model(g, l), dim=1).numpy()[0]
-            score = float(proba[PLANET_LIKE_IDX].sum())
+                scores = [float(torch.softmax(m(g, l), dim=1).numpy()[0][PLANET_LIKE_IDX].sum()) for m in models]
+            score = float(np.mean(scores))          # ensemble average when several runs are given
             rows.append({"star": star, "depth_ppm": depth, "period": period,
                          "duration_d": duration, "planet_like_score": score,
                          "depth_snr": res.get("depth_snr"),
@@ -204,9 +217,11 @@ def main() -> int:
         return 1
 
     # Recovery threshold: the model's own 90 %-recall operating point on Kepler val.
-    thr_file = args.run / "report.json"
+    thr_file = runs[0] / "report.json"
     thr = 0.5
-    if thr_file.is_file():
+    if args.threshold is not None:
+        thr = args.threshold
+    elif thr_file.is_file():
         rep = json.loads(thr_file.read_text(encoding="utf-8"))
         for r in (rep.get("val_metrics") or {}).get("precision_at_recall", []):
             if r.get("target_recall") == 0.90 and r.get("achievable"):
@@ -303,13 +318,13 @@ def main() -> int:
                  "through the training pipeline", fontsize=10)
     fig.tight_layout(rect=(0, 0, 1, 0.93))
     EDA.mkdir(parents=True, exist_ok=True)
-    out = EDA / "injection_recovery.png"
+    out = EDA / ("injection_recovery.png" if args.split_version == "v1" else "injection_recovery_v2.png")
     fig.savefig(out, dpi=150)
     plt.close(fig)
 
     (OUT_DIR / "summary.json").write_text(json.dumps({
         "generated_at": datetime.now().isoformat(timespec="seconds"),
-        "model_run": args.run.name, "architecture": arch,
+        "model_run": [Path(r).name for r in runs] if args.runs else args.run.name, "architecture": arch,
         "n_stars": int(ok.star.nunique()), "n_injections": int(len(ok)),
         "depths_ppm": DEPTHS_PPM, "recovery_threshold": thr,
         "limb_darkening": {"u1": U1, "u2": U2, "impact_parameter": IMPACT},

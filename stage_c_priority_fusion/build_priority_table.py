@@ -91,10 +91,13 @@ def literature_molecules(names: pd.Series) -> pd.DataFrame:
 
 
 def vetting_scores() -> pd.DataFrame:
-    """Planet-like scores of the TESS light curves from both vetting models (informational)."""
+    """Planet-like scores of the TESS light curves from both vetting models (informational).
+    The v2 ensembles (score_priority_targets.py --with-errors --tag-suffix _v2) are used when present."""
     out = None
     for tag, col in [("TESS", "transit_ML_probability_TESS"), ("KEPLER", "transit_ML_probability_TESS_crossmission")]:
-        f = OUT_DIR / f"priority_target_scores_{tag}.csv"
+        f = OUT_DIR / f"priority_target_scores_{tag}_v2.csv"
+        if not f.is_file():
+            f = OUT_DIR / f"priority_target_scores_{tag}.csv"
         if f.is_file():
             d = pd.read_csv(f)[["pl_name", col]].rename(columns={col: f"vetting_score_{tag.lower()}_model"})
             out = d if out is None else out.merge(d, on="pl_name", how="outer")

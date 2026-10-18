@@ -1,0 +1,114 @@
+{
+  "generated_at": "2026-10-18T18:19:07",
+  "model_run": [
+    "v2_kepler_dual_cnn_lstm_err",
+    "v2_kepler_dual_cnn_lstm_err_s1",
+    "v2_kepler_dual_cnn_lstm_err_s2",
+    "v2_kepler_dual_cnn_lstm_err_s7",
+    "v2_kepler_dual_cnn_lstm_err_s11"
+  ],
+  "architecture": {
+    "dropout": 0.3,
+    "width": 1.0,
+    "batchnorm": true,
+    "arch": "dual_cnn_lstm",
+    "use_errors": true
+  },
+  "n_stars": 50,
+  "n_injections": 400,
+  "depths_ppm": [
+    0,
+    5,
+    10,
+    20,
+    40,
+    80,
+    160,
+    320
+  ],
+  "recovery_threshold": 0.5925728678703308,
+  "limb_darkening": {
+    "u1": 0.4,
+    "u2": 0.25,
+    "impact_parameter": 0.3
+  },
+  "completeness": [
+    {
+      "depth_ppm": 0,
+      "n": 50,
+      "median_score": 0.6763964235782624,
+      "median_excess_over_null": 0.0,
+      "stars_responding": 0,
+      "n_paired": 50,
+      "recovered_fraction": 0.94
+    },
+    {
+      "depth_ppm": 5,
+      "n": 50,
+      "median_score": 0.6815886080265046,
+      "median_excess_over_null": 0.0010191023349762074,
+      "stars_responding": 29,
+      "n_paired": 50,
+      "recovered_fraction": 0.94
+    },
+    {
+      "depth_ppm": 10,
+      "n": 50,
+      "median_score": 0.6857144832611084,
+      "median_excess_over_null": 0.0007538437843322421,
+      "stars_responding": 29,
+      "n_paired": 50,
+      "recovered_fraction": 0.94
+    },
+    {
+      "depth_ppm": 20,
+      "n": 50,
+      "median_score": 0.6891362369060516,
+      "median_excess_over_null": 0.0012092530727386142,
+      "stars_responding": 32,
+      "n_paired": 50,
+      "recovered_fraction": 0.96
+    },
+    {
+      "depth_ppm": 40,
+      "n": 50,
+      "median_score": 0.7095563352108001,
+      "median_excess_over_null": 0.02335888743400577,
+      "stars_responding": 39,
+      "n_paired": 50,
+      "recovered_fraction": 0.96
+    },
+    {
+      "depth_ppm": 80,
+      "n": 50,
+      "median_score": 0.8105138421058655,
+      "median_excess_over_null": 0.09356967806816102,
+      "stars_responding": 43,
+      "n_paired": 50,
+      "recovered_fraction": 0.96
+    },
+    {
+      "depth_ppm": 160,
+      "n": 50,
+      "median_score": 0.9350346446037292,
+      "median_excess_over_null": 0.22952352762222294,
+      "stars_responding": 47,
+      "n_paired": 50,
+      "recovered_fraction": 0.94
+    },
+    {
+      "depth_ppm": 320,
+      "n": 50,
+      "median_score": 0.9864765703678131,
+      "median_excess_over_null": 0.2883531808853149,
+      "stars_responding": 49,
+      "n_paired": 50,
+      "recovered_fraction": 0.98
+    }
+  ],
+  "detection_floor_ppm": 40,
+  "null_median_score": 0.6763964235782624,
+  "null_above_threshold_fraction": 0.94,
+  "caveat": "Bespoke injection test, not the DR25 INJ1 set, so not comparable with published INJ1 completeness. Read the PAIRED excess, not the recovery fraction: the 0 ppm null already scores above the threshold, so raw recovery is nearly all baseline. Injection happens before detrending with the injected ephemeris masked, so the filter treats it exactly as it treats a real transit.",
+  "model_run_note": "5-seed ensemble (mean score); field corrected after the run, the script had recorded the --run default"
+}

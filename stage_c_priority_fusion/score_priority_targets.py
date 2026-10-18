@@ -51,18 +51,20 @@ sys.path.insert(0, str(RESEARCH_DIR))
 
 import preprocessing_pipeline as p  # noqa: E402
 
-TEMPLATE = (RESEARCH_DIR / "exoplanet_research_data" / "05_final_ML_dataset_DO_NOT_USE"
-            / "final_priority_table_TEMPLATE.csv")
+# The planet list lives in Stage C itself. It was once read from the excluded 05_final_ML_dataset_DO_NOT_USE
+# folder, which the project's data rules forbid (fixed 2026-10-18).
+TARGETS = Path(__file__).resolve().parent / "target_list.csv"
 PSCOMP = (RESEARCH_DIR / "exoplanet_research_data" / "01_candidate_catalogs"
           / "pscomppars_confirmed_planets.csv")
-VIEWS_OUT = RESEARCH_DIR / "detection_views" / "stage_c_targets"
+VIEWS_OUT = RESEARCH_DIR / "detection_views" / "stage_c_targets"            # v1 views (no flux-error channel)
+VIEWS_OUT_ERR = RESEARCH_DIR / "detection_views_err" / "stage_c_targets"    # with the error channel (v2 models)
 OUT_DIR = RESEARCH_DIR / "outputs" / "stage_c"
 # The default model run is chosen in main(); see the note there.
 
 
 def build_input_frame() -> pd.DataFrame:
     """One row per priority planet, shaped the way ephemeris_from_row(mission='TESS') expects."""
-    tpl = pd.read_csv(TEMPLATE)
+    tpl = pd.read_csv(TARGETS)
     ps = pd.read_csv(PSCOMP, low_memory=False)
     cols = ["pl_name", "tic_id", "pl_orbper", "pl_tranmid", "pl_trandur",
             "pl_orbpererr1", "pl_tranmiderr1"]
@@ -84,13 +86,14 @@ def build_input_frame() -> pd.DataFrame:
     return sub.reset_index(drop=True)
 
 
-def score(views_dir: Path, run: Path, column: str) -> pd.DataFrame:
+def score(views_dir: Path, run, column: str) -> pd.DataFrame:
+    """run: one run directory, or a list of them (the planet-like probabilities are averaged)."""
     from stage_a_transit_model.cnn_lstm import PLANET_LIKE_IDX, consolidate_views, drop_unusable
     from stage_a_transit_model.failure_analysis import load_run_model, score_views
 
     vs = drop_unusable(consolidate_views(views_dir, verbose=False))
-    model, _ = load_run_model(run)
-    proba = score_views(model, vs)
+    runs = run if isinstance(run, (list, tuple)) else [run]
+    proba = np.mean([score_views(load_run_model(r)[0], vs) for r in runs], axis=0)
     return pd.DataFrame({
         "pl_name": vs.object_id, "tic_id": vs.star_id,
         column: proba[:, PLANET_LIKE_IDX].sum(axis=1),
@@ -106,7 +109,13 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--run", type=Path, default=None,
                     help="model run directory. Default: the TESS-trained model, which is the "
                          "right one for these targets - see --help notes")
+    ap.add_argument("--runs", type=Path, nargs="+", default=None,
+                    help="several run directories (an ensemble); overrides --run")
+    ap.add_argument("--with-errors", action="store_true",
+                    help="build/score views WITH the flux-error channel (detection_views_err/), as the v2 models need")
+    ap.add_argument("--tag-suffix", default="", help="appended to output names, e.g. _v2")
     args = ap.parse_args(argv)
+    views_out = VIEWS_OUT_ERR if args.with_errors else VIEWS_OUT
 
     # The TESS model is the correct choice here and the Kepler one is demonstrably not: on this
     # exact set the Kepler model rejected KELT-9 b, HD 189733 b, WASP-19 b and the other
@@ -115,13 +124,15 @@ def main(argv: list[str] | None = None) -> int:
     # rate, so the TESS model carries no such prior. These are TESS light curves either way.
     run = Path(args.run).resolve() if args.run else (RESEARCH_DIR / "stage_a_transit_model" / "runs"
                                                      / "tess_bn_aug_sched")
+    if args.runs:
+        run = Path(args.runs[0]).resolve()
     same_mission = "tess" in run.name.lower()
     column = ("transit_ML_probability_TESS" if same_mission
               else "transit_ML_probability_TESS_crossmission")
     # Output names carry the model, so a cross-mission run can never overwrite (or be read as) the
     # same-mission one. A single shared file name is how the summary ended up describing the
     # Kepler run while the table used the TESS one.
-    tag = "TESS" if same_mission else "KEPLER"
+    tag = ("TESS" if same_mission else "KEPLER") + args.tag_suffix
     scores_path = OUT_DIR / f"priority_target_scores_{tag}.csv"
     summary_path = OUT_DIR / f"priority_target_scores_summary_{tag}.json"
 
@@ -136,7 +147,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if not args.score_only:
         print(f"\n[2] building views for {len(frame)} targets via the AWS mirror")
-        index = p.build_dataset(frame, VIEWS_OUT, n_workers=args.workers, discard_raw=True,
+        index = p.build_dataset(frame, views_out, n_workers=args.workers, discard_raw=True,
                                 min_free_ram_gb=0.4, progress_every=10, verbose=True,
                                 use_s3=True, isolate_workers=True, stall_timeout_s=600)
         print(f"\n  status: {dict(index.status.value_counts())}")
@@ -147,13 +158,13 @@ def main(argv: list[str] | None = None) -> int:
     else:
         print("\n[2] --score-only: using the views already built")
 
-    if not VIEWS_OUT.is_dir() or not any(VIEWS_OUT.glob("*.npz")):
+    if not views_out.is_dir() or not any(views_out.glob("*.npz")):
         print("\nno views were produced; nothing to score")
         return 1
 
     print(f"\n[3] scoring with {run.name} "
           f"({'TESS-trained, same mission as these light curves' if same_mission else 'CROSS-MISSION'})")
-    scores = score(VIEWS_OUT, run, column)
+    scores = score(views_out, [Path(r).resolve() for r in args.runs] if args.runs else run, column)
     print(f"  scored {len(scores)} of the {len(frame)} attempted targets\n")
     print(f"  {'planet':<18} {'p(planet-like)':>15} {'p(FP)':>7} {'p(CAND)':>8} {'p(CONF)':>8}")
     for _, r in scores.iterrows():
@@ -174,7 +185,7 @@ def main(argv: list[str] | None = None) -> int:
 
     summary_path.write_text(json.dumps({
         "generated_at": datetime.now().isoformat(timespec="seconds"),
-        "model_run": run.name,
+        "model_run": [Path(r).name for r in args.runs] if args.runs else run.name,
         "trained_on": "TESS 2-minute photometry" if same_mission else "Kepler 30-minute photometry",
         "scored_on": "TESS 2-minute photometry" + ("" if same_mission else " (CROSS-MISSION)"),
         "score_column": column,

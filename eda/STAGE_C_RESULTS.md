@@ -150,13 +150,27 @@ The molecule model is no longer an input. Literature detections and non-detectio
 
 ## 5. Vetting scores of the 54 (informational — not in the ranking)
 
-All 54 are confirmed planets, so the vetting models' scores on their TESS light curves are a **sanity check on the vetters**, not evidence about the planets. These findings, from 2026-09-26, still stand:
+All 54 are confirmed planets, so the vetting models' scores on their TESS light curves are a **sanity check on the vetters**, not evidence about the planets. 44 have a complete ephemeris. Of those, 41 produced views; 2 were excluded for an unreliable ephemeris and 1 has no TESS light curve.
 
-- The **Kepler-trained** vetter rejected the canonical hot Jupiters (KELT-9 b 0.06, HD 189733 b 0.12, WASP-19 b 0.17 …). Only 71 % of these confirmed planets scored ≥ 0.5.
-  - The cause is measured in its training data: 93.4 % of Kepler KOIs deeper than 10,000 ppm are false positives (base rate 49.9 %).
-- The **TESS-trained** vetter, whose training data show the opposite (11.5 % against a 17.2 % base rate), scores 93 % of them ≥ 0.5.
-- The two models' biases are opposite across these 41 planets: Spearman with planet radius is −0.570 (Kepler model) vs +0.302 (TESS model).
-- Both columns are kept in the table (`vetting_score_*_model`). Neither feeds the ranking.
+**Updated 2026-10-18 to the final v2 models.**
+- The scorer is `score_priority_targets.py --with-errors --tag-suffix _v2 --runs …`.
+- The views were rebuilt with the flux-error channel in `detection_views_err/stage_c_targets/`.
+- The planet list now comes from `target_list.csv`. The script used to read it from the excluded `DO_NOT_USE` folder; that has been fixed.
+
+| | Kepler-trained ensemble (cross-mission) | TESS-trained ensemble |
+|---|---|---|
+| Model | 5-seed CNN+BiLSTM + error channel | 5-seed dual CNN |
+| Scored ≥ 0.5 | 71 % | 98 % |
+| Median planet-like score | 0.70 | 0.83 |
+| Spearman with planet radius (41 planets) | **−0.37** | **+0.35** |
+| v1 single models, for comparison | 71 %, ρ = −0.57 | 93 %, ρ = +0.30 |
+
+- **The opposite size biases survive the change of model and split.** The Kepler-trained ensemble still rejects the canonical hot Jupiters: HD 189733 b scores 0.09, KELT-9 b 0.23 and WASP-17 b 0.31.
+  - The cause is measured in its training data. In the v2 Kepler training split, 94 % of KOIs deeper than 10,000 ppm are false positives, against a 50 % base rate.
+  - The TESS training split shows the opposite: 12 % against 17 % (`figures/07`).
+- **The Kepler bias is weaker in v2** (ρ −0.37 vs −0.57).
+- **Small planets still score lowest with the TESS ensemble.** The TRAPPIST-1 planets score 0.54–0.58, and LHS 475 b, at 0.46, is the only one below 0.5. These are shallow transits in TESS photometry.
+- Both columns are kept in the table (`vetting_score_*_model`, now read from the `_v2` files). Neither feeds the ranking. Rebuilding the table changed only these two columns.
 
 ---
 
@@ -170,6 +184,13 @@ All 54 are confirmed planets, so the vetting models' scores on their TESS light 
 ## 7. Reproducing
 
 ```bash
+# optional, informational vetting columns (section 5): fetch the 54 TESS light curves and score them
+R=stage_a_transit_model/runs
+python stage_c_priority_fusion/score_priority_targets.py --with-errors --tag-suffix _v2 \
+       --runs $R/v2_tess_dual_cnn $R/v2_tess_dual_cnn_s1 $R/v2_tess_dual_cnn_s2 $R/v2_tess_dual_cnn_s7 $R/v2_tess_dual_cnn_s11
+python stage_c_priority_fusion/score_priority_targets.py --score-only --with-errors --tag-suffix _v2 \
+       --runs $R/v2_kepler_dual_cnn_lstm_err $R/v2_kepler_dual_cnn_lstm_err_s1 $R/v2_kepler_dual_cnn_lstm_err_s2 \
+              $R/v2_kepler_dual_cnn_lstm_err_s7 $R/v2_kepler_dual_cnn_lstm_err_s11
 python stage_c_priority_fusion/build_priority_table.py
 python -m pytest tests/test_target_physics.py
 ```
