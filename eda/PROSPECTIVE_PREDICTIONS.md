@@ -16,6 +16,8 @@ The final v2 ensembles scored every test-split signal once, including the CANDID
 | `stage_a_transit_model/runs/v2_final/kepler_test_predictions.csv` (`3d897473…14b2`) | 285 KOIs | all still CANDIDATE |
 | `stage_a_transit_model/runs/k2_blind/k2_predictions.csv` (`94fd3b1d…f5a1`), Kepler-trained ensemble score, from the single K2 read (2026-10-18 21:13) | 838 K2 candidates | all still CANDIDATE (`k2pandc`) |
 
+**Habitable-zone shortlist (2026-10-18).** `outputs/stage_c/candidate_shortlist.csv` (SHA-256 `1220f820…35782381`) holds the 15 candidates that have P(real) ≥ 0.5 and P(optimistic HZ) ≥ 0.5 under the habitability factor (`stage_c_priority_fusion/candidate_factor.py`). Their eventual dispositions test the joined detection-plus-habitability prediction.
+
 **In total: 1,687 candidates in three missions.** The K2 scores come from a mission the model never trained on, so their eventual resolution tests transfer as well.
 
 ## How it will be scored
