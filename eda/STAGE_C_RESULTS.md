@@ -168,6 +168,12 @@ A2 held, but the discrimination is modest: leave-one-out AUC 0.60 against 0.55.
 | TOI-700 d | 0.51 [0.22, 0.78] | 0.72 |
 | TRAPPIST-1 g / f / e | 0.40 / 0.33 / 0.23 | 0.42 / 0.19 / 0.03 |
 
+**Related work (searched 2026-10-18).**
+- **Ji et al. 2025** (ApJ 992, 198; arXiv:2504.19872) revise the shoreline *theoretically*, from hydrodynamic escape. They find that the initial volatile inventory blurs it into a band, not a line.
+- **Ih et al. 2025** (arXiv:2508.08253, submitted to AAS Journals) *simulate* how a JWST survey could test it. They estimate that roughly 500 hours would give strong evidence (ΔBIC > 5) if it holds.
+- **This work** fits a shoreline model directly to the **observed** JWST outcomes of 20 rocky planets, with uncertain margins, soft labels, a magma-ocean term and leave-one-out validation. We found no earlier fit of this kind. That is a search result, not proof of absence.
+- **The finding fits both papers.** The direction is supported, but the line is soft (β = −1.3 per dex, not a step), as Ji et al. predict. The evidence is still weak in the way Ih et al.'s survey-size estimate implies.
+
 **Conclusion.** The data back the shoreline's direction but not its sharpness. For temperate planets nothing in the data can test it: no temperate rocky planet has a confirmed atmosphere. The registered ranking keeps the fixed shoreline; the fitted one is the sensitivity case (§3b).
 
 ## 3b. Global sensitivity of the ranking (Sobol; added 2026-10-18)
