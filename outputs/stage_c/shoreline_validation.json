@@ -1,21 +1,21 @@
 {
   "primary": {
-    "no_thick_atmosphere_on_dry_side": "13/13",
-    "atmosphere_evidence_on_wet_side": "1/5",
-    "roc_auc_minus_margin_vs_atmosphere": 0.646,
-    "roc_auc_excluding_tentative": 0.538
+    "no_thick_atmosphere_on_dry_side": "14/14",
+    "atmosphere_evidence_on_wet_side": "1/6",
+    "roc_auc_minus_margin_vs_atmosphere": 0.548,
+    "roc_auc_excluding_tentative": 0.321
   },
   "empirical": {
-    "no_thick_atmosphere_on_dry_side": "10/13",
-    "atmosphere_evidence_on_wet_side": "1/5",
-    "roc_auc_minus_margin_vs_atmosphere": 0.646,
-    "roc_auc_excluding_tentative": 0.769
+    "no_thick_atmosphere_on_dry_side": "11/14",
+    "atmosphere_evidence_on_wet_side": "1/6",
+    "roc_auc_minus_margin_vs_atmosphere": 0.536,
+    "roc_auc_excluding_tentative": 0.429
   },
   "bolometric": {
-    "no_thick_atmosphere_on_dry_side": "11/13",
-    "atmosphere_evidence_on_wet_side": "1/5",
-    "roc_auc_minus_margin_vs_atmosphere": 0.538,
-    "roc_auc_excluding_tentative": 0.154
+    "no_thick_atmosphere_on_dry_side": "12/14",
+    "atmosphere_evidence_on_wet_side": "1/6",
+    "roc_auc_minus_margin_vs_atmosphere": 0.452,
+    "roc_auc_excluding_tentative": 0.071
   },
   "solar_system": {
     "correct_primary_7e-4": "7/8",

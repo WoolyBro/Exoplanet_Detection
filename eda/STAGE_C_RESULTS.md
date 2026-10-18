@@ -77,7 +77,7 @@ on the catalogue's upper and lower errors).
 
 ## 2b. Can they keep an atmosphere? The cosmic shoreline (added 2026-10-18)
 
-**Why.** The habitable zone says whether liquid water is *possible* under an atmosphere. It does not say whether the planet can keep one. JWST has now found no thick atmosphere on 13 rocky planets, all around M dwarfs (table below). The best-known explanation is the **cosmic shoreline** (Zahnle & Catling 2017, ApJ 843, 122): bodies with low escape velocity and high cumulative XUV exposure lose their atmospheres.
+**Why.** The habitable zone says whether liquid water is *possible* under an atmosphere. It does not say whether the planet can keep one. JWST (and Spitzer) have now found no thick atmosphere on 14 rocky planets, all around M dwarfs (table below; extended to 20 planets on 2026-10-18). The best-known explanation is the **cosmic shoreline** (Zahnle & Catling 2017, ApJ 843, 122): bodies with low escape velocity and high cumulative XUV exposure lose their atmospheres.
 
 **Definition** (`stage_c_priority_fusion/cosmic_shoreline.py`).
 - **Escape velocity:** v_esc = 11.19 km/s × √(M_p/R_p).
@@ -89,14 +89,27 @@ on the catalogue's upper and lower errors).
 
 | Shoreline definition | JWST/Spitzer "no thick atmosphere" planets on its airless side | Atmosphere-evidence planets on its atmosphere side | Solar System correct |
 |---|---|---|---|
-| **XUV, slope 4 (used)** | **13 / 13** | 1 / 5 | **7 / 8** (Ganymede misses by 0.03–0.2 dex) |
-| empirical, slope 5.89 (arXiv:2508.12865) | 10 / 13 (puts LTT 1445 A b, LHS 1140 c, TOI-1468 b on the wrong side) | 1 / 5 | 7 / 8 (Titan wrong) |
-| bolometric I = 10⁻⁴ v_esc⁴ | 11 / 13 | 1 / 5 | 5 / 8 |
+| **XUV, slope 4 (used)** | **14 / 14** | 1 / 6 | **7 / 8** (Ganymede misses by 0.03–0.2 dex) |
+| empirical, slope 5.89 (arXiv:2508.12865) | 11 / 14 (puts LTT 1445 A b, LHS 1140 c, TOI-1468 b on the wrong side) | 1 / 6 | 7 / 8 (Titan wrong) |
+| bolometric I = 10⁻⁴ v_esc⁴ | 12 / 14 (TRAPPIST-1 c, LTT 1445 A b wrong) | 1 / 6 | 5 / 8 |
+
+**Additions on 2026-10-18** (each checked against the paper itself):
+- **GJ 3473 b** (Hot Rocks Survey V, Holmberg et al. 2026): thick CO₂ excluded, bare rock not settled; entered as tentative.
+- **TOI-561 b** (Teske et al. 2025, ApJL): the first *strong* atmosphere detection on a rocky planet. The dayside is far cooler than bare rock allows.
+- **Better sources** for LTT 1445 A b (Wachiraphan et al. 2025, AJ 169, 311: pure CO₂ disfavoured at 4.2σ at 1 bar) and GJ 3929 b (the four-visit Rocky Worlds result, 2026).
 
 - **The XUV shoreline is contradicted by no bare-rock result.** The four "atmosphere" planets on its airless side are not counter-examples to *retention*:
   - 55 Cnc e's atmosphere is thought to be resupplied by a magma ocean (Hu et al. 2024).
   - L 98-59 b and d and LHS 1478 b are tentative (2.6–3.6σ), and two of them are proposed volcanic atmospheres.
 - **Limit:** almost every observed planet lies on the airless side. The validation tests the shoreline's "airless" predictions far better than its "keeps an atmosphere" predictions. Only LHS 1140 b, with a tentative atmosphere, sits on the atmosphere side.
+- **TOI-561 b breaks the shoreline as a general rule.**
+  - It has a strong atmosphere detection, yet sits 2.4 dex deep on the airless side.
+  - Across all 20 planets, the shoreline margin does not separate atmosphere evidence from its absence: ROC-AUC 0.55, or 0.32 counting only the moderate and strong cases.
+  - Both strong counter-examples, 55 Cnc e and TOI-561 b, are ultra-short-period lava worlds whose magma oceans resupply volatiles (Hu et al. 2024; Teske et al. 2025). Cumulative escape, the shoreline's only physics, does not describe them.
+- **What this means for the ranking.**
+  - The targets ranked here are temperate (T_eq ≈ 200–300 K), with no magma ocean, so that resupply route is closed. The shoreline remains the relevant prior for them.
+  - It is a prior supported only on its airless side: no temperate rocky planet yet has a confirmed atmosphere to test the other side.
+  - This is why `rank_without_retention` is kept in the table, and why the ablation (§3) reports the ranking without it.
 
 **How it enters the score.** It is combined with size: the component is P(R_p < 1.5 R⊕ *and* atmosphere side), and the weights are unchanged. A separate fourth term was tried first and rejected: it put hot Jupiters in the top 15 for trivially keeping their H/He envelopes.
 
