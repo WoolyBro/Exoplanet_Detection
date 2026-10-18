@@ -59,6 +59,15 @@ python tools/dr25_simulated_sample.py                               # DR25 simul
 python tools/build_dr25_simulated_views.py --set INJ1 --workers 4   # about 30 min; also --set INV (about 55 min)
 python stage_a_transit_model/evaluate_dr25_simulated.py             # figures/16
 python tools/prospective_check.py                                   # registered predictions (TESS, Kepler, K2) vs today's dispositions
+python stage_a_transit_model/critique2_analyses.py                  # uncertainty, occlusion, noise intervention (figures/18)
+python stage_a_transit_model/vetter_v3.py --sweep --configs N --jobs 2     # S/N-balanced model N (protocol eda/SNR_BALANCE_PROTOCOL.md)
+python stage_a_transit_model/evaluate_snr_balance.py --dry-run && python stage_a_transit_model/evaluate_snr_balance.py   # figures/19; K2 read guarded
+python tools/build_v3_dataset.py                                    # vetter v3: NTP sample, fresh simulations, diagnostics
+python tools/build_dr25_simulated_views.py --set OBS --sample external_data/kepler_dr25_simulated/v3/ntp_sample.csv --out v3_ntp --workers 8
+python tools/build_dr25_simulated_views.py --set INJ1 --sample external_data/kepler_dr25_simulated/v3/eval_inj1.csv --out v3_eval_inj1   # also INV, INJ2, INJ3
+python stage_a_transit_model/vetter_v3.py --sweep --configs CAB --jobs 5   # 15 runs, about 1 h
+python stage_a_transit_model/evaluate_v3.py --dry-run && python stage_a_transit_model/evaluate_v3.py      # figures/17; read guarded
+python tools/pillar_a_status.py                                     # progress of the v3 builds and training
 ```
 
 The guarded reads refuse to run a second time.
@@ -80,6 +89,8 @@ python stage_b_atmospheres/methane_tls_robustness.py    # contamination-trained 
 python tools/refresh_archive_spectra.py                 # archive refresh (network)
 python stage_b_atmospheres/methane_round3.py            # round 3: planets new to the archive
 python tools/label_crosscheck.py                        # labels vs exoplanet.eu (independent compilation)
+python stage_b_atmospheres/methane_specnet.py           # SpecNet (strength-blind CNN+BiLSTM; failed its protocol)
+python stage_b_atmospheres/co2_extension.py             # CO2 detector on 34 planets (labels hash-checked)
 ```
 
 ## 5. Forecast and retrievals
@@ -93,6 +104,8 @@ prt:  stage_b_atmospheres/retrieval_trappist1e_real.py --workers 4          # re
                                                                             # RETRIEVAL_WL_MIN=3.0, RETRIEVAL_VISITS=1,2 for the variants
 prt:  stage_b_atmospheres/real_retrieval_report.py
 python stage_b_atmospheres/retrieval_report.py
+prt:  TARGET="TRAPPIST-1 f" stage_b_atmospheres/retrieval_real_general.py --workers 3   # about 45 min; then --report
+prt:  TARGET="LHS 1140 b"   stage_b_atmospheres/retrieval_real_general.py --workers 3   # about 55 min; then --report
 ```
 
 ## 6. Stage C — priority ranking
@@ -101,13 +114,16 @@ python stage_b_atmospheres/retrieval_report.py
 python stage_c_priority_fusion/validate_shoreline.py     # cosmic shoreline vs 18 observed rocky planets + Solar System
 python stage_c_priority_fusion/score_priority_targets.py --with-errors --tag-suffix _v2 --runs ...   # optional vetting columns
 python stage_c_priority_fusion/build_priority_table.py
+python stage_c_priority_fusion/retention_model.py        # Bayesian retention fit to 20 rocky planets
+python stage_c_priority_fusion/sensitivity.py            # Sobol indices, robust core
+python stage_c_priority_fusion/candidate_factor.py       # P(real) x score for candidates (TIC via MAST)
 ```
 
 ## 7. Figures and tests (minutes, no network)
 
 ```bash
 python figures/make_figures.py      # figures/01-12 from committed results
-python -m pytest tests -q           # 45 tests
+python -m pytest tests -q           # 58 tests
 ```
 
 ## Where each result is written up
@@ -121,4 +137,10 @@ python -m pytest tests -q           # 45 tests
 | CH₄ classifier, rounds 1–3, contamination, label cross-check | `eda/METHANE_EXTENSION_RESULTS.md` |
 | Gas forecast, contamination regimes, retrievals | `eda/FORECAST_RESULTS.md` |
 | Priority ranking and cosmic shoreline | `eda/STAGE_C_RESULTS.md` |
+| How the vetter decides; S/N-balanced training | `eda/VETTER_MECHANISMS_RESULTS.md`, `eda/SNR_BALANCE_PROTOCOL.md` |
+| Vetter v3 (real false alarms + diagnostics) | `eda/VETTER_V3_PROTOCOL.md`, `eda/VETTER_V3_RESULTS.md` |
+| CO₂ detector on 34 planets | `stage_b_atmospheres/CO2_EXTENSION_PROTOCOL.md`, `eda/CO2_EXTENSION_RESULTS.md` |
+| TRAPPIST-1 f and LHS 1140 b retrievals | `stage_b_atmospheres/RETRIEVAL_HZ_PROTOCOL.md`, `eda/RETRIEVAL_HZ_RESULTS.md` |
+| Fitted retention, Sobol, candidate factor | `stage_c_priority_fusion/HABITABILITY_FACTOR_PROTOCOL.md`, `eda/STAGE_C_RESULTS.md` §2c, 3b, 3c |
+| Every registered expectation and outcome | `eda/PREREGISTRATION_SCOREBOARD.md` |
 | Chronological log of every run, bug and correction | `run_log.txt` |

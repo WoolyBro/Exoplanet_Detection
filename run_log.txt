@@ -3770,3 +3770,10 @@ DR25 SIMULATED BENCHMARK (protocol 6c92294, evaluator b46206e): 1,000 INJ1 + 1,0
   (-0.019 [-0.028, -0.009]). D1 D2 D4 held; D3 failed (0.952 just above the [0.80, 0.95] range).
   -> a strong planet keeper that transfers across missions, not a false-alarm filter (trained on KOIs, no NTP class).
   Prospective register now 564 TESS + 285 Kepler + 838 K2 candidates (K2 hash 94fd3b1d...). Tests: 50 pass.
+
+2026-10-19  CRITIQUE FIXES COMPLETE (pillars A, B; all pre-registered, one read each):
+  Vetter v3 (ae91f4e): C matches ExoMiner 0.9961 vs 0.9963; fresh INV rejected 0.991; NTP test 0.999; centroid-only 0.80;
+    INJ2/INJ3 0.20/0.23 vs Robovetter 0.53/0.63. H1 H4 H5 H6 H7 H8b held; H2 H3 H8a failed.
+  S/N balance (47a6930): gap 0.22 -> 0.08; N2, N4 failed (K2 0.863 -> 0.834). SpecNet: S1-S4 failed.
+  CO2 on 34 planets (4893248, labels fb66170): GBM 0.982, CNN 0.996, strong half 0.94/0.98 vs 0.67; K1-K4 held.
+  TRAPPIST-1 f lnB -0.70, LHS 1140 b -0.90: no atmosphere credited. Scoreboard: 47 expectations, 33 held, 14 failed.

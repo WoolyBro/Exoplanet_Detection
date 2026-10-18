@@ -73,6 +73,16 @@ with the model chosen on validation by a pre-registered rule and the test set re
 | **K2, a mission neither model saw** (pre-registered, read once) | **0.863** [0.840, 0.884]; confirmed vs FP 0.954 | 0.843 [0.816, 0.871] |
 | **Kepler DR25 simulated data** (stars never seen; vs Robovetter on the same signals) | injected planets kept **0.935** vs 0.869; systematics false alarms rejected **0.760** vs 0.992 | — |
 
+**Added 2026-10-18/19, each pre-registered and read once** (all outcomes in [`eda/PREREGISTRATION_SCOREBOARD.md`](eda/PREREGISTRATION_SCOREBOARD.md): 47 expectations, 33 held, 14 failed):
+
+| Result | Number | Write-up |
+|---|---|---|
+| **Vetter v3** (Kepler; + real false alarms + 27 pipeline measurements) | equal to ExoMiner on the Kepler test (0.9961 vs 0.9963); fresh false alarms rejected 0.991 (v2 0.704); neighbouring-star FPs caught 0.80 (v2 0.49); faint off-target/EB simulations still lag the Robovetter | [`eda/VETTER_V3_RESULTS.md`](eda/VETTER_V3_RESULTS.md) |
+| **How the vetter decides** | seed spread flags errors (abstain on half: error 16.8 % → 5.1 %); the survey prior is causal through S/N; S/N-balanced training removes two-thirds of it, at a K2 cost | [`eda/VETTER_MECHANISMS_RESULTS.md`](eda/VETTER_MECHANISMS_RESULTS.md) |
+| **CO₂ detector on 34 real JWST planets** | 1-D CNN 0.996, GBM 0.982; strong-feature half 0.98 / 0.94 vs gas-blind control 0.67; masking the 4.3 µm band removes the skill | [`eda/CO2_EXTENSION_RESULTS.md`](eda/CO2_EXTENSION_RESULTS.md) |
+| **Habitable-zone retrievals** | TRAPPIST-1 f ln B = −0.70, LHS 1140 b −0.90: no atmosphere credited; H₂ envelopes disfavoured | [`eda/RETRIEVAL_HZ_RESULTS.md`](eda/RETRIEVAL_HZ_RESULTS.md) |
+| **Fitted habitability factor** | retention fitted to 20 rocky planets (P(β < 0) = 0.99); Sobol robust core of 7; 15 vetted HZ candidates | [`eda/STAGE_C_RESULTS.md`](eda/STAGE_C_RESULTS.md) §2c–3c |
+
 The earlier numbers (Kepler 0.9158, TESS 0.7843) came from split v1. That split leaked: 301 of
 1,406 Kepler test KOIs had a signal twin in another split. They are kept in
 `eda/STAGE_A_LEVEL2_RESULTS.md` as history.
