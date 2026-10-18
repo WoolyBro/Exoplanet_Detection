@@ -18,7 +18,7 @@
 - **Contributions** (numbered, one per act, plus the method):
   1. Signal-twin leakage in star-grouped splits.
   2. A pre-registered evaluation of a CNN–BiLSTM vetter: external K2 and DR25 tests, a diagnosed blind spot and its fix (v3).
-  3. A simulation-trained CH₄ detector validated on 40 real JWST planets. A strength-blind CNN–BiLSTM version failed its pre-registered tests and is reported as such.
+  3. Simulation-trained CH₄ (40 planets) and CO₂ (34 planets) detectors validated on real JWST spectra against a gas-blind confound. The CO₂ 1-D CNN scores 0.996, with band occlusion showing gas specificity. A strength-blind CNN–BiLSTM for CH₄ failed and is reported.
   4. Contamination-aware verdicts on three habitable-zone planets (TRAPPIST-1 e and f, LHS 1140 b): none has a credited atmosphere, and an H₂ envelope is disfavoured for all three.
   5. A fitted habitability factor that is robust to its assumptions.
 - **The method itself:** pre-registration and single reads, with a scoreboard of all registered expectations (§7).
@@ -55,7 +55,8 @@
 2. **Simulation-trained detectors validated on real data.**
    - The GBM, plus **SpecNet**, the strength-blind CNN–BiLSTM, which failed S1–S4 (critique 4): hiding feature strength also hides band significance.
    - 40 labelled planets; the confound test; the stress set; the exoplanet.eu label cross-check.
-   - **Fig. 6:** methane_specnet + methane_tls_robustness.
+   - **CO₂ (Pillar B):** 1-D CNN 0.996 and GBM 0.982 on 34 planets; the confound test is passed; masking the 4.3 µm band removes the GBM's skill.
+   - **Fig. 6:** co2_extension + methane_tls_robustness (methane_specnet in an appendix).
 3. **Stellar contamination is the limiting systematic.**
    - TRAPPIST-1 e: the atmosphere "signal" lives in visits 3–4.
    - Calibrated on 8 visits: significant in 4.
@@ -91,6 +92,7 @@ Every registered expectation, its registration commit and its outcome:
 - vetter v3 (H1–H8);
 - S/N balance (N1–N5);
 - SpecNet (S1–S5);
+- CO₂ (K1–K4);
 - retrievals (R1–R4);
 - habitability (A1–A4, B1–B2, C1);
 - methane rounds 1–3.

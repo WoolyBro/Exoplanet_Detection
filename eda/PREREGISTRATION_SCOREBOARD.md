@@ -90,6 +90,15 @@ Every expectation this project registered **before** seeing the result, with its
 |---|---|---|
 | R3-1 | Each labelled planet falls on the correct side of the v3 class separation (0.08–0.17) | **held**: HATS-6 b 0.982 (CH₄), TRAPPIST-1 f 0.032 (none), HAT-P-12 b 0.017 (none) |
 
+### CO₂ detector on 34 real JWST planets (`CO2_EXTENSION_PROTOCOL.md`, commit `4893248`; labels hash-frozen in commit `fb66170`; result `outputs/stage_b_co2/co2_results.json`)
+
+| ID | Expectation | Outcome |
+|---|---|---|
+| K1 | GBM ROC-AUC ≥ 0.85, p < 0.01 | **held**: 0.982 [0.932, 1.00] |
+| K2 | Strong-feature half: GBM ≥ 0.80 and ≥ control + 0.10 | **held**: 0.942 vs 0.673 (CNN 0.981) |
+| K3 | Masking 4.20–4.45 µm lowers CO₂ planets' scores more (p < 0.05) | **held**: median drop 0.87 vs −0.005, p = 3 × 10⁻⁶ |
+| K4 | CNN ROC-AUC ≥ 0.80 | **held**: 0.996 |
+
 ### SpecNet, the strength-blind CNN–BiLSTM (`METHANE_SPECNET_PROTOCOL.md`, commit `3f5b744`; result `outputs/stage_b_methane_ext/specnet.json`)
 
 | ID | Expectation | Outcome |
