@@ -112,7 +112,7 @@ def make_figure(v: pd.DataFrame, ss: pd.DataFrame):
         d = vv[vv.status == status]
         ax.scatter(d.v_esc_kms, d.cumulative_xuv_earth, color=c, marker=m, s=60, edgecolor="k", linewidth=0.4, zorder=4,
                    label={"no_thick_atmosphere": "JWST/Spitzer: no thick atmosphere",
-                          "atmosphere_evidence": "atmosphere evidence (55 Cnc e moderate; others tentative)"}[status])
+                          "atmosphere_evidence": "atmosphere evidence (strength in the key)"}[status])
     for i, r in vv.iterrows():
         ax.annotate(str(i + 1), (r.v_esc_kms, r.cumulative_xuv_earth), fontsize=5.5, ha="center", va="center",
                     color="white", fontweight="bold", zorder=6)

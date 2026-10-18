@@ -7,8 +7,8 @@ GJ 486 b,no_thick_atmosphere,strong,JWST MIRI eclipse,Mansfield et al. 2024 (ApJ
 GJ 367 b,no_thick_atmosphere,strong,JWST MIRI phase curve,Zhang et al. 2024 (ApJL 961 L44; arXiv:2401.01400),1 bar ruled out for many compositions
 TOI-1468 b,no_thick_atmosphere,moderate,JWST MIRI eclipse,Hot Rocks Survey II (A&A 2025),consistent with zero-albedo bare rock
 LHS 1140 c,no_thick_atmosphere,moderate,JWST MIRI eclipse,as summarised in arXiv:2508.08253,consistent with bare rock
-LTT 1445 A b,no_thick_atmosphere,moderate,JWST MIRI LRS eclipse,as summarised in Hot Rocks / review sources (2025),consistent with bare rock
-GJ 3929 b,no_thick_atmosphere,strong,JWST MIRI 15 um eclipses (Rocky Worlds DDT),arXiv:2508.12516 (ApJL 2025),CO2-rich > 100 mbar ruled out at > 3 sigma
+LTT 1445 A b,no_thick_atmosphere,moderate,JWST MIRI LRS eclipse,Wachiraphan et al. 2025 (AJ 169 311; arXiv:2410.10987),dayside 525 K; pure CO2 at 1/10/100 bar disfavoured at 4.2/6.6/6.8 sigma; dark bare rock consistent; thin atmosphere possible
+GJ 3929 b,no_thick_atmosphere,strong,JWST MIRI 15 um eclipses (Rocky Worlds DDT),arXiv:2508.12516 (ApJL 2025); four visits: arXiv:2606.07511 (ApJL 2026),"four-visit eclipse 118 +- 22 ppm, 641 K; CO2 > 1 % ruled out at > 3 sigma; bare rock likely"
 LTT 3780 b,no_thick_atmosphere,moderate,JWST MIRI eclipse,Hot Rocks Survey IV (arXiv:2508.14210),consistent with bare rock
 TOI-1685 b,no_thick_atmosphere,moderate,JWST NIRSpec phase curve + transits,Luque et al. 2025; Fisher et al. 2025 (MNRAS 545),dark bare rock; flat transmission
 GJ 1252 b,no_thick_atmosphere,moderate,Spitzer eclipse,Crossfield et al. 2022 (ApJL),no thick atmosphere
@@ -17,3 +17,5 @@ LHS 1478 b,atmosphere_evidence,tentative,JWST MIRI eclipse,Hot Rocks Survey I (a
 L 98-59 b,atmosphere_evidence,tentative,JWST NIRSpec transmission,Bello-Arufe et al. 2025 (ApJL; arXiv:2501.18680),SO2 preferred at 3.6 sigma over flat
 L 98-59 d,atmosphere_evidence,tentative,JWST NIRSpec transmission,Gressier et al. 2024 (ApJL 975 L10),2.6-5.6 sigma departure from flat; possible sulfur species
 LHS 1140 b,atmosphere_evidence,tentative,JWST NIRISS + NIRSpec transmission,Cadieux et al. 2024 (ApJL); Damiano et al. 2024 (ApJL 968 L22),N2-dominated favoured; 2.3 sigma Rayleigh hint
+GJ 3473 b,no_thick_atmosphere,tentative,JWST MIRI 15 um eclipses (4 visits),Hot Rocks Survey V: Holmberg et al. 2026 (AJ; arXiv:2604.02332),eclipse 186 +- 45 ppm; thick CO2 excluded (95 % upper limit 1.2-6.5 bar); bare rock and thin atmosphere both consistent
+TOI-561 b,atmosphere_evidence,strong,JWST NIRSpec 3-5 um eclipses,Teske et al. 2025 (ApJL; arXiv:2509.17231),"dayside far cooler than bare rock, inconsistent with bare rock at high significance; thick volatile envelope on an ultra-short-period (0.44 d) super-Earth of a ~10 Gyr thick-disk star; magma-ocean reservoir"
