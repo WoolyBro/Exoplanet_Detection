@@ -3738,3 +3738,22 @@ Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 
      TRAPPIST-1: ~10 % penalty (photon-limited); bright deep-transit host LHS 1140 b worst (x1.7-4.2).
   Old forecast columns moved by <= 1.5 % in signal: Stage C T_eq medians shifted at the shoreline rebuild (not a bug).
   Tests: 45 pass (3 new: GLS = projection at A=0, GLS = explicit inverse, joint split gain only via shared terms).
+
+2026-10-18  MORE DATA (user: single paper, no second human labeller).
+  K2 BLIND TEST registered (commit fbc60d8) before any K2 view existed: eda/K2_BLIND_TEST_PROTOCOL.md, 7 expectations,
+    frozen v2 ensembles + Platt maps + thresholds. Pipeline gains K2 (test only): EVEREST light curves (K2SFF robustness),
+    errors FRAW_ERR/FRAW; ephemerides tools/k2_ephemerides.py (k2pandc snapshot; 296 gaps filled from other parameter sets;
+    154 durations estimated, estimator median ratio 0.999 vs 1,478 catalogue durations). 1,755 complete rows
+    (571 CONF / 241 FP / 943 CAND). EVEREST scatter/error 1.17 (Kepler PDCSAP 1.09); K2SFF 1.48.
+    187 K2 rows on TESS train/val stars -> excluded from TESS-model analyses. evaluate_k2.py committed before the read
+    (dry run on Kepler val reproduces 0.932 / TESS-model 0.886).
+  CH4 LABELS vs exoplanet.eu species (EPN-TAP, independent compilation): 36/43 agree, kappa 0.53 (0.66 on listed);
+    all 7 disagreements = pre-JWST claims JWST contradicted (HD 189733 b, HD 209458 b) or 2024-26 JWST detections the
+    compilation lacks (TOI-270 d, TOI-5205 b, LP 791-18 c, LTT 3780 c, HATS-6 b). tools/label_crosscheck.py.
+  PROSPECTIVE register: 564 TESS + 285 Kepler test candidates (hash-checked, commit ccd2eed); today 1 resolved (TOI 6287.01
+    FP, scored 0.44 < 0.48 threshold). tools/prospective_check.py.
+  SHORELINE test extended to 20 rocky planets: + GJ 3473 b (no thick CO2, tentative), + TOI-561 b (STRONG atmosphere,
+    Teske+ 2025). Airless side 14/14; atmosphere side 1/6; margin AUC 0.65 -> 0.55. Both strong counter-examples are
+    magma-ocean lava worlds -> shoreline = prior supported only on its airless side (STAGE_C_RESULTS 2b).
+  Repro: REPRODUCE.md (full ordered run sheet), environment-prt.yml + osx-arm64 lock, MODEL_CARD.md (draft).
+  Cleanup: 40 old stdout/stderr build logs and empty folders removed from the project root.
