@@ -6,7 +6,13 @@ Every expectation this project registered **before** seeing the result, with its
 - **Commit:** the protocol was committed to git before the build, training or read it governs. The hash is that commit.
 - **Hash file:** the labels were frozen by SHA-256, with a timestamp, before scoring. The protocol entered git together with the results, so the evidence for the order is the local hash file, not git. This applies to methane rounds 1–2, which predate the rule of committing protocols first.
 
-**Totals:** TOTALS_PLACEHOLDER
+**Totals: 47 directional expectations, 33 held (70 %) and 14 failed.**
+- **Also registered:**
+  - 2 model-selection rules (V-K, V-T);
+  - 1 test failure criterion (F, not met);
+  - 3 CH₄ failure criteria (M1–M3; none met for the GBM, M2 met for the v1 CNN);
+  - 2 decision rules (SpecNet, R1), both applied.
+- **The 70 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
 
 ---
 
@@ -137,4 +143,17 @@ Every expectation this project registered **before** seeing the result, with its
 
 ## What the failures say
 
-FAILURES_PLACEHOLDER
+| Failed | What it taught |
+|---|---|
+| E4 (TESS half) | The TESS-trained model also under-scores deep K2 planets slightly; the survey prior is not unique to Kepler |
+| E6 | K2SFF beat EVEREST; the reasoning about understated errors misleading the error channel was wrong |
+| D3 | The vetter ranked DR25 simulations better than expected (0.952); its weakness is the operating point, not the ranking |
+| M4 | Platt calibration on 28 planets adds more variance than it removes |
+| N2, N4 | The survey prior carried real base-rate information; removing it is a trade-off, not a fix |
+| H2 | v3's completeness fell to the Robovetter's operating point (an operating-point effect; as a ranker it is better) |
+| H3 | Faint off-target transits are outside the KOI false positives' distribution; rule-based thresholds still win there |
+| H8a | The pipeline diagnostics, not the NTP examples, drive the false-alarm gain |
+| S1–S4 | Hiding feature strength from a CNN also hides band significance; the confound must be controlled by evaluation |
+| B1 | The observability weight, not the HZ weight, shapes the full ranking most; HZ decides the top group |
+
+**The failures do not concentrate in one place.** Each was reported where it occurred, and five of them (E6, H8a, N2/N4, S1–S4, B1) changed a claim in the text.
