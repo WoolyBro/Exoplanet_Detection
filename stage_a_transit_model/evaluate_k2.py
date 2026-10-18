@@ -125,6 +125,18 @@ def analyse(vs, meta: pd.DataFrame, scores: dict, per_seed: dict, probs: dict) -
     return res
 
 
+def robustness(vs, meta: pd.DataFrame, s1: np.ndarray, vs2) -> dict:
+    """Paired EVEREST - K2SFF ROC-AUC for the Kepler ensemble, on primary rows present in both builds."""
+    s2 = ev.ensemble_proba(MODELS["kepler"], vs2)[0][:, PLANET_LIKE_IDX].sum(1)
+    common = sorted(set(vs.object_id) & set(vs2.object_id))
+    i1 = pd.Series(np.arange(len(vs.object_id)), index=vs.object_id)[common].to_numpy()
+    i2 = pd.Series(np.arange(len(vs2.object_id)), index=vs2.object_id)[common].to_numpy()
+    prim = meta.duration_source.isin(["catalogue", "other set"]).to_numpy()[i1]
+    y = np.isin(vs.label_index.astype(int)[i1], PLANET_LIKE_IDX).astype(int)[prim]
+    return {"n_common_primary": int(prim.sum()),
+            **ev.paired_auc_diff(y, s1[i1][prim], s2[i2][prim], vs.star_id[i1][prim])}
+
+
 def yields(views_dir: Path) -> dict:
     """Signals surviving each stage, by class (protocol section 5: a class-dependent yield biases every metric)."""
     e = pd.read_csv(EPH)
@@ -135,7 +147,7 @@ def yields(views_dir: Path) -> dict:
            "complete_ephemeris": e[e.ephemeris_complete].label_harmonized.value_counts().to_dict(),
            "view_built": idx[idx.status == "ok"].label.value_counts().to_dict(),
            "excluded_unreliable_ephemeris": idx[idx.status == "excluded"].label.value_counts().to_dict(),
-           "failed": idx[idx.status == "failed"].groupby(["category", "label"]).size().unstack(fill_value=0).to_dict()}
+           "failed": {f"{c} | {l}": int(n) for (c, l), n in idx[idx.status == "failed"].groupby(["category", "label"]).size().items()}}
     tot = out["complete_ephemeris"]
     out["fraction_of_complete_built"] = {k: round(out["view_built"].get(k, 0) / v, 3) for k, v in tot.items()}
     return out
@@ -163,7 +175,11 @@ def verdicts(res: dict, robust: dict | None) -> dict:
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--figure-only", action="store_true", help="redraw figures/15 from the saved read; scores nothing")
     a = ap.parse_args(argv)
+    if a.figure_only:
+        make_figure(json.loads((OUT / "k2_eval.json").read_text()), OUT)
+        return 0
     check_frozen()
     out = OUT / "dry_run" if a.dry_run else OUT
     if not a.dry_run and GUARD.is_file():
@@ -171,9 +187,8 @@ def main(argv=None) -> int:
     out.mkdir(parents=True, exist_ok=True)
     src = {"EVEREST": R / "detection_views_v2" / "kepler_val"} if a.dry_run else VIEWS
     vs, meta = load(src["EVEREST"], a.dry_run)
-    if not a.dry_run:
-        GUARD.write_text(json.dumps({"reads": 1, "at": datetime.now().isoformat(timespec="seconds"),
-                                     "protocol_commit": "fbc60d8"}))
+    # The guard is written together with the results, before anything is printed: a crash before that
+    # point means nobody has seen a K2 number, so the read has not happened yet.
     probs, per_seed, scores = {}, {}, {}
     for m, runs in MODELS.items():
         p, per = ev.ensemble_proba(runs, vs)
@@ -182,16 +197,10 @@ def main(argv=None) -> int:
     res = {"generated_at": datetime.now().isoformat(timespec="seconds"), "dry_run": a.dry_run,
            "light_curves": "EVEREST", **analyse(vs, meta, scores, per_seed, probs)}
     robust = None
-    if not a.dry_run and VIEWS["K2SFF"].is_dir() and any(VIEWS["K2SFF"].glob("*.npz")):
-        vs2, meta2 = load(VIEWS["K2SFF"], False)
-        s2 = ev.ensemble_proba(MODELS["kepler"], vs2)[0][:, PLANET_LIKE_IDX].sum(1)
-        common = sorted(set(vs.object_id) & set(vs2.object_id))
-        i1 = pd.Series(np.arange(len(vs.object_id)), index=vs.object_id)[common].to_numpy()
-        i2 = pd.Series(np.arange(len(vs2.object_id)), index=vs2.object_id)[common].to_numpy()
-        prim = meta.duration_source.isin(["catalogue", "other set"]).to_numpy()[i1]
-        y = np.isin(vs.label_index.astype(int)[i1], PLANET_LIKE_IDX).astype(int)[prim]
-        robust = {"n_common_primary": int(prim.sum()),
-                  **ev.paired_auc_diff(y, scores["kepler"][i1][prim], s2[i2][prim], vs.star_id[i1][prim])}
+    second = (R / "detection_views_v2" / "kepler_val") if a.dry_run else VIEWS["K2SFF"]
+    if second.is_dir() and any(second.glob("*.npz")):
+        vs2, _ = load(second, a.dry_run)
+        robust = robustness(vs, meta, scores["kepler"], vs2)
         res["robustness_everest_minus_k2sff"] = robust
     if not a.dry_run:
         res["yields"] = yields(VIEWS["EVEREST"])
@@ -201,6 +210,9 @@ def main(argv=None) -> int:
                   "calibrated_kepler": cal_apply(FROZEN["kepler"]["platt"], scores["kepler"]),
                   **meta.drop(columns=["object_id"]).to_dict("list")}).to_csv(out / "k2_predictions.csv", index=False)
     (out / "k2_eval.json").write_text(json.dumps(res, indent=2, default=lambda x: x.tolist() if hasattr(x, "tolist") else str(x)))
+    if not a.dry_run:
+        GUARD.write_text(json.dumps({"reads": 1, "at": datetime.now().isoformat(timespec="seconds"),
+                                     "protocol_commit": "fbc60d8"}))
     print(json.dumps({k: res[k] for k in ["n_views", "labels_all_views", "expectations"]}, indent=2))
     for k in ["primary_kepler", "primary_tess"]:
         r = res[k]
