@@ -122,3 +122,6 @@ outputs/retrieval_e_wl3.log
 outputs/retrieval_e_v12.log
 
 # downloaded third-party tables are small and cited; keep
+
+# DR25 Robovetter input tables (180 MB; re-downloaded by tools/build_v3_dataset.py --fetch)
+external_data/kepler_dr25_simulated/robovetter_inputs/
