@@ -25,6 +25,7 @@ One row per claim the paper can make, with its number, its figure and the file t
    - **Vetter v3**, which adds real false alarms and Robovetter measurements: it matches ExoMiner on the Kepler test (0.9961 vs 0.9963), rejects 99.1 % of fresh false alarms and 99.9 % of real ones, and catches 80 % of neighbouring-star FPs (was 49 %). It stays below the Robovetter on subtle simulated off-target and EB signals (0.20 / 0.23 vs 0.53 / 0.63). 6 of 9 registered expectations held.
 5. **A simulation-trained CH₄ detector** that ranks all 40 labelled real JWST planets correctly. It is robust to stellar contamination (false-CH₄ rate 4.1 % → 1.0 %).
    - A strength-blind CNN + BiLSTM (SpecNet) **failed** its pre-registered tests (0.78 on all 40 planets). The GBM stays the detector.
+   - **CO₂, pre-registered on 34 planets:** 1-D CNN 0.996, GBM 0.982. Both pass the confound test (strong-feature half 0.98 / 0.94 vs control 0.67). Masking the 4.3 µm band removes the signal, so the skill is gas-specific.
 6. **Three habitable-zone planets, one contamination-aware method, one answer:**
    - **TRAPPIST-1 e:** the apparent atmosphere comes from contaminated visits.
    - **TRAPPIST-1 f:** ln B = −0.70.
@@ -76,7 +77,8 @@ One row per claim the paper can make, with its number, its figure and the file t
 | Simulation-trained CH₄ detector | v1 0.97 on 29 new planets (p = 0.0003); the confound control (gas-blind) scores 0.70 | `eda/METHANE_EXTENSION_RESULTS.md` §7 |
 | Robust to contamination (v3) | stress-set false-CH₄ 4.1 % → 1.0 %; all 40 labelled planets ranked correctly (10 with CH₄) | same, §9–10 |
 | Labels cross-checked | 36/43 agree with exoplanet.eu (κ 0.53); all 7 disagreements explained | same, §11 |
-| H₂O / CO₂ / CO | no skill beyond the gas-blind control | `eda/STAGE_B_LEVEL3_RESULTS.md` |
+| H₂O / CO | no skill beyond the gas-blind control | `eda/STAGE_B_LEVEL3_RESULTS.md` |
+| CO₂ detector (registered, 34 new-label planets) | GBM 0.982, 1-D CNN 0.996 (control 0.925); strong-feature half GBM 0.94 / CNN 0.98 vs control 0.67; masking the 4.3 µm band: drop 0.87 vs 0.00 (p = 3e-6); K1–K4 held | `eda/CO2_EXTENSION_RESULTS.md` |
 | SpecNet (registered) | strength-blind CNN+BiLSTM: 0.80 (29 new), 0.78 (all 40), stress false rate 4.5 %; S1–S4 failed, S5 held | `eda/METHANE_EXTENSION_RESULTS.md` §12 |
 | TRAPPIST-1 f (registered) | ln B(N₂ vs bare) −0.70; H₂ −3.1 vs bare; CH₄ < 10^−3.4; R4 held | `eda/RETRIEVAL_HZ_RESULTS.md` §1 |
 | LHS 1140 b (registered) | ln B(N₂ vs bare) −0.90; N₂ vs H₂ +1.9; CO₂ < 0.2 %; R2, R3 held; NIRISS χ²/N 1.7 | same, §2 |

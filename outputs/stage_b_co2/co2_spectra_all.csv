@@ -1,0 +1,190 @@
+planet,file,instrument,scored,reason
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_4988_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_4988_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5078_1.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_4988_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_4988_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5077_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5040_1.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5285_1.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5285_2.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5285_3.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,fewer than 3 grid bins in 4.20-4.45 um
+LHS 475 b,LHS_475_b_Transmission_LHS_475_b_3.13814_5239_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_5.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5292_6.tbl,Near Infrared Spectrograph (NIRSpec),True,
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5330_1.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,fewer than 3 grid bins in 4.20-4.45 um
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5330_2.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5352_1.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,no data on the 1-5 um grid
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5352_2.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,no data on the 1-5 um grid
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5352_3.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,no data on the 1-5 um grid
+HD 209458 b,HD_209458_b_Transmission_HD_209458_b_3.11218_5413_50.tbl,Near Infrared Camera (NIRCam),True,
+HD 209458 b,HD_209458_b_Transmission_HD_209458_b_3.11218_5413_51.tbl,Near Infrared Camera (NIRCam),True,
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5452_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_1.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,no data on the 1-5 um grid
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_2.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_3.tbl,Near Infrared Camera (NIRCam),True,
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_6.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_7.tbl,Near Infrared Camera (NIRCam),True,
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_8.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5453_9.tbl,Near Infrared Camera (NIRCam),True,
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-836 b,TOI-836_b_Transmission_TOI_836_b_3.13742_5454_5.tbl,Near Infrared Spectrograph (NIRSpec),True,
+HD 189733 b,HD_189733_b_Transmission_HD_189733_b_3.11185_5430_1.tbl,Near Infrared Camera (NIRCam),True,
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5502_2.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5502_1.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5502_3.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,no data on the 1-5 um grid
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5502_4.tbl,Near Infrared Spectrograph (NIRSpec),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5502_5.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5502_6.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-836 c,TOI-836_c_Transmission_TOI_836_c_3.13741_5501_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-836 c,TOI-836_c_Transmission_TOI_836_c_3.13741_5501_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-836 c,TOI-836_c_Transmission_TOI_836_c_3.13741_5501_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+HIP 67522 b,HIP_67522_b_Transmission_HIP_67522_b_3.12561_5512_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+HIP 67522 b,HIP_67522_b_Transmission_HIP_67522_b_3.12561_5512_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+HIP 67522 b,HIP_67522_b_Transmission_HIP_67522_b_3.12561_5512_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 3470 b,GJ_3470_b_Transmission_GJ_3470_b_3.11524_5498_1.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+GJ 3470 b,GJ_3470_b_Transmission_GJ_3470_b_3.11524_5498_2.tbl,Near Infrared Camera (NIRCam),True,
+GJ 3470 b,GJ_3470_b_Transmission_GJ_3470_b_3.11524_5498_4.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-39 b,WASP-39_b_Transmission_WASP_39_b_3.11466_5087_1.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+HD 189733 b,HD_189733_b_Transmission_HD_189733_b_3.11185_5532_1.tbl,Near Infrared Camera (NIRCam),True,
+WASP-107 b,WASP-107_b_Transmission_WASP_107_b_3.12045_5534_1.tbl,Near Infrared Camera (NIRCam),False,fewer than 3 grid bins in 4.20-4.45 um
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5554_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5554_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5554_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5554_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5554_5.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,fewer than 3 grid bins in 4.20-4.45 um
+L 168-9 b,L_168-9_b_Transmission_L_168_9_b_3.12495_5554_6.tbl,Mid-Infrared Instrument (MIRI) - LRS,False,fewer than 3 grid bins in 4.20-4.45 um
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+L 98-59 c,L_98-59_c_Transmission_L_98_59_c_3.12373_5503_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 b,TOI-776_b_Transmission_TOI_776_b_3.12641_5649_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 b,TOI-776_b_Transmission_TOI_776_b_3.12641_5649_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 b,TOI-776_b_Transmission_TOI_776_b_3.12641_5649_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 b,TOI-776_b_Transmission_TOI_776_b_3.12641_5649_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 c,TOI-776_c_Transmission_TOI_776_c_3.12642_5648_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 c,TOI-776_c_Transmission_TOI_776_c_3.12642_5648_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 c,TOI-776_c_Transmission_TOI_776_c_3.12642_5648_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 c,TOI-776_c_Transmission_TOI_776_c_3.12642_5648_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 c,TOI-776_c_Transmission_TOI_776_c_3.12642_5648_5.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-776 c,TOI-776_c_Transmission_TOI_776_c_3.12642_5648_6.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TrES-4 b,TrES-4_b_Transmission_TrES_4_b_3.11432_5676_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TrES-4 b,TrES-4_b_Transmission_TrES_4_b_3.11432_5676_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-15 b,WASP-15_b_Transmission_WASP_15_b_3.11444_5675_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-15 b,WASP-15_b_Transmission_WASP_15_b_3.11444_5675_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-15 b,WASP-15_b_Transmission_WASP_15_b_3.11444_5675_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-15 b,WASP-15_b_Transmission_WASP_15_b_3.11444_5675_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 357 b,GJ_357_b_Transmission_GJ_357_b_3.12407_5682_1.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-121 b,WASP-121_b_Transmission_WASP_121_b_3.11900_5699_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-121 b,WASP-121_b_Transmission_WASP_121_b_3.11900_5699_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-121 b,WASP-121_b_Transmission_WASP_121_b_3.11900_5699_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-121 b,WASP-121_b_Transmission_WASP_121_b_3.11900_5699_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_12.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_11.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_10.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_9.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_8.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_7.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_6.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_5.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_4.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_3.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_2.tbl,Near Infrared Camera (NIRCam),True,
+GJ 341 b,GJ_341_b_Transmission_GJ_341_b_3.19698_5705_1.tbl,Near Infrared Camera (NIRCam),True,
+WASP-94 A b,WASP-94_A_b_Transmission_WASP_94_A_b_3.11708_5700_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-94 A b,WASP-94_A_b_Transmission_WASP_94_A_b_3.11708_5700_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-94 A b,WASP-94_A_b_Transmission_WASP_94_A_b_3.11708_5700_3.tbl,Near Infrared Spectrograph (NIRSpec),True,
+WASP-94 A b,WASP-94_A_b_Transmission_WASP_94_A_b_3.11708_5700_4.tbl,Near Infrared Spectrograph (NIRSpec),True,
+V1298 Tau b,V1298_Tau_b_Transmission_V1298_Tau_b_3.12385_5719_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5741_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5741_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5741_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5741_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5741_5.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5741_6.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TRAPPIST-1 e,TRAPPIST-1_e_Transmission_TRAPPIST_1_e_3.11990_5756_1.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,False,fewer than 3 grid bins in 4.20-4.45 um
+TRAPPIST-1 e,TRAPPIST-1_e_Transmission_TRAPPIST_1_e_3.11990_5756_2.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,False,fewer than 3 grid bins in 4.20-4.45 um
+TRAPPIST-1 e,TRAPPIST-1_e_Transmission_TRAPPIST_1_e_3.11990_5756_3.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,False,fewer than 3 grid bins in 4.20-4.45 um
+TRAPPIST-1 e,TRAPPIST-1_e_Transmission_TRAPPIST_1_e_3.11990_5756_4.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,False,fewer than 3 grid bins in 4.20-4.45 um
+HAT-P-26 b,HAT-P-26_b_Transmission_HAT_P_26_b_3.11010_5775_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HAT-P-26 b,HAT-P-26_b_Transmission_HAT_P_26_b_3.11010_5775_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-421 b,TOI-421_b_Transmission_TOI_421_b_3.12609_5799_1.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-421 b,TOI-421_b_Transmission_TOI_421_b_3.12609_5799_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+TOI-421 b,TOI-421_b_Transmission_TOI_421_b_3.12609_5799_3.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+GJ 357 b,GJ_357_b_Transmission_GJ_357_b_3.12407_5801_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 357 b,GJ_357_b_Transmission_GJ_357_b_3.12407_5801_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TRAPPIST-1 d,TRAPPIST-1_d_Transmission_TRAPPIST_1_d_3.11878_5840_1.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,False,fewer than 3 grid bins in 4.20-4.45 um
+TRAPPIST-1 d,TRAPPIST-1_d_Transmission_TRAPPIST_1_d_3.11878_5840_2.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,False,fewer than 3 grid bins in 4.20-4.45 um
+HAT-P-12 b,HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_5841_1.tbl,Near Infrared Spectrograph (NIRSpec),True,
+HAT-P-12 b,HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_5841_2.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_5.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_6.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_7.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_8.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_9.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_10.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_11.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_12.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_13.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_14.tbl,Near Infrared Spectrograph (NIRSpec),True,
+GJ 1132 b,GJ_1132_b_Transmission_GJ_1132_b_3.11819_5867_15.tbl,Near Infrared Spectrograph (NIRSpec),True,
+HAT-P-14 b,HAT-P-14_b_Transmission_HAT_P_14_b_3.10996_5886_1.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+HAT-P-14 b,HAT-P-14_b_Transmission_HAT_P_14_b_3.10996_5886_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5947_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5947_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-1685 b,TOI-1685_b_Transmission_TOI_1685_b_3.12738_5947_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+LTT 3780 c,LTT_3780_c_Transmission_TOI_732_c_3.12529_5941_3.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+LTT 3780 c,LTT_3780_c_Transmission_TOI_732_c_3.12529_5941_1.tbl,Mid-Infrared Instrument (MIRI),False,no data on the 1-5 um grid
+LTT 3780 c,LTT_3780_c_Transmission_TOI_732_c_3.12529_5941_2.tbl,Mid-Infrared Instrument (MIRI),False,no data on the 1-5 um grid
+LTT 3780 c,LTT_3780_c_Transmission_TOI_732_c_3.12529_5941_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,False,fewer than 3 grid bins in 4.20-4.45 um
+LTT 3780 c,LTT_3780_c_Transmission_TOI_732_c_3.12529_5941_5.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+WASP-166 b,WASP-166_b_Transmission_WASP_166_b_3.12399_5951_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+WASP-166 b,WASP-166_b_Transmission_WASP_166_b_3.12399_5951_2.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-166 b,WASP-166_b_Transmission_WASP_166_b_3.12399_5951_1.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+WASP-166 b,WASP-166_b_Transmission_WASP_166_b_3.12399_5951_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+Kepler-51 d,Kepler-51_d_Transmission_Kepler_51_d_3.2966_5961_1.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+LP 791-18 c,LP_791-18_c_Transmission_LP_791_18_c_3.12458_5963_1.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_1.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_2.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_3.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_4.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_5.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_6.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_7.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-5205 b,TOI-5205_b_Transmission_TOI_5205_b_3.17776_5968_8.tbl,Near Infrared Spectrograph (NIRSpec) - PRISM,True,
+TOI-1130 b,TOI-1130_b_Transmission_TOI_1130_b_3.12513_6013_1.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-1130 b,TOI-1130_b_Transmission_TOI_1130_b_3.12513_6013_2.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,no data on the 1-5 um grid
+TOI-1130 b,TOI-1130_b_Transmission_TOI_1130_b_3.12513_6013_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-1130 b,TOI-1130_b_Transmission_TOI_1130_b_3.12513_6013_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+WASP-94 A b,WASP-94_A_b_Transmission_WASP_94_A_b_3.11708_6047_1.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um
+TOI-199 b,TOI-199_b_Transmission_TOI_199_b_3.13229_6051_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+TOI-199 b,TOI-199_b_Transmission_TOI_199_b_3.13229_6051_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395M,True,
+TOI-260 b,TOI-260_b_Transmission_TOI_260_b_3.20968_5975_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-260 b,TOI-260_b_Transmission_TOI_260_b_3.20968_5975_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-260 b,TOI-260_b_Transmission_TOI_260_b_3.20968_5975_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-260 b,TOI-260_b_Transmission_TOI_260_b_3.20968_5975_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-260 b,TOI-260_b_Transmission_TOI_260_b_3.20968_5975_5.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+TOI-260 b,TOI-260_b_Transmission_TOI_260_b_3.20968_5975_6.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HD 15337 c,HD_15337_c_Transmission_HD_15337_c_3.12351_6089_1.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HD 15337 c,HD_15337_c_Transmission_HD_15337_c_3.12351_6089_2.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HD 15337 c,HD_15337_c_Transmission_HD_15337_c_3.12351_6089_3.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HD 15337 c,HD_15337_c_Transmission_HD_15337_c_3.12351_6089_4.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HD 15337 c,HD_15337_c_Transmission_HD_15337_c_3.12351_6089_5.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HD 15337 c,HD_15337_c_Transmission_HD_15337_c_3.12351_6089_6.tbl,Near Infrared Spectrograph (NIRSpec) - G395H,True,
+HAT-P-12 b,HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_6155_1.tbl,Mid-Infrared Instrument (MIRI),False,fewer than 3 grid bins in 4.20-4.45 um
+HAT-P-12 b,HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_6155_2.tbl,Mid-Infrared Instrument (MIRI),False,fewer than 3 grid bins in 4.20-4.45 um
+HAT-P-12 b,HAT-P-12_b_Transmission_HAT_P_12_b_3.10993_6155_3.tbl,Near Infrared Imager and Slitless Spectrograph (NIRISS),False,fewer than 3 grid bins in 4.20-4.45 um

@@ -54,7 +54,7 @@ Level 1 trained on 53 real spectra from 13 planets and had no skill above a cons
 |---|---|---|---|---|---|---|
 | **CH₄** | 9 (5/4) | **1.00 (0.007)** | **0.95 (0.015)** | 0.40 (0.72) | 0.60 / 0.45 | **real, gas-specific skill** |
 | H₂O | 11 (9/2) | 1.00 (0.018) | 0.94 (0.037) | 1.00 (0.018) | 0.50 / 0.67 | explained by feature strength |
-| CO₂ | 8 (7/1) | 1.00 (0.12) | 1.00 (0.12) | 1.00 (0.12) | 0.00 / 0.14 | one negative: uninformative |
+| CO₂ | 8 (7/1) | 1.00 (0.12) | 1.00 (0.12) | 1.00 (0.12) | 0.00 / 0.14 | one negative: uninformative. **Since addressed:** on 34 planets, 0.98 / 1.00, and gas-specific (`CO2_EXTENSION_RESULTS.md`) |
 | CO | 5 (3/2) | 1.00 (0.10) | 1.00 (0.10) | 1.00 (0.10) | 0.17 / 0.67 | explained by feature strength |
 | SO₂ | 5 (4/1) | 1.00 (0.20) | 1.00 (0.20) | 0.50 (0.60) | 0.00 / 0.00 | one negative: uninformative |
 

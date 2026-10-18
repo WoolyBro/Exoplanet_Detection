@@ -1,0 +1,118 @@
+{
+  "protocol": "stage_b_atmospheres/CO2_EXTENSION_PROTOCOL.md",
+  "labels_frozen": true,
+  "n_labelled": 37,
+  "n_scored": 34,
+  "unscored_labelled": [
+    "LP 791-18 c",
+    "TRAPPIST-1 d",
+    "TRAPPIST-1 e"
+  ],
+  "n_spectra": 139,
+  "lopo_training_sizes": {
+    "GJ 3470 b": 2616,
+    "HAT-P-26 b": 2651,
+    "HD 189733 b": 2633,
+    "HD 209458 b": 2676,
+    "WASP-107 b": 2201,
+    "WASP-39 b": 2101
+  },
+  "all": {
+    "n": 34,
+    "n_pos": 14,
+    "gbm": {
+      "roc_auc": 0.982,
+      "perm_p": 0.0,
+      "ci95": [
+        0.932,
+        1.0
+      ]
+    },
+    "cnn": {
+      "roc_auc": 0.996,
+      "perm_p": 0.0,
+      "ci95": [
+        0.979,
+        1.0
+      ]
+    },
+    "strength": {
+      "roc_auc": 0.925,
+      "perm_p": 0.0,
+      "ci95": [
+        0.821,
+        0.993
+      ]
+    }
+  },
+  "strong_feature_half": {
+    "strength_threshold": 2.753,
+    "n_pos": 13,
+    "n_neg": 4,
+    "testable": true,
+    "n": 17,
+    "gbm": {
+      "roc_auc": 0.942,
+      "perm_p": 0.0029,
+      "ci95": [
+        0.8,
+        1.0
+      ]
+    },
+    "cnn": {
+      "roc_auc": 0.981,
+      "perm_p": 0.0008,
+      "ci95": [
+        0.885,
+        1.0
+      ]
+    },
+    "strength": {
+      "roc_auc": 0.673,
+      "perm_p": 0.1736,
+      "ci95": [
+        0.373,
+        0.929
+      ]
+    }
+  },
+  "band_occlusion": {
+    "gbm": {
+      "median_drop_co2": 0.871,
+      "median_drop_no_co2": -0.005,
+      "mannwhitney_p": 2.9275402154685157e-06,
+      "roc_auc_after_occlusion": {
+        "roc_auc": 0.664,
+        "perm_p": 0.0565,
+        "ci95": [
+          0.462,
+          0.856
+        ]
+      }
+    },
+    "cnn": {
+      "median_drop_co2": 0.497,
+      "median_drop_no_co2": -0.008,
+      "mannwhitney_p": 3.0791007402454155e-05,
+      "roc_auc_after_occlusion": {
+        "roc_auc": 0.868,
+        "perm_p": 0.0,
+        "ci95": [
+          0.684,
+          1.0
+        ]
+      }
+    }
+  },
+  "expectations": {
+    "K1 GBM ROC-AUC >= 0.85 and p < 0.01": true,
+    "K2 strong half: GBM >= 0.80 and >= control + 0.10": true,
+    "K3 occlusion drops CO2 planets more (p < 0.05)": true,
+    "K4 CNN ROC-AUC >= 0.80": true
+  },
+  "failure": {
+    "K1 CI includes 0.5": false,
+    "GBM not above control on the strong half": false,
+    "K3 failed": false
+  }
+}
