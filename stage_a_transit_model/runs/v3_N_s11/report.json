@@ -1,0 +1,20 @@
+{
+  "name": "v3_N_s11",
+  "config": "N",
+  "ntp": false,
+  "diag": false,
+  "snr_balance": true,
+  "seed": 11,
+  "best_epoch": 18,
+  "val_roc_auc": 0.9202272200509907,
+  "val_n": 1415,
+  "train_n": 6575,
+  "n_params": 40451,
+  "thresholds_val": {
+    "0.9": 0.6104812026023865,
+    "0.95": 0.42959561944007874,
+    "0.99": 0.14046452939510345
+  },
+  "minutes": 11.9,
+  "diag_state": null
+}
