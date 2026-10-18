@@ -6,16 +6,24 @@
 - `detectability_forecast.py`: the forecast.
 - `forward_model.py`: spectra.
 
-**Outputs:** `outputs/forecast/` (`noise_calibration.json`, `noise_validation.csv`, `forecast.csv` (every mode), `forecast_best_mode.csv`, `forecast_summary.json`)
-**Figures:** `eda/forecast_noise_model.png`, `eda/forecast_transits_needed.png`
+**Outputs:** `outputs/forecast/`:
+- `noise_calibration.json`, `noise_validation.csv`
+- `forecast.csv` (every mode), `forecast_best_mode.csv`
+- `forecast_combined.csv`, `forecast_regimes.csv`, `contamination_residuals.json`
+- `forecast_summary.json`
+
+**Figures:** `eda/forecast_noise_model.png`, `eda/forecast_transits_needed.png`, `eda/contamination_residuals.png`, `eda/forecast_contamination_regimes.png`
 
 > **What this answers.** For the 11 transiting planets that Stage C places in the optimistic habitable zone, it estimates how many JWST transits would detect each gas at 5σ, *if* the atmosphere looked like a stated scenario. That makes "habitability" concrete in terms of the gases that would show it (CO₂, CH₄, O₃), without claiming any planet has them.
 >
 > **Bottom line.**
 > - An Archean-like CO₂ + CH₄ atmosphere on **TRAPPIST-1 d, e, f or g** is detectable in roughly **2–16 transits**, i.e. within a few years of JWST time.
-> - **LHS 1140 b** needs 15–26 transits; **TOI-700 d/e** and **K2-18 b** need 50–150.
+> - **LHS 1140 b** needs 14–26 transits; **TOI-700 d/e** and **K2-18 b** need 50–150.
 > - **Kepler-62 f** and **Kepler-296 f** are out of reach (more than 1,000 transits).
 > - **Modern-Earth ozone is out of reach for every target** (440 transits or more).
+> - **Stellar contamination (§4b, §4e).**
+>   - Calibrated on all 8 real PRISM transits of TRAPPIST-1, the contamination that varies from visit to visit raises the TRAPPIST-1 counts by about 10 % (up to ×1.9 for CH₄), and LHS 1140 b's CH₄ by ×1.7–4.2.
+>   - Combining NIRISS SOSS with NIRSpec G395 halves the CH₄ cost for TOI-700 d/e and K2-18 b, but only if the star's contamination is stable between visits.
 >
 > These are lower bounds (§5).
 
@@ -91,35 +99,37 @@ Combined, real retrievals may need roughly 2–3.5× the transits forecast here.
 
 ## 4. Results — transits for 5σ (median [68 % range]), clear sky, best mode
 
+(Refreshed 2026-10-18 with the current Stage C inputs. The equilibrium temperatures moved by up to 0.5 %, which changes the counts by at most a few per cent; no conclusion changed.)
+
 | Planet | J | Mode | Archean CH₄ | Archean CO₂ | CO₂-rich CO₂ | Modern CO₂ | Modern CH₄ | Modern O₃ (best mode) |
 |---|---|---|---|---|---|---|---|---|
-| TRAPPIST-1 d | 11.4 | PRISM | 2 [2–4] | 6 [4–9] | 5 [3–8] | 15 [10–23] | 63 [41–98] | 442 [283–679] |
-| TRAPPIST-1 e | 11.4 | PRISM | 4 [2–6] | 9 [6–14] | 8 [5–12] | 24 [15–37] | 94 [60–146] | 563 [359–869] |
-| TRAPPIST-1 f | 11.4 | PRISM | 5 [3–8] | 13 [8–19] | 10 [7–15] | 33 [22–51] | 112 [73–172] | 534 [349–817] |
-| TRAPPIST-1 g | 11.4 | PRISM | 6 [4–9] | 16 [11–25] | 12 [8–18] | 43 [28–66] | 124 [80–189] | 503 [323–769] |
-| LHS 1140 b | 9.6 | G395 | 15 [7–32] | 26 [12–57] | 36 [16–78] | 53 [24–115] | 296 [132–641] | 760 [339–1645] |
-| LP 890-9 c | 12.3 | PRISM | 30 [8–104] | 74 [21–258] | 59 [16–207] | 190 [53–663] | 780 [217–2722] | 5312 [1477–18548] |
-| K2-18 b | 9.8 | G395 | 46 [16–136] | 85 [30–247] | 126 [45–370] | 162 [57–473] | 975 [346–2853] | 3795 [1345–11106] |
-| TOI-700 e | 9.5 | G395 | 65 [24–178] | 115 [42–317] | 176 [65–484] | 219 [81–603] | 1459 [537–4021] | 5848 [2154–16116] |
-| TOI-700 d | 9.5 | G395 | 86 [31–237] | 146 [53–401] | 218 [80–600] | 284 [104–780] | 1888 [689–5186] | 6343 [2316–17428] |
-| Kepler-296 f | 13.4 | PRISM | 1598 [393–6195] | 4412 [1085–17107] | 3256 [801–12626] | >10⁴ | >10⁴ | >10⁴ |
-| Kepler-62 f | 12.3 | PRISM | 2796 [844–9620] | 8156 [2460–28058] | 5636 [1700–19390] | >10⁴ | >10⁴ | >10⁴ |
+| TRAPPIST-1 d | 11.4 | PRISM | 2 [2–4] | 6 [4–9] | 5 [3–8] | 15 [10–23] | 64 [40–98] | 444 [282–686] |
+| TRAPPIST-1 e | 11.4 | PRISM | 4 [2–6] | 9 [6–15] | 8 [5–12] | 24 [15–38] | 95 [61–148] | 565 [361–882] |
+| TRAPPIST-1 f | 11.4 | PRISM | 5 [3–8] | 13 [8–20] | 10 [7–16] | 34 [22–52] | 114 [73–175] | 542 [349–831] |
+| TRAPPIST-1 g | 11.4 | PRISM | 6 [4–9] | 16 [10–24] | 12 [8–18] | 42 [27–64] | 122 [79–185] | 494 [320–751] |
+| LHS 1140 b | 9.6 | G395 | 14 [7–32] | 26 [12–57] | 35 [16–79] | 52 [24–116] | 291 [135–646] | 747 [346–1659] |
+| LP 890-9 c | 12.3 | PRISM | 31 [9–103] | 76 [22–256] | 61 [18–205] | 197 [56–658] | 807 [231–2701] | 5498 [1575–18399] |
+| K2-18 b | 9.8 | G395 | 46 [16–136] | 85 [30–248] | 126 [45–370] | 162 [57–473] | 976 [346–2855] | 3790 [1343–11092] |
+| TOI-700 e | 9.5 | G395 | 64 [23–180] | 115 [42–322] | 175 [63–491] | 218 [79–611] | 1453 [526–4080] | 5829 [2111–16363] |
+| TOI-700 d | 9.5 | G395 | 86 [30–247] | 145 [51–418] | 217 [77–626] | 282 [100–814] | 1877 [664–5417] | 6313 [2234–18219] |
+| Kepler-296 f | 13.4 | PRISM | 1625 [381–6502] | 4491 [1054–17974] | 3312 [778–13257] | >10⁴ | >10⁴ | >10⁴ |
+| Kepler-62 f | 12.3 | PRISM | 2909 [838–9599] | 8483 [2444–27992] | 5863 [1689–19345] | >10⁴ | >10⁴ | >10⁴ |
 
 **Reading it.**
 
 1. **TRAPPIST-1 dominates.**
-   - Its four HZ planets can show an Archean-like CO₂ + CH₄ pair, the anoxic-biosphere disequilibrium signature, in **2–16 transits**: 8–72 hours of telescope time, about 2 years or less of visible transits.
-   - Even modern-Earth CO₂ is within reach (15–43 transits).
+   - Its four HZ planets can show an Archean-like CO₂ + CH₄ pair, the anoxic-biosphere disequilibrium signature, in **2–16 transits**: 8–71 hours of telescope time, about 2 years or less of visible transits.
+   - Even modern-Earth CO₂ is within reach (15–42 transits).
    - The reason is the 0.12 R☉ host: the signal scales as R★⁻².
-2. **Ozone, the oxygen biosphere's signature, is out of reach everywhere.** Its best mode is NIRSpec, through the O₃ bands near 4.7 µm, with MIRI's 9.6 µm band similar or worse (TRAPPIST-1 e: 563 vs 639 transits). A 2026-10-17 version of this table labelled the column MIRI; that was wrong.
-   - TRAPPIST-1 needs 440–560 MIRI transits, which is more than all the transits observable in 20 years for e, f and g (323, 214 and 160).
+2. **Ozone, the oxygen biosphere's signature, is out of reach everywhere.** Its best mode is NIRSpec, through the O₃ bands near 4.7 µm, with MIRI's 9.6 µm band similar or worse (TRAPPIST-1 e: 565 vs 654 transits). A 2026-10-17 version of this table labelled the column MIRI; that was wrong.
+   - TRAPPIST-1 needs 440–570 transits, which is more than all the transits observable in 20 years for e, f and g (323, 214 and 160).
    - The modern-Earth CH₄ (1.8 ppm) is just as hard.
 3. **The bright-star targets are limited by systematics, not photons.**
-   - With the Greene floors, LHS 1140 b, TOI-700 d/e and K2-18 b **never** reach 5σ for these N₂ atmospheres (`p_n5_floor_reachable` = 0): their features of tens of ppm sit below a 30 ppm per-bin floor.
-   - The faint TRAPPIST-1 planets stay feasible with the floor (Archean CO₂: 7.5–67 transits for d–g).
+   - With the Greene floors, LHS 1140 b, TOI-700 d/e and K2-18 b **never** reach 5σ for these N₂ atmospheres (`p_n5_floor_reachable` ≤ 0.003): their features of tens of ppm sit below a 30 ppm per-bin floor.
+   - The faint TRAPPIST-1 planets stay feasible with the floor (Archean CO₂: 7.6–66 transits for d–g).
    - Whether JWST beats the Greene floors is therefore what decides LHS 1140 b's and TOI-700's prospects.
 4. **K2-18 b as a hycean / H₂-rich world needs under one transit** for CH₄ and CO₂ (median 0.2 and 0.4). As an N₂ world it needs tens to hundreds of transits. The real data match the H₂-rich case (§3).
-5. **Clouds at 0.1 bar** raise the counts by about 10–70 % (Archean CO₂: +45 % for TRAPPIST-1 e, +12 % for LHS 1140 b). A secondary atmosphere's features form above that level.
+5. **Clouds at 0.1 bar** raise the counts by about 10–70 % (Archean CO₂: +44 % for TRAPPIST-1 e, +12 % for LHS 1140 b). A secondary atmosphere's features form above that level.
 6. **Kepler-62 f and Kepler-296 f** are habitable-zone planets that transmission spectroscopy cannot characterise: faint hosts with R★ of 0.48–0.64 R☉. Their Stage C rank already reflects that.
 
 ## 4b. Stellar contamination (starspots and faculae), added 2026-10-18
@@ -132,22 +142,22 @@ Combined, real retrievals may need roughly 2–3.5× the transits forecast here.
 
 | Target, mode | CH₄ signal kept | Archean CH₄: 5σ transits, no TLS → with TLS | CO₂ signal kept | Archean CO₂: → with TLS |
 |---|---|---|---|---|
-| TRAPPIST-1 d, PRISM | 0.89 | 2.4 → **3.0** | 1.00 | 6.0 → 6.0 |
-| TRAPPIST-1 e, PRISM | 0.90 | 3.9 → **4.8** | 1.00 | 9.3 → 9.4 |
-| TRAPPIST-1 f, PRISM | 0.90 | 5.0 → **6.2** | 1.00 | 12.6 → 12.7 |
-| TRAPPIST-1 g, PRISM | 0.91 | 6.0 → **7.3** | 1.00 | 16.3 → 16.4 |
-| LP 890-9 c, PRISM | 0.92 | 30 → 35 | 1.00 | 74 → 74 |
-| LHS 1140 b, G395 | 0.77 | 15 → **25** | 0.83 | 26 → 38 |
-| TOI-700 d, G395 | **0.56** | 86 → **276** | 0.84 | 146 → 204 |
-| TOI-700 e, G395 | **0.56** | 65 → **206** | 0.84 | 115 → 164 |
-| K2-18 b (N₂ case), G395 | **0.55** | 46 → **151** | 0.85 | 85 → 118 |
+| TRAPPIST-1 d, PRISM | 0.89 | 2.4 → **3.0** | 1.00 | 6.0 → 6.1 |
+| TRAPPIST-1 e, PRISM | 0.90 | 3.9 → **4.8** | 1.00 | 9.4 → 9.4 |
+| TRAPPIST-1 f, PRISM | 0.90 | 5.1 → **6.2** | 1.00 | 12.8 → 12.9 |
+| TRAPPIST-1 g, PRISM | 0.91 | 5.9 → **7.2** | 1.00 | 16.1 → 16.1 |
+| LP 890-9 c, PRISM | 0.92 | 31 → 37 | 1.00 | 76 → 77 |
+| LHS 1140 b, G395 | 0.77 | 14 → **25** | 0.83 | 26 → 37 |
+| TOI-700 d, G395 | **0.56** | 86 → **274** | 0.84 | 145 → 203 |
+| TOI-700 e, G395 | **0.56** | 64 → **205** | 0.84 | 115 → 164 |
+| K2-18 b (N₂ case), G395 | **0.55** | 46 → **152** | 0.85 | 85 → 118 |
 
 **Reading it.**
 - **Wide wavelength coverage protects against starspots.** PRISM's 0.95–5.3 µm range lets the fit separate stellar contamination, which is broad and strongest below 2 µm, from planetary CH₄. TRAPPIST-1 keeps about 90 % of its CH₄ signal, and all of its CO₂.
   - G395 alone (2.9–5.2 µm) cannot separate them. Nearly half the CH₄ signal at 3.3 µm is degenerate with contamination, which triples the transits needed for TOI-700 d/e.
-  - Adding NIRISS SOSS (0.85–2.8 µm) for these bright hosts would restore the leverage; that combination is not modelled here.
+  - Adding NIRISS SOSS (0.85–2.8 µm) restores most of the leverage, but only if the contamination is stable between visits (§4e).
 - **CO₂ at 4.3 µm is almost immune.** Its band shape is unlike any stellar template.
-- **This is the optimistic, linear case.** The contamination is a fixed pattern fitted alongside the gases. Real contamination changes between visits (200–300 ppm on TRAPPIST-1; Piaulet-Ghorayeb et al. 2025), and PHOENIX is interpolated on a coarse T_eff grid. The full TRAPPIST-1 e retrievals with stellar contamination (§4c) test it directly.
+- **This is the linear case.** The contamination is a fixed pair of templates fitted alongside the gases. Real contamination changes between visits (200–300 ppm on TRAPPIST-1; Piaulet-Ghorayeb et al. 2025), and PHOENIX is interpolated on a coarse T_eff grid. The full TRAPPIST-1 e retrievals with stellar contamination (§4c) test it directly. §4e adds what the linear model misses, measured on the real TRAPPIST-1 visits.
 
 ## 4c. Full Bayesian retrievals for TRAPPIST-1 e (added 2026-10-18)
 
@@ -228,10 +238,105 @@ Multiply the matched-filter counts in §4 by these factors for retrieval-grade e
 - The contamination model is first order with two fixed templates; the null tests show it does not fake atmospheres on b, c or d.
 - This is a re-analysis of published, reduced spectra, not of the raw data.
 
+## 4e. Combined instrument modes, and contamination that changes from visit to visit (added 2026-10-18)
+
+**Code:**
+- `stage_b_atmospheres/contamination_residuals.py` (calibration)
+- `detectability_forecast.py` (columns `n5_vv_*`, files `forecast_combined.csv` and `forecast_regimes.csv`)
+
+**Figures:** `eda/contamination_residuals.png`, `eda/forecast_contamination_regimes.png`
+
+§4b fitted one fixed pair of spot and facula templates. Two things it left out are now modelled.
+
+### What the linear model misses, measured on all 8 public PRISM transits of TRAPPIST-1
+
+The calibration uses every PRISM visit in the research pack: b (1), c (1), d (2) and e (4).
+
+**The model, for each visit:**
+- **Planet.** A flat planet depth. None of these planets shows an atmosphere at PRISM precision.
+- **Linear contamination.** Exactly the retrieval's marginalised term: spot and facula templates scaled by the depth, plus an offset.
+- **Noise.** The published per-bin errors.
+- **What the linear model misses.** A Gaussian process in ln λ, with amplitude A × depth. A is fitted separately in each visit; the length scale ℓ is shared by all 8 visits.
+
+| Visit | Bins | χ²/n, linear model only | A (fraction of depth), 68 % | ΔlnL vs A = 0 | p |
+|---|---|---|---|---|---|
+| b 1 | 362 | 1.31 | 0.002 [0, 0.006] | +0.0 | 0.39 |
+| c 1 | 362 | 1.10 | **0.024** [0.015, 0.040] | +6.9 | 1 × 10⁻⁴ |
+| d 1 | 24 | 0.84 | 0.021 [0.007, 0.041] | +0.7 | 0.11 |
+| d 2 | 24 | 1.30 | **0.046** [0.025, 0.084] | +3.2 | 0.006 |
+| e 1 | 67 | 0.96 | 0.008 [0, 0.015] | +0.4 | 0.17 |
+| e 2 | 67 | 0.93 | 0.022 [0.010, 0.038] | +1.1 | 0.07 |
+| e 3 | 67 | 1.54 | **0.028** [0.019, 0.042] | +16.6 | < 10⁻⁶ |
+| e 4 | 67 | 0.93 | **0.022** [0.014, 0.038] | +9.5 | 1 × 10⁻⁵ |
+
+**What the calibration shows.**
+- **The contamination left behind varies from visit to visit.** Four of the 8 visits carry significant structure that the linear model cannot absorb, at 2–5 % of the transit depth (about 110–140 ppm for e). The other four are consistent with none.
+  - The two worst visits of e are visits 3 and 4. These are exactly the visits that produced the spurious "atmosphere" preference in the real-data retrieval (§4d). The calibration reaches that conclusion independently.
+- **The structure is broad.**
+  - The best length scale is ℓ = 0.42 in ln λ (68 % range 0.32–0.54). A second, nearly as good maximum sits at ℓ ≈ 0.15 (ΔlnL 0.7). It is used as the sensitivity case, because a shorter scale is more degenerate with gas bands.
+  - A stationary kernel fits better than one shaped like the spot contrast (ΔlnL = 7.8).
+  - Over all 8 visits the process improves the likelihood by 38.5.
+
+### Two regimes, and why combining modes only helps in one of them
+
+**Visit-varying contamination** (`n5_vv`):
+- **What is fitted.** Every visit gets its own free template amplitudes, plus an unmodelled part drawn independently.
+- **Where the amplitudes come from.** Each forecast visit takes its amplitude from the 8 measured values, with ℓ = 0.42.
+- **How it is computed.** The expected information per visit is computed exactly, by generalised least squares with the templates marginalised. One eigendecomposition per mode keeps the 4,000 Monte Carlo draws cheap.
+- **Combining modes cannot help here.** Each visit uses one mode and must be corrected on its own, so the modes' information simply adds. Splitting transits between modes can then never beat the better mode alone. The code checks this numerically for every target: the gain is exactly 1.
+
+**Stable contamination, modes combined** (`n5_tls_joint`):
+- **What is fitted.** One spot amplitude and one facula amplitude span every mode and every visit; each mode keeps its own offset.
+- **How the transits are split.** Optimally between modes, on a 5 % grid.
+- **Why it helps.** The wider wavelength baseline separates contamination from gas bands.
+
+**Archean scenario, clear sky: transits for 5σ (median)**
+
+| Target (host J) | Gas | No contamination | Linear, best single mode | **Modes combined, stable star** (split) | **Visit-varying** (ℓ = 0.42; ℓ = 0.15) |
+|---|---|---|---|---|---|
+| TRAPPIST-1 d (11.4) | CH₄ | 2.4 | 3.0 | 3.0 (PRISM only) | 3.3; 4.3 |
+| TRAPPIST-1 e (11.4) | CH₄ | 3.9 | 4.8 | 4.8 (PRISM only) | **5.3** [3.4–8.1]; 7.7 |
+| | CO₂ | 9.4 | 9.4 | 9.4 | **10.4** [6.7–16.1]; 12.1 |
+| TRAPPIST-1 f (11.4) | CH₄ | 5.1 | 6.2 | 6.2 | 6.9; 11.1 |
+| TRAPPIST-1 g (11.4) | CH₄ | 5.9 | 7.2 | 7.2 | 8.0; 13.6 |
+| LP 890-9 c (12.3) | CH₄ | 31 | 37 | 37 | 41; 53 |
+| LHS 1140 b (9.6) | CH₄ | 14 | 25 | 21 (G395 0.85 / SOSS 0.15) | **41** [22–80]; 103 (SOSS: 62) |
+| | CO₂ | 26 | 37 | 34 | 39; 46 |
+| K2-18 b, N₂ case (9.8) | CH₄ | 46 | 146 (SOSS) | **71** (G395 0.70 / SOSS 0.30) | 155; 182 |
+| TOI-700 e (9.5) | CH₄ | 64 | 205 | **101** (0.70 / 0.30) | 205; 222 |
+| TOI-700 d (9.5) | CH₄ | 86 | 262 (SOSS) | **132** (0.70 / 0.30) | 271; 281 |
+| | CO₂ | 145 | 203 | 193 (0.90 / 0.10) | 204; 210 |
+
+The "visit-varying" column takes the best single mode. Mission limits (all observable transits in 20 years): TRAPPIST-1 e 323, LHS 1140 b 80, K2-18 b 60, TOI-700 e 71, TOI-700 d 53.
+
+**Reading it.**
+- **Combining SOSS with G395 halves the CH₄ cost, if the star is stable.**
+  - The gain is ×2.0 for TOI-700 d and e and K2-18 b, recovering most of what contamination took away.
+  - The best split puts about 30 % of the transits on SOSS: its 1.7 and 2.3 µm CH₄ bands and its short-wavelength view of the spots break the degeneracy at 3.3 µm.
+  - CO₂ gains only about 5 %, because its 4.3 µm band was never degenerate.
+  - For PRISM targets there is nothing to gain: PRISM already spans 0.6–5.3 µm in each visit, and MIRI adds nothing for CH₄ or CO₂.
+- **If the contamination varies between visits, as it does on TRAPPIST-1, that gain disappears.**
+  - Then broad wavelength coverage must come within each visit. That is an argument for PRISM, or for simultaneous coverage, over separate SOSS and G395 visits.
+- **TRAPPIST-1 conclusions survive.**
+  - Unmodelled, visit-varying contamination at TRAPPIST-1's own measured level costs about 10 % more transits, or up to ×1.3 (CO₂) and ×1.9 (CH₄) for the shorter length scale.
+  - An Archean CO₂ + CH₄ pair on TRAPPIST-1 e still needs only **5–8 (CH₄) and 10–12 (CO₂) transits**.
+  - The penalty is small because a faint star's photon noise dominates each visit.
+- **Bright hosts with deep transits are hit hardest.**
+  - LHS 1140 b's CH₄ in G395 costs ×1.7, or ×4.2 at ℓ = 0.15 (41–103 transits against 80 available). At the short length scale, SOSS becomes the better mode (62).
+  - Small photon noise lets the correlated contamination dominate, and contamination scales with the transit depth.
+  - TOI-700 d/e barely notice, because their shallow transits (430–550 ppm) carry little contamination.
+- **The calibration is pessimistic for most hosts.**
+  - TRAPPIST-1 is an active M8 dwarf. LHS 1140 and TOI-700 are older, quieter M4.5 and M2 dwarfs, so the `n5_vv` columns bracket the realistic case from above and `n5_tls` from below.
+  - One star's 8 visits are a small sample for the distribution of A.
+- **Mission feasibility for CH₄:**
+  - **TOI-700 d stays out of reach** even with combined modes and a stable star (132 against 53 available).
+  - **TOI-700 e** needs 101 against 71.
+  - **K2-18 b as an N₂ world** needs 71 against 60, borderline.
+
 ## 5. Limitations — what would make these numbers wrong
 
 - **Lower bounds.** The matched filter knows the template. Full retrievals for TRAPPIST-1 e need 1.4× (CO₂) to 2.2× (CH₄) more transits (§4c). K2-18 b suggested 2–3.5×.
-- **Stellar contamination is modelled only to first order** (§4b), as a fixed pattern. Visit-to-visit variability is not modelled, and it dominated the TRAPPIST-1 b/c JWST spectra.
+- **Stellar contamination** is modelled as linear templates (§4b) plus visit-varying unmodelled structure calibrated on one star's 8 visits (§4e). Hosts quieter than TRAPPIST-1 are probably better than `n5_vv`. A contamination component that is stable but unmodelled would not average down, and acts like the Greene floors of §4.
 - **No cold trap.** The atmospheres are isothermal with constant mixing ratios. Real H₂O above the tropopause is far lower, so **the H₂O numbers in the output files are optimistic and are not reported here**. Lustig-Yaeger et al. 2019 find habitable-atmosphere H₂O "prohibitively difficult".
 - **The scenarios are assumptions.** A thin or absent atmosphere, which JWST has found for TRAPPIST-1 b and c, has no features at all.
 - **Noise calibration rests on the archive's single-transit flag** and on the published uncertainties. MIRI LRS is calibrated on only three stars.
@@ -241,5 +346,6 @@ Multiply the matched-filter counts in §4 by these factors for retrieval-grade e
 
 ```bash
 python stage_b_atmospheres/noise_model.py                                    # project .venv, ~1 min
-~/micromamba/envs/prt/bin/python stage_b_atmospheres/detectability_forecast.py  # ~10 min idle machine, ~2 GB
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/contamination_residuals.py   # ~10 s, the visit-varying calibration
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/detectability_forecast.py  # ~8-10 min idle machine, ~2 GB
 ```

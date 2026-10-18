@@ -3721,3 +3721,20 @@ Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 
      violation, fixed), --with-errors rebuilds views in detection_views_err/stage_c_targets (41/44 ok), --runs ensembles.
      v2: Kepler-trained rho(radius) -0.37, 71 % >= 0.5 (HD 189733 b 0.09); TESS-trained +0.35, 98 %. (v1 -0.57/+0.30.)
      build_priority_table reads the _v2 files; only the two vetting columns changed.
+
+2026-10-18  FORECAST: COMBINED MODES + VISIT-VARYING CONTAMINATION (FORECAST_RESULTS.md 4e).
+  Calibration (contamination_residuals.py): all 8 PRISM visits of TRAPPIST-1 (b1 c1 d2 e4); per visit flat depth +
+  the retrieval's marginalised linear spot/facula/offset + GP in ln(lambda) with amplitude A x depth. Stationary kernel
+  preferred over template-shaped (dlnL 7.8); ell 0.42 [0.32, 0.54], second maximum 0.15 (dlnL 0.7; sensitivity case).
+  Significant in c1 (A 0.024, p 1e-4), d2 (0.046, p 0.006), e3 (0.028, dlnL +16.6), e4 (0.022, p 1e-5); b1, d1, e1, e2
+  consistent with 0 -> varies visit to visit; e3/e4 = the visits behind the spurious real-data atmosphere preference.
+  Forecast: n5_vv = exact GLS Fisher info per visit (templates marginalised, A drawn from the 8 visits), eigen trick.
+  n5_tls_joint = modes combined with ONE spot/facula amplitude across modes (stable star), optimal split (5 % grid).
+  Archean CH4 (clear), white / linear best mode / joint stable / visit-varying (ell 0.42; 0.15):
+    TRAPPIST-1 e 3.9 / 4.8 / 4.8 / 5.3; 7.7     CO2 9.4 / 9.4 / 9.4 / 10.4; 12.1
+    LHS 1140 b 14 / 25 / 21 / 41; 103 (SOSS 62)   K2-18 b 46 / 146 / 71 / 155; 182
+    TOI-700 e 64 / 205 / 101 / 205; 222         TOI-700 d 86 / 262 / 132 / 271; 281
+  -> SOSS+G395 halves CH4 cost ONLY if contamination is stable; visit-varying -> no gain (checked: split gain = 1.000).
+     TRAPPIST-1: ~10 % penalty (photon-limited); bright deep-transit host LHS 1140 b worst (x1.7-4.2).
+  Old forecast columns moved by <= 1.5 % in signal: Stage C T_eq medians shifted at the shoreline rebuild (not a bug).
+  Tests: 45 pass (3 new: GLS = projection at A=0, GLS = explicit inverse, joint split gain only via shared terms).
