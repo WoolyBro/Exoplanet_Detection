@@ -12,6 +12,7 @@ asked for:
 
 Configs (fixed by the protocol; nothing else is trained):
     C  NTP + diagnostics (primary)      A  NTP, no diagnostics      B  diagnostics, no NTP
+    N  the v2 recipe with S/N-balanced loss weights, no NTP, no diagnostics (eda/SNR_BALANCE_PROTOCOL.md)
 
     python stage_a_transit_model/vetter_v3.py --config C --seed 42
     python stage_a_transit_model/vetter_v3.py --sweep --jobs 3          # all 15 runs
@@ -42,7 +43,8 @@ RUNS = R / "stage_a_transit_model" / "runs"
 KOI_VIEWS = R / "detection_views_v2"
 NTP_VIEWS = R / "detection_views_err" / "v3_ntp"
 V3 = R / "external_data" / "kepler_dr25_simulated" / "v3"
-CONFIGS = {"C": {"ntp": True, "diag": True}, "A": {"ntp": True, "diag": False}, "B": {"ntp": False, "diag": True}}
+CONFIGS = {"C": {"ntp": True, "diag": True}, "A": {"ntp": True, "diag": False}, "B": {"ntp": False, "diag": True},
+           "N": {"ntp": False, "diag": False, "snr_balance": True}}
 SEEDS = [42, 1, 2, 7, 11]
 FEATURES = ["cent_score", "halo_ghost", "oesig_dv", "mod_oe_dv", "mod_sig_pri_dv", "mod_sig_sec_dv", "mod_sig_ter_dv",
             "mod_sig_pos_dv", "mod_fred_dv", "mod_fa1_dv", "mod_fa2_dv", "mod_depth_sec_dv", "mod_ph_sec_dv", "alb_dv",
@@ -73,6 +75,23 @@ def load_split(split: str, ntp: bool) -> ViewSet:
         keep = np.flatnonzero(pd.Series(n.object_id).map(ntp_split_map()).to_numpy() == split)
         vs = concat(vs, n.take(keep))
     return vs
+
+
+def snr_balance_weights(vs: ViewSet, bins: int = 10, clip: tuple = (0.2, 10.0)) -> np.ndarray:
+    """SNR_BALANCE_PROTOCOL.md: w = P(c) / P(c | S/N bin) for the binary class c, clipped, mean 1.
+    In the weighted training set the label carries (almost) no information about depth S/N."""
+    from preprocessing_pipeline import _npz_name
+    snr = []
+    for oid in vs.object_id:
+        with np.load(KOI_VIEWS / "kepler_train" / _npz_name(oid), allow_pickle=False) as z:
+            snr.append(json.loads(str(z["metadata"])).get("depth_snr", np.nan))
+    x = np.log10(np.clip(np.nan_to_num(np.asarray(snr, float), nan=1e-3), 1e-3, None))
+    b = pd.qcut(x, bins, labels=False, duplicates="drop")
+    y = np.isin(vs.label_index, PLANET_LIKE_IDX)
+    p, pb = y.mean(), pd.Series(y).groupby(b).mean().to_numpy()
+    w = np.where(y, p / pb[b], (1 - p) / (1 - pb[b]))
+    w = np.clip(w, *clip)
+    return (w / w.mean()).astype(np.float32)
 
 
 class Diagnostics:
@@ -174,6 +193,12 @@ def train_one(config: str, seed: int) -> dict:
     ytr = torch.from_numpy(tr.label_index.astype(np.int64))
     model = build_v3(cfg["diag"])
     w = class_weights(tr.label_index, "inverse")
+    sw = None
+    if cfg.get("snr_balance"):
+        if cfg["ntp"]:
+            raise SystemExit("S/N balancing is defined on the KOI training views only")
+        sw = torch.from_numpy(snr_balance_weights(tr))
+        crit_each = nn.CrossEntropyLoss(weight=torch.tensor(w, dtype=torch.float32), reduction="none")
     crit = nn.CrossEntropyLoss(weight=torch.tensor(w, dtype=torch.float32))
     opt = torch.optim.Adam(model.parameters(), lr=HP["lr"], weight_decay=HP["weight_decay"])
     sched = torch.optim.lr_scheduler.ReduceLROnPlateau(opt, mode="max", factor=0.5, patience=3)
@@ -195,7 +220,8 @@ def train_one(config: str, seed: int) -> dict:
                 gb[flip] = torch.flip(gb[flip], dims=[-1])
                 lb[flip] = torch.flip(lb[flip], dims=[-1])
             opt.zero_grad()
-            loss = crit(model(gb, lb, None if dtr is None else dtr[idx]), ytr[idx])
+            logits = model(gb, lb, None if dtr is None else dtr[idx])
+            loss = crit(logits, ytr[idx]) if sw is None else (crit_each(logits, ytr[idx]) * sw[idx]).mean()
             if not torch.isfinite(loss):
                 raise RuntimeError(f"epoch {epoch}: non-finite loss")
             loss.backward()
@@ -246,9 +272,9 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", choices=list(CONFIGS))
     ap.add_argument("--seed", type=int, default=42)
-    ap.add_argument("--sweep", action="store_true", help="all 15 runs (3 configs x 5 seeds)")
+    ap.add_argument("--sweep", action="store_true", help="all runs of --configs (5 seeds each)")
     ap.add_argument("--jobs", type=int, default=3)
-    ap.add_argument("--configs", default="".join(CONFIGS), help="subset for --sweep, e.g. B")
+    ap.add_argument("--configs", default="CAB", help="subset for --sweep, e.g. B")
     a = ap.parse_args(argv)
     if not a.sweep:
         train_one(a.config, a.seed)
