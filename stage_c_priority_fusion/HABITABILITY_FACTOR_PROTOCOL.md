@@ -81,3 +81,25 @@ Two physical assumptions behind the score were held fixed. They are now added as
 | B5 | The mass–radius relation (x7) has a total Sobol index < 0.05 |
 
 **Not pre-registered, reported as a consistency check:** the fitted retention model applied to 8 Solar System bodies, none of which were in the fit (Venus, Earth, Mars and Titan have atmospheres; Mercury, the Moon, Ganymede and Callisto do not). I estimated its outcome by hand before writing this addendum, so it cannot count as a blind test.
+
+## Addendum 2 (2026-10-19, committed before any prediction for these planets): an out-of-sample test of the fitted retention model
+
+A literature search on 2026-10-19 found three rocky planets with JWST atmosphere verdicts published after the 20-planet fit. They are labelled by the same rules (`LABEL` in `retention_model.py`) in `rocky_atmosphere_observations_new.csv`, with sources:
+
+| Planet | Status, strength | Soft label | Magma (T_eq ≥ 1,200 K) |
+|---|---|---|---|
+| HD 3167 b | atmosphere evidence, moderate | 1.0 | yes |
+| TOI-431 b | atmosphere evidence, tentative | 0.6 | yes |
+| GJ 357 b | no thick atmosphere, tentative | 0.25 | no |
+
+**Test.** The posterior committed in `outputs/stage_c/retention_posterior.npz` (the 20-planet fit, unchanged) predicts each new planet. The refit on all 23 planets follows.
+
+| ID | Expectation |
+|---|---|
+| A5 | On the 3 new planets, the frozen model's mean log score beats both the constant base rate (mean of the 20 labels) and the fixed shoreline |
+| A6 | Refitted on 23 planets: P(β < 0) ≥ 0.90 and P(γ > 0) ≥ 0.95 |
+| A7 | Refitted on 23 planets: the leave-one-out log score beats the fixed shoreline and the base rate (as A2) |
+
+**Caveat registered now.** Three planets is a small test. Two of them are magma worlds, where the model's magma term is expected to do the work. A5 therefore mainly tests the magma exception, not the shoreline slope.
+
+**Related work found in the same search, to cite:** Meni-Gallardo & Pallé 2025 (MNRAS; arXiv:2508.12865) built an empirical cosmic shoreline anchored on five bodies with tentative atmospheres. The fitted model here differs in three ways: it is probabilistic, it uses all observed outcomes with soft labels, and it is validated by leave-one-out and out-of-sample planets. The earlier "no earlier fit" statement in `eda/STAGE_C_RESULTS.md` is corrected accordingly.

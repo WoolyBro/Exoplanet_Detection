@@ -1,0 +1,4 @@
+planet,status,strength,method,source,note
+HD 3167 b,atmosphere_evidence,moderate,JWST MIRI LRS eclipse,"Park Coy et al. 2026 (ApJL 1005 L77; arXiv:2604.11911)","white-light eclipse 38 +/- 11 ppm, more than 5 sigma below a dark bare rock; atmosphere reflecting or redistributing; T_eq 1786 K (lava world)"
+TOI-431 b,atmosphere_evidence,tentative,JWST MIRI LRS partial eclipse,"arXiv:2609.03029 (2026)","Tb 1967 K, R = 0.81 +/- 0.10, 1.8 sigma below bare rock; 'best explained by the presence of an atmosphere'; single partial eclipse (lava world)"
+GJ 357 b,no_thick_atmosphere,tentative,JWST MIRI F1500W eclipse,"Hot Rocks Survey VI (arXiv:2609.30552, 2026)","Tb 923 K vs zero-albedo 686 K; inconsistent with pure CO2, pure H2O and N2+100 ppm CO2 atmospheres; authors do not conclude bare rock (anomalously hot)"
