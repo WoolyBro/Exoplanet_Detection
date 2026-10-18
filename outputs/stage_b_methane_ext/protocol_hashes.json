@@ -3,5 +3,7 @@
  "frozen_at": "2026-10-17T21:18:40",
  "rule": "labels fixed before any new planet is scored",
  "ch4_labels_round2.csv": "c2abbfbcdf22f7932961998fb525ffce373342ad518c83c469219ce2dce19026",
- "round2_frozen_at": "2026-10-17T21:37:17"
+ "round2_frozen_at": "2026-10-17T21:37:17",
+ "ch4_labels_round3.csv": "7f68b2ca31a47746e29686af8f6e413ea02005e420ca594f500d2fda77406b5c",
+ "round3_frozen_at": "2026-10-18T13:33:58"
 }

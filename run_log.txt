@@ -3695,3 +3695,8 @@ Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 
   ours 0.977 | AstroNet 0.976 (diff +0.001 [-0.005,0.008]) | Robovetter 0.984 (circular: FP labels = Robovetter FP 100%)
   ExoNet 0.990 (-0.013*) | ExoMiner 0.996 (-0.019*) | MES<12: ours 0.931, AstroNet 0.927, ExoMiner 0.994
   -> light-curve-only parity with AstroNet; diagnostics (centroid, odd/even, secondary) are worth ~0.02 AUC.
+
+2026-10-18  ARCHIVE REFRESH + METHANE ROUND 3. TAP 'spectra' table: 1875 (pack 1826); 49 new files downloaded (session method,
+  certifi TLS, verified byte-identical on a pack file) -> external_data/archive_spectra_2026-10-18/. New JWST planets:
+  HATS-6 b (CH4=1) v3 0.982; TRAPPIST-1 f (0) 0.032; TOI-3235 b (unknown) 0.899 [prediction]; HAT-P-12 b new NIRISS 0.017.
+  All labelled planets on the correct side -> 40 labelled planets (10 CH4) all ranked correctly by v3.
