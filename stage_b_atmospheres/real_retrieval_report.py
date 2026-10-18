@@ -117,32 +117,43 @@ def make_figure(d, curves):
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+    from matplotlib.gridspec import GridSpec
 
-    fig, axes = plt.subplots(2, 1, figsize=(11, 8), sharex=True, gridspec_kw={"height_ratios": [1.3, 1]})
+    fig = plt.figure(figsize=(13, 8.5))
+    gs = GridSpec(2, 3, figure=fig, height_ratios=[1.2, 1])
     wl = d["wl"]
-    ax = axes[0]
+    nv = len(d["depth"])
     colours = ["#2a6fdb", "#d1495b", "#2e933c", "#8f5bd6"]
-    for v in range(len(d["depth"])):
+    ax = fig.add_subplot(gs[0, :])
+    for v in range(nv):
         ax.errorbar(wl, d["depth"][v], d["sigma"][v], fmt="o", ms=2.5, color=colours[v], alpha=0.7, label=f"visit {v + 1}")
         if "bare_rock" in curves:
             ax.plot(wl, curves["bare_rock"][1][v], color=colours[v], lw=0.8)
-    ax.set(ylabel="transit depth (ppm)", title="TRAPPIST-1 e, JWST NIRSpec PRISM (Espinoza et al. 2025): data and bare rock + per-visit contamination fit")
+    ax.set(ylabel="transit depth (ppm)", ylim=(3800, 6000), xlim=(0.6, 5.3),
+           title="TRAPPIST-1 e, JWST NIRSpec PRISM (Espinoza et al. 2025): 4 visits, each with its own contamination fit (lines: bare rock)")
     ax.legend(fontsize=7, ncol=4)
-    # contamination-corrected residuals: data minus each visit's fitted contamination, averaged
-    ax = axes[1]
+    ax = fig.add_subplot(gs[1, :2])
     if "bare_rock" in curves:
         depth0, mods0 = curves["bare_rock"]
-        corr = np.array([d["depth"][v] - (mods0[v] - depth0) for v in range(len(d["depth"]))])
+        corr = np.array([d["depth"][v] - (mods0[v] - depth0) for v in range(nv)])
         w = 1 / d["sigma"] ** 2
         mean = np.sum(corr * w, axis=0) / np.sum(w, axis=0)
         sd = 1 / np.sqrt(np.sum(w, axis=0))
-        ax.errorbar(wl, mean - np.nanmedian(depth0), sd, fmt="o", ms=3, color="k", label="4 visits, contamination removed (bare-rock fit)")
+        ax.errorbar(wl, mean - np.nanmedian(depth0), sd, fmt="o", ms=3, color="k", label="4 visits combined, contamination removed")
         for m, c, lab in [("archean", "#d1495b", "Archean CO2 + CH4 (forecast scenario), best fit"), ("full", "#2a6fdb", "free atmosphere, best fit")]:
             if m in curves:
                 ax.plot(wl, curves[m][0] - np.nanmedian(curves[m][0]), color=c, lw=1.5, label=lab)
         ax.axhline(0, color="0.6", lw=0.8)
-    ax.set(xlabel="wavelength (um)", ylabel="depth - median (ppm)")
-    ax.legend(fontsize=7)
+    ax.set(xlabel="wavelength (um)", ylabel="depth - median (ppm)", ylim=(-400, 400), xlim=(0.6, 5.3))
+    ax.legend(fontsize=7, loc="lower left")
+    ax = fig.add_subplot(gs[1, 2])
+    summ = json.loads((OUT / "summary.json").read_text())["fits"]
+    if "bare_rock" in summ and "full" in summ:
+        gain = np.array(summ["bare_rock"]["chi2_per_visit"]) - np.array(summ["full"]["chi2_per_visit"])
+        ax.bar(np.arange(1, nv + 1), gain, color=colours[:nv])
+        ax.axhline(0, color="k", lw=0.8)
+        ax.set(xlabel="visit", ylabel="chi^2 improvement: bare rock -> free atmosphere", xticks=np.arange(1, nv + 1),
+               title="A planet would improve every visit;\nthis 'signal' lives in visits 3 and 4")
     fig.tight_layout()
     fig.savefig(RESEARCH / "eda" / "retrieval_trappist1e_real.png", dpi=150, bbox_inches="tight")
 

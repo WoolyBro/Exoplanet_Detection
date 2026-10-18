@@ -1,0 +1,24 @@
+{
+ "total": 2,
+ "completed": 2,
+ "plan": [
+  "bare_rock",
+  "full"
+ ],
+ "planet": "TRAPPIST-1 b",
+ "data": {
+  "visits": 1,
+  "points_per_visit": 228,
+  "wl_um": [
+   3.00067,
+   5.19278
+  ],
+  "median_sigma_ppm": 301.05
+ },
+ "updated": "2026-10-18T11:09:45",
+ "current": "done",
+ "current_ncall": 5516,
+ "current_seconds": 783,
+ "current_dlogz": 0.309,
+ "last_finished": "full"
+}

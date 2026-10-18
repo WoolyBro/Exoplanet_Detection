@@ -1,0 +1,141 @@
+{
+  "clean": {
+    "per_N_expected": {
+      "2": {
+        "CH4": [
+          1.39,
+          0.23,
+          2.25
+        ],
+        "CO2": [
+          1.17,
+          0.24,
+          2.12
+        ]
+      },
+      "4": {
+        "CH4": [
+          4.02,
+          0.27,
+          3.3
+        ],
+        "CO2": [
+          2.89,
+          0.28,
+          2.91
+        ]
+      },
+      "8": {
+        "CH4": [
+          9.68,
+          0.3,
+          4.78
+        ],
+        "CO2": [
+          6.14,
+          0.32,
+          3.93
+        ]
+      },
+      "16": {
+        "CH4": [
+          22.45,
+          0.33,
+          7.01
+        ],
+        "CO2": [
+          12.89,
+          0.35,
+          5.43
+        ]
+      }
+    },
+    "noise_realisations": {
+      "N=8 #0": {
+        "CH4": [
+          3.2,
+          0.3,
+          3.02
+        ],
+        "CO2": [
+          7.07,
+          0.29,
+          4.17
+        ]
+      }
+    },
+    "CH4": {
+      "N_3sigma": 3.4,
+      "N_3sigma_extrapolated": false,
+      "N_5sigma": 8.7,
+      "N_5sigma_extrapolated": false,
+      "matched_filter_N_5sigma": 3.9,
+      "retrieval_factor_5sigma": 2.22
+    },
+    "CO2": {
+      "N_3sigma": 4.3,
+      "N_3sigma_extrapolated": false,
+      "N_5sigma": 13.4,
+      "N_5sigma_extrapolated": false,
+      "matched_filter_N_5sigma": 9.6,
+      "retrieval_factor_5sigma": 1.4
+    }
+  },
+  "stellar_contamination": {
+    "per_N_expected": {
+      "4": {
+        "CH4": [
+          3.01,
+          0.16,
+          2.95
+        ],
+        "CO2": [
+          2.51,
+          0.18,
+          2.76
+        ]
+      },
+      "8": {
+        "CH4": [
+          8.47,
+          0.2,
+          4.51
+        ],
+        "CO2": [
+          6.5,
+          0.22,
+          4.03
+        ]
+      },
+      "16": {
+        "CH4": [
+          18.99,
+          0.23,
+          6.48
+        ],
+        "CO2": [
+          13.13,
+          0.25,
+          5.48
+        ]
+      }
+    },
+    "noise_realisations": {},
+    "CH4": {
+      "N_3sigma": 4.1,
+      "N_3sigma_extrapolated": false,
+      "N_5sigma": 9.7,
+      "N_5sigma_extrapolated": false,
+      "matched_filter_N_5sigma": 3.9,
+      "retrieval_factor_5sigma": 2.49
+    },
+    "CO2": {
+      "N_3sigma": 4.7,
+      "N_3sigma_extrapolated": false,
+      "N_5sigma": 13.0,
+      "N_5sigma_extrapolated": false,
+      "matched_filter_N_5sigma": 9.6,
+      "retrieval_factor_5sigma": 1.36
+    }
+  }
+}

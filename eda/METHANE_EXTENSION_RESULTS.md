@@ -181,7 +181,7 @@ v3 places every CH₄ planet (lowest: GJ 3470 b, 0.17) above every non-CH₄ pla
 **Caveats.**
 - A perfect ranking on 9 positives has a wide true uncertainty, and the bootstrap CI of [1.00, 1.00] understates it.
 - The 29 planets' v1 scores had been seen before v3 was built. The comparison was a pre-registered non-inferiority check, not a selection, but it is not a fully blind test of v3.
-- PHOENIX's T_eff grid is coarse below 3,000 K (2002, 2314, 2642 K, …), and real M-dwarf contamination is not fully described by PHOENIX; the TRAPPIST-1 b null test in FORECAST_RESULTS.md §4d shows this.
+- PHOENIX's T_eff grid is coarse below 3,000 K (2002, 2314, 2642 K, …), and real M-dwarf contamination is not fully described by two PHOENIX templates. Visits 3 and 4 of TRAPPIST-1 e keep unexplained structure (FORECAST_RESULTS.md §4d), although null tests on TRAPPIST-1 b, c and d show the fitting method does not fake atmospheres.
 
 **Reproducing**
 ```bash

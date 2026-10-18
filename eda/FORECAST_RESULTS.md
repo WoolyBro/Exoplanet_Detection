@@ -149,9 +149,88 @@ Combined, real retrievals may need roughly 2–3.5× the transits forecast here.
 - **CO₂ at 4.3 µm is almost immune.** Its band shape is unlike any stellar template.
 - **This is the optimistic, linear case.** The contamination is a fixed pattern fitted alongside the gases. Real contamination changes between visits (200–300 ppm on TRAPPIST-1; Piaulet-Ghorayeb et al. 2025), and PHOENIX is interpolated on a coarse T_eff grid. The full TRAPPIST-1 e retrievals with stellar contamination (§4c) test it directly.
 
+## 4c. Full Bayesian retrievals for TRAPPIST-1 e (added 2026-10-18)
+
+The numbers above use a known-template matched filter, which is optimistic because it assumes the right spectrum shape is known. Here they are replaced by what an observer would actually do (`stage_b_atmospheres/retrieval_trappist1e.py`):
+- **Simulated observation.** The Archean atmosphere (CO₂ 1 %, CH₄ 0.1 %, H₂O 0.1 %, N₂, 1 bar, 250 K) on TRAPPIST-1 e. NIRSpec PRISM, 0.95–5.3 µm at R = 100, with the calibrated noise for N transits.
+- **Retrieval.** Nested sampling (dynesty, 250 live points) over log CO₂, CH₄ and H₂O, T, surface pressure and radius.
+- **Detection test.** Each gas is tested by Bayesian model comparison against the same retrieval without it, with the Bayes factor converted to sigma (Benneke & Seager 2013).
+- **Data.** Each N is an expected (noise-free) dataset, so no single random draw decides the answer.
+- **Opacities.** Binned to R = 300 for both the simulated data and the retrieval. That changes the gas signals by < 0.2 % relative to R = 1000.
+
+| Transits | CH₄: ln B (σ) | CO₂: ln B (σ) |
+|---|---|---|
+| 2 | 1.39 (2.3σ) | 1.17 (2.1σ) |
+| 4 | 4.02 (3.3σ) | 2.89 (2.9σ) |
+| 8 | 9.68 (4.8σ) | 6.14 (3.9σ) |
+| 16 | 22.45 (7.0σ) | 12.89 (5.4σ) |
+
+| | Transits for 3σ | Transits for 5σ: retrieval | Transits for 5σ: matched filter (same data grid) | Retrieval factor |
+|---|---|---|---|---|
+| CH₄ | 3.4 | **8.7** | 3.9 | **×2.2** |
+| CO₂ | 4.3 | **13.4** | 9.6 | **×1.4** |
+
+**Reading it.**
+- **A full retrieval needs 1.4–2.2× the transits of the matched filter.** That sits at the low end of the 2–3.5× inferred independently from K2-18 b (§3), so the two checks agree.
+- **CO₂ suffers less than CH₄.** Its 4.3 µm band is unique; CH₄'s bands overlap H₂O's.
+- **The Archean pair on TRAPPIST-1 e still needs only about 9–13 PRISM transits** without stellar contamination.
+
+**With stellar contamination** (`--tls-linear`):
+- **Setup.** Unocculted spots (f = 0.08, 2300 K; about 250 ppm, TRAPPIST-1's observed amplitude) were injected with the full non-linear model. They were then fitted with first-order spot and facula templates plus an offset, marginalised analytically, as on the real data. A fully non-linear 8-parameter retrieval was tried first and abandoned: one run took more than 3 h without converging.
+
+| | 5σ transits, clean | 5σ transits, contamination fitted | Retrieval cost of contamination | First-order forecast (§4b) |
+|---|---|---|---|---|
+| CH₄ | 8.7 | **9.7** | +11 % | +23 % (CH₄ signal kept 0.90) |
+| CO₂ | 13.4 | **13.0** | none | none (CO₂ signal kept 1.00) |
+
+- **The full retrieval confirms §4b.** Stellar contamination costs PRISM a little CH₄ sensitivity and essentially no CO₂ sensitivity. The broad 0.6–5.3 µm coverage separates stellar from planetary features.
+- **Remaining optimism.** The contamination is held fixed across stacked visits; the real data (§4d) show it is not.
+
+Multiply the matched-filter counts in §4 by these factors for retrieval-grade estimates. The factors are specific to TRAPPIST-1 e, PRISM and this scenario, but the same order should apply to similar targets.
+
+## 4d. The real TRAPPIST-1 e data (4 JWST visits, Espinoza et al. 2025)
+
+`stage_b_atmospheres/retrieval_trappist1e_real.py` and `real_retrieval_report.py`; figure `eda/retrieval_trappist1e_real.png`.
+
+**Data.** The four NIRSpec PRISM visits as published in the archive: 67 points each, 0.63–5.21 µm.
+
+**Model.**
+- **Planet, shared across visits:** an N₂ atmosphere with free CO₂, CH₄ and H₂O, plus temperature, surface pressure and radius; or a bare rock.
+- **Per visit:** cool-spot (2200 K) and hot-facula (T★ + 150 K) PHOENIX templates plus an offset, marginalised analytically. The integral was checked against brute-force Monte Carlo (`tests/test_forecast_noise.py`).
+- **Sampler:** nested sampling (dynesty).
+
+**Empirical null tests (same star, same mode).**
+- TRAPPIST-1 b and c are airless or without a thick atmosphere (JWST thermal emission); d's spectrum is flat. The method finds **no atmosphere** on any of them: ln B(atmosphere vs bare rock) = −0.5 (b), −0.3 (b, ≥ 3 µm only), +0.8 (c), +0.1 (d).
+- An earlier run gave b ln B ≈ 511, from a **bug**: data bins narrower than the model's sampling got no model value, and were dropped from the atmosphere models only. It is fixed, and the likelihood now refuses to run if any data point lacks a model value. TRAPPIST-1 e and d had no such bins, which was checked.
+
+**Results.** ln B (Benneke & Seager sigma; negative = the second model is favoured):
+
+| Test | All visits, 0.6–5.2 µm | All visits, ≥ 3 µm only | Quiet visits 1 + 2 only |
+|---|---|---|---|
+| any atmosphere vs bare rock | +7.4 (4.3σ) | +6.4 (4.0σ) | **+0.4 (none)** |
+| CH₄ (with vs without) | +7.8 (4.3σ) | +7.7 (4.3σ) | +1.4 (2.3σ, weak) |
+| CO₂ (with vs without) | −1.0 (not needed) | −0.7 (not needed) | — |
+| Archean scenario (CO₂ 1 %, CH₄ 0.1 %) vs bare rock | +2.5 | **−1.1 (disfavoured, 2.1σ)** | — |
+| Archean scenario vs free atmosphere | **−4.9 (disfavoured, 3.6σ)** | **−7.5 (disfavoured, 4.3σ)** | — |
+
+**Reading it.**
+1. **No credible atmosphere detection.** The "atmosphere/CH₄" preference has three red flags:
+   - It vanishes when only the two quiet visits are used (ln B +0.4).
+   - Adding an atmosphere improves χ² only in visits 3 (+19) and 4 (+11), and worsens visits 1 and 2. A planetary atmosphere is the same in every transit; stellar contamination is not.
+   - It needs an implausible ~5 % CH₄.
+
+   It is unexplained, visit-specific stellar contamination: spots or faculae, or flares, which affected TRAPPIST-1 transits in every published visit. That is the same conclusion Glidden et al. (2025) draw: neither a bare rock nor an N₂ atmosphere "fully explains all features".
+2. **A CO₂-rich, Archean-like atmosphere is disfavoured.** The 4.3 µm CO₂ band is where contamination matters least (§4b), and the data show no CO₂ feature (95 % upper limit log CO₂ < −5.0). With only ≥ 3 µm data, the Archean scenario is disfavoured even against a bare rock (2.1σ). That is consistent with Glidden et al. (2025), who weakly disfavour CO₂-rich atmospheres (2σ).
+3. **It matches the forecast.** The forecast predicted roughly 3σ sensitivity to Archean CO₂ from 4 transits (§4c: 2.9σ at N = 4), and the real data deliver a disfavour of that order.
+
+**Limits.**
+- The atmosphere model is clear, isothermal and 1 bar; clouds or a thinner atmosphere would weaken the CO₂ constraint.
+- The contamination model is first order with two fixed templates; the null tests show it does not fake atmospheres on b, c or d.
+- This is a re-analysis of published, reduced spectra, not of the raw data.
+
 ## 5. Limitations — what would make these numbers wrong
 
-- **Lower bounds.** The matched filter knows the template. A free retrieval needs more data; K2-18 b suggests about 2–3.5× more.
+- **Lower bounds.** The matched filter knows the template. Full retrievals for TRAPPIST-1 e need 1.4× (CO₂) to 2.2× (CH₄) more transits (§4c). K2-18 b suggested 2–3.5×.
 - **Stellar contamination is modelled only to first order** (§4b), as a fixed pattern. Visit-to-visit variability is not modelled, and it dominated the TRAPPIST-1 b/c JWST spectra.
 - **No cold trap.** The atmospheres are isothermal with constant mixing ratios. Real H₂O above the tropopause is far lower, so **the H₂O numbers in the output files are optimistic and are not reported here**. Lustig-Yaeger et al. 2019 find habitable-atmosphere H₂O "prohibitively difficult".
 - **The scenarios are assumptions.** A thin or absent atmosphere, which JWST has found for TRAPPIST-1 b and c, has no features at all.

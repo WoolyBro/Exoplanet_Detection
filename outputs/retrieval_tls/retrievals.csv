@@ -1,0 +1,7 @@
+n_transits,realisation,gas,lnB,lnB_err,sigma_retrieval,sigma_matched_filter
+4,expected,CH4,3.01,0.16,2.95,5.06
+4,expected,CO2,2.51,0.18,2.76,3.23
+8,expected,CH4,8.47,0.2,4.51,7.15
+8,expected,CO2,6.5,0.22,4.03,4.57
+16,expected,CH4,18.99,0.23,6.48,10.12
+16,expected,CO2,13.13,0.25,5.48,6.46
