@@ -1,0 +1,55 @@
+planet,CO2,source,evidence,note
+WASP-39 b,1,2023Natur.614..659R (arXiv:2211.10487); ERS 2022 (2208.11692),28 sigma (PRISM); 26 sigma (ERS),verified_gas_labels.csv
+WASP-107 b,1,2024Natur.630..836W (arXiv:2405.11018),29 sigma,verified_gas_labels.csv
+HD 189733 b,1,2024Natur.632..752F (arXiv:2407.06163),11.2 sigma,verified_gas_labels.csv
+HD 209458 b,1,2024ApJ...963L...5X (arXiv:2310.03245),strong CO2 feature (sigma not stated),verified_gas_labels.csv
+GJ 3470 b,1,2024ApJ...970L..10B (arXiv:2406.04450),>3 sigma,verified_gas_labels.csv
+HAT-P-26 b,1,2025AJ....170..292G (arXiv:2509.16082),ln B = 85.6,verified_gas_labels.csv
+HAT-P-12 b,1,arXiv:2507.18722 (Crouzet+ 2025),CO2 12.2 sigma,
+HIP 67522 b,1,arXiv:2409.16355 (Thao+ 2024),"""strong absorption from H2O and CO2 (>=7 sigma)""",
+TOI-1130 b,1,arXiv:2605.02036 (Barat+ 2026),CO2 3.3 sigma,
+V1298 Tau b,1,arXiv:2507.08837 (Barat+ 2025 AJ 170 165),CO2 35 sigma,
+WASP-166 b,1,arXiv:2501.00609 (Mayo+ 2025 AJ),CO2 14.7 sigma,
+WASP-15 b,1,arXiv:2410.08116 (Kirk+ 2025),"""significant absorption by H2O (4.2 sigma) and CO2 (8.9 sigma)""",
+WASP-94 A b,1,arXiv:2505.11224 (Ahrer+ 2025),"""H2O and CO2 at ~4 sigma and ~11 sigma""",
+TrES-4 b,1,arXiv:2503.24280 (Meech+ 2025),"""evidence for CO and small amounts of CO2"" at 4.0 sigma",authors say evidence; >= 3 sigma by the rule
+TOI-421 b,0,arXiv:2501.01498 (Davenport+ 2025 ApJL),H2O detected; CH4 and CO2 not detected,
+TOI-199 b,0,arXiv:2511.15835 (Bello-Arufe+ 2026 AJ),CH4 detected; CO and CO2 not detected (G395M),
+LP 791-18 c,0,Roy+ 2025 Nature Astronomy (NIRSpec PRISM),CH4 plus haze; no CO2,
+TRAPPIST-1 d,0,arXiv:2508.08416 (Piaulet-Ghorayeb+ 2025 ApJ),"no CH4, CO2 or H2O detected",
+TOI-5205 b,0,arXiv:2502.06966 (Canas+ 2026 AJ 171 260),"CH4 and H2S detected; ""No other molecular species were significantly detected"" (CO2 in the retrieval)",
+LTT 3780 c,0,arXiv:2512.15844 (Rigby+ 2025; TOI-732 c),"CH4 3.0-4.6 sigma; ""nominal constraints"" only on H2O, CO, CO2",
+WASP-121 b,0,arXiv:2506.02199 (Gapp+ 2025),"CO2 a free retrieval species, loosely constrained; ""H2O and CO are apparent"" plus SiO; G395H opacity from H2O, SiO, CO",CO2 in the retrieval and absent from the detected species
+HAT-P-14 b,0,arXiv:2504.08903 (Liu+ 2025) Sec IV.4,"H2O 3.09 sigma; ""non-detection of other gas species""",
+GJ 1132 b,0,arXiv:2508.10579 (Bennett+ 2025 AJ 170 205),"""best-fit with a flat line""; featureless",
+GJ 341 b,0,arXiv:2401.06043 (Kirk+ 2024 AJ 167 90),"""does not uncover evidence of an atmosphere""; reduction-dependent 2.9-3.1 sigma bumps judged not real",
+GJ 357 b,0,arXiv:2507.07165 (Adams Redai+ 2025 AJ),"""no detectable atmospheric spectral features""",
+HD 15337 c,0,arXiv:2602.22327 (Wallack+ 2026 AJ),step function (detector offset) best fit; no features,
+L 168-9 b,0,arXiv:2411.03154 (Alam+ 2025),"""lack of discernible atmospheric features""; flat line best fit",
+L 98-59 c,0,arXiv:2409.07552 (Scarsdale+ 2024 AJ 168 276),"""featureless at the precision of our data""",
+LHS 475 b,0,arXiv:2301.04191 (Lustig-Yaeger+ 2023 Nat Astron),consistent with a flat line,
+TOI-1685 b,0,arXiv:2512.15338 (Fisher+ 2025 MNRAS 545),no evidence for an atmosphere,
+TOI-260 b,0,arXiv:2602.22329 (Meech+ 2026),"""We do not detect any clear molecular signatures""; mostly featureless",
+TOI-776 b,0,arXiv:2501.14596 (Alderson+ 2025),flat line preferred,
+TOI-776 c,0,arXiv:2502.20501 (Teske+ 2025),"""no strong evidence for molecular features""",
+TOI-836 b,0,arXiv:2404.00093 (Alderson+ 2024 AJ),"""well fit by a zero-sloped line""",
+TOI-836 c,0,arXiv:2404.01264 (Wallack+ 2024 AJ),"""featureless transmission spectrum""",
+Kepler-51 d,0,arXiv:2505.21358 (Libby-Roberts+ 2026 AJ 171 221),"""best fit by a sloped line covering the entire wavelength range"" (haze)",
+TRAPPIST-1 e,0,arXiv:2509.05407 (Glidden+ 2025 ApJL); arXiv:2509.05414 (Espinoza+ 2025),"no atmosphere detected; CO2-rich atmospheres weakly disfavoured (2 sigma)",
+GJ 1214 b,unknown,arXiv:2410.10183 (Schlawin+ 2024 ApJL 974 L33),"""possible"" CO2; CO2+CH4 model 3.3-3.6 sigma; ""more observations are needed""",tentative
+GJ 3090 b,unknown,arXiv:2504.20428 (Ahrer+ 2025 ApJL 985 L10),"CO2 lower limits but ""not individually significantly detected""",tentative
+HAT-P-30 b,unknown,arXiv:2601.13104 (Claringbold+ 2026),CO2 2.1 sigma,tentative
+KELT-7 b,unknown,arXiv:2509.12479 (Ahrer+ 2025),"""only tentative evidence for H2O and CO2""",tentative
+NGTS-2 b,unknown,arXiv:2603.18332 (Fairman+ 2026),"CO2 1.9-5.4 sigma depending on the model; authors caution against quoting",model-dependent
+HATS-6 b,unknown,arXiv:2608.16990 (Guzman Caloca+ 2026 AJ 172 193),"log CO2 = -7.59, ln B = 4.24 classed as a ""minor result"", not a detection",below the authors' detection class
+TOI-3235 b,unknown,arXiv:2608.04194 (Ko+ 2026 AJ 172 174),CO2 constrained only with a deterministic contamination model,model-dependent
+K2-18 b,unknown,arXiv:2309.05566 (Madhusudhan+ 2023) vs reanalysis arXiv:2501.18477,3 sigma in 2023; not robust in the reanalysis,conflicting; verified_gas_labels.csv had 0
+TOI-270 d,unknown,Holmberg & Madhusudhan 2024; Felix+ 2025,2.9-3.9 sigma depending on the analysis,verified_gas_labels.csv unknown
+LHS 1140 b,unknown,Damiano+ 2024 ApJL 968 L22 (arXiv:2403.13265); Cadieux+ 2024,"""possibly N2-dominated with H2O and CO2, with a modest confidence""",tentative
+WASP-127 b,unknown,arXiv:2501.02081 (Fu+ 2025),CO2-L index 2.64 +/- 0.39 scale heights; no detection statement,no statement (strict rule)
+GJ 486 b,unknown,arXiv:2305.00868 (Moran+ 2023),deviates from flat at 2.2-3.3 sigma (water or starspots); no CO2 statement,no statement
+L 98-59 b,unknown,arXiv:2501.18680 (Bello-Arufe+ 2025),SO2 preferred at 3.6 sigma; no CO2 statement,no statement
+L 98-59 d,unknown,arXiv:2408.15855 (Gressier+ 2024),3.3-4.8 um feature fit by sulfur species; no CO2 statement,no statement
+TRAPPIST-1 b,unknown,arXiv:2412.16541 (Rathcke+ 2025),contamination-corrected PRISM spectra; no CO2 statement,no statement
+TRAPPIST-1 c,unknown,arXiv:2412.16541 (Rathcke+ 2025),contamination-corrected PRISM spectra; no CO2 statement,no statement; verified_gas_labels.csv unknown
+TOI-270 b,unknown,arXiv:2509.14224 (Coulombe+ 2025),possible H2O (ln B 0.3-3.2); no CO2 statement,no statement

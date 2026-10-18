@@ -1,0 +1,6 @@
+{
+ "co2_labels.csv": "8721ae688b6bd58b09036b46bdc80dfbaa49f5c0dbcef53b2146fd51ff346039",
+ "frozen_at": "2026-10-19T00:46:20",
+ "rule": "labels fixed before any CO2 score of the v3-grid models is computed",
+ "protocol": "stage_b_atmospheres/CO2_EXTENSION_PROTOCOL.md (commit 4893248)"
+}
