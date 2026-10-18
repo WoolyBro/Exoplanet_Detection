@@ -104,6 +104,33 @@ Each final model is the **5-seed ensemble**. Platt calibration and the recall-90
 - **The TESS-trained model transfers to Kepler better than it does on TESS itself** (0.875).
 - Both point the same way: TESS's labels and class balance, not its light curves, limit what can be learned from it.
 
+## 5b. Against published vetters, on the same test KOIs (added 2026-10-18)
+
+`stage_a_transit_model/compare_published_vetters.py`; figure `figures/14_published_vetters.png`.
+
+**What was compared.**
+- **Robovetter** `koi_score` (Thompson et al. 2018).
+- **Out-of-fold scores** of AstroNet, ExoNet, ExoMiner and ExoMiner-TCE for every DR25 TCE, from Valizadegan et al. 2022 (ApJ 926, 120, Table 3; their 10-fold cross-validation is grouped by star; saved in `external_data/exominer/`).
+- **Matching:** KOIs matched by (kepid, TCE planet number).
+- **The common set:** 922 v2 test KOIs scored by every vetter. The published table holds only labelled TCEs, so the set has just 2 CANDIDATEs, and the comparison is effectively **confirmed vs false positive**.
+
+| Vetter | Inputs | ROC-AUC (95 % star bootstrap) | Ours minus vetter (paired) | MES < 12 (n = 204) |
+|---|---|---|---|---|
+| **Ours** (CNN+BiLSTM ensemble) | phase-folded views + flux error | **0.977** [0.968, 0.986] | — | 0.931 |
+| AstroNet (Shallue & Vanderburg architecture, retrained by Valizadegan et al.) | phase-folded views | 0.976 [0.966, 0.985] | **+0.001 [−0.005, +0.008]** | 0.927 |
+| Robovetter `koi_score`* | many diagnostics | 0.984 [0.976, 0.993] | −0.007 [−0.018, +0.004] | 0.983 |
+| ExoNet | views + centroid + stellar | 0.990 [0.984, 0.995] | **−0.013 [−0.021, −0.005]** | 0.962 |
+| ExoMiner | views + centroid, odd/even, secondary, stellar, … | **0.996** [0.994, 0.998] | **−0.019 [−0.027, −0.012]** | 0.994 |
+| ExoMiner-TCE | the same | 0.996 [0.994, 0.998] | −0.019 [−0.028, −0.012] | 0.993 |
+
+\* Circular: for 100 % of the test false positives, the label equals the Robovetter's own FALSE POSITIVE decision (`koi_pdisposition`), and the Robovetter's binary decision agrees with the label for 99.8 % of KOIs. Its score is partly graded against itself.
+
+**Reading it.**
+- **Our model is statistically indistinguishable from AstroNet,** the published light-curve-only CNN (ΔAUC +0.001), overall and on weak signals.
+- **ExoMiner and ExoNet are significantly better** (by 0.013–0.019), and the gap is largest for weak signals (MES < 12: 0.93 vs 0.99). Their advantage comes from diagnostics our model does not see: centroid motion catches background eclipsing binaries, and odd/even and secondary-eclipse tests catch eclipsing binaries.
+- The recurrent layer and error channel did not change this picture: the gain from more *information* (diagnostics) is larger than the gain from more *architecture*.
+- **The comparison excludes candidates,** which are 34 % of our test set and the hardest part of our task. ExoMiner publishes no candidate scores with labels to compare against.
+
 ## 6. Limits
 
 - One test reading per mission. The CIs are star-bootstrap intervals and do not include the selection procedure's own variance. The validation–test agreement suggests that is small.

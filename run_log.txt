@@ -3689,3 +3689,9 @@ Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 
   inflating ln B(atmosphere vs bare rock) to ~511 on airless TRAPPIST-1 b. Fix: interpolate the model into empty bins;
   likelihood now raises if any data point lacks a model value. TRAPPIST-1 e (67-pt) and d (24-pt) had 0 affected bins
   (verified) -> their results stand. b and c null tests rerun.
+
+2026-10-18  STAGE A vs PUBLISHED VETTERS (same v2 test KOIs; ExoMiner paper Table 3 out-of-fold scores + koi_score)
+  common set 922 KOIs (ExoMiner table = labelled TCEs only -> 2 candidates) ; confirmed vs FP ROC-AUC:
+  ours 0.977 | AstroNet 0.976 (diff +0.001 [-0.005,0.008]) | Robovetter 0.984 (circular: FP labels = Robovetter FP 100%)
+  ExoNet 0.990 (-0.013*) | ExoMiner 0.996 (-0.019*) | MES<12: ours 0.931, AstroNet 0.927, ExoMiner 0.994
+  -> light-curve-only parity with AstroNet; diagnostics (centroid, odd/even, secondary) are worth ~0.02 AUC.
