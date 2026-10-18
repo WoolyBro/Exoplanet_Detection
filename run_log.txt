@@ -3683,3 +3683,9 @@ Entered as terrestrial_atm = P(R<1.5 AND atmosphere side) [a separate 4th term p
 Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 f 3 (0.19), TRAPPIST-1 e 4 (0.03, was 1),
   LP 890-9 c 4, LHS 1140 b 6, TRAPPIST-1 d 8; hot rocks (GJ 1132 b, GJ 486 b, LHS 475 b, T-1 b/c) 9 -> 12.
   TRAPPIST-1 e verdict depends on XUV assumption: empirical 0.17, bolometric 1.00. Tests: 41 pass.
+
+2026-10-18  BUG FOUND AND FIXED (real-data retrieval): data bins narrower than the R=300 model sampling (TRAPPIST-1 b/c,
+  362-point spectra) got NaN model values and were silently DROPPED from atmosphere-model likelihoods only (68/362 points),
+  inflating ln B(atmosphere vs bare rock) to ~511 on airless TRAPPIST-1 b. Fix: interpolate the model into empty bins;
+  likelihood now raises if any data point lacks a model value. TRAPPIST-1 e (67-pt) and d (24-pt) had 0 affected bins
+  (verified) -> their results stand. b and c null tests rerun.

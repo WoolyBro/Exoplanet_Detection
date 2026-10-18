@@ -59,3 +59,24 @@ def test_transits_for_target_sigma_interpolates_and_flags_extrapolation():
     assert 8 < n < 16 and not ext
     n, ext = n_for_sigma([2, 4], [1.0, 1.4], 5.0)
     assert n > 4 and ext
+
+
+def test_analytic_contamination_marginalisation_matches_monte_carlo():
+    """The real-data retrieval integrates per-visit linear nuisances analytically; check that integral
+    against brute-force averaging of the likelihood over the nuisance prior."""
+    import retrieval_trappist1e_real as rr
+
+    rng = np.random.default_rng(0)
+    n = 8
+    depth = np.full(n, 5000.0)
+    rr._TPL.update(spot=np.linspace(0.2, 0.8, n), facula=np.linspace(-1.0, -0.1, n))
+    sigma = np.full(n, 100.0)
+    y = depth + rng.normal(0, 100, n)
+    analytic = rr.marginal_loglike(depth, y, sigma)
+    lam = np.array([rr.PRIOR_SD["spot"], rr.PRIOR_SD["facula"], rr.PRIOR_SD["offset_ppm"]])
+    th = rng.normal(0, 1, (400_000, 3)) * lam
+    model = depth * (1 + th[:, :1] * rr._TPL["spot"] + th[:, 1:2] * rr._TPL["facula"]) + th[:, 2:3]
+    ll = -0.5 * np.sum(((y - model) / sigma) ** 2, axis=1) - n * np.log(np.sqrt(2 * np.pi) * 100.0)
+    mc = np.log(np.mean(np.exp(ll - ll.max()))) + ll.max()
+    rr._TPL.clear()
+    assert analytic == pytest.approx(mc, abs=0.15)

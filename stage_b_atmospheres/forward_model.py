@@ -93,7 +93,8 @@ def transmission_spectrum(vmr: dict[str, float], background: str, temperature: f
                           mp_earth: float, rs_sun: float, surface_pressure: float = 1.0,
                           wl_range: tuple[float, float] = (0.95, 12.0),
                           species: tuple[str, ...] | None = None,
-                          resolution: int = 1000) -> tuple[np.ndarray, np.ndarray]:
+                          resolution: int = 1000, haze_kappa_350: float | None = None,
+                          haze_gamma: float = -4.0) -> tuple[np.ndarray, np.ndarray]:
     """(wavelength um, transit depth ppm) for an isothermal atmosphere.
 
     vmr: volume mixing ratios of trace gases (keys from SPECIES). The background (N2, or H2/He)
@@ -101,6 +102,8 @@ def transmission_spectrum(vmr: dict[str, float], background: str, temperature: f
     or a cloud deck for a giant - and is also the reference pressure at which the radius is rp_earth.
     species: the line species to load (default: all of SPECIES). Keep it the same across calls so the
     cached opacity objects are reused; gases in it but not in vmr get zero abundance.
+    haze_kappa_350, haze_gamma: optional haze, an opacity of haze_kappa_350 (cm^2/g) at 0.35 um scaling
+    as (lambda / 0.35 um)^haze_gamma (gamma = -4 is Rayleigh-like; petitRADTRANS power-law opacity).
     """
     if not 0 < sum(vmr.values()) < 1:
         raise ValueError("trace-gas VMRs must sum to between 0 and 1")
@@ -133,7 +136,9 @@ def transmission_spectrum(vmr: dict[str, float], background: str, temperature: f
             temperatures=np.full(n, float(temperature)), mass_fractions=mass,
             mean_molar_masses=np.full(n, mu), reference_gravity=gravity,
             reference_pressure=surface_pressure, planet_radius=rp_earth * R_EARTH_CM,
-            opaque_cloud_top_pressure=surface_pressure)
+            opaque_cloud_top_pressure=surface_pressure,
+            **({} if haze_kappa_350 is None else {"power_law_opacity_350nm": haze_kappa_350,
+                                                  "power_law_opacity_coefficient": haze_gamma}))
         wl = wl_cm * 1e4
         keep = (wl >= lo2) & (wl < hi2)
         wl_all.append(wl[keep])

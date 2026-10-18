@@ -27,6 +27,12 @@ Why each design choice
   * Grid and preprocessing identical to Stage B: 1-5 um, 100 bins, depth minus its median over covered
     bins, channels (depth, uncertainty, mask).
 
+  * Optional (2026-10-18), --tls and --haze:
+      - unocculted spots (0.70-0.95 T_eff) or faculae (T_eff + 50-500 K) covering up to 25 % of the
+        disc, with PHOENIX spectra at the anchor star's own T_eff, on 70 % of samples;
+      - a power-law haze (kappa_350 0.01-30 cm^2/g, slope -6 to -2) on 50 % of samples.
+    Labels are computed on the contaminated, hazy spectra, so "detectable" stays honest.
+
 Output: outputs/stage_b_synthetic/synthetic_grid.npz (X, Y, presence, anchors, params) + params.csv
 """
 
@@ -68,9 +74,46 @@ def real_inputs():
     return _REAL
 
 
-def make_sample(seed: int) -> dict:
+# ---- optional realism (2026-10-18): stellar contamination and hazes ------------------------------ #
+# Off by default, so the original grid (seed 20261017) reproduces exactly; every extra random draw
+# happens only when a flag is on.
+TLS_PROB, SPOT_SHARE, F_MAX = 0.7, 0.6, 0.25
+HAZE_PROB, LOG_KAPPA, GAMMA = 0.5, (-2.0, 1.5), (-6.0, -2.0)
+_PHX = {}
+
+
+def phoenix_on_grid():
+    """PHOENIX F_nu on the 1-5 um grid, every 20 K from 2002 to 7500 K (petitRADTRANS table)."""
+    if not _PHX:
+        import os
+        from petitRADTRANS.config import petitradtrans_config_parser as cfg
+        cfg.set_input_data_path(os.path.expanduser("~/petitRADTRANS/input_data"))
+        from petitRADTRANS.stellar_spectra.phoenix import PhoenixStarTable
+        t = PhoenixStarTable()
+        t.load()
+        grid = np.arange(2002.0, 7501.0, 20.0)
+        rows = []
+        for T in grid:
+            spec, _ = t.compute_spectrum(T)
+            idx = np.digitize(spec[:, 0] * 1e4, EDGES) - 1
+            rows.append([spec[idx == b, 1].mean() for b in range(len(EDGES) - 1)])
+        _PHX.update(grid=grid, flux=np.array(rows))
+    return _PHX
+
+
+def phoenix_flux(T: float) -> np.ndarray:
+    p = phoenix_on_grid()
+    T = float(np.clip(T, p["grid"][0], p["grid"][-1]))
+    i = min(np.searchsorted(p["grid"], T) - 1, len(p["grid"]) - 2)
+    i = max(i, 0)
+    w = (T - p["grid"][i]) / (p["grid"][i + 1] - p["grid"][i])
+    return (1 - w) * p["flux"][i] + w * p["flux"][i + 1]
+
+
+def make_sample(arg) -> dict:
     import forward_model as fm
 
+    seed, use_tls, use_haze = arg if isinstance(arg, tuple) else (arg, False, False)
     rng = np.random.default_rng(seed)
     R = real_inputs()
     anchor = R["params"].iloc[rng.integers(len(R["params"]))]
@@ -87,11 +130,25 @@ def make_sample(seed: int) -> dict:
     k = rng.integers(len(R["X"]))
     _, unc, mask = R["X"][k]
     cov = mask > 0
+    extra = {}
+    haze_k, haze_g, eps = None, -4.0, np.ones(len(EDGES) - 1)
+    if use_haze and rng.random() < HAZE_PROB:
+        haze_k, haze_g = 10 ** rng.uniform(*LOG_KAPPA), rng.uniform(*GAMMA)
+    if use_tls and rng.random() < TLS_PROB:
+        t_phot = float(anchor.st_teff)
+        spot = rng.random() < SPOT_SHARE
+        t_het = t_phot * rng.uniform(0.70, 0.95) if spot else t_phot + rng.uniform(50, 500)
+        f = rng.uniform(0, F_MAX)
+        eps = 1.0 / (1.0 - f * (1.0 - phoenix_flux(t_het) / phoenix_flux(t_phot)))
+        extra.update(tls_f=f, tls_T_het=t_het, tls_type="spot" if spot else "facula")
+    if haze_k is not None:
+        extra.update(haze_kappa_350=haze_k, haze_gamma=haze_g)
 
     def binned(v):
         wl, dep = fm.transmission_spectrum(v, background, t, rp, mp, rs, surface_pressure=p_cloud,
-                                         wl_range=(0.98, 5.02), species=tuple(MOLECULES))
-        return fm.bin_spectrum(wl, dep, EDGES)
+                                         wl_range=(0.98, 5.02), species=tuple(MOLECULES),
+                                         **({} if haze_k is None else {"haze_kappa_350": haze_k, "haze_gamma": haze_g}))
+        return fm.bin_spectrum(wl, dep, EDGES) * eps        # contamination multiplies the observed depth
 
     full = binned(vmr)
     labels = {}
@@ -111,7 +168,7 @@ def make_sample(seed: int) -> dict:
             "Y": [labels[g] for g in STAGE_B_ORDER], "present": [int(g in vmr) for g in STAGE_B_ORDER],
             "anchor": str(anchor.pl_name), "noise_from": str(R["planets"][k]),
             "params": {"rp": rp, "mp": mp, "rs": rs, "T": t, "log_p_cloud": float(np.log10(p_cloud)), "background": background,
-                       **{f"log_vmr_{g}": float(np.log10(vmr[g])) if g in vmr else None for g in MOLECULES}}}
+                       **{f"log_vmr_{g}": float(np.log10(vmr[g])) if g in vmr else None for g in MOLECULES}, **extra}}
 
 
 def main() -> int:
@@ -120,6 +177,8 @@ def main() -> int:
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=20261017)
     ap.add_argument("--out", default=str(OUT), help="output folder (a second, independent grid goes elsewhere)")
+    ap.add_argument("--tls", action="store_true", help="add unocculted spots/faculae (PHOENIX) to 70 %% of samples")
+    ap.add_argument("--haze", action="store_true", help="add a power-law haze to 50 %% of samples")
     args = ap.parse_args()
     out = Path(args.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -129,9 +188,10 @@ def main() -> int:
     parts = out / "parts"
     parts.mkdir(exist_ok=True)
     todo = [s for s in seeds if not (parts / f"{s}.pkl").is_file()]
+    jobs = [(s, args.tls, args.haze) for s in todo]
     print(f"  {len(seeds) - len(todo)} samples already checkpointed, {len(todo)} to compute", flush=True)
     with Pool(args.workers) as pool:
-        for i, (s, r) in enumerate(zip(todo, pool.imap(make_sample, todo, chunksize=4)), 1):
+        for i, (s, r) in enumerate(zip(todo, pool.imap(make_sample, jobs, chunksize=4)), 1):
             tmp = parts / f"{s}.pkl.tmp"
             tmp.write_bytes(pickle.dumps(r))
             tmp.replace(parts / f"{s}.pkl")
