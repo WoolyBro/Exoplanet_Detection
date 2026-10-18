@@ -135,6 +135,93 @@ on the catalogue's upper and lower errors).
 3. **The habitable-zone planets of quieter stars rise:** TOI-700 d (M2, 0.72) and Kepler-62 f (K2, 0.98). They are much harder to observe, though (TSM 3.6 and 0.4).
 4. **The hot rocky planets fall** (GJ 1132 b, GJ 486 b, LHS 475 b, TRAPPIST-1 b, c). JWST found no thick atmosphere on GJ 1132 b, GJ 486 b and TRAPPIST-1 b and c, which agrees with the shoreline.
 
+## 2c. Retention fitted to the observations (added 2026-10-18; pre-registered in `stage_c_priority_fusion/HABITABILITY_FACTOR_PROTOCOL.md`)
+
+**Code:** `retention_model.py`. **Figure:** `eda/retention_model.png`.
+
+The fixed shoreline was replaced, as a tested alternative, by a model fitted to the 20 observed rocky planets:
+- **The model:** logit P(atmosphere) = α + β · margin + γ · magma (T_eq ≥ 1,200 K, fixed a priori).
+- **Labels:** soft, from the evidence strength.
+- **Priors:** from theory.
+- **Uncertainty:** each planet's margin uncertainty is averaged over.
+- **Inference:** importance sampling (effective sample size 15,400), with exact leave-one-out.
+
+| | Posterior median [95 %] | Reading |
+|---|---|---|
+| β (margin, per dex) | **−1.27** [−2.64, −0.12]; P(β < 0) = **0.99** | the shoreline's direction is supported by the data (A1 held) |
+| γ (magma-ocean dayside) | **+2.63** [+0.05, +5.45]; P(γ > 0) = **0.98** | hot lava worlds keep (resupplied) atmospheres more often (A3 held) |
+| α | −0.34 [−1.85, +1.25] | ~42 % on the shoreline itself |
+
+**Leave-one-out mean log score:**
+- fitted **−0.53**;
+- fixed shoreline −1.72 (it gives TOI-561 b and 55 Cnc e near-zero probability);
+- constant base rate −0.58.
+
+A2 held, but the discrimination is modest: leave-one-out AUC 0.60 against 0.55.
+
+**For the ranked targets** (all temperate, magma = 0) the fitted retention is more cautious and, unlike the 0/1 shoreline, carries honest uncertainty:
+
+| Planet | P(retain): fitted [5–95 %] | Fixed shoreline |
+|---|---|---|
+| LHS 1140 b | 0.69 [0.28, 0.95] | 0.99 |
+| Kepler-62 f | 0.76 [0.32, 0.98] | 0.98 |
+| TOI-700 d | 0.51 [0.22, 0.78] | 0.72 |
+| TRAPPIST-1 g / f / e | 0.40 / 0.33 / 0.23 | 0.42 / 0.19 / 0.03 |
+
+**Conclusion.** The data back the shoreline's direction but not its sharpness. For temperate planets nothing in the data can test it: no temperate rocky planet has a confirmed atmosphere. The registered ranking keeps the fixed shoreline; the fitted one is the sensitivity case (§3b).
+
+## 3b. Global sensitivity of the ranking (Sobol; added 2026-10-18)
+
+**Code:** `sensitivity.py`. **Figure:** `eda/stage_c_sensitivity.png`.
+
+**Inputs varied together:**
+- the three weights, each ×½ to ×2;
+- the retention treatment (primary, empirical, bolometric or fitted);
+- the credit given to the optimistic-only HZ band, from 0 to 1.
+
+There are 4,096 Saltelli base samples. The output is the Spearman correlation with the registered ranking (median 0.84, 5th percentile 0.51).
+
+| Input | First-order index | Total index |
+|---|---|---|
+| observability weight | 0.43 | **0.60** |
+| HZ weight | 0.27 | 0.47 |
+| optimistic-HZ credit | 0.12 | 0.19 |
+| rocky + retained weight | 0.02 | 0.11 |
+| **retention treatment** | −0.01 | **0.04** |
+
+- **The robust core.** Seven targets are in the top 10 in ≥ 90 % of all samples:
+  - TRAPPIST-1 e, f and g (1.00);
+  - LP 890-9 c (1.00);
+  - LHS 1140 b (0.996);
+  - TOI-700 d (0.98);
+  - Kepler-62 f (0.94).
+  
+  Next come TRAPPIST-1 d (0.89), TOI-700 e (0.73) and Kepler-296 f (0.58). B2 held.
+- **The retention term barely matters (total index 0.04).** With the fitted model the top 10 is unchanged (10/10) and Spearman = 0.84 (A4 held). The term attacked by the critique is not load-bearing for the ranking.
+- **B1 failed.** Across plausible weights, the *observability* weight shapes the full 44-planet order more than the HZ weight. The HZ term decides who is in the top group (§3: removing it collapses the order); TSM decides the order within the long tail.
+
+## 3c. Candidates: where the CNN–LSTM vetter enters the factor (added 2026-10-18)
+
+**Code:** `candidate_factor.py`. **Output:** `outputs/stage_c/candidate_shortlist.csv`, hash-locked in `PROSPECTIVE_PREDICTIONS.md`.
+
+For unconfirmed candidates the factor is **P(real) × Stage C score**:
+- **P(real)** is the vetter's calibrated planet-like probability: the TESS ensemble with its validation Platt map, which also transferred to K2 (ECE 0.087).
+- **The Stage C score** uses the physics and weights of the confirmed targets.
+- **Missing parameters:** stellar parameters missing from the archive tables come from the TIC, and insolation is derived where absent.
+- **Period aliases:** catalogue insolations inconsistent with the period by more than ×3 (two-transit candidates whose listed period is an alias) are flagged, and the insolation is trusted.
+
+**Coverage:** 1,064 of the 1,360 candidates (486 TESS, 578 K2).
+
+**The shortlist (C1 held):**
+- **15 candidates** have P(real) ≥ 0.5 and P(optimistic HZ) ≥ 0.5.
+- **11 of them score above the 10th-ranked confirmed target.**
+- **Leading entries:**
+  - EPIC 246711015.01 (K2): 1.23 R⊕ at 0.60 S⊕ around a 3,245 K M dwarf, P(real) 0.86. Its sibling .02 is 0.51 R⊕ at 0.27 S⊕.
+  - EPIC 216876207.01: 3.3 R⊕, 0.48 S⊕.
+  - TOI 4353.01: 1.37 R⊕, 0.43 S⊕, period flagged as an alias.
+
+These are catalogued candidates, not discoveries. The contribution is a ranked, uncertainty-aware follow-up list in which the detection network's verdict is part of the habitability factor.
+
 ## 3. Ablation — what the order depends on
 
 | Criterion removed | Spearman vs full ranking | Top-10 overlap |
