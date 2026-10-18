@@ -1,0 +1,19 @@
+{
+  "name": "v3_A_s2",
+  "config": "A",
+  "ntp": true,
+  "diag": false,
+  "seed": 2,
+  "best_epoch": 47,
+  "val_roc_auc": 0.951467974050624,
+  "val_n": 2315,
+  "train_n": 10775,
+  "n_params": 40451,
+  "thresholds_val": {
+    "0.9": 0.6412614583969116,
+    "0.95": 0.4163128137588501,
+    "0.99": 0.06892142444849014
+  },
+  "minutes": 44.8,
+  "diag_state": null
+}

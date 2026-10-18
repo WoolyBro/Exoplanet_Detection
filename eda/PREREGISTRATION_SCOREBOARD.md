@@ -53,7 +53,17 @@ Every expectation this project registered **before** seeing the result, with its
 
 ### Vetter v3 (`eda/VETTER_V3_PROTOCOL.md`, commit `ae91f4e`; result `stage_a_transit_model/runs/v3_final/v3_eval.json`)
 
-V3_ROWS_PLACEHOLDER
+| ID | Expectation | Outcome |
+|---|---|---|
+| H1 | C rejects ≥ 0.95 of fresh INV | **held**: 0.991 |
+| H2 | C keeps ≥ 0.90 of fresh INJ1 | **failed**: 0.842 (Robovetter 0.859; an operating-point trade, ranker AUC 0.989 vs 0.940) |
+| H3 | C rejects INJ2 ≥ v2 + 0.15 and ≥ the Robovetter | **failed**: +0.152 over v2, but 0.20 vs 0.53 |
+| H4 | C rejects INJ3 ≥ v2 | **held**: 0.228 vs 0.142 |
+| H5 | C rejects ≥ 0.95 of the real NTP test | **held**: 0.999 |
+| H6 | C within 0.01 of ExoMiner (confirmed vs FP, common KOIs) | **held**: 0.9961 vs 0.9963 |
+| H7 | C rejects ≥ 0.80 of centroid-only FPs | **held**: 0.800 |
+| H8a | NTP drives the INV gain | **failed**: the diagnostics do (B 0.948 > A 0.837) |
+| H8b | The diagnostics drive the INJ2 gain | **held** |
 
 ---
 

@@ -34,6 +34,20 @@ Two 5-seed ensembles that score how planet-like a transit signal is. They were f
 
 Details: `eda/STAGE_A_V2_FINAL_RESULTS.md`, `eda/K2_BLIND_TEST_RESULTS.md` and `eda/DR25_SIMULATED_RESULTS.md`.
 
+## Vetter v3 (Kepler only; added 2026-10-19)
+
+A third model for **Kepler DR25 signals**. It uses the v2 Kepler network plus a 32-unit branch over 27 raw DR25 pipeline measurements (centroid, odd/even, secondary eclipse, LPP, chases, SES/MES), and adds 4,200 real non-KOI false alarms to training.
+- **Checkpoints:** `runs/v3_C{,_s1,_s2,_s7,_s11}`.
+- **Threshold:** recall 90 on KOI + NTP validation, 0.815.
+- **Results** (pre-registered, one read; `eda/VETTER_V3_RESULTS.md`):
+  - Kepler test 0.962, confirmed vs FP 0.994; equal to ExoMiner on 934 common KOIs (0.9961 vs 0.9963).
+  - Rejects 99.1 % of fresh DR25 inverted false alarms and 99.9 % of real held-out non-KOI TCEs. Keeps 84 % of injected planets, matching the Robovetter's operating point.
+  - Catches 80 % of neighbouring-star false positives.
+- **Not for:**
+  - **K2, TESS or any signal without DR25 measurements.** The branch would see only its missing flag. Use v2 there.
+  - **Faint off-target transits and faint eclipsing binaries.** It rejects 20 % and 23 % of the DR25 INJ2 and INJ3 simulations, against 53 % and 63 % for the Robovetter.
+- **Caveat.** Part of its gain on KOI labels is circular: the measurements fed the Robovetter that produced the dispositions.
+
 ## Intended use
 
 Rank transit-like signals **that a detection pipeline has already found** (TCEs, TOIs, catalogued K2 candidates) by how planet-like they are. This prioritises follow-up and vetting effort.

@@ -22,7 +22,7 @@ One row per claim the paper can make, with its number, its figure and the file t
      - seed disagreement predicts errors (AUROC 0.76), and abstaining on half cuts errors from 16.8 % to 5.1 %;
      - occlusion shows the transit core and the secondary eclipse carry the decision;
      - the survey prior is causal through S/N, and S/N-balanced training removes two-thirds of it, at a cost (pre-registered; N2 and N4 failed).
-   - **Vetter v3**, which adds real false alarms and Robovetter measurements: V3_SUMMARY_PENDING.
+   - **Vetter v3**, which adds real false alarms and Robovetter measurements: it matches ExoMiner on the Kepler test (0.9961 vs 0.9963), rejects 99.1 % of fresh false alarms and 99.9 % of real ones, and catches 80 % of neighbouring-star FPs (was 49 %). It stays below the Robovetter on subtle simulated off-target and EB signals (0.20 / 0.23 vs 0.53 / 0.63). 6 of 9 registered expectations held.
 5. **A simulation-trained CH₄ detector** that ranks all 40 labelled real JWST planets correctly. It is robust to stellar contamination (false-CH₄ rate 4.1 % → 1.0 %).
    - A strength-blind CNN + BiLSTM (SpecNet) **failed** its pre-registered tests (0.78 on all 40 planets). The GBM stays the detector.
 6. **Three habitable-zone planets, one contamination-aware method, one answer:**
@@ -66,7 +66,7 @@ One row per claim the paper can make, with its number, its figure and the file t
 | Occlusion | planets: transit core −0.18 to −0.25; EBs: phase-0.5 window +0.04 | 18 | same, §2 |
 | Survey prior is causal through S/N | K2 deep confirmed 0.72 → 0.95 with 5 % noise; Kepler EBs 0.02 → 0.64 at 20 % | 18 | same, §3 |
 | S/N-balanced training (registered) | gap 0.22 → 0.08 (N3 held); deep median 0.84 (N2 failed, needed 0.85); K2 ROC-AUC 0.863 → 0.834 (N4 failed); the prior was partly true base-rate information | 19 | same, §3b |
-| Vetter v3 (registered) | V3_ROW_PENDING | 17 | `eda/VETTER_V3_RESULTS.md` |
+| Vetter v3 (registered) | C (NTP + 27 diagnostics): fresh INV rejected 0.991 (v2 0.704, Robovetter 0.984); INJ1 kept 0.842 (H2 failed; Robovetter 0.859); INJ2 / INJ3 rejected 0.20 / 0.23 (Robovetter 0.53 / 0.63; H3 failed); NTP test 0.999; Kepler test 0.962, confirmed vs FP 0.994 (+0.023 over v2); ExoMiner Δ −0.0002 [−0.0025, 0.0021]; centroid-only 0.80. Ablation: the diagnostics drive most gains (H8a failed) | 17 | `eda/VETTER_V3_RESULTS.md` |
 
 ## 4. Atmospheres (Stage B)
 
@@ -109,7 +109,7 @@ One row per claim the paper can make, with its number, its figure and the file t
 
 All are in the write-ups above and in `README.md` (caveats 1–8):
 - test sets read once;
-- not a false-alarm filter: 24 % of DR25 INV false alarms pass;
+- v2 is not a false-alarm filter (24 % of DR25 INV pass); v3 fixes this for Kepler only (diagnostics exist only for DR25), and part of its KOI gain is circular (Robovetter metrics);
 - probabilities and thresholds need recalibration per survey (K2);
 - TESS label and selection bias;
 - vetter, not search;
