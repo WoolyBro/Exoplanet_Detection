@@ -80,3 +80,46 @@ def test_analytic_contamination_marginalisation_matches_monte_carlo():
     mc = np.log(np.mean(np.exp(ll - ll.max()))) + ll.max()
     rr._TPL.clear()
     assert analytic == pytest.approx(mc, abs=0.15)
+
+
+def _toy(n=60, seed=0):
+    rng = np.random.default_rng(seed)
+    x = np.linspace(0, 1.5, n)
+    sig = rng.uniform(20, 40, n)
+    s = 50 * np.exp(-0.5 * ((x - 0.8) / 0.05) ** 2)
+    B = np.column_stack([np.ones(n), np.sin(3 * x), x ** 2])
+    K = 1e4 * np.exp(-0.5 * ((x[:, None] - x[None, :]) / 0.4) ** 2)
+    return s, B, sig, K
+
+
+def test_gls_information_reduces_to_the_template_projection_without_correlated_noise():
+    s, B, sig, K = _toy()
+    proj = df.project_out(s, B, 1 / sig ** 2)
+    q = df.gls_info(s, B, sig, K, np.array([1.0, 2.0]), np.array([0.0]))
+    assert q[0, 0] == pytest.approx(np.sum((proj / sig) ** 2), rel=1e-9)
+    assert q[1, 0] == pytest.approx(np.sum((proj / sig) ** 2) / 4, rel=1e-9)     # white noise x2 -> info / 4
+
+
+def test_gls_information_matches_an_explicit_covariance_inverse():
+    s, B, sig, K = _toy()
+    for A in (0.3, 1.0, 3.0):
+        Ci = np.linalg.inv(np.diag(sig ** 2) + A ** 2 * K)
+        brute = s @ Ci @ s - s @ Ci @ B @ np.linalg.solve(B.T @ Ci @ B, B.T @ Ci @ s)
+        assert df.gls_info(s, B, sig, K, np.array([1.0]), np.array([A]))[0, 0] == pytest.approx(brute, rel=1e-8)
+    # correlated noise can only remove information
+    q = df.gls_info(s, B, sig, K, np.array([1.0]), np.array([0.0, 0.5, 2.0]))[0]
+    assert q[0] >= q[1] >= q[2]
+
+
+def test_combining_modes_helps_only_through_shared_contamination_terms():
+    s, B, sig, _ = _toy()
+    P = [{"s": s, "sig": sig, "spot": B[:, 1], "facula": B[:, 2]},
+         {"s": 0.6 * s[:45], "sig": sig[:45], "spot": 2 * B[:45, 1] + B[:45, 2], "facula": B[:45, 2] ** 2}]
+    one = np.ones((1, 2))
+    single = [df.joint_info(P, np.eye(2)[i], one, False)[0] for i in range(2)]
+    # no shared terms: information adds linearly in the split, so the best split is the better mode alone
+    assert max(df.joint_info(P, f, one, False)[0] for f in df.simplex(2)) == pytest.approx(max(single), rel=1e-9)
+    # a one-mode "split" with shared terms is that mode's own template projection
+    proj = df.project_out(s, B, 1 / sig ** 2)
+    assert df.joint_info(P, np.array([1.0, 0.0]), one, True)[0] == pytest.approx(np.sum((proj / sig) ** 2), rel=1e-9)
+    assert len(df.simplex(3)) == 231 and all(abs(f.sum() - 1) < 1e-12 for f in df.simplex(3))

@@ -289,7 +289,8 @@ These are in the reports too, but they are the load-bearing caveats:
    - Read it as a probability only after the Platt map fitted on validation (`calibrated_score` in `runs/v2_final/*_test_predictions.csv`).
    - With the map, test ECE is 0.023 (Kepler) and 0.018 (TESS), and the Brier score is 0.110 and 0.098.
 8. **The gas forecast gives lower bounds under stated scenarios.** It uses a matched filter with a
-   known template, and leaves out stellar contamination. On K2-18 b it is ~1.4–1.9× optimistic in
+   known template. Stellar contamination enters as linear spot/facula templates plus visit-varying
+   structure calibrated on TRAPPIST-1's 8 real PRISM transits (`eda/FORECAST_RESULTS.md` §4e). On K2-18 b it is ~1.4–1.9× optimistic in
    S/N against the published detections. It says how hard a gas *would* be to detect, never
    that a planet has it. The simulated-spectra classifier shows real skill for CH₄ only; its
    H₂O/CO₂/CO scores are matched by a gas-blind control. Its CH₄ test set is 38 labelled planets,

@@ -41,20 +41,36 @@ Method
 What this is NOT
   * The matched filter assumes the template is known. A free retrieval needs more data, typically
     of order 1.5-2x the transits; the numbers here are lower bounds in that sense.
-  * Stellar contamination is handled only to first order: fixed spot and facula templates are
-    projected out (columns n5_tls_*, for hosts with T_eff < 4000 K). Visit-to-visit changes in the
-    contamination, which dominated the TRAPPIST-1 b/c spectra, are not modelled.
+  * Stellar contamination (hosts with T_eff < 4000 K) is modelled in three regimes, from optimistic to
+    realistic:
+      n5_tls        fixed spot and facula templates with free amplitudes in every visit, projected out.
+                    For one mode it does not matter whether the amplitudes are shared across visits or
+                    not: the same template subspace is removed either way.
+      n5_tls_joint  (forecast_combined.csv) modes COMBINED with the contamination STABLE across visits, so
+                    one spot and one facula amplitude span every mode, each mode keeps its own offset, and
+                    the transits are split between modes optimally. Broad wavelength coverage breaks the
+                    spot-gas degeneracy. If instead the contamination changes between visits, each visit
+                    must be corrected on its own, the information of the modes simply adds, and combining
+                    them can never beat the better mode alone (no column needed: it equals the best n5_tls).
+      n5_vv         visit-varying: the templates again, plus what the linear model misses, as correlated
+                    noise drawn afresh for every visit. Calibrated on all 8 public PRISM transits of
+                    TRAPPIST-1 (contamination_residuals.py): a Gaussian process in ln(wavelength), length
+                    0.42, amplitude a fraction A of the transit depth, with each forecast visit taking A from
+                    the 8 measured visits (4 consistent with 0, 4 at 2-3 %). The expected per-visit Fisher
+                    information is exact (generalised least squares, templates marginalised with flat priors).
+                    TRAPPIST-1 is an active M8 dwarf, so for earlier M dwarfs this is pessimistic.
   * The atmospheres are isothermal with no cold trap. Real H2O above the tropopause is far lower
     than 1e-3.
   * The scenarios are assumptions, not predictions of what these planets have.
 
-Output: outputs/forecast/{forecast.csv, forecast_best_mode.csv, forecast_summary.json} (spectra are kept in
-        memory only: they regenerate in minutes and would add 5 MB)
-        eda/forecast_transits_needed.png
+Output: outputs/forecast/{forecast.csv, forecast_best_mode.csv, forecast_combined.csv, forecast_regimes.csv,
+        forecast_summary.json} (spectra are kept in memory only: they regenerate in minutes and would add 5 MB)
+        eda/forecast_transits_needed.png, eda/forecast_contamination_regimes.png
 """
 
 from __future__ import annotations
 
+import itertools
 import json
 import sys
 from pathlib import Path
@@ -119,6 +135,61 @@ def project_out(s: np.ndarray, basis: np.ndarray, w: np.ndarray) -> np.ndarray:
     a = basis * np.sqrt(w)[:, None]
     coef, *_ = np.linalg.lstsq(a, s * np.sqrt(w), rcond=None)
     return s - basis @ coef
+
+
+def load_vv() -> dict | None:
+    """The unmodelled-contamination calibration from contamination_residuals.py, or None."""
+    f = RESEARCH / "outputs" / "forecast" / "contamination_residuals.json"
+    if not f.is_file():
+        return None
+    c = json.loads(f.read_text())
+    fi = c["forecast_input"]
+    prof = c["kernels"][fi["kernel"]]["profile"]
+    e, lnl = np.array(prof["ell"]), np.array(prof["lnL"])
+    short = e < fi["ell"] / 2          # the profile's second, shorter maximum: a sensitivity case
+    return {"kernel": fi["kernel"], "ell": float(fi["ell"]), "A": np.array(fi["A_per_visit"], float),
+            "ell_alt": float(e[short][np.argmax(lnl[short])]) if short.any() else None}
+
+
+def gls_info(s: np.ndarray, B: np.ndarray, sig: np.ndarray, kshape: np.ndarray, k: np.ndarray, A: np.ndarray) -> np.ndarray:
+    """Fisher information on the amplitude of signal s from ONE visit, i.e. its expected (S/N)^2, in the
+    generalised least-squares sense with the columns of B marginalised under flat priors, for noise
+        C = k^2 diag(sig^2) + A^2 kshape.
+    k (draws,) scales the white noise, A (amps,) the correlated part. Returns (draws, amps).
+    One eigendecomposition of diag(1/sig) kshape diag(1/sig) makes every (k, A) pair cheap."""
+    w = 1.0 / sig
+    lam, U = np.linalg.eigh((w[:, None] * kshape) * w[None, :])
+    lam = np.clip(lam, 0.0, None)
+    sh, Bh = U.T @ (w * s), U.T @ (w[:, None] * B)
+    dinv = 1.0 / (k[:, None, None] ** 2 + (A ** 2)[None, :, None] * lam[None, None, :])
+    ss = np.einsum("dan,n->da", dinv, sh ** 2)
+    bs = np.einsum("dan,np->dap", dinv, Bh * sh[:, None])
+    bb = np.einsum("dan,np,nq->dapq", dinv, Bh, Bh)
+    return ss - np.einsum("dap,dap->da", bs, np.linalg.solve(bb, bs[..., None])[..., 0])
+
+
+def joint_info(parts: list[dict], frac: np.ndarray, k: np.ndarray, shared: bool) -> np.ndarray:
+    """(S/N)^2 per transit for transits split between modes in fractions frac, with k (draws, modes) noise
+    scales. Each part: s (signal), sig, spot and facula columns. Every mode keeps its own offset; if
+    shared, one spot and one facula amplitude span all modes (contamination stable across visits),
+    otherwise no contamination terms at all. Returns (draws,)."""
+    use = [i for i, f in enumerate(frac) if f > 0]
+    s = np.concatenate([parts[i]["s"] for i in use])
+    cols = [np.concatenate([np.full(len(parts[ii]["s"]), float(ii == i)) for ii in use]) for i in use]   # offsets
+    if shared:
+        cols += [np.concatenate([parts[i]["spot"] for i in use]), np.concatenate([parts[i]["facula"] for i in use])]
+    B = np.column_stack(cols)
+    W = np.concatenate([frac[i] / (k[:, [i]] ** 2 * parts[i]["sig"][None, :] ** 2) for i in use], axis=1)
+    ss = W @ s ** 2
+    bs = np.einsum("dn,np->dp", W, B * s[:, None])
+    bb = np.einsum("dn,np,nq->dpq", W, B, B)
+    return ss - np.einsum("dp,dp->d", bs, np.linalg.solve(bb, bs[..., None])[..., 0])
+
+
+def simplex(n_modes: int, step: float = 0.05) -> list[np.ndarray]:
+    """Every split of the transits between n_modes modes, in steps of `step`."""
+    m = int(round(1 / step))
+    return [np.array(c, float) / m for c in itertools.product(range(m + 1), repeat=n_modes) if sum(c) == m]
 
 
 SCENARIOS = {
@@ -192,12 +263,19 @@ def main() -> int:
     tg = targets()
     rng = np.random.default_rng(SEED)
     edges = {m: r_edges(*MODE_RANGE[m]) for m in MODE_RANGE}
-    rows, spectra = [], {}
+    ctr = {m: 0.5 * (e[1:] + e[:-1]) for m, e in edges.items()}
+    VV = load_vv()
+    print("visit-varying contamination: " + ("not calibrated (run contamination_residuals.py)" if VV is None else
+          f"{VV['kernel']} kernel, ell {VV['ell']:.3f} (sensitivity {VV['ell_alt']}), A per visit {np.round(VV['A'], 4).tolist()}"))
+    rows, spectra, comb_rows = [], {}, []
     for _, r in tg.iterrows():
         modes = (["NIRSpec_PRISM"] if r.sy_jmag >= PRISM_BRIGHT_LIMIT_J else ["NIRSpec_G395", "NIRISS_SOSS"]) + ["MIRI_LRS"]
         amp, m0 = amplitude_draws(r, rng)
         planet = {"T": float(r.teq_kempton_K), "rp": float(r.pl_rade), "mp": float(m0), "rs": float(r.st_rad)}
         tls = tls_templates({m: edges[m] for m in modes}, float(r.st_teff)) if r.st_teff < TLS_HOST_TEFF_MAX else None
+        vv = VV if tls is not None else None
+        per_year = 365.25 / r.pl_orbper * VISIBLE_FRACTION
+        q = lambda x, p: float(np.percentile(x, p, method="nearest"))   # inf = unreachable
         sig1, noise_k = {}, {}
         for m in modes:
             e = edges[m]
@@ -218,6 +296,7 @@ def main() -> int:
                 for gas in vmr:
                     sigs, (wl2, dep2) = gas_signal(fm, vmr, bg, gas, planet, p_surf, {m: edges[m] for m in modes}, full)
                     spectra[f"{r.pl_name}|{scen}|{cloud}|no_{gas}"] = np.stack([wl2, dep2]).astype(np.float32)
+                    parts = {}
                     for m in modes:
                         s, sg = sigs[m], sig1[m]
                         ok = np.isfinite(s) & np.isfinite(sg) & np.isfinite(full[m])
@@ -225,12 +304,25 @@ def main() -> int:
                             ok &= np.isfinite(tls[m][0]) & np.isfinite(tls[m][1])
                         s, sg = s[ok], sg[ok]
                         wts = 1 / sg ** 2
-                        n5_tls = snr1_tls = None
+                        n5_tls = snr1_tls = n5_vv = snr1_vv = n5_vv_alt = None
                         if tls is not None:
                             basis = np.column_stack([np.ones(ok.sum()), full[m][ok] * tls[m][0][ok], full[m][ok] * tls[m][1][ok]])
                             s_tls = project_out(s, basis, wts)
                             snr1_tls = float(np.sqrt(np.sum((s_tls / sg) ** 2)))
                             n5_tls = solve_n((amp[:, None] * s_tls[None, :]) ** 2, (noise_k[m][:, None] * sg[None, :]) ** 2, 0.0, 5.0)
+                            parts[m] = {"s": s.copy(), "sig": sg, "spot": basis[:, 1], "facula": basis[:, 2], "k": noise_k[m]}
+                            if vv is not None:
+                                # unmodelled contamination, independent between visits: expected per-visit
+                                # information over the 8 calibrated visit amplitudes
+                                x = np.log(ctr[m][ok])
+                                depth = float(np.nanmedian(full[m][ok]))       # the GP amplitude is A x depth
+                                wv = depth * (tls[m][0][ok] if vv["kernel"] == "template" else np.ones(ok.sum()))
+                                shape = lambda ell: np.outer(wv, wv) * np.exp(-0.5 * ((x[:, None] - x[None, :]) / ell) ** 2)
+                                info = gls_info(s, basis, sg, shape(vv["ell"]), noise_k[m], vv["A"]).mean(axis=1)
+                                n5_vv = 25.0 / (amp ** 2 * info)
+                                snr1_vv = float(np.sqrt(gls_info(s, basis, sg, shape(vv["ell"]), np.ones(1), vv["A"]).mean()))
+                                if vv["ell_alt"]:
+                                    n5_vv_alt = 25.0 / (amp ** 2 * gls_info(s, basis, sg, shape(vv["ell_alt"]), noise_k[m], vv["A"]).mean(axis=1))
                         s = s - np.sum(s * wts) / np.sum(wts)          # remove the free offset
                         snr1 = float(np.sqrt(np.sum((s / sg) ** 2)))
                         sig2 = (amp[:, None] * s[None, :]) ** 2
@@ -238,8 +330,6 @@ def main() -> int:
                         n5 = solve_n(sig2, n2, 0.0, 5.0)
                         n3 = solve_n(sig2, n2, 0.0, 3.0)
                         n5f = solve_n(sig2, n2, FLOOR_PPM[m] ** 2, 5.0)
-                        per_year = 365.25 / r.pl_orbper * VISIBLE_FRACTION
-                        q = lambda x, p: float(np.percentile(x, p, method="nearest"))   # inf = unreachable
                         rows.append({
                             "pl_name": r.pl_name, "rank_stage_c": r.rank_median, "scenario": scen, "cloud": cloud,
                             "gas": gas, "mode": m, "jmag": r.sy_jmag, "t14_h": r.pl_trandur, "period_d": r.pl_orbper,
@@ -254,14 +344,41 @@ def main() -> int:
                             "n5_tls_median": None if n5_tls is None else q(n5_tls, 50),
                             "n5_tls_p16": None if n5_tls is None else q(n5_tls, 16),
                             "n5_tls_p84": None if n5_tls is None else q(n5_tls, 84),
+                            "snr_1_transit_vv": snr1_vv,
+                            "n5_vv_median": None if n5_vv is None else q(n5_vv, 50),
+                            "n5_vv_p16": None if n5_vv is None else q(n5_vv, 16),
+                            "n5_vv_p84": None if n5_vv is None else q(n5_vv, 84),
+                            "n5_vv_ellalt_median": None if n5_vv_alt is None else q(n5_vv_alt, 50),
                         })
+                    if len(parts) >= 2:
+                        # modes combined, contamination stable across visits: one spot and one facula
+                        # amplitude for every mode, own offset per mode, transits split optimally
+                        ms = list(parts)
+                        P = [parts[m] for m in ms]
+                        one = np.ones((1, len(ms)))
+                        best = max(simplex(len(ms)), key=lambda f: joint_info(P, f, one, True)[0])
+                        n5j = 25.0 / (amp ** 2 * joint_info(P, best, np.column_stack([parts[m]["k"] for m in ms]), True))
+                        # without shared terms, no split beats the better mode alone (the visit-varying case)
+                        nocon = max(joint_info(P, f, one, False)[0] for f in simplex(len(ms)))
+                        single = max(joint_info(P, np.eye(len(ms))[i], one, False)[0] for i in range(len(ms)))
+                        comb_rows.append({
+                            "pl_name": r.pl_name, "rank_stage_c": r.rank_median, "scenario": scen, "cloud": cloud, "gas": gas,
+                            "modes": "+".join(ms), "split": " / ".join(f"{m} {f:.2f}" for m, f in zip(ms, best) if f > 0),
+                            "n5_tls_joint_median": q(n5j, 50), "n5_tls_joint_p16": q(n5j, 16), "n5_tls_joint_p84": q(n5j, 84),
+                            "check_no_contamination_split_gain": round(nocon / single, 6),
+                            "transits_in_mission": per_year * MISSION_YEARS})
         print(f"  {r.pl_name}: done", flush=True)
     df = pd.DataFrame(rows)
     df.to_csv(OUT / "forecast.csv", index=False)
     best = (df.sort_values("n5_median").groupby(["pl_name", "scenario", "cloud", "gas"], sort=False).head(1)
             .sort_values(["rank_stage_c", "pl_name", "scenario", "cloud", "gas"]))
     best.to_csv(OUT / "forecast_best_mode.csv", index=False)
+    comb = pd.DataFrame(comb_rows)
+    comb.to_csv(OUT / "forecast_combined.csv", index=False)
+    reg = regimes(df, comb)
+    reg.to_csv(OUT / "forecast_regimes.csv", index=False)
     summary = summarise(best)
+    summary["contamination_regimes"] = summarise_regimes(reg, VV)
     val, real_val = validate_k2_18b(df), real_noise_check(spectra)
     for gas, v in real_val.items():
         val[gas] = {**val.get(gas, {}), **v} if isinstance(v, dict) else v
@@ -271,7 +388,38 @@ def main() -> int:
     (OUT / "forecast_summary.json").write_text(json.dumps(summary, indent=2, default=float))
     print(json.dumps(summary["validation_k2_18b"], indent=2, default=float))
     make_figure(best, spectra, tg)
+    make_regime_figure(reg, tg)
     return 0
+
+
+def regimes(df: pd.DataFrame, comb: pd.DataFrame) -> pd.DataFrame:
+    """One row per planet, scenario, cloud and gas: the transits for 5 sigma (median) under each
+    contamination regime, each at its own best mode."""
+    keys = ["pl_name", "rank_stage_c", "scenario", "cloud", "gas"]
+    out = df.groupby(keys, sort=False)[["transits_in_mission"]].first().reset_index()
+    for col, name in [("n5_median", "white"), ("n5_tls_median", "tls"), ("n5_vv_median", "vv"), ("n5_vv_ellalt_median", "vv_ellalt")]:
+        d = df.dropna(subset=[col])
+        if d.empty:
+            continue
+        b = d.loc[d.groupby(keys, sort=False)[col].idxmin(), keys + [col, "mode"]]
+        out = out.merge(b.rename(columns={col: f"n5_{name}", "mode": f"mode_{name}"}), on=keys, how="left")
+    if not comb.empty:
+        out = out.merge(comb[keys + ["n5_tls_joint_median", "split"]].rename(
+            columns={"n5_tls_joint_median": "n5_tls_joint", "split": "split_tls_joint"}), on=keys, how="left")
+    return out
+
+
+def summarise_regimes(reg: pd.DataFrame, vv: dict | None) -> dict:
+    sel = reg[(reg.cloud == "clear") & reg.scenario.isin(["archean", "modern_earth"]) & reg.n5_tls.notna()]
+    out = {"calibration": None if vv is None else {"kernel": vv["kernel"], "ell": vv["ell"], "ell_alt": vv["ell_alt"],
+                                                   "A_per_visit": [round(float(a), 4) for a in vv["A"]]},
+           "by_planet": {}}
+    for _, r in sel.iterrows():
+        out["by_planet"].setdefault(r.pl_name, {}).setdefault(r.scenario, {})[r.gas] = {
+            k: (None if pd.isna(r.get(k)) else (round(float(r[k]), 2) if k.startswith("n5") else r[k]))
+            for k in ["n5_white", "n5_tls", "n5_tls_joint", "split_tls_joint", "n5_vv", "n5_vv_ellalt", "mode_vv"] if k in r}
+        out["by_planet"][r.pl_name][r.scenario][r.gas]["transits_in_mission"] = round(float(r.transits_in_mission), 1)
+    return out
 
 
 def summarise(best: pd.DataFrame) -> dict:
@@ -382,6 +530,40 @@ def make_figure(best, spectra, tg):
     ax.legend(fontsize=7, loc="upper center", bbox_to_anchor=(0.5, -0.12), ncol=2, frameon=False)
     fig.tight_layout()
     fig.savefig(RESEARCH / "eda" / "forecast_transits_needed.png", dpi=150, bbox_inches="tight")
+
+
+def make_regime_figure(reg: pd.DataFrame, tg: pd.DataFrame) -> None:
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    sel = reg[(reg.cloud == "clear") & (reg.scenario == "archean") & reg.gas.isin(["CH4", "CO2"]) & reg.n5_tls.notna()]
+    names = [n for n in dict.fromkeys(tg.pl_name) if n in set(sel.pl_name)]
+    regs = [("n5_white", "no stellar contamination", "#8a8984", "o"),
+            ("n5_tls", "linear spots + faculae, free per visit (best single mode)", "#2a6fdb", "s"),
+            ("n5_tls_joint", "modes combined, contamination stable across visits", "#2e933c", "D"),
+            ("n5_vv", "visit-varying, incl. unmodelled part (TRAPPIST-1 calibrated)", "#d1495b", "^")]
+    fig, axes = plt.subplots(1, 2, figsize=(14, 0.5 * len(names) + 2.6), sharey=True)
+    y = np.arange(len(names))
+    for ax, gas in zip(axes, ["CH4", "CO2"]):
+        g = sel[sel.gas == gas].set_index("pl_name").reindex(names)
+        for j, (col, lab, c, mk) in enumerate(regs):
+            if col in g:
+                ax.scatter(g[col].clip(upper=3e5), y + (j - 1.5) * 0.17, color=c, marker=mk, s=34, label=lab, zorder=3)
+        ax.scatter(g.transits_in_mission, y, marker="|", s=260, color="k", label="every observable transit in 20 years", zorder=2)
+        ax.set(xscale="log", xlabel="JWST transits for a 5-sigma detection (median of 4000 draws)",
+               title=f"{gas} in the Archean scenario (CO2 1e-2, CH4 1e-3), clear sky")
+        ax.grid(alpha=0.3)
+    axes[0].set_yticks(y)
+    axes[0].set_yticklabels(names)
+    axes[0].invert_yaxis()
+    h, lab = axes[0].get_legend_handles_labels()
+    fig.legend(h, lab, fontsize=8, loc="lower center", ncol=3, frameon=False, bbox_to_anchor=(0.5, 0.0))
+    fig.suptitle("M-dwarf habitable-zone targets: how stellar contamination changes the JWST cost of a gas detection",
+                 x=0.01, ha="left", fontsize=12, fontweight="bold")
+    fig.tight_layout(rect=(0, 0.09, 1, 0.95))
+    fig.savefig(RESEARCH / "eda" / "forecast_contamination_regimes.png", dpi=150, bbox_inches="tight")
 
 
 if __name__ == "__main__":
