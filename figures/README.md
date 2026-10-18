@@ -35,6 +35,8 @@ training seed, so run-to-run noise is visible next to each difference.
 | 12 | [What drives the planet priority ranking?](#12-how-much-does-the-follow-up-priority-ranking-depend-on-each-criterion) | Habitable-zone membership (without it ρ = 0.14) |
 | 13 | Stage A final evaluation, one panel set | Made by `stage_a_transit_model/report_v2.py` |
 | 14 | Against published vetters, same test KOIs | Ours 0.977 ≈ AstroNet 0.976 < ExoNet 0.990 < ExoMiner 0.996; made by `compare_published_vetters.py` |
+| 15 | Does it work on a mission it never saw? (K2, pre-registered blind test) | Yes for ranking: ROC-AUC 0.863, confirmed vs FP 0.954. Its probabilities need recalibration. Made by `evaluate_k2.py` (`eda/K2_BLIND_TEST_RESULTS.md`) |
+| 16 | Kepler DR25 simulated data: planets kept, false alarms rejected | Keeps more injected planets than the Robovetter (0.935 vs 0.869) but passes 24 % of systematics false alarms. Made by `evaluate_dr25_simulated.py` (`eda/DR25_SIMULATED_RESULTS.md`) |
 
 ---
 

@@ -29,9 +29,10 @@ Two 5-seed ensembles that score how planet-like a transit signal is. They were f
 | ECE, raw → Platt | 0.078 → 0.023 | 0.144 → 0.018 |
 | Against published vetters, same 922 Kepler test KOIs (confirmed vs FP) | 0.977, the same as AstroNet (0.976); below ExoNet (0.990) and ExoMiner (0.996) | — |
 | On the other mission's test set | Kepler → TESS 0.811 | TESS → Kepler 0.875 |
-| On K2, never seen (pre-registered blind test) | *filled in after the single read* | *filled in after the single read* |
+| On K2, never seen (pre-registered blind test, read once) | **0.863** [0.840, 0.884]; confirmed vs FP 0.954 | 0.843 [0.816, 0.871]; 0.938 |
+| Kepler DR25 simulated data, stars never seen | completeness (injected planets kept) **0.935** vs Robovetter 0.869; false alarms rejected **0.760** vs 0.992; ROC-AUC 0.952 vs 0.971 | — |
 
-Details: `eda/STAGE_A_V2_FINAL_RESULTS.md` and `eda/K2_BLIND_TEST_PROTOCOL.md`.
+Details: `eda/STAGE_A_V2_FINAL_RESULTS.md`, `eda/K2_BLIND_TEST_RESULTS.md` and `eda/DR25_SIMULATED_RESULTS.md`.
 
 ## Intended use
 
@@ -39,9 +40,14 @@ Rank transit-like signals **that a detection pipeline has already found** (TCEs,
 
 ## Not intended for
 
-- **A blind transit search.** Folding a star's light curve at an arbitrary period already scores a median 0.68, and 94 % of such folds pass the threshold (`figures/10`).
+- **A blind transit search, or raw pipeline TCEs without a false-alarm filter.**
+  - Arbitrary folds score a median 0.68, and 94 % pass the threshold (`figures/10`).
+  - 24 % of systematics-born false alarms (DR25 INV) pass as well, mostly long-period, few-transit ones (`figures/16`).
+  - It was trained on KOIs, which had already passed the pipeline's transit-like triage.
 - **Confirming planets.** A high score is not a confirmation, and the CANDIDATE class means undecided.
-- **Reading the raw score as a probability.** Use the Platt-calibrated score, and only on data like the validation set: base rates differ between surveys.
+- **Reading the raw score as a probability, or reusing the threshold, on another survey.**
+  - On K2 the ranking transferred (0.863), but the Kepler Platt map made calibration worse (ECE 0.26 → 0.36), and the recall-90 threshold gave 65 % recall.
+  - Recalibrate on a small labelled sample of the new survey.
 
 ## Known failure modes (measured)
 
@@ -49,7 +55,8 @@ Rank transit-like signals **that a detection pipeline has already found** (TCEs,
 - **Survey priors.**
   - The Kepler-trained model distrusts deep transits: 94 % of Kepler training transits deeper than 10,000 ppm are false positives. On TESS photometry it rejects real hot Jupiters (HD 189733 b scores 0.09).
   - The TESS-trained model has the opposite bias (`figures/07`, `08`).
-- **Weak signals.** Near chance below a pipeline S/N of about 7 (Kepler 0.60, TESS 0.65).
+- **Weak signals.** Near chance below a pipeline S/N of about 7 (Kepler 0.60, TESS 0.65, K2 0.72). On injected planets it is still more complete than the Robovetter at MES 7.1–10 (0.91 vs 0.82).
+- **Detrending dependence.** On K2 the light-curve product moved the ROC-AUC by 0.031 (K2SFF above EVEREST).
 - **TESS label and selection bias.** The TESS build kept 56 % of false positives but 89 % of confirmed planets (the ephemeris-reliability filter).
 
 ## Ethical and practical notes

@@ -264,10 +264,15 @@ def make_figure(res: dict, out: Path) -> None:
     for model, col in [("kepler", "#2a78d6"), ("tess", "#eb6834")]:
         ax.scatter(c.depth_ppm.clip(lower=10), c[f"score_{model}"], s=12, alpha=0.55, color=col, label=f"{model}-trained")
     ax.axvline(DEEP_PPM, color="k", lw=1, ls=":")
-    ax.set(xscale="log", xlabel="measured transit depth (ppm)", ylabel="planet-like score",
-           title="Confirmed K2 planets: the Kepler model distrusts deep transits?")
+    dk = res["primary_kepler"]["depth_prior_confirmed"]
+    ax.set(xscale="log", xlabel="measured transit depth (ppm; <= 10 plotted at 10)", ylabel="planet-like score",
+           title=f"Confirmed K2 planets: Kepler model median {dk['median_deep']:.2f} deeper than 10,000 ppm\n"
+                 f"vs {dk['median_shallow']:.2f} shallower (p = {dk['mannwhitney_p_deep_lower']:.0e}): its survey prior again")
     ax.legend(fontsize=8)
-    fig.suptitle("Stage A on K2, a mission neither model saw (single pre-registered read)", x=0.01, ha="left", fontweight="bold")
+    pk = res["primary_kepler"]
+    fig.suptitle(f"Stage A on K2, a mission neither model saw (single pre-registered read): Kepler-trained ROC-AUC "
+                 f"{pk['planet_like_vs_fp']['roc_auc']:.3f}, confirmed vs FP {pk['confirmed_vs_fp']['roc_auc']:.3f}",
+                 x=0.01, ha="left", fontweight="bold")
     fig.tight_layout(rect=(0, 0, 1, 0.94))
     fig.savefig(R / "figures" / "15_k2_blind_test.png", dpi=150, bbox_inches="tight")
 
