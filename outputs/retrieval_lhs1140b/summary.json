@@ -1,0 +1,61 @@
+{
+  "target": "LHS 1140 b",
+  "spectra": [
+    "NIRISS SOSS (Cadieux 2024)",
+    "NIRSpec G235H (Damiano 2024)",
+    "NIRSpec G395H (Damiano 2024)"
+  ],
+  "atmosphere_vs_bare": {
+    "best_atmosphere": "n2",
+    "lnB": -0.9,
+    "lnB_err": 0.14,
+    "sigma": -1.96
+  },
+  "n2_vs_h2": {
+    "lnB": 1.93,
+    "lnB_err": 0.19,
+    "sigma": 2.51
+  },
+  "logz": {
+    "bare_rock": -1231.7793335516144,
+    "n2": -1232.683663187612,
+    "h2": -1234.613751813615
+  },
+  "chi2_per_spectrum": {
+    "bare_rock": [
+      239.7,
+      76.6,
+      31.9
+    ],
+    "n2": [
+      235.1,
+      76.0,
+      31.5
+    ],
+    "h2": [
+      239.0,
+      72.7,
+      32.2
+    ]
+  },
+  "chi2_gain_bare_to_atm": [
+    4.6,
+    0.6,
+    0.4
+  ],
+  "n_spectra_improved": 3,
+  "n_needed": 2,
+  "R1_atmosphere_credited": false,
+  "n_points": [
+    142,
+    39,
+    37
+  ],
+  "R2_n2_preferred_over_h2": true,
+  "R3_atmosphere_vs_bare_inconclusive": true,
+  "95pc_upper_log10_vmr_n2": {
+    "CH4": -2.66,
+    "CO2": -2.65,
+    "H2O": -1.52
+  }
+}

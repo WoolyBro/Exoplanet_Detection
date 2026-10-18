@@ -51,4 +51,50 @@
 
 ## 2. LHS 1140 b
 
-LHS1140B_PLACEHOLDER
+**Data:** three separate JWST spectra, each with its own contamination and offset (218 points in all):
+- NIRISS SOSS, 0.65–2.65 µm (Cadieux et al. 2024, ApJL 970, L2);
+- NIRSpec G235H and G395H, 1.68–5.15 µm (Damiano et al. 2024).
+
+| Model | ln Z | ln B vs bare rock | Best log-likelihood |
+|---|---|---|---|
+| bare rock | −1231.78 ± 0.08 | — | −1230.57 |
+| N₂ background | −1232.68 ± 0.12 | **−0.90 ± 0.14** | −1227.70 |
+| H₂/He envelope | −1234.61 ± 0.14 | −2.83 ± 0.16 | −1228.51 |
+
+| Expectation | Outcome |
+|---|---|
+| R1, credit rule: ln B ≥ 3 and a gain in ≥ 2 of 3 spectra | not met, so **no atmosphere credited** (ln B = −0.90; gains 4.6, 0.6, 0.4) |
+| R2: N₂ preferred over H₂ | **held**: ln B(N₂ vs H₂) = +1.93, weak (Trotta scale 1–2.5) |
+| R3: atmosphere vs bare rock inconclusive, \|ln B\| < 3 | **held** |
+
+**Reading it.**
+- **Inconclusive, as registered.** With a separate spot, facula and offset term for each spectrum, the data do not require an atmosphere: bare rock is marginally favoured by the evidence.
+  - The N₂ model's 2.9 better log-likelihood comes almost entirely from the NIRISS spectrum (χ² gain 4.6).
+  - The NIRSpec spectra gain 0.6 and 0.4.
+  - This is the TRAPPIST-1 e pattern again, though weaker: a preference carried by one spectrum.
+- **An H₂-rich envelope is disfavoured,** against N₂ (+1.9) and against bare rock (+2.8). This agrees with both published analyses, which rule out a clear H₂ envelope.
+- **Upper limits** (95 %, N₂ background): log VMR(CH₄) < −2.66, log VMR(CO₂) < −2.65 (≈ 0.2 %), log VMR(H₂O) < −1.52. The data contain no CO₂ requirement once each spectrum carries its own contamination and offset.
+- **Fit quality limits every hypothesis equally.**
+  - The NIRISS spectrum has χ²/N = 1.69 (239.7 / 142) under all three models, and G235H has 1.96 (76.6 / 39). G395H is fine at 0.86.
+  - The structure below 1 µm (depths falling to ~5,200 ppm at 0.7 µm) is the unocculted-facula signature that Cadieux et al. identified. Our two-temperature contamination model captures it only partly.
+  - Either the stellar model is too simple for this star or the published errors are underestimated. Neither favours an atmosphere, but both cap how strong any verdict can be.
+
+**What is new.**
+- An independent, contamination-marginalised joint analysis of the NIRISS and NIRSpec spectra of LHS 1140 b, under a rule fixed in advance.
+- It concludes that **the N₂-atmosphere evidence is not robust to per-spectrum contamination.** It rests on one instrument's spectrum, and the evidence leans to bare rock (ln B = −0.9), while an H₂ envelope is disfavoured.
+- **For the habitability factor:** LHS 1140 b's label in the retention model is "tentative atmosphere" (soft label 0.6). This verdict supports keeping it soft rather than raising it. A reanalysis would justify lowering it, but the label was frozen before this retrieval and is left unchanged.
+
+## 3. Summary for the paper (critique 5)
+
+| Planet | Spectra | ln B(atmosphere vs bare) | ln B(N₂ vs H₂) | Verdict |
+|---|---|---|---|---|
+| TRAPPIST-1 e (`FORECAST_RESULTS.md` §4d–4e) | 8 visits | preference carried by visits 3–4 | — | contamination, no atmosphere credited |
+| TRAPPIST-1 f | 5 NIRISS visits (released Aug 2026) | −0.70 | +2.4 | no atmosphere credited; H₂ envelope disfavoured |
+| LHS 1140 b | NIRISS + 2 NIRSpec | −0.90 | +1.9 | inconclusive; the N₂ hint rests on one spectrum |
+
+**Every registered expectation (R2–R4) held,** and the credit rule R1 credited an atmosphere to neither planet.
+
+**One method, three habitable-zone planets, the same answer:** at present JWST precision, a temperate rocky planet's transmission spectrum cannot separate an N₂ atmosphere from bare rock once each visit's stellar contamination is modelled. An H₂ envelope is disfavoured for all three.
+- **This is the paper's science result for Stage B.** It turns the forecast (`FORECAST_RESULTS.md`), which says how many transits are needed, into a measured statement about the transits that exist.
+- **It also explains why a learned classifier cannot be trained on real temperate-planet spectra:** they do not yet contain a detectable signal.
+

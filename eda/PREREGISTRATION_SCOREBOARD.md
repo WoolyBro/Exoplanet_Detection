@@ -41,6 +41,16 @@ Every expectation this project registered **before** seeing the result, with its
 | D3 | ROC-AUC in [0.80, 0.95] and below the Robovetter's | **failed**: 0.952, just above the range (below the Robovetter's 0.971 as expected) |
 | D4 | Completeness rises with MES | **held** |
 
+### S/N-balanced training, the survey-prior mechanism test (`eda/SNR_BALANCE_PROTOCOL.md`, commit `47a6930`; result `outputs/stage_a_mechanisms/snr_balance.json`)
+
+| ID | Expectation | Outcome |
+|---|---|---|
+| N1 | Validation ROC-AUC ≥ v2 − 0.01 | **held**: 0.925 vs 0.932 |
+| N2 | K2 confirmed deeper than 10,000 ppm: median ≥ 0.85 | **failed**, narrowly: 0.72 → 0.84 |
+| N3 | Deep-vs-shallow gap shrinks by at least half | **held**: 0.22 → 0.077 |
+| N4 | K2 P1 ROC-AUC ≥ v2 − 0.01 | **failed**: 0.863 → 0.834 |
+| N5 | High-S/N validation FPs rejected: ≥ v2 − 0.05 | **held**: 0.985 → 0.940 |
+
 ### Vetter v3 (`eda/VETTER_V3_PROTOCOL.md`, commit `ae91f4e`; result `stage_a_transit_model/runs/v3_final/v3_eval.json`)
 
 V3_ROWS_PLACEHOLDER
@@ -72,11 +82,23 @@ V3_ROWS_PLACEHOLDER
 
 ### SpecNet, the strength-blind CNN–BiLSTM (`METHANE_SPECNET_PROTOCOL.md`, commit `3f5b744`; result `outputs/stage_b_methane_ext/specnet.json`)
 
-SPECNET_ROWS_PLACEHOLDER
+| ID | Expectation | Outcome |
+|---|---|---|
+| S1 | ROC-AUC ≥ 0.95 on the 29 new planets | **failed**: 0.80 [0.46, 1.00] |
+| S2 | ≥ 0.90 on the strong-feature half, p < 0.05 | **failed**: 0.76, p = 0.11 |
+| S3 | ≥ 0.95 on all 40 labelled planets | **failed**: 0.78 [0.61, 0.94] |
+| S4 | False-CH₄ rate ≤ 3 % on the stress set | **failed**: 4.5 % |
+| S5 | Less tied to feature strength than the v3 CNN | **held**: Spearman 0.34 vs 0.53 |
+| Rule | If any of S1–S4 fails, SpecNet is reported as failed and the GBM stays the headline | applied |
 
 ### Retrievals of habitable-zone planets (`RETRIEVAL_HZ_PROTOCOL.md`, commit `4b6b107`; results `outputs/retrieval_trappist1_f/`, `outputs/retrieval_lhs1140_b/`)
 
-RETRIEVAL_ROWS_PLACEHOLDER
+| ID | Expectation | Outcome |
+|---|---|---|
+| R1 | Credit rule: ln B ≥ 3 and a χ² gain in ≥ ⌈2/3⌉ of spectra | applied: no atmosphere credited for either planet |
+| R2 | LHS 1140 b: ln B(N₂ vs H₂) > 0 | **held**: +1.93 |
+| R3 | LHS 1140 b: atmosphere vs bare inconclusive (\|ln B\| < 3) | **held**: −0.90 |
+| R4 | TRAPPIST-1 f: no atmosphere credited | **held**: ln B = −0.70 |
 
 ---
 
