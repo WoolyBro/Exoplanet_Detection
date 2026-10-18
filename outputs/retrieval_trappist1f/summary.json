@@ -1,0 +1,72 @@
+{
+  "target": "TRAPPIST-1 f",
+  "spectra": [
+    "NIRISS visit 1",
+    "NIRISS visit 2",
+    "NIRISS visit 3",
+    "NIRISS visit 4",
+    "NIRISS visit 5"
+  ],
+  "atmosphere_vs_bare": {
+    "best_atmosphere": "n2",
+    "lnB": -0.7,
+    "lnB_err": 0.16,
+    "sigma": -1.82
+  },
+  "n2_vs_h2": {
+    "lnB": 2.39,
+    "lnB_err": 0.2,
+    "sigma": 2.71
+  },
+  "logz": {
+    "bare_rock": -1706.663067947858,
+    "n2": -1707.3589592969963,
+    "h2": -1709.7489440091017
+  },
+  "chi2_per_spectrum": {
+    "bare_rock": [
+      53.3,
+      45.9,
+      29.2,
+      39.1,
+      24.7
+    ],
+    "n2": [
+      51.4,
+      42.8,
+      28.7,
+      37.1,
+      24.2
+    ],
+    "h2": [
+      52.9,
+      46.5,
+      28.4,
+      39.4,
+      24.4
+    ]
+  },
+  "chi2_gain_bare_to_atm": [
+    1.9,
+    3.1,
+    0.5,
+    2.0,
+    0.5
+  ],
+  "n_spectra_improved": 5,
+  "n_needed": 4,
+  "R1_atmosphere_credited": false,
+  "n_points": [
+    49,
+    50,
+    50,
+    50,
+    50
+  ],
+  "R4_no_atmosphere_credited": true,
+  "95pc_upper_log10_vmr_n2": {
+    "CH4": -3.37,
+    "CO2": -1.76,
+    "H2O": -1.19
+  }
+}

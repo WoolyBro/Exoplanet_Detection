@@ -253,11 +253,11 @@ def report() -> int:
     summ[f"95pc_upper_log10_vmr_{atm}"] = lim
     (OUT / "summary.json").write_text(json.dumps(summ, indent=2))
     print(json.dumps(summ, indent=2))
-    figure(res, atm, chis, gain)
+    figure(res, atm, chis, gain, summ)
     return 0
 
 
-def figure(res, atm, chis, gain):
+def figure(res, atm, chis, gain, summ):
     import matplotlib
 
     matplotlib.use("Agg")
@@ -275,7 +275,9 @@ def figure(res, atm, chis, gain):
     ax.bar(np.arange(1, len(gain) + 1), gain, color=cols)
     ax.axhline(0, color="k", lw=0.8)
     ax.set(xticks=np.arange(1, len(gain) + 1), xlabel="spectrum", ylabel=f"chi^2 improvement, bare rock -> {atm}",
-           title="A real atmosphere improves every spectrum;\ncontamination improves a few")
+           title=f"ln B({atm} vs bare) = {summ['atmosphere_vs_bare']['lnB']:+.2f}: "
+                 + ("atmosphere credited" if summ["R1_atmosphere_credited"] else "no atmosphere credited")
+                 + f"\n(R1 needs ln B >= 3 and a gain in >= {summ['n_needed']} of {len(gain)} spectra)")
     fig.tight_layout()
     fig.savefig(RESEARCH / "eda" / f"retrieval_{SLUG}.png", dpi=150, bbox_inches="tight")
 
