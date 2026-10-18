@@ -49,7 +49,7 @@ is the machinery that produced them.
 and what it changed. It is the honest history, including the things that went wrong.
 
 **Reproducing it:** the results above need no download at all — they are committed here. To
-re-run the modelling, fetch the view bundle from [release `v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views) (~150 MB) and
+re-run the modelling, fetch the views from release [`v2.0-views`](https://github.com/WoolyBro/exoplanet/releases/tag/v2.0-views) (~510 MB, split v2 with the error channel, plus K2, DR25 and vetter v3) and
 see [Running this without a 30-hour download](#running-this-without-a-30-hour-download).
 
 ---
@@ -202,19 +202,21 @@ the sample with `python tools/make_sample_views.py`.
 
 **The complete, ordered run sheet** covers split v2, the final evaluation, the K2 blind test, atmospheres, the forecast, the retrievals and the figures, with both environments (`environment-prt.yml` for petitRADTRANS). It is **[`REPRODUCE.md`](REPRODUCE.md)**. The subsections below are the quick paths into it.
 
-### 3. Reproduce the real numbers — one ~150 MB download
-The full view set is published as release assets, [`v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views), because 15,185
-binary files do not belong in git history. Unpack it at the repository root:
+### 3. Reproduce the real numbers — the view releases
+The views are published as release assets, because tens of thousands of binary files do not belong in git history.
 
-```bash
-gh release download v1.0-views --repo WoolyBro/Exoplanet_Detection   # or use the release page
-for z in views_*.zip; do unzip -o -q "$z"; done                      # creates detection_views/
-```
+- **[`v2.0-views`](https://github.com/WoolyBro/exoplanet/releases/tag/v2.0-views)** (~510 MB, used by every final result).
+  - One archive per folder: split-v2 Kepler and TESS (with the flux-error channel), K2 (EVEREST and K2SFF), the DR25 benchmark, and the vetter v3 NTP and fresh-simulation sets.
+  - Fetch only what you need: Kepler alone is `views_err_kepler_{train,val,test}.zip` (112 + 24 + 24 MB).
+  - `VIEWS_ERR_MANIFEST.json` gives each archive's view count and SHA-256.
 
-The bundle is split by split, so nothing has to be fetched that will not be used — Kepler alone is
-`views_kepler_train.zip` (66 MB), `views_kepler_val.zip` and `views_kepler_test.zip` (14 MB each);
-the TESS three are 42, 9 and 9 MB. `VIEWS_MANIFEST.json` on the release lists the view count in
-each. (It is split because a single 155 MB asset would not upload reliably.)
+  ```bash
+  gh release download v2.0-views --repo WoolyBro/exoplanet --pattern 'views_err_kepler_*'   # or use the release page
+  for z in views_err_*.zip; do unzip -o -q "$z"; done                                     # creates detection_views_err/
+  python tools/make_v2_views.py                                                          # split-v2 layout, detection_views_v2/
+  ```
+
+- **[`v1.0-views`](https://github.com/WoolyBro/exoplanet/releases/tag/v1.0-views)** (~150 MB). The split-v1 views behind the history section below. Split v1 leaked through signal twins, so it is not used for the final numbers.
 
 **Quickest check — no training at all.** Both final checkpoints are committed, so the reported
 test numbers can be regenerated directly from the selected artefact:

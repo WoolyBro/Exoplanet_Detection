@@ -14,7 +14,7 @@ This is the complete run sheet: every number in `eda/` and every figure comes fr
 | Main environment (Python 3.14) | `python3.14 -m venv .venv && .venv/bin/pip install -r requirements-lock.txt` (on macOS use `requirements-lock-macos.txt`; `requirements.txt` lists the direct dependencies) |
 | petitRADTRANS environment (Python 3.12, Fortran) for spectra, the forecast and the retrievals | `micromamba create -f environment-prt.yml`, which pins petitRADTRANS 3.4.0, dynesty 2.1.5 and exo_k 1.3.2. Exact build as run: `environment-prt-lock-osx-arm64.yml`. Opacities (about 1.7 GB) go to `~/petitRADTRANS/input_data`; petitRADTRANS fetches each one on first use (see the `forward_model.py` docstring). |
 | The mentor's research pack `exoplanet_research_data/` | Not redistributed. It provides catalogues, JWST spectra and pscomppars. Read-only, and its `05_final_ML_dataset_DO_NOT_USE` folder is never read (`DATA_BOUNDARY.md`). |
-| Light-curve views | v1 views: GitHub release `v1.0-views`. The v2/error-channel and K2 views are rebuilt with section 2 (not yet released). |
+| Light-curve views | Release [`v2.0-views`](https://github.com/WoolyBro/exoplanet/releases/tag/v2.0-views): split v2 with the error channel, K2, DR25 and vetter v3 (unpack, then `python tools/make_v2_views.py`). Or rebuild them with section 2. The split-v1 history views are in `v1.0-views`. |
 
 Everything below runs with `.venv/bin/python` unless marked **prt** (`~/micromamba/envs/prt/bin/python`).
 
