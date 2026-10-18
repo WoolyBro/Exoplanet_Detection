@@ -1,0 +1,56 @@
+{
+  "protocol": "stage_b_atmospheres/METHANE_EXTENSION_PROTOCOL_ROUND4.md",
+  "planet": "TOI-1231 b",
+  "label_ch4": 1,
+  "spectra": [
+    {
+      "spectrum": "NIRISS SOSS (JexoRes)",
+      "points": 69,
+      "wl_range_um": [
+        0.64,
+        2.37
+      ],
+      "grid_bins": 34,
+      "scored": true,
+      "gbm_v3_p_ch4": 0.101
+    },
+    {
+      "spectrum": "NIRSpec G395H (JexoRes)",
+      "points": 1696,
+      "wl_range_um": [
+        2.74,
+        5.17
+      ],
+      "grid_bins": 55,
+      "scored": true,
+      "gbm_v3_p_ch4": 0.984
+    },
+    {
+      "spectrum": "NIRISS SOSS (JexoPipe)",
+      "points": 65,
+      "wl_range_um": [
+        0.64,
+        2.36
+      ],
+      "grid_bins": 34,
+      "scored": true,
+      "gbm_v3_p_ch4": 0.479
+    },
+    {
+      "spectrum": "NIRSpec G395H (JexoPipe)",
+      "points": 1754,
+      "wl_range_um": [
+        2.73,
+        5.18
+      ],
+      "grid_bins": 55,
+      "scored": true,
+      "gbm_v3_p_ch4": 0.993
+    }
+  ],
+  "planet_score_gbm_v3": 0.639,
+  "boundary": 0.125,
+  "expectations": {
+    "R4-1 TOI-1231 b on the CH4 side (>= 0.125)": true
+  }
+}

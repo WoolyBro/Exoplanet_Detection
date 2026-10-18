@@ -6,7 +6,7 @@ Every expectation this project registered **before** seeing the result, with its
 - **Commit:** the protocol was committed to git before the build, training or read it governs. The hash is that commit.
 - **Hash file:** the labels were frozen by SHA-256, with a timestamp, before scoring. The protocol entered git together with the results, so the evidence for the order is the local hash file, not git. This applies to methane rounds 1–2, which predate the rule of committing protocols first.
 
-**Totals: 53 directional expectations, 39 held (74 %) and 14 failed.**
+**Totals: 54 directional expectations, 40 held (74 %) and 14 failed.**
 - **Also registered:**
   - 2 model-selection rules (V-K, V-T);
   - 1 test failure criterion (F, not met);
@@ -95,6 +95,7 @@ Every expectation this project registered **before** seeing the result, with its
 | ID | Expectation | Outcome |
 |---|---|---|
 | R3-1 | Each labelled planet falls on the correct side of the v3 class separation (0.08–0.17) | **held**: HATS-6 b 0.982 (CH₄), TRAPPIST-1 f 0.032 (none), HAT-P-12 b 0.017 (none) |
+| R4-1 | Round 4 (commit `944f3dc`): TOI-1231 b, published after the models were frozen, falls on the CH₄ side (≥ 0.125) | **held**: 0.639 (NIRSpec 0.98–0.99) |
 
 ### CO₂ detector on 34 real JWST planets (`CO2_EXTENSION_PROTOCOL.md`, commit `4893248`; labels hash-frozen in commit `fb66170`; result `outputs/stage_b_co2/co2_results.json`)
 
