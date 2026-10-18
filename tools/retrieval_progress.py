@@ -20,8 +20,14 @@ from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
 SETS = {"clean (no stellar contamination)": R / "outputs" / "retrieval",
-        "with stellar contamination (--tls)": R / "outputs" / "retrieval_tls"}
-FIRST_GUESS_MIN = 12.0
+        "with stellar contamination (--tls)": R / "outputs" / "retrieval_tls",
+        "REAL TRAPPIST-1 e data (4 JWST visits)": R / "outputs" / "retrieval_real",
+        "REAL e, only >= 3 um": R / "outputs" / "retrieval_real_wl3",
+        "null test b (airless)": R / "outputs" / "retrieval_real_trappist1b",
+        "null test b, only >= 3 um": R / "outputs" / "retrieval_real_trappist1b_wl3",
+        "null test c": R / "outputs" / "retrieval_real_trappist1c",
+        "null test d": R / "outputs" / "retrieval_real_trappist1d"}
+FIRST_GUESS_MIN = 25.0
 
 
 def snapshot() -> str:
@@ -37,7 +43,8 @@ def one(d: Path) -> str:
     total, done = p.get("total", 0), len(runs)
     lines = [f"  {datetime.now():%H:%M:%S}  finished {done}/{total}"]
     for r in runs[-4:]:
-        tag = f"N={r['n_transits']} {r['model']}" + (f" noise#{r['realisation']}" if r.get("realisation") is not None else "")
+        tag = (f"N={r['n_transits']} {r['model']}" + (f" noise#{r['realisation']}" if r.get("realisation") is not None else "")
+               if "n_transits" in r else r["model"])
         lines.append(f"    [x] {tag:28s} lnZ {r['logz']:8.2f}  ({r['seconds'] / 60:.0f} min)")
     avg = (sum(r["seconds"] for r in runs) / done / 60) if done else FIRST_GUESS_MIN
     cur_left = 0.0

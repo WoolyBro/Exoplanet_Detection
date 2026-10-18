@@ -1,0 +1,169 @@
+{
+  "protocol": "stage_b_atmospheres/METHANE_TLS_PROTOCOL.md",
+  "stress_test": {
+    "v1": {
+      "gbm": {
+        "roc_auc_all": 0.938,
+        "fpr_at_0.5_no_ch4_present": 0.041,
+        "fpr_at_0.5_no_ch4_strong_contamination_f>=0.1": 0.075,
+        "fpr_at_0.5_no_ch4_no_contamination": 0.01,
+        "n_no_ch4": 314,
+        "n_no_ch4_strong": 120,
+        "roc_auc_contaminated_only": 0.928
+      },
+      "cnn": {
+        "roc_auc_all": 0.921,
+        "fpr_at_0.5_no_ch4_present": 0.073,
+        "fpr_at_0.5_no_ch4_strong_contamination_f>=0.1": 0.125,
+        "fpr_at_0.5_no_ch4_no_contamination": 0.019,
+        "n_no_ch4": 314,
+        "n_no_ch4_strong": 120,
+        "roc_auc_contaminated_only": 0.914
+      }
+    },
+    "v3": {
+      "gbm": {
+        "roc_auc_all": 0.953,
+        "fpr_at_0.5_no_ch4_present": 0.01,
+        "fpr_at_0.5_no_ch4_strong_contamination_f>=0.1": 0.025,
+        "fpr_at_0.5_no_ch4_no_contamination": 0.0,
+        "n_no_ch4": 314,
+        "n_no_ch4_strong": 120,
+        "roc_auc_contaminated_only": 0.947
+      },
+      "cnn": {
+        "roc_auc_all": 0.948,
+        "fpr_at_0.5_no_ch4_present": 0.032,
+        "fpr_at_0.5_no_ch4_strong_contamination_f>=0.1": 0.058,
+        "fpr_at_0.5_no_ch4_no_contamination": 0.019,
+        "n_no_ch4": 314,
+        "n_no_ch4_strong": 120,
+        "roc_auc_contaminated_only": 0.947
+      }
+    }
+  },
+  "real": {
+    "new_v1": {
+      "n": 29,
+      "n_pos": 4,
+      "gbm": {
+        "roc_auc": 0.97,
+        "perm_p": 0.0003,
+        "ci95": [
+          0.884,
+          1.0
+        ]
+      },
+      "cnn": {
+        "roc_auc": 0.91,
+        "perm_p": 0.0028,
+        "ci95": [
+          0.783,
+          1.0
+        ]
+      }
+    },
+    "new_v3": {
+      "n": 29,
+      "n_pos": 4,
+      "gbm": {
+        "roc_auc": 1.0,
+        "perm_p": 0.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "cnn": {
+        "roc_auc": 0.97,
+        "perm_p": 0.0003,
+        "ci95": [
+          0.892,
+          1.0
+        ]
+      }
+    },
+    "all_v1": {
+      "n": 38,
+      "n_pos": 9,
+      "gbm": {
+        "roc_auc": 0.939,
+        "perm_p": 0.0,
+        "ci95": [
+          0.837,
+          1.0
+        ]
+      },
+      "cnn": {
+        "roc_auc": 0.87,
+        "perm_p": 0.0002,
+        "ci95": [
+          0.729,
+          0.985
+        ]
+      }
+    },
+    "all_v3": {
+      "n": 38,
+      "n_pos": 9,
+      "gbm": {
+        "roc_auc": 1.0,
+        "perm_p": 0.0,
+        "ci95": [
+          1.0,
+          1.0
+        ]
+      },
+      "cnn": {
+        "roc_auc": 0.943,
+        "perm_p": 0.0,
+        "ci95": [
+          0.856,
+          1.0
+        ]
+      }
+    }
+  },
+  "diagnostic": {
+    "v1": {
+      "TOI-260 b": {
+        "gbm": 0.849,
+        "cnn": 0.9940000176429749
+      },
+      "TRAPPIST-1 b": {
+        "gbm": 0.001,
+        "cnn": 0.07699999958276749
+      },
+      "TRAPPIST-1 e": {
+        "gbm": 0.094,
+        "cnn": 0.48899999260902405
+      }
+    },
+    "v3": {
+      "TOI-260 b": {
+        "gbm": 0.039,
+        "cnn": 0.7409999966621399
+      },
+      "TRAPPIST-1 b": {
+        "gbm": 0.001,
+        "cnn": 0.03099999949336052
+      },
+      "TRAPPIST-1 e": {
+        "gbm": 0.184,
+        "cnn": 0.21400000154972076
+      }
+    }
+  },
+  "decision": {
+    "stress_fpr_gbm": {
+      "v1": 0.041,
+      "v3": 0.01
+    },
+    "new_planet_roc_auc_gbm": {
+      "v1": 0.97,
+      "v3": 1.0
+    },
+    "v3_becomes_headline": true,
+    "rule": "v3 if its stress-test FPR (no-CH4 spectra, P>=0.5) is lower AND its ROC-AUC on the 29 new planets is no more than 0.03 below v1's"
+  }
+}

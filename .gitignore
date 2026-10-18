@@ -115,3 +115,7 @@ outputs/stage_b_methane_ext/grid_seed2.log
 # synthetic-grid checkpoints (deleted once the grid is assembled)
 outputs/stage_b_synthetic*/parts/
 outputs/retrieval_real_run.log
+outputs/grid_realistic.log
+outputs/grid_stress.log
+outputs/retrieval_null_*.log
+outputs/retrieval_e_wl3.log

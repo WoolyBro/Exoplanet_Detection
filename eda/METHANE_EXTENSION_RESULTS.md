@@ -12,11 +12,11 @@
 **Figure:** `eda/methane_extension.png`
 **Tests:** `tests/test_methane_extension.py`
 
-> **Bottom line (rounds 1 + 2).** The CH₄ classifier is trained only on simulated spectra; no real spectrum was ever used to train it. On **29 JWST planets this project had never used**, it identifies methane with **ROC-AUC 0.97** (95 % CI 0.88–1.00, permutation p = 0.0003). The gas-blind control scores 0.71.
-> - **It passes the confound test.** On the half of planets with the strongest spectral features, where "big features" cannot stand in for "CH₄", it scores 0.97 (p = 0.006) against 0.70 for the control.
-> - **It is robust to the training set.** A second, independently generated simulated grid gives 0.98, with Spearman 0.90 between the two models' scores.
-> - **Calibration did not help.** The pre-registered Platt calibration made the probabilities slightly worse; the raw score is usable but rough (§4).
-> - **Prior work.** We found no prior study that tests a simulation-trained molecule classifier on real JWST spectra of a planet population against literature labels (§8).
+> **Bottom line (rounds 1 + 2, and the contamination test of §9).** A CH₄ classifier trained only on simulated spectra identifies methane in real JWST spectra of planets it never saw.
+> - **The headline model, since 2026-10-18,** is the one trained on simulations that **include unocculted starspots, faculae and hazes** (v3; §9). It ranks all 9 CH₄ planets above all 29 non-CH₄ planets (ROC-AUC 1.00 on the 29 new planets and on all 38). It cuts false CH₄ calls under strong stellar contamination from 7.5 % to 2.5 %, and removes the one confident real false positive (TOI-260 b: 0.85 → 0.04).
+> - **The clean-trained model (v1)** scored 0.97 on the 29 new planets (CI 0.88–1.00, p = 0.0003) and 0.97 on the strong-feature half, where a gas-blind control scores 0.70. A second independent clean grid gave 0.98.
+> - **Probabilities are conservative, not calibrated.** v3 separates the classes at P ≈ 0.1–0.15, not 0.5. The pre-registered Platt calibration did not help v1 (§4).
+> - We found no prior study that tests a simulation-trained molecule classifier on real JWST spectra of a planet population against literature labels (§8).
 
 ---
 
@@ -130,3 +130,62 @@ These labels were frozen by hash before scoring. **No round-2 planet had ever be
 - **arXiv:2407.19167** (MNRAS 539, 1528). Classifiers for CH₄/O₃/H₂O trained on synthetic TRAPPIST-1e-like spectra, tested **only on simulated** JWST observations.
 - **Garvin et al. 2024** (A&A; arXiv:2405.13469). Machine learning for molecule detection on synthetic planets injected into **real instrument noise**, for direct imaging.
 - **This work.** A simulation-trained molecule classifier evaluated on **real JWST transmission spectra of 38 planets** (9 original + 29 new), with literature labels, a gas-blind confound control, pre-registration, and two independent training grids. We found no prior study doing this. That is a search result, not proof of absence.
+
+---
+
+## 9. Stellar contamination and hazes (pre-registered: `stage_b_atmospheres/METHANE_TLS_PROTOCOL.md`)
+
+**Question.** M-dwarf spectra carry unocculted spots and faculae, whose stellar molecular bands can mimic planetary gases, and hazes add slopes. Does the clean-trained classifier (v1) hallucinate CH₄ under these (H1)? Does training with them (v3) fix it without losing real-planet skill (H2)?
+
+**Data** (`synthetic_grid.py --tls --haze`; generated after the protocol was written):
+- A 3,000-spectrum training grid and an **independent 800-spectrum stress-test set**.
+- 70 % of spectra carry contamination: spots at 0.70–0.95 T_eff or faculae at T_eff + 50–500 K, covering 0–25 % of the disc, with PHOENIX spectra at each anchor star's own T_eff.
+- 50 % carry a power-law haze (κ₃₅₀ 0.01–30 cm²/g, slope −6 to −2).
+- Labels stay "detectable at this noise", computed on the contaminated, hazy spectra.
+- With the flags off, the generator reproduces the original grid exactly (checked).
+
+**Stress test** (800 held-out spectra; false CH₄ rate = P ≥ 0.5 among spectra containing no CH₄):
+
+| Model | ROC-AUC | False CH₄: no contamination | False CH₄: all | False CH₄: strong contamination (f ≥ 0.1) | ROC-AUC, contaminated only |
+|---|---|---|---|---|---|
+| v1 GBM (clean-trained) | 0.938 | 1.0 % | 4.1 % | **7.5 %** | 0.928 |
+| v1 CNN | 0.921 | 1.9 % | 7.3 % | 12.5 % | 0.914 |
+| **v3 GBM** | **0.953** | **0.0 %** | **1.0 %** | **2.5 %** | **0.947** |
+| v3 CNN | 0.948 | 1.9 % | 3.2 % | 5.8 % | 0.947 |
+
+**H1 is confirmed.** Contamination multiplies v1's false-CH₄ rate about sevenfold, and the CNN is the more vulnerable model.
+
+**H2 is confirmed.** Training with contamination cuts the false rate by 3–4× and raises ROC-AUC.
+
+**Real planets** (frozen labels; the original 9 by strict leave-one-planet-out on the v3 grid):
+
+| | v1 GBM | **v3 GBM** | v1 CNN | v3 CNN |
+|---|---|---|---|---|
+| 29 new planets | 0.97 [0.88, 1.00] | **1.00** | 0.91 | 0.97 [0.89, 1.00] |
+| all 38 labelled planets | 0.94 [0.84, 1.00] | **1.00** | 0.87 | 0.94 [0.86, 1.00] |
+
+v3 places every CH₄ planet (lowest: GJ 3470 b, 0.17) above every non-CH₄ planet (highest: L 98-59 d, 0.08).
+- **It is more cautious.** The CH₄ planets' scores fall (TOI-5205 b 0.89 → 0.58, GJ 3470 b 0.62 → 0.17), so at P ≥ 0.5 it flags only 4 of the 9.
+- **The hardest case improves:** WASP-107 b, a depleted-CH₄ detection, rises from 0.05 to 0.22.
+
+**Diagnostic spectra** (GBM; not labelled tests):
+
+| Planet | v1 | v3 | Context |
+|---|---|---|---|
+| **TOI-260 b** | **0.849** | **0.039** | flat spectrum, possible 3.17 µm systematic: v1's one confident false positive is gone |
+| TRAPPIST-1 b | 0.001 | 0.001 | airless; contamination-dominated spectrum |
+| TRAPPIST-1 e | 0.094 | 0.184 | no CH₄ indicated, consistent with the real-data retrieval null tests (FORECAST_RESULTS.md §4d) |
+
+**Pre-registered decision.** v3's stress-test false rate (1.0 %) is below v1's (4.1 %), and its ROC-AUC on the 29 new planets (1.00) is not below v1's (0.97). **v3 becomes the headline CH₄ model.**
+
+**Caveats.**
+- A perfect ranking on 9 positives has a wide true uncertainty, and the bootstrap CI of [1.00, 1.00] understates it.
+- The 29 planets' v1 scores had been seen before v3 was built. The comparison was a pre-registered non-inferiority check, not a selection, but it is not a fully blind test of v3.
+- PHOENIX's T_eff grid is coarse below 3,000 K (2002, 2314, 2642 K, …), and real M-dwarf contamination is not fully described by PHOENIX; the TRAPPIST-1 b null test in FORECAST_RESULTS.md §4d shows this.
+
+**Reproducing**
+```bash
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/synthetic_grid.py --n 3000 --seed 31415001 --tls --haze --out outputs/stage_b_synthetic_realistic
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/synthetic_grid.py --n 800 --seed 27182001 --tls --haze --out outputs/stage_b_synthetic_stress
+python stage_b_atmospheres/methane_tls_robustness.py
+```
