@@ -142,6 +142,31 @@ Every expectation this project registered **before** seeing the result, with its
 | B4 | The zero point's total index < the observability weight's | **held**: 0.06 vs 0.57 |
 | B5 | The mass–radius relation's total index < 0.05 | **held**: 0.005 |
 
+## Significance claims, Holm-adjusted as one family
+
+Every positive significance claim in the main text is listed, with its raw p-value. All are adjusted together (Holm, m = 12), as if they were one family of tests, which is stricter than adjusting each analysis separately.
+
+| Claim | Raw p | Holm-adjusted p | Source |
+|---|---|---|---|
+| v3 rejects more fresh INV false alarms than v2 (McNemar) | 2e-86 | 2e-85 | `eda/VETTER_V3_RESULTS.md` |
+| v3 rejects more real NTP false alarms than v2 (McNemar) | 2e-64 | 2e-63 | `eda/VETTER_V3_RESULTS.md` |
+| v3 rejects more off-target INJ2 than v2 (McNemar) | 1e-33 | 1e-32 | `eda/VETTER_V3_RESULTS.md` |
+| v3 rejects more EB-mimic INJ3 than v2 (McNemar) | 1e-09 | 1e-08 | `eda/VETTER_V3_RESULTS.md` |
+| DR25: v2 keeps more injected planets than the Robovetter (McNemar) | 3e-08 | 2e-07 | `eda/DR25_SIMULATED_RESULTS.md` |
+| S/N balance raises deep K2 planets (Wilcoxon) | 7e-07 | 5e-06 | `outputs/stage_a_mechanisms/snr_balance.json` |
+| K2: Kepler model under-scores deep confirmed planets (Mann-Whitney) | 2e-06 | 1e-05 | `eda/K2_BLIND_TEST_RESULTS.md` |
+| CO2 band occlusion is gas-specific (Mann-Whitney) | 3e-06 | 1e-05 | `eda/CO2_EXTENSION_RESULTS.md` |
+| CO2 GBM on 34 planets (permutation, < 1e-5) | 1e-05 | 4e-05 | `eda/CO2_EXTENSION_RESULTS.md` |
+| CH4 v1 GBM on 29 new planets (permutation) | 0.0003 | 0.0009 | `eda/METHANE_EXTENSION_RESULTS.md §7` |
+| CH4 v3 GBM on the strong-feature half (permutation) | 0.003 | 0.006 | `outputs/stage_b_methane_ext/specnet.json` |
+| CO2 GBM on the strong-feature half (permutation) | 0.003 | 0.006 | `eda/CO2_EXTENSION_RESULTS.md` |
+
+**All 12 survive** (largest adjusted p = 0.006).
+- **Not in the family:**
+  - The Bayesian results (retention P(β < 0) = 0.986; the retrieval Bayes factors) are reported as posteriors and evidence ratios, not p-values.
+  - The two *equivalence* readings (v3 = Robovetter on INV, p = 0.17; on INJ1, p = 0.14) are non-significance statements, so a multiplicity correction would only strengthen them.
+- **The 14 failed expectations above are not p-values.** They are point or interval predictions, reported as stated.
+
 ---
 
 ## What the failures say
