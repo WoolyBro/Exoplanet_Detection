@@ -17,7 +17,11 @@ A three-stage pipeline:
     independent second training grid (0.98);
   - a **detectability forecast**, with a noise model calibrated and validated on 117 real
     single-transit JWST spectra, of how many transits would detect CO₂, CH₄ and O₃ on each
-    habitable-zone target.
+    habitable-zone target. Full Bayesian retrievals refine it: a real analysis needs 1.4× (CO₂) to
+    2.2× (CH₄) the forecast transits;
+  - a re-analysis of the **real TRAPPIST-1 e JWST spectra**: no credible atmosphere detection (the
+    apparent signal sits in two contaminated visits), and a CO₂-rich Archean-like atmosphere is
+    disfavoured. Null tests on airless TRAPPIST-1 b, c and d find nothing.
 - **Stage C** ranks 44 transiting planets for transmission follow-up, with uncertainty, by three criteria:
   - habitable-zone membership (Kopparapu et al. 2014);
   - being terrestrial-size *and* able to keep an atmosphere. This uses the cosmic shoreline of

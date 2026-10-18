@@ -47,6 +47,10 @@ With --tls (stellar contamination, the transit light-source effect, Rackham et a
     both spots and faculae.
   * The contamination is held fixed across the stacked visits. It is not in reality, so this is still
     optimistic.
+  * --tls-linear (used for the reported set): the same injected non-linear contamination, but retrieved
+    with first-order spot/facula templates plus an offset, marginalised analytically. This is the method
+    used on the real data. The non-linear 8-parameter retrieval (--tls) converged too slowly (> 3 h for
+    one run without converging).
   * Output goes to outputs/retrieval_tls/.
 
 Output: outputs/retrieval/{results.json, retrievals.csv, posteriors/*.npz}, eda/retrieval_trappist1e.png
@@ -120,6 +124,36 @@ def phoenix_binned():
     return _PHX
 
 
+_TPL = {}
+SPOT_T_LIN, FACULA_DT_LIN = 2200.0, 150.0
+PRIOR_SD_LIN = (0.5, 0.5, 500.0)            # spot, facula amplitudes; offset (ppm)
+
+
+def linear_templates():
+    """(1 - F_het/F_phot) for a cool-spot (2200 K) and a hot-facula (T_phot + 150 K) population."""
+    if not _TPL:
+        p = phoenix_binned()
+        def flux(T):
+            i = np.clip(np.searchsorted(p["grid"], T) - 1, 0, len(p["grid"]) - 2)
+            w = (T - p["grid"][i]) / (p["grid"][i + 1] - p["grid"][i])
+            return (1 - w) * p["flux"][i] + w * p["flux"][i + 1]
+        _TPL["spot"] = 1 - flux(SPOT_T_LIN) / p["phot"]
+        _TPL["facula"] = 1 - flux(T_PHOT + FACULA_DT_LIN) / p["phot"]
+    return _TPL
+
+
+def marginal_loglike_linear(depth, y, sigma):
+    """Gaussian likelihood with first-order contamination (spot and facula templates) plus an offset,
+    integrated analytically over N(0, PRIOR_SD_LIN^2) priors (as in retrieval_trappist1e_real.py)."""
+    t = linear_templates()
+    ok = np.isfinite(depth) & np.isfinite(y)
+    B = np.column_stack([depth[ok] * t["spot"][ok], depth[ok] * t["facula"][ok], np.ones(ok.sum())])
+    C = np.diag(sigma[ok] ** 2) + (B * np.array(PRIOR_SD_LIN) ** 2) @ B.T
+    r = y[ok] - depth[ok]
+    _, logdet = np.linalg.slogdet(C)
+    return float(-0.5 * (r @ np.linalg.solve(C, r) + logdet + ok.sum() * np.log(2 * np.pi)))
+
+
 def tls_factor(f: float, t_het: float) -> np.ndarray:
     p = phoenix_binned()
     i = np.clip(np.searchsorted(p["grid"], t_het) - 1, 0, len(p["grid"]) - 2)
@@ -140,7 +174,7 @@ def sigma_per_transit() -> np.ndarray:
 def prior_transform(u, gases, tls=False):
     x = np.array(u, float)
     k = len(gases)
-    if tls:
+    if tls is True:
         x[k + 3] = F_RANGE[0] + (F_RANGE[1] - F_RANGE[0]) * u[k + 3]
         x[k + 4] = THET_RANGE[0] + (THET_RANGE[1] - THET_RANGE[0]) * u[k + 4]
     x[:k] = LOGX[0] + (LOGX[1] - LOGX[0]) * u[:k]
@@ -157,10 +191,12 @@ def log_likelihood(x, gases, data, sigma, tls=False):
         return -1e100
     try:
         m = model_binned(vmr, x[k], x[k + 1], x[k + 2])
-        if tls:
+        if tls is True:
             m = m * tls_factor(x[k + 3], x[k + 4])
     except Exception:
         return -1e100
+    if tls == "linear":
+        return marginal_loglike_linear(m, data, sigma)
     ok = np.isfinite(m) & np.isfinite(data)
     return float(-0.5 * np.sum(((m[ok] - data[ok]) / sigma[ok]) ** 2))
 
@@ -193,8 +229,8 @@ def run_one(name: str, gases: tuple, data: np.ndarray, sigma: np.ndarray, worker
     import dynesty
     from dynesty.pool import Pool
 
-    ndim = len(gases) + 3 + (2 if tls else 0)
-    names = [f"log_{g}" for g in gases] + ["T", "logP", "Rp"] + (["f_het", "T_het"] if tls else [])
+    ndim = len(gases) + 3 + (2 if tls is True else 0)
+    names = [f"log_{g}" for g in gases] + ["T", "logP", "Rp"] + (["f_het", "T_het"] if tls is True else [])
     t0 = time.time()
     last = [0.0]
 
@@ -246,16 +282,19 @@ def main() -> int:
     ap.add_argument("--realisations", type=int, default=3, help="noisy retrievals at N = --noisy-n")
     ap.add_argument("--noisy-n", type=int, default=8)
     ap.add_argument("--nlive", type=int, default=NLIVE)
-    ap.add_argument("--tls", action="store_true", help="inject and retrieve stellar contamination")
+    ap.add_argument("--tls", action="store_true", help="inject and retrieve stellar contamination (non-linear f, T_het)")
+    ap.add_argument("--tls-linear", action="store_true",
+                    help="inject non-linear contamination, retrieve it with analytically marginalised linear templates")
     ap.add_argument("--n-transits", type=int, nargs="+", default=list(N_TRANSITS))
     a = ap.parse_args()
     global OUT, PROG
-    if a.tls:
+    tls_mode = "linear" if a.tls_linear else bool(a.tls)
+    if a.tls or a.tls_linear:
         OUT, PROG = OUT.parent / "retrieval_tls", OUT.parent / "retrieval_tls" / "progress.json"
     (OUT / "posteriors").mkdir(parents=True, exist_ok=True)
     sigma1 = sigma_per_transit()
     truth = model_binned(TRUTH, PLANET["T"], 0.0, PLANET["rp"])
-    if a.tls:
+    if a.tls or a.tls_linear:
         truth = truth * tls_factor(TLS_TRUTH["f"], TLS_TRUTH["T_het"])
     mf = matched_filter_snr1(sigma1)
     plan = [(n, m, None) for n in a.n_transits for m in MODELS] + \
@@ -274,10 +313,10 @@ def main() -> int:
             data = truth + np.random.default_rng(1000 + k).normal(0, 1, len(truth)) * sigma
         tag = f"N{n}_{m}" + (f"_noise{k}" if k is not None else "")
         print(f"=== {tag} ===", flush=True)
-        out = run_one(m, MODELS[m], data, sigma, a.workers, seed=7 + n, tag=tag, nlive=a.nlive, tls=a.tls)
+        out = run_one(m, MODELS[m], data, sigma, a.workers, seed=7 + n, tag=tag, nlive=a.nlive, tls=tls_mode)
         out.update(n_transits=n, realisation=k)
         done.append(out)
-        res_path.write_text(json.dumps({"runs": done, "matched_filter_snr_1_transit": mf, "tls": a.tls,
+        res_path.write_text(json.dumps({"runs": done, "matched_filter_snr_1_transit": mf, "tls": str(tls_mode),
                                         "sigma_per_transit_median_ppm": float(np.nanmedian(sigma1))}, indent=1))
         write_progress(completed=len(done), last_finished=tag, last_seconds=out["seconds"])
         print(f"    lnZ = {out['logz']:.2f} +- {out['logz_err']:.2f}, {out['ncall']} calls, {out['seconds']} s", flush=True)

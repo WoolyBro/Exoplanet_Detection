@@ -1,0 +1,23 @@
+{
+ "total": 9,
+ "completed": 9,
+ "started": "2026-10-18T13:25:22",
+ "plan": [
+  "N=4 full",
+  "N=4 no_CH4",
+  "N=4 no_CO2",
+  "N=8 full",
+  "N=8 no_CH4",
+  "N=8 no_CO2",
+  "N=16 full",
+  "N=16 no_CH4",
+  "N=16 no_CO2"
+ ],
+ "updated": "2026-10-18T14:40:16",
+ "current": "done",
+ "current_ncall": 15471,
+ "current_seconds": 398,
+ "current_dlogz": 0.114,
+ "last_finished": "N16_no_CO2",
+ "last_seconds": 404
+}

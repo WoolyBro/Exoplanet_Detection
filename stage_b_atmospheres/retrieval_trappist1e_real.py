@@ -77,6 +77,9 @@ import os  # noqa: E402
 # the 3-5.2 um range (CH4 3.3, CO2 4.3), where unocculted spots and faculae matter least: the null
 # test on airless TRAPPIST-1 b showed the two-template contamination model fails at short wavelengths.
 WL_MIN = float(os.environ.get("RETRIEVAL_WL_MIN", "0.6"))
+# Optional subset of visits, 1-based, e.g. RETRIEVAL_VISITS=1,2: a real atmosphere is common to every
+# transit, whereas stellar contamination changes from visit to visit.
+VISITS = [int(v) for v in os.environ.get("RETRIEVAL_VISITS", "").split(",") if v.strip()]
 
 PLANETS = {"TRAPPIST-1 b": {"rp": 1.116, "mp": 1.374, "teq": 397.6},
            "TRAPPIST-1 c": {"rp": 1.097, "mp": 1.308, "teq": 339.7},
@@ -91,7 +94,8 @@ else:                                   # the same relative widths as for e
     T_RANGE = (base.T_RANGE[0], max(base.T_RANGE[1], 1.5 * PL["teq"]))
 OUT = RESEARCH / "outputs" / (("retrieval_real" if PLANET_NAME == "TRAPPIST-1 e"
                                else "retrieval_real_" + PLANET_NAME.lower().replace(" ", "").replace("-", ""))
-                              + ("" if WL_MIN == 0.6 else f"_wl{WL_MIN:g}"))
+                              + ("" if WL_MIN == 0.6 else f"_wl{WL_MIN:g}")
+                              + ("" if not VISITS else "_v" + "".join(map(str, VISITS))))
 PROG = OUT / "progress.json"
 N_VISITS = 4
 ARCHEAN = {"CO2": 1e-2, "CH4": 1e-3, "H2O": 1e-3}
@@ -112,6 +116,8 @@ def load_visits() -> dict:
 
         sel = sbp.select_spectra([PLANET_NAME])
         sel = sel[sel.instrument.astype(str).str.contains("PRISM")].sort_values("file")
+        if VISITS:
+            sel = sel.iloc[[v - 1 for v in VISITS]]
         depths, sigmas, wl = [], [], None
         for r in sel.itertuples():
             df, _ = sbp.parse_tbl(sbp.SPEC_DIR / "spectra_tbl" / r.file)

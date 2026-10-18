@@ -1,0 +1,26 @@
+{
+ "total": 5,
+ "completed": 1,
+ "plan": [
+  "bare_rock",
+  "full",
+  "archean",
+  "no_CH4",
+  "no_CO2"
+ ],
+ "data": {
+  "visits": 4,
+  "points_per_visit": 67,
+  "wl_um": [
+   0.6292,
+   5.2084
+  ],
+  "median_sigma_ppm": 109.5
+ },
+ "updated": "2026-10-18T03:07:19",
+ "current": "full",
+ "current_ncall": 36194,
+ "current_seconds": 2280,
+ "current_dlogz": 2986.448,
+ "last_finished": "bare_rock"
+}

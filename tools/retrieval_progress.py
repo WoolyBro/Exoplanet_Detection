@@ -20,9 +20,10 @@ from pathlib import Path
 
 R = Path(__file__).resolve().parents[1]
 SETS = {"clean (no stellar contamination)": R / "outputs" / "retrieval",
-        "with stellar contamination (--tls)": R / "outputs" / "retrieval_tls",
+        "with stellar contamination (linear, marginalised)": R / "outputs" / "retrieval_tls",
         "REAL TRAPPIST-1 e data (4 JWST visits)": R / "outputs" / "retrieval_real",
         "REAL e, only >= 3 um": R / "outputs" / "retrieval_real_wl3",
+        "REAL e, quiet visits 1+2 only": R / "outputs" / "retrieval_real_v12",
         "null test b (airless)": R / "outputs" / "retrieval_real_trappist1b",
         "null test b, only >= 3 um": R / "outputs" / "retrieval_real_trappist1b_wl3",
         "null test c": R / "outputs" / "retrieval_real_trappist1c",

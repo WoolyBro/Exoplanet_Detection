@@ -1,0 +1,209 @@
+{
+  "comparisons": {
+    "atmosphere (full) vs bare rock": {
+      "lnB": 7.39,
+      "lnB_err": 0.18,
+      "sigma": 4.25
+    },
+    "CH4 (full vs no_CH4)": {
+      "lnB": 7.76,
+      "lnB_err": 0.2,
+      "sigma": 4.34
+    },
+    "CO2 (full vs no_CO2)": {
+      "lnB": -1.0,
+      "lnB_err": 0.23,
+      "sigma": -2.03
+    },
+    "Archean scenario vs bare rock": {
+      "lnB": 2.54,
+      "lnB_err": 0.13,
+      "sigma": 2.77
+    },
+    "Archean scenario vs free atmosphere": {
+      "lnB": -4.85,
+      "lnB_err": 0.2,
+      "sigma": -3.57
+    }
+  },
+  "sign_convention": "positive sigma favours the first model; negative sigma favours the second",
+  "full_model_limits": {
+    "CH4": {
+      "95pc_upper_log10_vmr": -1.53,
+      "median": -2.77,
+      "archean_value": -3.0
+    },
+    "CO2": {
+      "95pc_upper_log10_vmr": -4.97,
+      "median": -7.92,
+      "archean_value": -2.0
+    },
+    "H2O": {
+      "95pc_upper_log10_vmr": -0.62,
+      "median": -1.74,
+      "archean_value": -3.0
+    }
+  },
+  "fits": {
+    "bare_rock": {
+      "chi2_per_visit": [
+        64.2,
+        62.5,
+        102.7,
+        61.9
+      ],
+      "chi2_total": 291.3,
+      "n_points": 268,
+      "contamination_theta_per_visit [spot, facula, offset_ppm]": [
+        [
+          0.0369,
+          0.0157,
+          -11.6326
+        ],
+        [
+          0.0636,
+          0.0634,
+          18.6408
+        ],
+        [
+          -0.2069,
+          -0.0544,
+          150.2097
+        ],
+        [
+          0.0414,
+          0.1638,
+          226.5092
+        ]
+      ]
+    },
+    "full": {
+      "chi2_per_visit": [
+        64.6,
+        64.8,
+        83.3,
+        51.4
+      ],
+      "chi2_total": 264.1,
+      "n_points": 268,
+      "contamination_theta_per_visit [spot, facula, offset_ppm]": [
+        [
+          -0.0324,
+          -0.0549,
+          -56.7226
+        ],
+        [
+          -0.0072,
+          -0.0113,
+          -31.7403
+        ],
+        [
+          -0.2696,
+          -0.1189,
+          100.1812
+        ],
+        [
+          -0.0222,
+          0.1,
+          174.5097
+        ]
+      ]
+    },
+    "archean": {
+      "chi2_per_visit": [
+        65.9,
+        64.5,
+        93.9,
+        57.6
+      ],
+      "chi2_total": 281.9,
+      "n_points": 268,
+      "contamination_theta_per_visit [spot, facula, offset_ppm]": [
+        [
+          0.0209,
+          -0.0059,
+          -61.447
+        ],
+        [
+          0.0457,
+          0.0377,
+          -33.3788
+        ],
+        [
+          -0.2242,
+          -0.0796,
+          101.6874
+        ],
+        [
+          0.0258,
+          0.1418,
+          175.1638
+        ]
+      ]
+    },
+    "no_CH4": {
+      "chi2_per_visit": [
+        64.8,
+        63.5,
+        99.6,
+        58.1
+      ],
+      "chi2_total": 286.0,
+      "n_points": 268,
+      "contamination_theta_per_visit [spot, facula, offset_ppm]": [
+        [
+          -0.0127,
+          -0.0214,
+          17.9819
+        ],
+        [
+          0.0181,
+          0.0309,
+          43.3213
+        ],
+        [
+          -0.2363,
+          -0.0599,
+          172.6294
+        ],
+        [
+          0.0002,
+          0.1399,
+          252.2134
+        ]
+      ]
+    },
+    "no_CO2": {
+      "chi2_per_visit": [
+        64.3,
+        63.9,
+        84.2,
+        51.9
+      ],
+      "chi2_total": 264.3,
+      "n_points": 268,
+      "contamination_theta_per_visit [spot, facula, offset_ppm]": [
+        [
+          -0.0108,
+          -0.039,
+          57.151
+        ],
+        [
+          0.0148,
+          0.0053,
+          82.7785
+        ],
+        [
+          -0.2593,
+          -0.1118,
+          216.4587
+        ],
+        [
+          -0.0027,
+          0.1163,
+          289.4483
+        ]
+      ]
+    }
+  }
+}

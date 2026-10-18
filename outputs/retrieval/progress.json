@@ -1,0 +1,29 @@
+{
+ "total": 15,
+ "completed": 15,
+ "started": "2026-10-17T23:53:21",
+ "plan": [
+  "N=2 full",
+  "N=2 no_CH4",
+  "N=2 no_CO2",
+  "N=4 full",
+  "N=4 no_CH4",
+  "N=4 no_CO2",
+  "N=8 full",
+  "N=8 no_CH4",
+  "N=8 no_CO2",
+  "N=16 full",
+  "N=16 no_CH4",
+  "N=16 no_CO2",
+  "N=8 full noise#0",
+  "N=8 no_CH4 noise#0",
+  "N=8 no_CO2 noise#0"
+ ],
+ "updated": "2026-10-18T10:31:00",
+ "current": "done",
+ "current_ncall": 31891,
+ "current_seconds": 20917,
+ "current_dlogz": 0.112,
+ "last_finished": "N8_no_CO2_noise0",
+ "last_seconds": 20924
+}

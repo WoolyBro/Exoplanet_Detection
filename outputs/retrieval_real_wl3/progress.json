@@ -1,0 +1,27 @@
+{
+ "total": 5,
+ "completed": 5,
+ "plan": [
+  "bare_rock",
+  "full",
+  "archean",
+  "no_CO2",
+  "no_CH4"
+ ],
+ "planet": "TRAPPIST-1 e",
+ "data": {
+  "visits": 4,
+  "points_per_visit": 18,
+  "wl_um": [
+   3.0185,
+   5.2084
+  ],
+  "median_sigma_ppm": 91.85
+ },
+ "updated": "2026-10-18T12:08:50",
+ "current": "done",
+ "current_ncall": 13649,
+ "current_seconds": 721,
+ "current_dlogz": 0.305,
+ "last_finished": "no_CH4"
+}
