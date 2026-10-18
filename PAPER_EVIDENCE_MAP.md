@@ -76,6 +76,7 @@ One row per claim the paper can make, with its number, its figure and the file t
 | Real-spectra classifiers cannot learn | 13 labelled planets; no model beats the majority class | `eda/STAGE_B_RESULTS.md` |
 | Simulation-trained CH₄ detector | v1 0.97 on 29 new planets (p = 0.0003); the confound control (gas-blind) scores 0.70 | `eda/METHANE_EXTENSION_RESULTS.md` §7 |
 | Robust to contamination (v3) | stress-set false-CH₄ 4.1 % → 1.0 %; all 40 labelled planets ranked correctly (10 with CH₄) | same, §9–10 |
+| CH₄ round 4 (registered) | TOI-1231 b (T_eq ≈ 330 K), published after freezing: 0.639, correct; 41 labelled planets, all ranked correctly | `eda/METHANE_EXTENSION_RESULTS.md` §13 |
 | Labels cross-checked | 36/43 agree with exoplanet.eu (κ 0.53); all 7 disagreements explained | same, §11 |
 | H₂O / CO | no skill beyond the gas-blind control | `eda/STAGE_B_LEVEL3_RESULTS.md` |
 | CO₂ detector (registered, 34 new-label planets) | GBM 0.982, 1-D CNN 0.996 (control 0.925); strong-feature half GBM 0.94 / CNN 0.98 vs control 0.67; masking the 4.3 µm band: drop 0.87 vs 0.00 (p = 3e-6); K1–K4 held | `eda/CO2_EXTENSION_RESULTS.md` |

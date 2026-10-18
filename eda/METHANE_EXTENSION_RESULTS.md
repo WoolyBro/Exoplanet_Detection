@@ -266,3 +266,22 @@ Hiding strength from the input is therefore not how the confound is controlled. 
 - 0.97 on the strong-feature half (p = 0.006). This last number is post hoc, so it is not a confirmed pass of the confound test.
 
 The headline stays with the GBM, which is the most accurate and also the least tied to feature strength (Spearman 0.25). The CNN–LSTM claim of the title rests on detection (Stage A) and on the candidate habitability factor (`STAGE_C_RESULTS.md` §3c), not on atmospheres.
+
+## 13. Round 4: a planet published after the models were frozen (pre-registered: `METHANE_EXTENSION_PROTOCOL_ROUND4.md`, commit `944f3dc`)
+
+**Code:** `stage_b_atmospheres/methane_round4.py`. **Output:** `outputs/stage_b_methane_ext/round4.json`. **Data:** `external_data/round4_toi1231b/` (the authors' spectra from OSF, osf.io/mryd6).
+
+**Why so few planets.** Every JWST transmission planet in the archive's 2026-10-18 snapshot has been considered in rounds 1–3, and the archive's query service was down on 2026-10-19. A literature search found two CH₄ planets published since; only one has a public reduced spectrum:
+- **TOI-1231 b**, a temperate Neptune (T_eq ≈ 330 K), cooler than every CH₄ planet in rounds 1–3. CH₄ was detected at ln B = 54.5–69.6 (arXiv:2607.00973).
+- **TOI-5293 A b** has strong CH₄, but its spectrum is not public, so it is not scored.
+
+| Spectrum (two independent reductions) | v3 GBM P(CH₄) |
+|---|---|
+| NIRSpec G395H, JexoRes / JexoPipe | **0.984 / 0.993** |
+| NIRISS SOSS, JexoRes / JexoPipe | 0.101 / 0.479 |
+| **Planet (mean of 4)** | **0.639**: on the CH₄ side of the 0.125 boundary, so **R4-1 held** |
+
+**Reading it.**
+- **A blind check outside the training regime.** The frozen model correctly identifies CH₄ in a planet published after it was frozen, and colder than anything it was tested on.
+- **The 3.3 µm band carries the detection,** as expected for a cool atmosphere: the NIRSpec spectra are nearly certain. NIRISS sees only the weaker 1.7 and 2.3 µm bands, and the two reductions disagree there (0.10 vs 0.48).
+- **The CH₄ test set now has 41 labelled planets, 11 with CH₄.** Every one is ranked correctly by v3: TOI-1231 b's 0.639 is above every non-CH₄ planet (≤ 0.08).
