@@ -13,6 +13,7 @@ asked for:
 Configs (fixed by the protocol; nothing else is trained):
     C  NTP + diagnostics (primary)      A  NTP, no diagnostics      B  diagnostics, no NTP
     N  the v2 recipe with S/N-balanced loss weights, no NTP, no diagnostics (eda/SNR_BALANCE_PROTOCOL.md)
+    R, T  the v2 data and recipe with a 1-D ResNet / a Transformer (eda/ARCHITECTURE_PROTOCOL.md)
 
     python stage_a_transit_model/vetter_v3.py --config C --seed 42
     python stage_a_transit_model/vetter_v3.py --sweep --jobs 3          # all 15 runs
@@ -44,7 +45,9 @@ KOI_VIEWS = R / "detection_views_v2"
 NTP_VIEWS = R / "detection_views_err" / "v3_ntp"
 V3 = R / "external_data" / "kepler_dr25_simulated" / "v3"
 CONFIGS = {"C": {"ntp": True, "diag": True}, "A": {"ntp": True, "diag": False}, "B": {"ntp": False, "diag": True},
-           "N": {"ntp": False, "diag": False, "snr_balance": True}}
+           "N": {"ntp": False, "diag": False, "snr_balance": True},
+           # eda/ARCHITECTURE_PROTOCOL.md: the v2 data and recipe, two modern architectures
+           "R": {"ntp": False, "diag": False, "arch": "resnet"}, "T": {"ntp": False, "diag": False, "arch": "transformer"}}
 SEEDS = [42, 1, 2, 7, 11]
 FEATURES = ["cent_score", "halo_ghost", "oesig_dv", "mod_oe_dv", "mod_sig_pri_dv", "mod_sig_sec_dv", "mod_sig_ter_dv",
             "mod_sig_pos_dv", "mod_fred_dv", "mod_fa1_dv", "mod_fa2_dv", "mod_depth_sec_dv", "mod_ph_sec_dv", "alb_dv",
@@ -157,6 +160,70 @@ def build_v3(use_diag: bool, n_diag: int = len(FEATURES) + 1):
     return m
 
 
+def build_arch(arch: str):
+    """ARCHITECTURE_PROTOCOL.md: the v2 head on top of a 1-D ResNet or a Transformer branch per view."""
+    import torch
+    from torch import nn
+
+    class Block(nn.Module):
+        def __init__(self, cin, cout, stride):
+            super().__init__()
+            self.body = nn.Sequential(nn.Conv1d(cin, cout, 3, stride, 1, bias=False), nn.BatchNorm1d(cout), nn.ReLU(),
+                                      nn.Conv1d(cout, cout, 3, 1, 1, bias=False), nn.BatchNorm1d(cout))
+            self.skip = (nn.Identity() if cin == cout and stride == 1 else
+                         nn.Sequential(nn.Conv1d(cin, cout, 1, stride, bias=False), nn.BatchNorm1d(cout)))
+
+        def forward(self, x):
+            return torch.relu(self.body(x) + self.skip(x))
+
+    class ResNetBranch(nn.Module):
+        def __init__(self):
+            super().__init__()
+            layers = [nn.Conv1d(2, 32, 7, 2, 3, bias=False), nn.BatchNorm1d(32), nn.ReLU()]
+            cin = 32
+            for cout, stride in [(32, 1), (64, 2), (128, 2)]:
+                layers += [Block(cin, cout, stride), Block(cout, cout, 1)]
+                cin = cout
+            self.net, self.out_features = nn.Sequential(*layers), 128
+
+        def forward(self, x):
+            return self.net(x).mean(dim=-1)
+
+    class TransformerBranch(nn.Module):
+        def __init__(self, length, patch):
+            super().__init__()
+            self.n_tok, self.patch = length // patch, patch
+            self.embed = nn.Conv1d(2, 64, patch, patch)
+            self.pos = nn.Parameter(torch.zeros(1, self.n_tok, 64))
+            nn.init.normal_(self.pos, std=0.02)
+            layer = nn.TransformerEncoderLayer(64, 4, 128, dropout=0.1, batch_first=True, norm_first=True)
+            self.enc, self.norm, self.out_features = nn.TransformerEncoder(layer, 3), nn.LayerNorm(64), 64
+
+        def forward(self, x):
+            t = self.embed(x[:, :, : self.n_tok * self.patch]).transpose(1, 2) + self.pos
+            return self.norm(self.enc(t)).mean(dim=1)
+
+    class Arch(nn.Module):
+        def __init__(self):
+            super().__init__()
+            if arch == "resnet":
+                self.global_branch, self.local_branch = ResNetBranch(), ResNetBranch()
+            elif arch == "transformer":
+                self.global_branch, self.local_branch = TransformerBranch(2001, 25), TransformerBranch(201, 9)
+            else:
+                raise ValueError(arch)
+            n = self.global_branch.out_features + self.local_branch.out_features
+            self.head = nn.Sequential(nn.Dropout(HP["dropout"]), nn.Linear(n, 64), nn.ReLU(),
+                                      nn.Dropout(HP["dropout"]), nn.Linear(64, len(CLASSES)))
+
+        def forward(self, g, l, d=None):
+            return self.head(torch.cat([self.global_branch(g), self.local_branch(l)], dim=1))
+
+    m = Arch()
+    m.use_errors, m.use_diag = True, False
+    return m
+
+
 def predict(model, g, l, d, batch: int = 256) -> np.ndarray:
     import torch
     model.eval()
@@ -191,7 +258,7 @@ def train_one(config: str, seed: int) -> dict:
     gtr, ltr, dtr = tensors(tr, diag)
     gva, lva, dva = tensors(va, diag)
     ytr = torch.from_numpy(tr.label_index.astype(np.int64))
-    model = build_v3(cfg["diag"])
+    model = build_arch(cfg["arch"]) if cfg.get("arch") else build_v3(cfg["diag"])
     w = class_weights(tr.label_index, "inverse")
     sw = None
     if cfg.get("snr_balance"):
@@ -244,7 +311,7 @@ def train_one(config: str, seed: int) -> dict:
     rep = {"name": name, "config": config, **cfg, "seed": seed, "best_epoch": best["epoch"], "val_roc_auc": best["monitor"],
            "val_n": int(len(va)), "train_n": int(len(tr)), "n_params": n_params, "thresholds_val": thr,
            "minutes": round((time.time() - t0) / 60, 1), "diag_state": None if diag is None else diag.state()}
-    torch.save({"state_dict": model.state_dict(), "config": config, "use_diag": cfg["diag"],
+    torch.save({"state_dict": model.state_dict(), "config": config, "use_diag": cfg["diag"], "arch": cfg.get("arch"),
                 "diag_state": rep["diag_state"]}, out / "best.pt")
     (out / "report.json").write_text(json.dumps(rep, indent=2, default=float))
     pd.DataFrame(history).to_csv(out / "history.csv", index=False)
@@ -255,7 +322,7 @@ def train_one(config: str, seed: int) -> dict:
 def load_v3(run_dir: Path):
     import torch
     ck = torch.load(run_dir / "best.pt", map_location="cpu", weights_only=False)
-    m = build_v3(ck["use_diag"])
+    m = build_arch(ck["arch"]) if ck.get("arch") else build_v3(ck["use_diag"])
     m.load_state_dict(ck["state_dict"])
     m.eval()
     diag = Diagnostics.from_state(ck["diag_state"]) if ck["use_diag"] else None
