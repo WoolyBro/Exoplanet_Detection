@@ -112,7 +112,7 @@ def test_mass_relation_option_leaves_the_default_unchanged():
     row = pd.DataFrame({"pl_name": ["X b"], "pl_rade": [1.1], "pl_radeerr1": [0.05], "pl_radeerr2": [-0.05],
                         "pl_insol": [0.8], "pl_insolerr1": [0.1], "pl_insolerr2": [-0.1], "st_teff": [3300.0],
                         "st_tefferr1": [50.0], "st_tefferr2": [-50.0], "st_rad": [0.3], "st_raderr1": [0.01], "st_raderr2": [-0.01],
-                        "st_lum": [np.nan], "pl_orbsmax": [0.05], "pl_orbsmaxerr1": [0.002], "pl_orbsmaxerr2": [-0.002],
+                        "st_lum": [np.nan], "st_lumerr1": [np.nan], "st_lumerr2": [np.nan], "pl_orbsmax": [0.05], "pl_orbsmaxerr1": [0.002], "pl_orbsmaxerr2": [-0.002],
                         "sy_jmag": [9.0], "tran_flag": [1], "discoverymethod": ["Transit"], "pl_bmassprov": ["Estimated"],
                         "pl_bmasse": [np.nan], "pl_bmasseerr1": [np.nan], "pl_bmasseerr2": [np.nan], "pl_bmasselim": [0]})
     _, a = tp.monte_carlo(row, n=500, return_draws=True)
