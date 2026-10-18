@@ -39,7 +39,10 @@ QUARTER_TS = {0: "2009131105131", 1: "2009166043257", 2: "2009259160929", 3: "20
               10: "2011271113734", 11: "2012004120508", 12: "2012088054726", 13: "2012179063303",
               14: "2012277125453", 15: "2013011073258", 16: "2013098041711", 17: "2013131215648"}
 INJ_URL = ("https://exoplanetarchive.ipac.caltech.edu/data/KeplerData/Simulated///light_curves//"
-           "injected-light-curves-dr25-inj1/q{q}/kplr{kic:09d}-{ts}_INJECTED-inj1_llc.fits.gz")
+           "injected-light-curves-dr25-{s}/q{q}/kplr{kic:09d}-{ts}_INJECTED-{s}_llc.fits.gz")
+# Truth by construction: only INJ1 (on-target planets) are planets. INJ2 transits sit on a neighbouring star,
+# INJ3 are eclipsing-binary mimics, INV are false alarms; OBS rows here are real non-KOI TCEs (NTP).
+LABEL = {"INJ1": "CONFIRMED", "INJ2": "FALSE POSITIVE", "INJ3": "FALSE POSITIVE", "INV": "FALSE POSITIVE", "OBS": "FALSE POSITIVE"}
 
 
 def _get(url: str, dest: Path, attempts: int = 3) -> bool:
@@ -77,19 +80,25 @@ def _star_job(job: dict) -> dict:
 
     kic, rows, sset, out, work, cache = job["kic"], job["rows"], job["set"], Path(job["out"]), Path(job["work"]), Path(job["cache"])
     started = time.time()
-    label = "CONFIRMED" if sset == "INJ1" else "FALSE POSITIVE"
+    label = LABEL[sset]
     ephs = [p.Ephemeris(object_id=f"{r['TCE_ID']}_{sset}", star_id=kic, mission="Kepler", period=float(r["period"]),
                         epoch=float(r["epoch"]), duration=float(r["duration"]) / 24.0, label=label,
                         period_err=np.nan, epoch_err=np.nan) for r in rows]
+    # the star's real DR25 TCEs are masked in detrending too (they are in every injected light curve)
+    masks = ephs + [p.Ephemeris(object_id=f"real_{m['TCE_ID']}", star_id=kic, mission="Kepler", period=float(m["period"]),
+                                epoch=float(m["epoch"]), duration=float(m["duration"]) / 24.0, label=None)
+                    for m in job.get("real", [])
+                    # for OBS the sampled TCE IS a catalogue TCE (already in ephs); injected TCE numbers are unrelated
+                    if not (sset == "OBS" and f"{m['TCE_ID']}_OBS" in {e.object_id for e in ephs})]
     star_dir = work / f"kic{kic}"
     star_dir.mkdir(parents=True, exist_ok=True)
     try:
-        if sset == "INJ1":
+        if sset.startswith("INJ"):
             from concurrent.futures import ThreadPoolExecutor
             def one(item):
                 q, ts = item
                 dest = star_dir / f"q{q}.fits.gz"
-                return dest if _get(INJ_URL.format(q=q, kic=kic, ts=ts), dest) else None
+                return dest if _get(INJ_URL.format(s=sset.lower(), q=q, kic=kic, ts=ts), dest) else None
             with ThreadPoolExecutor(max_workers=6) as pool:      # the 18 quarter files, in parallel
                 files = [f for f in pool.map(one, sorted(QUARTER_TS.items())) if f is not None]
             if not files:
@@ -98,23 +107,25 @@ def _star_job(job: dict) -> dict:
         else:
             src = p.fetch_lightcurve_via_api(kic, "Kepler", cache_dir=cache, use_s3=True)
             d = pd.read_csv(src)
-            d["flux"] = 2.0 - d.flux                     # inverted about the per-quarter median of 1
+            if sset == "INV":
+                d["flux"] = 2.0 - d.flux                 # inverted about the per-quarter median of 1
             csv = star_dir / "lc.csv"
             d.to_csv(csv, index=False)
-        flat = p.load_and_flatten(csv, mission="Kepler", ephemerides=ephs)
+        flat = p.load_and_flatten(csv, mission="Kepler", ephemerides=masks)
     except Exception as exc:
         return {"kic": kic, "records": [{"object_id": e.object_id, "status": "failed", "error": f"{type(exc).__name__}: {exc}"[:300]}
                                         for e in ephs], "seconds": time.time() - started}
     finally:
-        if sset == "INV":
+        if sset in ("INV", "OBS"):
             p.discard_raw_files(kic, "Kepler", cache)
     records = []
     for e, r in zip(ephs, rows):
         try:
-            res = p.process_koi(flat, e, ephs)
+            res = p.process_koi(flat, e, masks)
             meta = {"object_id": e.object_id, "star_id": kic, "set": sset, "tce_id": r["TCE_ID"], "period_days": e.period,
-                    "epoch": e.epoch, "duration_days": e.duration, "label": label, "MES": r["MES"],
-                    "expected_mes": r.get("Expected_MES"), "robovetter_disp": r["Disp"], "robovetter_score": r["Score"],
+                    "epoch": e.epoch, "duration_days": e.duration, "label": label, "MES": r.get("MES", r.get("mes")),
+                    "expected_mes": r.get("Expected_MES"), "robovetter_disp": r.get("Disp"), "robovetter_score": r.get("Score"),
+                    "split": r.get("split"),
                     "depth_ppm": res["depth_ppm"], "depth_snr": res["depth_snr"], "transit_observed": res["transit_observed"],
                     "global_coverage": res["global"].coverage, "local_coverage": res["local"].coverage,
                     "flatten": flat.meta, "has_errors": True}
@@ -136,22 +147,30 @@ def _star_job(job: dict) -> dict:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--set", choices=["INJ1", "INV"], required=True)
+    ap.add_argument("--set", choices=["INJ1", "INJ2", "INJ3", "INV", "OBS"], required=True)
+    ap.add_argument("--sample", type=Path, default=None, help="sample CSV (default: the 2026-10-18 DR25 benchmark sample)")
+    ap.add_argument("--out", default=None, help="output folder name under detection_views_err/")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--limit", type=int, default=None)
     a = ap.parse_args()
-    sample = pd.read_csv(SIM / f"sample_{a.set.lower()}.csv")
-    out = R / "detection_views_err" / f"dr25_{a.set.lower()}"
+    sample = pd.read_csv(a.sample or SIM / f"sample_{a.set.lower()}.csv")
+    out = R / "detection_views_err" / (a.out or f"dr25_{a.set.lower()}")
+    from astropy.io import ascii
+    rv = SIM / "robovetter_inputs" / "kplr_dr25_obs_robovetter_input.txt"
+    real = ascii.read(rv, format="ipac").to_pandas()[["TCE_ID", "KIC", "period", "epoch", "duration"]] if rv.is_file() else None
     out.mkdir(parents=True, exist_ok=True)
-    work = Path(os.path.expanduser("~/lightkurve_cache_dr25")) / f"work_{a.set.lower()}"
+    work = Path(os.path.expanduser("~/lightkurve_cache_dr25")) / f"work_{(a.out or a.set).lower()}"
     cache = Path(os.path.expanduser("~/lightkurve_cache_dr25"))
     prog = out / "progress.jsonl"
     done = set()
     if prog.is_file():
-        done = {json.loads(l)["kic"] for l in prog.read_text().splitlines() if l.strip()}
+        # only stars whose every record succeeded count as done; failures are retried on the next run
+        done = {r["kic"] for r in map(json.loads, filter(str.strip, prog.read_text().splitlines()))
+                if all(x["status"] == "ok" for x in r["records"])}
     stars = [k for k in sample.KIC.drop_duplicates() if k not in done][: a.limit]
     jobs = [{"kic": int(k), "rows": sample[sample.KIC == k].to_dict("records"), "set": a.set, "out": str(out),
-             "work": str(work), "cache": str(cache)} for k in stars]
+             "work": str(work), "cache": str(cache),
+             "real": [] if real is None else real[real.KIC == k].to_dict("records")} for k in stars]
     log = out / "build_progress.txt"
     t0, n_done, counts = time.time(), 0, {}
     with open(log, "a") as fh:

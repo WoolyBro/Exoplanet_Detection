@@ -1,0 +1,37 @@
+{
+  "seed": 20261019,
+  "obs_tces": 32534,
+  "ntp_pool": 20641,
+  "twin_pairs_koi_ntp": 28753,
+  "ntp_in_koi_families": 1407,
+  "ntp_dropped_bridging_koi_splits": 507,
+  "ntp_sample_by_split": {
+    "train": 4200,
+    "val": 900,
+    "test": 900
+  },
+  "eval": {
+    "inj1": {
+      "n": 1000,
+      "stars": 1000,
+      "pool": 40930
+    },
+    "inv": {
+      "n": 1000,
+      "stars": 903,
+      "pool": 5858
+    },
+    "inj2": {
+      "n": 1000,
+      "stars": 1000,
+      "pool": 17351
+    },
+    "inj3": {
+      "n": 1000,
+      "stars": 972,
+      "pool": 9803
+    }
+  },
+  "diagnostics_rows": 19564,
+  "koi_without_dr25_tce": 1373
+}
