@@ -18,8 +18,8 @@
 - **Contributions** (numbered, one per act, plus the method):
   1. Signal-twin leakage in star-grouped splits.
   2. A pre-registered evaluation of a CNN–BiLSTM vetter: external K2 and DR25 tests, a diagnosed blind spot and its fix (v3).
-  3. A strength-blind CNN–BiLSTM CH₄ detector validated on 40 real JWST planets.
-  4. Contamination-aware verdicts on three habitable-zone planets.
+  3. A simulation-trained CH₄ detector validated on 40 real JWST planets. A strength-blind CNN–BiLSTM version failed its pre-registered tests and is reported as such.
+  4. Contamination-aware verdicts on three habitable-zone planets (TRAPPIST-1 e and f, LHS 1140 b): none has a credited atmosphere, and an H₂ envelope is disfavoured for all three.
   5. A fitted habitability factor that is robust to its assumptions.
 - **The method itself:** pre-registration and single reads, with a scoreboard of all registered expectations (§7).
 
@@ -39,6 +39,7 @@
    - **Fig. 3:** figures 15 and 16 combined.
 3. **What the network learned** (critique 2).
    - Survey priors are causal through S/N (noise-injection test), measured against the training data.
+   - S/N-balanced training removes two-thirds of the prior but costs K2 skill, because the prior carries real base rates. **Fig. 4b:** figure 19.
    - Seed disagreement flags errors, so the vetter can abstain.
    - Occlusion maps.
    - **Fig. 4:** figure 18, with figure 08's opposite biases as an inset.
@@ -52,14 +53,14 @@
 
 1. **Why supervised learning on real spectra fails:** 13 labelled planets.
 2. **Simulation-trained detectors validated on real data.**
-   - The GBM and **SpecNet**, the strength-blind CNN–BiLSTM (critique 4).
+   - The GBM, plus **SpecNet**, the strength-blind CNN–BiLSTM, which failed S1–S4 (critique 4): hiding feature strength also hides band significance.
    - 40 labelled planets; the confound test; the stress set; the exoplanet.eu label cross-check.
    - **Fig. 6:** methane_specnet + methane_tls_robustness.
 3. **Stellar contamination is the limiting systematic.**
    - TRAPPIST-1 e: the atmosphere "signal" lives in visits 3–4.
    - Calibrated on 8 visits: significant in 4.
    - **Fig. 7:** retrieval_trappist1e_real + contamination_residuals.
-4. **New verdicts** (critique 5): LHS 1140 b and TRAPPIST-1 f, by the same method with a pre-registered credit rule. **Fig. 8.**
+4. **New verdicts** (critique 5): TRAPPIST-1 f (ln B −0.70) and LHS 1140 b (ln B −0.90; the N₂ hint rests on the NIRISS spectrum), by the same method with a pre-registered credit rule. **Fig. 8:** retrieval_trappist1f + retrieval_lhs1140b.
 
 ## 5. Act III — The habitability factor (≈ 1,800 words)
 
@@ -88,12 +89,13 @@ Every registered expectation, its registration commit and its outcome:
 - the K2 test (E1–E7);
 - DR25 (D1–D4);
 - vetter v3 (H1–H8);
+- S/N balance (N1–N5);
 - SpecNet (S1–S5);
 - retrievals (R1–R4);
 - habitability (A1–A4, B1–B2, C1);
 - methane rounds 1–3.
 
-Reporting the failures (E4, E6, D3, B1, ...) is part of the evidence.
+Reporting the failures (E4, E6, D3, M4, N2, N4, S1–S4, B1, ...) is part of the evidence. The table is `eda/PREREGISTRATION_SCOREBOARD.md`.
 
 ## 8. Reproducibility
 

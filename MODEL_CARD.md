@@ -55,6 +55,11 @@ Rank transit-like signals **that a detection pipeline has already found** (TCEs,
 - **Survey priors.**
   - The Kepler-trained model distrusts deep transits: 94 % of Kepler training transits deeper than 10,000 ppm are false positives. On TESS photometry it rejects real hot Jupiters (HD 189733 b scores 0.09).
   - The TESS-trained model has the opposite bias (`figures/07`, `08`).
+  - **The prior is learned from the training labels and acts through S/N.**
+    - Adding noise raises deep K2 planets from 0.72 to 0.95.
+    - S/N-balanced training (model N, `runs/v3_N*`, a research variant, not the release model) removes about two-thirds of it. But it lowers K2 ROC-AUC to 0.834, because the prior also carries real base-rate information.
+    - Recalibrate per survey rather than retraining (`eda/VETTER_MECHANISMS_RESULTS.md` §3, §3b; `figures/18`, `19`).
+- **Knowing when it is unsure.** The spread of the 5 seeds' scores flags errors: AUROC 0.76 on Kepler validation, falling to 0.68 on K2 and 0.58 on DR25 false alarms. Abstaining on the most uncertain half cuts the in-survey error rate from 16.8 % to 5.1 %. Confident out-of-survey errors are not flagged.
 - **Weak signals.** Near chance below a pipeline S/N of about 7 (Kepler 0.60, TESS 0.65, K2 0.72). On injected planets it is still more complete than the Robovetter at MES 7.1–10 (0.91 vs 0.82).
 - **Detrending dependence.** On K2 the light-curve product moved the ROC-AUC by 0.031 (K2SFF above EVEREST).
 - **TESS label and selection bias.** The TESS build kept 56 % of false positives but 89 % of confirmed planets (the ephemeris-reliability filter).

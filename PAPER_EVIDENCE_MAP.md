@@ -18,11 +18,23 @@ One row per claim the paper can make, with its number, its figure and the file t
      - It keeps more injected planets than the Robovetter (0.935 vs 0.869, p = 3 × 10⁻⁸), most of all for weak, long-period signals.
      - It rejects only 76 % of systematics-born false alarms (Robovetter 99 %), because it was trained on KOIs.
    - **Prospective predictions:** 1,687 open candidates in three missions, locked by hash.
+   - **How the network decides, by experiment** (`eda/VETTER_MECHANISMS_RESULTS.md`):
+     - seed disagreement predicts errors (AUROC 0.76), and abstaining on half cuts errors from 16.8 % to 5.1 %;
+     - occlusion shows the transit core and the secondary eclipse carry the decision;
+     - the survey prior is causal through S/N, and S/N-balanced training removes two-thirds of it, at a cost (pre-registered; N2 and N4 failed).
+   - **Vetter v3**, which adds real false alarms and Robovetter measurements: V3_SUMMARY_PENDING.
 5. **A simulation-trained CH₄ detector** that ranks all 40 labelled real JWST planets correctly. It is robust to stellar contamination (false-CH₄ rate 4.1 % → 1.0 %).
-6. **TRAPPIST-1 e.**
-   - The real JWST data favour no atmosphere once visit-to-visit stellar contamination is modelled.
-   - That contamination, calibrated on all 8 TRAPPIST-1 PRISM visits, enters a JWST forecast for the habitable-zone targets.
-7. **A physically grounded habitability factor:** habitable-zone membership × rocky-and-retains-atmosphere × observability. It is validated against 20 observed rocky planets, including where it fails.
+   - A strength-blind CNN + BiLSTM (SpecNet) **failed** its pre-registered tests (0.78 on all 40 planets). The GBM stays the detector.
+6. **Three habitable-zone planets, one contamination-aware method, one answer:**
+   - **TRAPPIST-1 e:** the apparent atmosphere comes from contaminated visits.
+   - **TRAPPIST-1 f:** ln B = −0.70.
+   - **LHS 1140 b:** ln B = −0.90; its N₂ hint rests on one spectrum.
+   - An H₂ envelope is disfavoured for all three. The contamination, calibrated on all 8 TRAPPIST-1 PRISM visits, enters a JWST forecast.
+7. **A habitability factor with a learned component:**
+   - HZ membership × rocky-and-retains-atmosphere × observability.
+   - Retention is a Bayesian logistic model fitted to 20 observed JWST rocky planets: P(β < 0) = 0.99, magma-ocean exception P = 0.98, leave-one-out validated.
+   - Sobol analysis gives a robust core of 7 targets.
+   - For candidates, the CNN–LSTM vetter's calibrated P(real) multiplies the score; the 15-candidate shortlist is hash-locked.
 
 ## 2. Data and splits
 
@@ -50,6 +62,11 @@ One row per claim the paper can make, with its number, its figure and the file t
 | DR25 simulated data (registered) | completeness 0.935 vs Robovetter 0.869 (McNemar p = 3e-8; MES 7.1–10: 0.91 vs 0.82); false alarms rejected 0.760 vs 0.992; ROC-AUC 0.952 vs 0.971 | 16 | `eda/DR25_SIMULATED_RESULTS.md` |
 | K2 blind test (registered, read once) | Kepler-trained 0.863 [0.840, 0.884], CONF-vs-FP 0.954; TESS-trained 0.843. Deep-transit prior replicated (median 0.72 vs 0.94, p = 2e-6). Platt map does not transfer (ECE 0.36). E1–E3, E5, E7 held; E4 (TESS half) and E6 (EVEREST ≥ K2SFF, −0.031) failed | 15 | `eda/K2_BLIND_TEST_RESULTS.md` |
 | Prospective | 564 TESS + 285 Kepler + 838 K2 candidates registered (hash-checked); 1 resolved so far | — | `eda/PROSPECTIVE_PREDICTIONS.md` |
+| Selective prediction | seed spread flags errors: AUROC 0.76 (Kepler val), 0.68 (K2), 0.58 (DR25); keep 50 % → error 0.168 → 0.051 | 18 | `eda/VETTER_MECHANISMS_RESULTS.md` §1 |
+| Occlusion | planets: transit core −0.18 to −0.25; EBs: phase-0.5 window +0.04 | 18 | same, §2 |
+| Survey prior is causal through S/N | K2 deep confirmed 0.72 → 0.95 with 5 % noise; Kepler EBs 0.02 → 0.64 at 20 % | 18 | same, §3 |
+| S/N-balanced training (registered) | gap 0.22 → 0.08 (N3 held); deep median 0.84 (N2 failed, needed 0.85); K2 ROC-AUC 0.863 → 0.834 (N4 failed); the prior was partly true base-rate information | 19 | same, §3b |
+| Vetter v3 (registered) | V3_ROW_PENDING | 17 | `eda/VETTER_V3_RESULTS.md` |
 
 ## 4. Atmospheres (Stage B)
 
@@ -60,6 +77,9 @@ One row per claim the paper can make, with its number, its figure and the file t
 | Robust to contamination (v3) | stress-set false-CH₄ 4.1 % → 1.0 %; all 40 labelled planets ranked correctly (10 with CH₄) | same, §9–10 |
 | Labels cross-checked | 36/43 agree with exoplanet.eu (κ 0.53); all 7 disagreements explained | same, §11 |
 | H₂O / CO₂ / CO | no skill beyond the gas-blind control | `eda/STAGE_B_LEVEL3_RESULTS.md` |
+| SpecNet (registered) | strength-blind CNN+BiLSTM: 0.80 (29 new), 0.78 (all 40), stress false rate 4.5 %; S1–S4 failed, S5 held | `eda/METHANE_EXTENSION_RESULTS.md` §12 |
+| TRAPPIST-1 f (registered) | ln B(N₂ vs bare) −0.70; H₂ −3.1 vs bare; CH₄ < 10^−3.4; R4 held | `eda/RETRIEVAL_HZ_RESULTS.md` §1 |
+| LHS 1140 b (registered) | ln B(N₂ vs bare) −0.90; N₂ vs H₂ +1.9; CO₂ < 0.2 %; R2, R3 held; NIRISS χ²/N 1.7 | same, §2 |
 
 ## 5. TRAPPIST-1 e and the JWST forecast
 
@@ -81,6 +101,9 @@ One row per claim the paper can make, with its number, its figure and the file t
 | Shoreline validation | airless side 14/14; atmosphere side 1/6; margin AUC 0.55; TOI-561 b (strong atmosphere) 2.4 dex on the airless side | §2b |
 | What drives the ranking | without HZ ρ = 0.14; without retention ρ = 0.86 | 12, §3 |
 | TRAPPIST-1 e | rank 1 → 4 with retention; depends on the XUV history (P 0.03 / 0.17 / 1.00) | §2b |
+| Fitted retention (registered) | β −1.27 [−2.64, −0.12], P(β<0) 0.986; γ_magma +2.63, P 0.977; LOO log score −0.53 vs −1.72 (shoreline) vs −0.58 (base rate); A1–A3 held | §2c |
+| Sensitivity (Sobol) | total index: observability weight 0.60, HZ 0.47, retention 0.04; robust core of 7; B1 failed, A4 and B2 held | §3b |
+| Candidate factor | P(real) × score over 1,064 candidates; shortlist of 15 (11 above the confirmed top-10 cut); C1 held | §3c |
 
 ## 7. Limitations the paper must state
 
@@ -94,8 +117,10 @@ All are in the write-ups above and in `README.md` (caveats 1–8):
 - forecast lower bounds and a calibration from one star;
 - 40 labelled CH₄ planets;
 - Stage D not modelled (no ground-truth habitability labels exist);
-- the shoreline is supported only on its airless side.
+- the shoreline is supported only on its airless side; the fitted retention model has modest discrimination (LOO AUC 0.60);
+- the S/N-balance and v3 Kepler-test results are pre-declared second reads, not unbiased estimates;
+- temperate rocky-planet spectra cannot yet separate an N₂ atmosphere from bare rock.
 
 ## 8. Reproducibility
 
-`REPRODUCE.md`, `environment-prt.yml`, `requirements-lock*.txt`, `MODEL_CARD.md`; 50 tests (`python -m pytest tests`).
+`REPRODUCE.md`, `environment-prt.yml`, `requirements-lock*.txt`, `MODEL_CARD.md`; 58 tests (`python -m pytest tests`); every pre-registered expectation and outcome in `eda/PREREGISTRATION_SCOREBOARD.md`.
