@@ -29,6 +29,16 @@
       "resolved_false_positive": 0,
       "status": "not yet evaluable (needs >= 10 resolved each way)",
       "resolved": []
+    },
+    "k2": {
+      "n_candidates": 838,
+      "now": {
+        "CANDIDATE": 838
+      },
+      "resolved_planet": 0,
+      "resolved_false_positive": 0,
+      "status": "not yet evaluable (needs >= 10 resolved each way)",
+      "resolved": []
     }
   }
 }

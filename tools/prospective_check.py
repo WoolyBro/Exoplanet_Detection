@@ -34,9 +34,12 @@ OUT = R / "outputs" / "prospective"
 TAP = "https://exoplanetarchive.ipac.caltech.edu/TAP/sync"
 REGISTERED = {"kepler_test_predictions.csv": "3d897473c3f8a9545f53c5313c8f2789e66d652bf2ebe7d6724c0cd7bc0014b2",
               "tess_test_predictions.csv": "99206c087ab12381f56ad09a2b70df9c45eb085122a34d014b8dc266d259433e"}
+# K2 candidates, scored once by the blind K2 read (runs/k2_blind, 2026-10-18 21:13)
+K2_PRED = R / "stage_a_transit_model" / "runs" / "k2_blind" / "k2_predictions.csv"
+K2_HASH = "94fd3b1d14d5d8699d12128ea6371d3ae0c13fe2d2d16ec9d2bc2a64aaf0f5a1"
 MIN_PER_CLASS = 10
-PLANET = {"tess": {"CP", "KP"}, "kepler": {"CONFIRMED"}}
-FALSE = {"tess": {"FP", "FA"}, "kepler": {"FALSE POSITIVE"}}
+PLANET = {"tess": {"CP", "KP"}, "kepler": {"CONFIRMED"}, "k2": {"CONFIRMED"}}
+FALSE = {"tess": {"FP", "FA"}, "kepler": {"FALSE POSITIVE"}, "k2": {"FALSE POSITIVE", "REFUTED"}}
 
 
 def tap(query: str) -> pd.DataFrame:
@@ -51,6 +54,9 @@ def current(mission: str) -> pd.Series:
     if mission == "tess":
         t = tap("select toi, tfopwg_disp from toi")
         return t.assign(object_id="TOI " + t.toi.map(lambda x: f"{x:.2f}")).set_index("object_id").tfopwg_disp
+    if mission == "k2":
+        k = tap("select pl_name, disposition from k2pandc where default_flag = 1")
+        return k.drop_duplicates("pl_name").set_index("pl_name").disposition
     k = tap("select kepoi_name, koi_disposition from cumulative")
     return k.set_index("kepoi_name").koi_disposition
 
@@ -62,8 +68,13 @@ def main() -> int:
     for f, h in REGISTERED.items():
         if hashlib.sha256((PRED / f).read_bytes()).hexdigest() != h:
             raise SystemExit(f"{f} differs from its registered hash; the prospective test is void")
-    for mission in ["tess", "kepler"]:
-        pred = pd.read_csv(PRED / f"{mission}_test_predictions.csv")
+    if hashlib.sha256(K2_PRED.read_bytes()).hexdigest() != K2_HASH:
+        raise SystemExit("k2_predictions.csv differs from its registered hash; the K2 prospective test is void")
+    for mission in ["tess", "kepler", "k2"]:
+        if mission == "k2":
+            pred = pd.read_csv(K2_PRED).rename(columns={"score_kepler": "planet_like_score", "calibrated_kepler": "calibrated_score"})
+        else:
+            pred = pd.read_csv(PRED / f"{mission}_test_predictions.csv")
         cand = pred[pred.true_label == "CANDIDATE"].copy()
         cand["now"] = cand.object_id.map(current(mission))
         cand["y"] = np.where(cand.now.isin(PLANET[mission]), 1, np.where(cand.now.isin(FALSE[mission]), 0, -1))

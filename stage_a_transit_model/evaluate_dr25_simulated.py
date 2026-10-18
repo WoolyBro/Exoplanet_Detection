@@ -146,9 +146,12 @@ def make_figure(res: dict, d: pd.DataFrame) -> None:
     ax.set(xlabel="false-alarm rate (INV)", ylabel="true-positive rate (INJ1)", title="Injected planets vs inverted false alarms")
     ax.legend(fontsize=8, loc="lower right")
     ax.grid(alpha=0.3)
-    fig.suptitle("Kepler DR25 simulated data (stars never seen in training): the vetter keeps planets but is fooled by systematics?",
+    c, e = res["completeness_INJ1"], res["effectiveness_INV"]
+    fig.suptitle(f"Kepler DR25 simulated data, stars never seen in training: the vetter keeps more injected planets than the Robovetter "
+                 f"({c['ours'][0]:.3f} vs {c['robovetter'][0]:.3f})\nbut passes {1 - e['ours'][0]:.0%} of inverted-light-curve "
+                 f"false alarms (Robovetter {1 - e['robovetter'][0]:.1%}), mostly long-period, few-transit ones",
                  x=0.01, ha="left", fontweight="bold")
-    fig.tight_layout(rect=(0, 0, 1, 0.94))
+    fig.tight_layout(rect=(0, 0, 1, 0.90))
     fig.savefig(R / "figures" / "16_dr25_simulated.png", dpi=150, bbox_inches="tight")
 
 

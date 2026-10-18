@@ -2,7 +2,7 @@
 
 **Working title:** *Exoplanet detection and habitability factor using CNN and LSTM.*
 
-One row per claim the paper can make, with its number, its figure and the file that proves it. Quote numbers from here and check them against the source file before submission. Rows marked *(pending)* are filled after their pre-registered read.
+One row per claim the paper can make, with its number, its figure and the file that proves it. Quote numbers from here and check them against the source file before submission.
 
 ## 1. Contributions (abstract and introduction)
 
@@ -12,7 +12,12 @@ One row per claim the paper can make, with its number, its figure and the file t
    - neighbouring-star contamination (centroid-only false positives rejected 49 %);
    - opposite survey priors (the Kepler model rejects real hot Jupiters);
    - not a blind search (arbitrary folds pass 94 %).
-4. **Out-of-mission and simulated tests:** a blind K2 test and the Kepler DR25 simulated-data benchmark, both pre-registered *(pending)*, plus registered prospective predictions for 849 open candidates.
+4. **Out-of-mission and simulated tests, both pre-registered.**
+   - **K2, a mission the model never saw:** ROC-AUC 0.863; confirmed vs FP 0.954.
+   - **Kepler's own DR25 simulated data:**
+     - It keeps more injected planets than the Robovetter (0.935 vs 0.869, p = 3 × 10⁻⁸), most of all for weak, long-period signals.
+     - It rejects only 76 % of systematics-born false alarms (Robovetter 99 %), because it was trained on KOIs.
+   - **Prospective predictions:** 1,687 open candidates in three missions, locked by hash.
 5. **A simulation-trained CH₄ detector** that ranks all 40 labelled real JWST planets correctly. It is robust to stellar contamination (false-CH₄ rate 4.1 % → 1.0 %).
 6. **TRAPPIST-1 e.**
    - The real JWST data favour no atmosphere once visit-to-visit stellar contamination is modelled.
@@ -42,9 +47,9 @@ One row per claim the paper can make, with its number, its figure and the file t
 | Published vetters | 922 common KOIs: ours 0.977, AstroNet 0.976, ExoNet 0.990, ExoMiner 0.996 | 14 | `outputs/stage_a_comparison/` |
 | Blind spot | centroid-only FPs rejected 49 % (n = 80) vs eclipsing-binary-only 95 % | 09 | `figures/make_figures.py` (`fooled_table`) |
 | Injection (bespoke) | reliable from 40 ppm; null folds pass 94 % | 10 | `outputs/injection_recovery_v2/` |
-| DR25 simulated data | completeness, effectiveness, vs Robovetter *(pending)* | 16 | `eda/DR25_SIMULATED_PROTOCOL.md` |
-| K2 blind test | P1 and P2, E1–E7 verdicts *(pending)* | 15 | `eda/K2_BLIND_TEST_PROTOCOL.md` |
-| Prospective | 564 TESS + 285 Kepler candidates registered; 1 resolved so far | — | `eda/PROSPECTIVE_PREDICTIONS.md` |
+| DR25 simulated data (registered) | completeness 0.935 vs Robovetter 0.869 (McNemar p = 3e-8; MES 7.1–10: 0.91 vs 0.82); false alarms rejected 0.760 vs 0.992; ROC-AUC 0.952 vs 0.971 | 16 | `eda/DR25_SIMULATED_RESULTS.md` |
+| K2 blind test (registered, read once) | Kepler-trained 0.863 [0.840, 0.884], CONF-vs-FP 0.954; TESS-trained 0.843. Deep-transit prior replicated (median 0.72 vs 0.94, p = 2e-6). Platt map does not transfer (ECE 0.36). E1–E3, E5, E7 held; E4 (TESS half) and E6 (EVEREST ≥ K2SFF, −0.031) failed | 15 | `eda/K2_BLIND_TEST_RESULTS.md` |
+| Prospective | 564 TESS + 285 Kepler + 838 K2 candidates registered (hash-checked); 1 resolved so far | — | `eda/PROSPECTIVE_PREDICTIONS.md` |
 
 ## 4. Atmospheres (Stage B)
 
@@ -81,6 +86,8 @@ One row per claim the paper can make, with its number, its figure and the file t
 
 All are in the write-ups above and in `README.md` (caveats 1–8):
 - test sets read once;
+- not a false-alarm filter: 24 % of DR25 INV false alarms pass;
+- probabilities and thresholds need recalibration per survey (K2);
 - TESS label and selection bias;
 - vetter, not search;
 - centroid blind spot;

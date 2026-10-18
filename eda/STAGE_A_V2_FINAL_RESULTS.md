@@ -172,6 +172,17 @@ Each final model is the **5-seed ensemble**. Platt calibration and the recall-90
   - Only the paired comparison, each injection against its own star, measures detection.
   - The model must be run on signals a detection pipeline has already found, which is how it is used here.
 
+## 5e. Two external tests, both pre-registered (added 2026-10-18)
+
+| Test | Result | Write-up |
+|---|---|---|
+| **K2**, a mission neither model saw (1,462 signals, read once) | Kepler-trained **0.863** [0.840, 0.884], confirmed vs FP 0.954; TESS-trained 0.843. The ranking transfers; the Kepler Platt map and threshold do not (ECE 0.36, recall 0.65). | `eda/K2_BLIND_TEST_RESULTS.md`, `figures/15` |
+| **Kepler DR25 simulated data** on never-seen stars (1,000 injected planets + 1,000 inverted-light-curve false alarms) | **Keeps 93.5 % of injected planets** vs the Robovetter's 86.9 % (p = 3 × 10⁻⁸; the gain is at MES < 10 and P > 100 d). **Rejects only 76 % of false alarms** vs 99.2 %. ROC-AUC 0.952 vs 0.971. | `eda/DR25_SIMULATED_RESULTS.md`, `figures/16` |
+
+Together they place the model precisely:
+- **A strong planet-keeper that generalises across missions.** It is more complete than the Robovetter on weak signals.
+- **Not a false-alarm filter.** Trained on KOIs, it never saw the systematics that the Robovetter's not-transit-like tests remove.
+
 ## 6. Limits
 
 - One test reading per mission. The CIs are star-bootstrap intervals and do not include the selection procedure's own variance. The validation–test agreement suggests that is small.

@@ -70,6 +70,8 @@ with the model chosen on validation by a pre-registered rule and the test set re
 | precision at the validation-fixed 90 %-recall threshold | 0.792 | 0.915 |
 | vs published vetters, same test KOIs (confirmed vs FP) | ≈ AstroNet (ΔAUC +0.001); below ExoMiner (−0.019), which uses extra diagnostics | — |
 | calibrated (Platt, fitted on validation) test ECE | 0.023 | 0.018 |
+| **K2, a mission neither model saw** (pre-registered, read once) | **0.863** [0.840, 0.884]; confirmed vs FP 0.954 | 0.843 [0.816, 0.871] |
+| **Kepler DR25 simulated data** (stars never seen; vs Robovetter on the same signals) | injected planets kept **0.935** vs 0.869; systematics false alarms rejected **0.760** vs 0.992 | — |
 
 The earlier numbers (Kepler 0.9158, TESS 0.7843) came from split v1. That split leaked: 301 of
 1,406 Kepler test KOIs had a signal twin in another split. They are kept in
@@ -83,7 +85,7 @@ explained wherever those numbers appear.
 
 ## Results in figures
 
-All twelve statistical figures, each titled by the question it answers and carrying 95 %
+The statistical figures (01–12 from one script, 13–16 from their analyses), each titled by the question it answers and carrying 95 %
 intervals, are in **[`figures/`](figures/)** and regenerate with `python figures/make_figures.py`.
 The Stage A figures show the final v2 ensembles and their single test read (regenerated 2026-10-18).
 Four that carry the main argument:
@@ -100,7 +102,7 @@ Four that carry the main argument:
 **Are the two detection models biased toward different kinds of planet?**
 ![Opposite planet-size bias](figures/08_opposite_planet_size_bias.png)
 
-**[See all twelve figures, with sources and interpretation &rarr;](figures/README.md)**
+**[See all sixteen figures, with sources and interpretation &rarr;](figures/README.md)**
 
 ---
 
@@ -280,8 +282,10 @@ These are in the reports too, but they are the load-bearing caveats:
    a statement about received flux. The ranking (rebuilt 2026-10-17) uses published physics with
    uncertainty, excludes the 10 planets that do not transit, and no longer uses the Stage B
    molecule model, which has no skill. See `eda/STAGE_C_RESULTS.md` §4 for what was wrong before.
-5. **The vetter is a vetter, not a search, and it cannot see centroids.**
+5. **The vetter is a vetter, not a search or a false-alarm filter, and it cannot see centroids.**
    - Folding a star at an arbitrary period already scores a median 0.68. It must be run on signals a pipeline has already detected; it responds to injected transits from 40 ppm.
+   - On Kepler's simulated data it lets through 24 % of systematics-born false alarms, against 0.8 % for the Robovetter, mostly long-period ones. It was trained on KOIs, which had already passed that triage.
+   - On raw TCEs it needs a false-alarm filter in front.
    - False positives whose only warning sign is light from a neighbouring star are rejected 49 % of the time, against 95 % for eclipsing binaries (`figures/09`).
    - That gap is where ExoMiner, which reads centroid diagnostics, beats it.
 6. **`stage_d_habitability/` is exploration, not a result.** No habitability model was trained:

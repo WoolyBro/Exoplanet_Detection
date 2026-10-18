@@ -1,0 +1,293 @@
+{
+  "threshold": 0.5926,
+  "views_built": {
+    "INJ1": 1000,
+    "INV": 1000
+  },
+  "sampled": {
+    "INJ1": 1000,
+    "INV": 1000
+  },
+  "completeness_INJ1": {
+    "n": 1000,
+    "ours": [
+      0.935,
+      0.918,
+      0.9487
+    ],
+    "robovetter": [
+      0.869,
+      0.8467,
+      0.8885
+    ],
+    "paired": {
+      "ours_only": 104,
+      "robovetter_only": 38,
+      "p_exact": 2.7833777337348257e-08
+    }
+  },
+  "effectiveness_INV": {
+    "n": 1000,
+    "ours": [
+      0.76,
+      0.7326,
+      0.7854
+    ],
+    "robovetter": [
+      0.992,
+      0.9843,
+      0.9959
+    ],
+    "paired": {
+      "ours_only": 3,
+      "robovetter_only": 235,
+      "p_exact": 1.0174408616545886e-65
+    }
+  },
+  "completeness_by_MES": {
+    "7.1-10": {
+      "n": 494,
+      "ours": [
+        0.9089,
+        0.8803,
+        0.9312
+      ],
+      "robovetter": [
+        0.8178,
+        0.7814,
+        0.8494
+      ],
+      "paired": {
+        "ours_only": 67,
+        "robovetter_only": 22,
+        "p_exact": 1.899849174722082e-06
+      }
+    },
+    "10-15": {
+      "n": 415,
+      "ours": [
+        0.959,
+        0.9354,
+        0.9743
+      ],
+      "robovetter": [
+        0.9157,
+        0.885,
+        0.9387
+      ],
+      "paired": {
+        "ours_only": 32,
+        "robovetter_only": 14,
+        "p_exact": 0.011351591436778108
+      }
+    },
+    "15-25": {
+      "n": 49,
+      "ours": [
+        0.9592,
+        0.8629,
+        0.9887
+      ],
+      "robovetter": [
+        0.898,
+        0.7824,
+        0.9556
+      ],
+      "paired": {
+        "ours_only": 4,
+        "robovetter_only": 1,
+        "p_exact": 0.375
+      }
+    },
+    "25-inf": {
+      "n": 42,
+      "ours": [
+        0.9762,
+        0.8768,
+        0.9958
+      ],
+      "robovetter": [
+        0.9762,
+        0.8768,
+        0.9958
+      ],
+      "paired": {
+        "ours_only": 1,
+        "robovetter_only": 1,
+        "p_exact": 1.0
+      }
+    }
+  },
+  "effectiveness_by_MES": {
+    "7.1-10": {
+      "n": 521,
+      "ours": [
+        0.6852,
+        0.6441,
+        0.7236
+      ],
+      "robovetter": [
+        0.9846,
+        0.97,
+        0.9922
+      ],
+      "paired": {
+        "ours_only": 3,
+        "robovetter_only": 159,
+        "p_exact": 2.424643195386088e-43
+      }
+    },
+    "10-15": {
+      "n": 316,
+      "ours": [
+        0.8165,
+        0.7701,
+        0.8553
+      ],
+      "robovetter": [
+        1.0,
+        0.988,
+        1.0
+      ],
+      "paired": {
+        "ours_only": 0,
+        "robovetter_only": 58,
+        "p_exact": 6.938893903907228e-18
+      }
+    },
+    "15-25": {
+      "n": 112,
+      "ours": [
+        0.8661,
+        0.7907,
+        0.9171
+      ],
+      "robovetter": [
+        1.0,
+        0.9668,
+        1.0
+      ],
+      "paired": {
+        "ours_only": 0,
+        "robovetter_only": 15,
+        "p_exact": 6.103515625e-05
+      }
+    },
+    "25-inf": {
+      "n": 51,
+      "ours": [
+        0.9412,
+        0.8408,
+        0.9798
+      ],
+      "robovetter": [
+        1.0,
+        0.93,
+        1.0
+      ],
+      "paired": {
+        "ours_only": 0,
+        "robovetter_only": 3,
+        "p_exact": 0.25
+      }
+    }
+  },
+  "completeness_by_period": {
+    "0-10": {
+      "n": 17,
+      "ours": [
+        0.7647,
+        0.5274,
+        0.9045
+      ],
+      "robovetter": [
+        0.8824,
+        0.6566,
+        0.9671
+      ],
+      "paired": {
+        "ours_only": 0,
+        "robovetter_only": 2,
+        "p_exact": 0.5
+      }
+    },
+    "10-100": {
+      "n": 250,
+      "ours": [
+        0.992,
+        0.9713,
+        0.9978
+      ],
+      "robovetter": [
+        0.948,
+        0.9131,
+        0.9694
+      ],
+      "paired": {
+        "ours_only": 13,
+        "robovetter_only": 2,
+        "p_exact": 0.00738525390625
+      }
+    },
+    "100-300": {
+      "n": 437,
+      "ours": [
+        0.9382,
+        0.9116,
+        0.9572
+      ],
+      "robovetter": [
+        0.8719,
+        0.8372,
+        0.9
+      ],
+      "paired": {
+        "ours_only": 46,
+        "robovetter_only": 17,
+        "p_exact": 0.00033670934946623826
+      }
+    },
+    "300-inf": {
+      "n": 296,
+      "ours": [
+        0.8919,
+        0.8514,
+        0.9224
+      ],
+      "robovetter": [
+        0.7973,
+        0.7478,
+        0.8392
+      ],
+      "paired": {
+        "ours_only": 45,
+        "robovetter_only": 17,
+        "p_exact": 0.0004970915863810334
+      }
+    }
+  },
+  "roc_auc_inj_vs_inv": {
+    "ours": 0.952,
+    "ours_ci": [
+      0.9437,
+      0.9599
+    ],
+    "robovetter_score": 0.9707,
+    "ours_minus_robovetter": {
+      "delta_roc_auc": -0.018630499999999883,
+      "ci": [
+        -0.0281,
+        -0.0088
+      ],
+      "excludes_zero": true
+    }
+  },
+  "expectations": {
+    "D1 completeness in [0.85, 0.97] and >= Robovetter": true,
+    "D1a completeness in [0.85, 0.97]": true,
+    "D1b completeness >= Robovetter on the same TCEs": true,
+    "D2 effectiveness in [0.40, 0.85], far below Robovetter": true,
+    "D3 ROC-AUC in [0.80, 0.95] and below Robovetter": false,
+    "D4 completeness rises with MES (first bin < last bin)": true
+  }
+}

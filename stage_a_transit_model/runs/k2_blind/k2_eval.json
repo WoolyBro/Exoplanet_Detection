@@ -1,0 +1,419 @@
+{
+  "generated_at": "2026-10-18T21:12:54",
+  "dry_run": false,
+  "light_curves": "EVEREST",
+  "n_views": 1594,
+  "labels_all_views": {
+    "FALSE POSITIVE": 237,
+    "CANDIDATE": 838,
+    "CONFIRMED": 519
+  },
+  "primary_kepler": {
+    "n": 1462,
+    "n_stars": 1282,
+    "labels": {
+      "FALSE POSITIVE": 211,
+      "CANDIDATE": 780,
+      "CONFIRMED": 471
+    },
+    "planet_like_vs_fp": {
+      "n": 1462,
+      "positive_rate": 0.8556771545827634,
+      "roc_auc": 0.863400275040631,
+      "roc_auc_ci": [
+        0.8395,
+        0.8843
+      ],
+      "pr_auc": 0.9749874568348181,
+      "pr_auc_ci": [
+        0.9689,
+        0.9804
+      ],
+      "pr_auc_lift": 0.11931030225205475
+    },
+    "confirmed_vs_fp": {
+      "n": 682,
+      "positive_rate": 0.6906158357771262,
+      "roc_auc": 0.9537134864813196,
+      "roc_auc_ci": [
+        0.9365,
+        0.9679
+      ],
+      "pr_auc": 0.9790764710755882,
+      "pr_auc_ci": [
+        0.9695,
+        0.9866
+      ],
+      "pr_auc_lift": 0.288460635298462
+    },
+    "calibration": {
+      "raw": {
+        "brier": 0.2048502207567447,
+        "ece": 0.26353073932954124
+      },
+      "frozen_platt": {
+        "brier": 0.27900497319526607,
+        "ece": 0.3577911352058709
+      }
+    },
+    "at_frozen_recall90_threshold": {
+      "threshold": 0.5926,
+      "precision": 0.9842995169082126,
+      "recall": 0.6514788169464428,
+      "false_positive_rate": 0.061611374407582936
+    },
+    "three_class": {
+      "accuracy": 0.48632010943912446,
+      "confusion": [
+        [
+          193,
+          11,
+          7
+        ],
+        [
+          340,
+          204,
+          236
+        ],
+        [
+          75,
+          82,
+          314
+        ]
+      ]
+    },
+    "per_seed_roc_auc": [
+      0.8546300400437944,
+      0.8558915900454992,
+      0.8510992154143984,
+      0.8537624876402196,
+      0.8654763393077007
+    ],
+    "by_depth_snr": {
+      "0-7.1": {
+        "n": 94,
+        "positive_rate": 0.7127659574468085,
+        "roc_auc": 0.7191818684355997,
+        "roc_auc_ci": [
+          0.6029,
+          0.827
+        ],
+        "pr_auc": 0.8680636405080416,
+        "pr_auc_ci": [
+          0.7824,
+          0.9425
+        ],
+        "pr_auc_lift": 0.15529768306123315
+      },
+      "7.1-15": {
+        "n": 208,
+        "positive_rate": 0.9471153846153846,
+        "roc_auc": 0.9141670512228888,
+        "roc_auc_ci": [
+          0.8742,
+          0.9515
+        ],
+        "pr_auc": 0.9952196171504284,
+        "pr_auc_ci": [
+          0.9909,
+          0.9982
+        ],
+        "pr_auc_lift": 0.04810423253504381
+      },
+      "15-50": {
+        "n": 583,
+        "positive_rate": 0.9588336192109777,
+        "roc_auc": 0.8858825283243887,
+        "roc_auc_ci": [
+          0.842,
+          0.9233
+        ],
+        "pr_auc": 0.9946598886194316,
+        "pr_auc_ci": [
+          0.991,
+          0.9975
+        ],
+        "pr_auc_lift": 0.035826269408453904
+      },
+      "50-inf": {
+        "n": 539,
+        "positive_rate": 0.7421150278293135,
+        "roc_auc": 0.8133093525179856,
+        "roc_auc_ci": [
+          0.7732,
+          0.8507
+        ],
+        "pr_auc": 0.9323694807392899,
+        "pr_auc_ci": [
+          0.9119,
+          0.9505
+        ],
+        "pr_auc_lift": 0.19025445290997645
+      }
+    },
+    "depth_prior_confirmed": {
+      "n_deep": 27,
+      "n_shallow": 444,
+      "median_deep": 0.7161886096000671,
+      "median_shallow": 0.9391452074050903,
+      "mannwhitney_p_deep_lower": 1.8781349808705272e-06
+    }
+  },
+  "primary_tess": {
+    "n": 1297,
+    "n_stars": 1160,
+    "labels": {
+      "FALSE POSITIVE": 208,
+      "CANDIDATE": 738,
+      "CONFIRMED": 351
+    },
+    "planet_like_vs_fp": {
+      "n": 1297,
+      "positive_rate": 0.8396299151888974,
+      "roc_auc": 0.8432136045772409,
+      "roc_auc_ci": [
+        0.8155,
+        0.8706
+      ],
+      "pr_auc": 0.9638456733044888,
+      "pr_auc_ci": [
+        0.954,
+        0.9728
+      ],
+      "pr_auc_lift": 0.12421575811559138
+    },
+    "confirmed_vs_fp": {
+      "n": 559,
+      "positive_rate": 0.627906976744186,
+      "roc_auc": 0.9375821827744905,
+      "roc_auc_ci": [
+        0.9157,
+        0.9569
+      ],
+      "pr_auc": 0.9594196249129179,
+      "pr_auc_ci": [
+        0.942,
+        0.9747
+      ],
+      "pr_auc_lift": 0.3315126481687318
+    },
+    "calibration": {
+      "raw": {
+        "brier": 0.17747330006104334,
+        "ece": 0.256066165370443
+      },
+      "frozen_platt": {
+        "brier": 0.11207601945131046,
+        "ece": 0.08725870863596441
+      }
+    },
+    "at_frozen_recall90_threshold": {
+      "threshold": 0.4793,
+      "precision": 0.950354609929078,
+      "recall": 0.7382920110192838,
+      "false_positive_rate": 0.20192307692307693
+    },
+    "three_class": {
+      "accuracy": 0.4202004626060139,
+      "confusion": [
+        [
+          190,
+          1,
+          17
+        ],
+        [
+          397,
+          213,
+          128
+        ],
+        [
+          54,
+          155,
+          142
+        ]
+      ]
+    },
+    "per_seed_roc_auc": [
+      0.8445556968284242,
+      0.8200845871300417,
+      0.8499593840502931,
+      0.8241726707635799,
+      0.8461273574909938
+    ],
+    "by_depth_snr": {
+      "0-7.1": {
+        "n": 87,
+        "positive_rate": 0.6896551724137931,
+        "roc_auc": 0.8012345679012346,
+        "roc_auc_ci": [
+          0.6957,
+          0.8868
+        ],
+        "pr_auc": 0.9073156495525353,
+        "pr_auc_ci": [
+          0.8384,
+          0.9551
+        ],
+        "pr_auc_lift": 0.21766047713874215
+      },
+      "7.1-15": {
+        "n": 195,
+        "positive_rate": 0.9435897435897436,
+        "roc_auc": 0.9456521739130436,
+        "roc_auc_ci": [
+          0.8964,
+          0.9822
+        ],
+        "pr_auc": 0.996652139879012,
+        "pr_auc_ci": [
+          0.9929,
+          0.9993
+        ],
+        "pr_auc_lift": 0.053062396289268454
+      },
+      "15-50": {
+        "n": 547,
+        "positive_rate": 0.9579524680073126,
+        "roc_auc": 0.9390142714902091,
+        "roc_auc_ci": [
+          0.9009,
+          0.9685
+        ],
+        "pr_auc": 0.9971420252120684,
+        "pr_auc_ci": [
+          0.9948,
+          0.9989
+        ],
+        "pr_auc_lift": 0.03918955720475581
+      },
+      "50-inf": {
+        "n": 434,
+        "positive_rate": 0.684331797235023,
+        "roc_auc": 0.7622207476222075,
+        "roc_auc_ci": [
+          0.7123,
+          0.8063
+        ],
+        "pr_auc": 0.8737011677901001,
+        "pr_auc_ci": [
+          0.8369,
+          0.9086
+        ],
+        "pr_auc_lift": 0.18936937055507708
+      }
+    },
+    "depth_prior_confirmed": {
+      "n_deep": 11,
+      "n_shallow": 340,
+      "median_deep": 0.7523307800292969,
+      "median_shallow": 0.803528904914856,
+      "mannwhitney_p_deep_lower": 0.19601918756961823
+    }
+  },
+  "secondaryA_kepler": {
+    "n": 1594,
+    "n_stars": 1395,
+    "labels": {
+      "FALSE POSITIVE": 237,
+      "CANDIDATE": 838,
+      "CONFIRMED": 519
+    },
+    "planet_like_vs_fp": {
+      "n": 1594,
+      "positive_rate": 0.8513174404015057,
+      "roc_auc": 0.8541116697604856,
+      "roc_auc_ci": [
+        0.8314,
+        0.8754
+      ],
+      "pr_auc": 0.9713568450451524,
+      "pr_auc_ci": [
+        0.964,
+        0.9777
+      ],
+      "pr_auc_lift": 0.12003940464364671
+    },
+    "confirmed_vs_fp": {
+      "n": 756,
+      "positive_rate": 0.6865079365079365,
+      "roc_auc": 0.9426030259424567,
+      "roc_auc_ci": [
+        0.9236,
+        0.9586
+      ],
+      "pr_auc": 0.972266153296332,
+      "pr_auc_ci": [
+        0.962,
+        0.9818
+      ],
+      "pr_auc_lift": 0.2857582167883955
+    }
+  },
+  "kepler_minus_tess_paired": {
+    "n": 1297,
+    "delta_roc_auc": 0.010449777495232127,
+    "ci": [
+      -0.0153,
+      0.0364
+    ],
+    "excludes_zero": false
+  },
+  "scatter_over_error": {
+    "median": 1.1311,
+    "p16_p84": [
+      0.760688,
+      2.056816
+    ]
+  },
+  "robustness_everest_minus_k2sff": {
+    "n_common_primary": 1450,
+    "delta_roc_auc": -0.03089940289715365,
+    "ci": [
+      -0.0448,
+      -0.018
+    ],
+    "excludes_zero": true
+  },
+  "yields": {
+    "in_split": {
+      "CANDIDATE": 976,
+      "CONFIRMED": 579,
+      "FALSE POSITIVE": 250
+    },
+    "complete_ephemeris": {
+      "CANDIDATE": 943,
+      "CONFIRMED": 571,
+      "FALSE POSITIVE": 241
+    },
+    "view_built": {
+      "CANDIDATE": 838,
+      "CONFIRMED": 519,
+      "FALSE POSITIVE": 237
+    },
+    "excluded_unreliable_ephemeris": {
+      "CANDIDATE": 94,
+      "CONFIRMED": 48,
+      "FALSE POSITIVE": 2
+    },
+    "failed": {
+      "api: no light curve found | CANDIDATE": 11,
+      "api: no light curve found | CONFIRMED": 4,
+      "api: no light curve found | FALSE POSITIVE": 2
+    },
+    "fraction_of_complete_built": {
+      "CANDIDATE": 0.889,
+      "CONFIRMED": 0.909,
+      "FALSE POSITIVE": 0.983
+    }
+  },
+  "expectations": {
+    "E1 P1 in [0.80, 0.92]": true,
+    "E2 P2 in [0.88, 0.97]": true,
+    "E3 Kepler > TESS on K2 (paired)": true,
+    "E4 Kepler ensemble under-scores deep confirmed planets, TESS does not": false,
+    "E5 ROC-AUC rises with S/N (first bin < last bin)": true,
+    "E6 EVEREST >= K2SFF (Kepler ensemble)": false,
+    "E7 frozen Platt map does not transfer (ECE > 0.05)": true,
+    "FAILURE criterion P1 < 0.75": false
+  }
+}

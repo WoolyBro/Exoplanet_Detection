@@ -3757,3 +3757,16 @@ Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 
     magma-ocean lava worlds -> shoreline = prior supported only on its airless side (STAGE_C_RESULTS 2b).
   Repro: REPRODUCE.md (full ordered run sheet), environment-prt.yml + osx-arm64 lock, MODEL_CARD.md (draft).
   Cleanup: 40 old stdout/stderr build logs and empty folders removed from the project root.
+
+2026-10-18  K2 BLIND TEST READ ONCE (21:13; protocol fbc60d8, evaluator 16db11a). 1,594 EVEREST views (CAND 838 / CONF 519 / FP 237);
+  144 unreliable ephemeris, 17 no light curve. Primary (catalogue durations) n=1,462, 1,282 stars:
+  Kepler-trained 0.863 [0.840, 0.884], CONF-vs-FP 0.954; TESS-trained (TESS-seen stars removed, n=1,297) 0.843, 0.938;
+  paired K-T +0.010 [-0.015, 0.036]. Deep confirmed (>10k ppm) Kepler median 0.72 vs 0.94 (p 2e-6). Platt map does not
+  transfer for the Kepler model (ECE 0.26 -> 0.36; recall at thr 0.65); TESS map does (0.26 -> 0.09; base rates match).
+  EVEREST - K2SFF = -0.031 [-0.045, -0.018]. Expectations: E1 E2 E3 E5 E7 held; E4 failed (TESS half), E6 failed.
+DR25 SIMULATED BENCHMARK (protocol 6c92294, evaluator b46206e): 1,000 INJ1 + 1,000 INV TCEs on never-seen stars.
+  Completeness 0.935 [0.918, 0.949] vs Robovetter 0.869 (McNemar p 3e-8; MES 7.1-10 0.91 vs 0.82; P>300 d 0.89 vs 0.80).
+  Effectiveness 0.760 [0.733, 0.785] vs 0.992 (p 1e-65); passing false alarms median P 126 d. ROC-AUC 0.952 vs 0.971
+  (-0.019 [-0.028, -0.009]). D1 D2 D4 held; D3 failed (0.952 just above the [0.80, 0.95] range).
+  -> a strong planet keeper that transfers across missions, not a false-alarm filter (trained on KOIs, no NTP class).
+  Prospective register now 564 TESS + 285 Kepler + 838 K2 candidates (K2 hash 94fd3b1d...). Tests: 50 pass.

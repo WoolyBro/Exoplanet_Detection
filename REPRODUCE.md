@@ -55,7 +55,10 @@ python stage_a_transit_model/injection_recovery.py --stars 50 --seed 0 --split-v
        --out outputs/injection_recovery_v2 --threshold 0.5925728678703308   # about 25 min
 python stage_a_transit_model/evaluate_k2.py --dry-run               # K2 evaluation, code check on Kepler validation
 python stage_a_transit_model/evaluate_k2.py                         # THE single K2 read (guarded; protocol in eda/)
-python tools/prospective_check.py                                   # registered predictions vs today's dispositions
+python tools/dr25_simulated_sample.py                               # DR25 simulated-data benchmark (protocol in eda/)
+python tools/build_dr25_simulated_views.py --set INJ1 --workers 4   # about 30 min; also --set INV (about 55 min)
+python stage_a_transit_model/evaluate_dr25_simulated.py             # figures/16
+python tools/prospective_check.py                                   # registered predictions (TESS, Kepler, K2) vs today's dispositions
 ```
 
 The guarded reads refuse to run a second time.
@@ -113,6 +116,7 @@ python -m pytest tests -q           # 45 tests
 |---|---|
 | Split v2, final Stage A, published-vetter comparison, failure analysis, injection test | `eda/STAGE_A_V2_FINAL_RESULTS.md` |
 | K2 blind test | `eda/K2_BLIND_TEST_PROTOCOL.md` (registered before the build) and the results in `eda/K2_BLIND_TEST_RESULTS.md` |
+| DR25 simulated-data benchmark | `eda/DR25_SIMULATED_PROTOCOL.md` and `eda/DR25_SIMULATED_RESULTS.md` |
 | Prospective predictions | `eda/PROSPECTIVE_PREDICTIONS.md` |
 | CH₄ classifier, rounds 1–3, contamination, label cross-check | `eda/METHANE_EXTENSION_RESULTS.md` |
 | Gas forecast, contamination regimes, retrievals | `eda/FORECAST_RESULTS.md` |
