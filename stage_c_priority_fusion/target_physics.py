@@ -100,7 +100,8 @@ def split_normal(value, err_hi, err_lo, n: int, rng: np.random.Generator, positi
     return np.clip(out, 1e-9, None) if positive else out
 
 
-def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_draws: bool = False):
+def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_draws: bool = False,
+                mass_relation: str = "chen_kipping"):
     """HZ membership probabilities, TSM and their uncertainty for each planet in `df` (pscomppars rows).
 
     Insolation: pl_insol with its own errors; where those are missing, its fractional uncertainty is
@@ -145,11 +146,19 @@ def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_dr
     M = split_normal(d.pl_bmasse, d.pl_bmasseerr1, d.pl_bmasseerr2, n, rng)
     # Chen & Kipping masses carry the relation's intrinsic scatter: radius scatter at fixed mass
     # (0.0403 / 0.146 dex, Terran / Neptunian) over the slope (0.279 / 0.589) = 0.144 / 0.248 dex in mass.
-    ck_scatter = 10 ** (rng.normal(0.0, 1.0, R.shape) * np.where(R < 1.23, 0.144, 0.248))
-    M = np.where(measured[:, None], M, chen_kipping_mass(R) * ck_scatter)
+    # mass_relation="otegi_rocky" (sensitivity analysis only): Otegi et al. 2020 rocky branch, R = 1.03 M^0.29,
+    # 0.05 dex scatter, driven by the same normal draws so the default stays bit-identical
+    z = rng.normal(0.0, 1.0, R.shape)
+    if mass_relation == "otegi_rocky":
+        est, rel = (R / 1.03) ** (1 / 0.29) * 10 ** (0.05 * z), "Otegi et al. 2020 (rocky)"
+    elif mass_relation == "chen_kipping":
+        est, rel = chen_kipping_mass(R) * 10 ** (z * np.where(R < 1.23, 0.144, 0.248)), "Chen & Kipping"
+    else:
+        raise ValueError(f"unknown mass_relation {mass_relation!r}")
+    M = np.where(measured[:, None], M, est)
     for i in np.flatnonzero(~measured):
         why = f"catalogue gives only a limit of {d.pl_bmasse[i]:.3g}" if limit[i] else f"catalogue: {prov[i]}"
-        notes[i].append(f"mass from Chen & Kipping ({why})")
+        notes[i].append(f"mass from {rel} ({why})")
     Rs = split_normal(d.st_rad, d.st_raderr1, d.st_raderr2, n, rng)
     A = split_normal(d.pl_orbsmax, d.pl_orbsmaxerr1, d.pl_orbsmaxerr2, n, rng)
     teq = teq_kempton(T, Rs, A)
