@@ -6,13 +6,13 @@ Every expectation this project registered **before** seeing the result, with its
 - **Commit:** the protocol was committed to git before the build, training or read it governs. The hash is that commit.
 - **Hash file:** the labels were frozen by SHA-256, with a timestamp, before scoring. The protocol entered git together with the results, so the evidence for the order is the local hash file, not git. This applies to methane rounds 1–2, which predate the rule of committing protocols first.
 
-**Totals: 50 directional expectations, 36 held (72 %) and 14 failed.**
+**Totals: 53 directional expectations, 39 held (74 %) and 14 failed.**
 - **Also registered:**
   - 2 model-selection rules (V-K, V-T);
   - 1 test failure criterion (F, not met);
   - 3 CH₄ failure criteria (M1–M3; none met for the GBM, M2 met for the v1 CNN);
   - 2 decision rules (SpecNet, R1), both applied.
-- **The 72 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
+- **The 74 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
 
 ---
 
@@ -141,6 +141,9 @@ Every expectation this project registered **before** seeing the result, with its
 | B3 | Addendum (commit `225b269`): ≥ 5 targets stay in the top 10 in ≥ 90 % of samples when the zero point and the M–R relation also vary | **held**: the same 7 (`sensitivity_extended.json`) |
 | B4 | The zero point's total index < the observability weight's | **held**: 0.06 vs 0.57 |
 | B5 | The mass–radius relation's total index < 0.05 | **held**: 0.005 |
+| A5 | Addendum 2 (commit `2f3582c`): on 3 planets published after the fit, the frozen model beats the base rate and the fixed shoreline | **held**: log score −0.59 vs −1.00 and −4.75 (`retention_update.json`) |
+| A6 | Refit on 23: P(β < 0) ≥ 0.90 and P(γ > 0) ≥ 0.95 | **held**: 0.989 and 0.997 |
+| A7 | Refit on 23: leave-one-out beats the fixed shoreline and the base rate | **held**: −0.50 vs −1.87 and −0.63; AUC 0.77 |
 
 ## Significance claims, Holm-adjusted as one family
 

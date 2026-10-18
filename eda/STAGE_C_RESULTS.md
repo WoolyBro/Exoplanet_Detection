@@ -171,7 +171,8 @@ A2 held, but the discrimination is modest: leave-one-out AUC 0.60 against 0.55.
 **Related work (searched 2026-10-18).**
 - **Ji et al. 2025** (ApJ 992, 198; arXiv:2504.19872) revise the shoreline *theoretically*, from hydrodynamic escape. They find that the initial volatile inventory blurs it into a band, not a line.
 - **Ih et al. 2025** (arXiv:2508.08253, submitted to AAS Journals) *simulate* how a JWST survey could test it. They estimate that roughly 500 hours would give strong evidence (ΔBIC > 5) if it holds.
-- **This work** fits a shoreline model directly to the **observed** JWST outcomes of 20 rocky planets, with uncertain margins, soft labels, a magma-ocean term and leave-one-out validation. We found no earlier fit of this kind. That is a search result, not proof of absence.
+- **Meni-Gallardo & Pallé 2025** (MNRAS; arXiv:2508.12865) build an *empirical* cosmic shoreline anchored on five bodies with tentative atmospheres (Mars, GJ 9827 d, L 98-59 d, GJ 3090 b, π Men c). They find a steeper slope than theory. That is the closest earlier work.
+- **This work differs in method.** It is a *probabilistic* fit to all observed JWST outcomes, both with and without atmospheres (20, then 23 planets). It uses soft labels for evidence strength, propagates the margin uncertainty, includes a magma-ocean term, and is validated by leave-one-out, on planets published after the fit (§2d) and on the Solar System (§3b-iii). It was found by a search on 2026-10-19; the earlier statement that "no earlier fit" existed was wrong and is withdrawn.
 - **The finding fits both papers.** The direction is supported, but the line is soft (β = −1.3 per dex, not a step), as Ji et al. predict. The evidence is still weak in the way Ih et al.'s survey-size estimate implies.
 
 **Conclusion.** The data back the shoreline's direction but not its sharpness. For temperate planets nothing in the data can test it: no temperate rocky planet has a confirmed atmosphere. The registered ranking keeps the fixed shoreline; the fitted one is the sensitivity case (§3b).
@@ -284,6 +285,43 @@ For unconfirmed candidates the factor is **P(real) × Stage C score**:
   - TOI 4353.01: 1.37 R⊕, 0.43 S⊕, period flagged as an alias.
 
 These are catalogued candidates, not discoveries. The contribution is a ranked, uncertainty-aware follow-up list in which the detection network's verdict is part of the habitability factor.
+
+## 2d. Out-of-sample test and refit on 23 planets (addendum 2, commit `2f3582c`)
+
+**Code:** `retention_update.py`. **Output:** `outputs/stage_c/retention_update.json`.
+
+A search on 2026-10-19 found three rocky planets with JWST verdicts published *after* the 20-planet fit. They were labelled by the same rules and registered before any prediction.
+
+| Planet | Label | Frozen 20-planet model | Fixed shoreline |
+|---|---|---|---|
+| HD 3167 b, lava world (T_eq 1,783 K): eclipse > 5σ below bare rock (Park Coy et al. 2026) | 1.0 | **0.60** | 0.005 |
+| TOI-431 b, lava world (1,882 K): tentative atmosphere, 1.8σ (arXiv:2609.03029) | 0.6 | **0.51** | 0.000 |
+| GJ 357 b (517 K): anomalously hot dayside, thick atmospheres tested inconsistent (Hot Rocks VI) | 0.25 | **0.27** | 0.07 |
+
+**Mean log score on the 3:**
+- frozen fitted model **−0.59**;
+- base rate −1.00;
+- fixed shoreline −4.75.
+
+**A5 held.** The fixed shoreline gives both new lava worlds essentially zero chance of an atmosphere, as it did TOI-561 b and 55 Cnc e. The magma term, fitted before either was published, predicted them.
+
+**Refit on all 23:**
+
+| | 20 planets | **23 planets** |
+|---|---|---|
+| β (per dex), median [95 %] | −1.27 [−2.64, −0.12] | **−1.32 [−2.67, −0.18]** |
+| γ (magma), median [95 %] | +2.63 [+0.05, +5.45] | **+3.05 [+0.82, +5.59]** |
+| P(β < 0) / P(γ > 0) | 0.986 / 0.977 | **0.989 / 0.997** |
+| Leave-one-out log score: fitted / shoreline / base rate | −0.53 / −1.72 / −0.58 | **−0.50 / −1.87 / −0.63** |
+| Leave-one-out AUC: fitted / shoreline | 0.60 / 0.55 | **0.77 / 0.48** |
+
+**A6 and A7 held.**
+
+**Reading it.**
+- **More data sharpened both terms,** most of all the magma exception, which is now excluded from zero at 95 %.
+- **The overall discrimination rose from 0.60 to 0.77.**
+- **Among non-magma planets alone, the leave-one-out AUC is 0.59.** The shoreline's direction is supported, but it still separates temperate rocky planets only weakly, because few of them have a confirmed atmosphere to learn from.
+- **The ranking is unaffected.** No Stage C target's retention probability moves by more than 0.012. The registered ranking and the robust core stand.
 
 ## 3. Ablation — what the order depends on
 
