@@ -3777,3 +3777,8 @@ DR25 SIMULATED BENCHMARK (protocol 6c92294, evaluator b46206e): 1,000 INJ1 + 1,0
   S/N balance (47a6930): gap 0.22 -> 0.08; N2, N4 failed (K2 0.863 -> 0.834). SpecNet: S1-S4 failed.
   CO2 on 34 planets (4893248, labels fb66170): GBM 0.982, CNN 0.996, strong half 0.94/0.98 vs 0.67; K1-K4 held.
   TRAPPIST-1 f lnB -0.70, LHS 1140 b -0.90: no atmosphere credited. Scoreboard: 47 expectations, 33 held, 14 failed.
+2026-10-19  PILLAR C + RIGOUR closed. Sobol with shoreline zero point (+/-1 dex, total 0.06) and mass-radius relation
+  (Otegi rocky vs Chen & Kipping, 0.005): same robust core of 7; B3 B4 B5 held (addendum 225b269). Ground-truth section:
+  fitted retention on 8 Solar System bodies (out of sample) 7/8, misses Mars; shoreline 7/8 (in-sample). Scoreboard:
+  50 expectations, 36 held, 14 failed; 12 significance claims Holm-adjusted as one family, all survive (max 0.006).
+  Deleted detection_views_full.zip (identical to release_assets/, which matches the published v1.0-views release).
