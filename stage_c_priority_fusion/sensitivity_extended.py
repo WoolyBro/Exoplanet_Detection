@@ -125,12 +125,15 @@ def main() -> int:
            "spearman_vs_registered": {"first_order": dict(zip(INPUTS, np.round(s1, 3))), "total": tot,
                                       "median": round(float(np.median(rho(SA))), 3), "p5": round(float(np.percentile(rho(SA), 5)), 3)},
            "p_top10": dict(zip(names, np.round(member, 3))), "robust_core_ge_0.9": core,
-           "expectations": {"B3 >= 5 targets in the top 10 in >= 90 % of samples": len(core) >= 5,
-                            "B4 zero point total index < observability weight's": tot["shoreline_zero_point"] < tot["w_observable"],
-                            "B5 mass-radius total index < 0.05": tot["mass_radius_relation"] < 0.05},
+           "expectations": {"B3 >= 5 targets in the top 10 in >= 90 % of samples": bool(len(core) >= 5),
+                            "B4 zero point total index < observability weight's": bool(tot["shoreline_zero_point"] < tot["w_observable"]),
+                            "B5 mass-radius total index < 0.05": bool(tot["mass_radius_relation"] < 0.05)},
            "solar_system_consistency_not_preregistered": ss,
            "solar_system_correct": {"fitted": f"{sum(r['fitted_correct_at_0.5'] for r in ss)}/{len(ss)}",
-                                    "shoreline": f"{sum(r['shoreline_correct_at_0.5'] for r in ss)}/{len(ss)}"}}
+                                    "shoreline": f"{sum(r['shoreline_correct_at_0.5'] for r in ss)}/{len(ss)}",
+                                    "brier_fitted": round(float(np.mean([(r["p_retain_fitted"] - r["has_atmosphere"]) ** 2 for r in ss])), 3),
+                                    "brier_shoreline": round(float(np.mean([(r["p_retain_shoreline"] - r["has_atmosphere"]) ** 2 for r in ss])), 3),
+                                    "note": "the shoreline was drawn through Solar System bodies (Zahnle & Catling 2017): in-sample for it, out-of-sample for the fitted model"}}
     (OUT / "sensitivity_extended.json").write_text(json.dumps(res, indent=2, default=float))
     print(json.dumps({k: res[k] for k in ["spearman_vs_registered", "robust_core_ge_0.9", "expectations", "solar_system_correct"]}, indent=2, default=float))
     print(pd.DataFrame(ss).to_string(index=False))

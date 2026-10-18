@@ -105,6 +105,8 @@ One row per claim the paper can make, with its number, its figure and the file t
 | TRAPPIST-1 e | rank 1 → 4 with retention; depends on the XUV history (P 0.03 / 0.17 / 1.00) | §2b |
 | Fitted retention (registered) | β −1.27 [−2.64, −0.12], P(β<0) 0.986; γ_magma +2.63, P 0.977; LOO log score −0.53 vs −1.72 (shoreline) vs −0.58 (base rate); A1–A3 held | §2c |
 | Sensitivity (Sobol) | total index: observability weight 0.60, HZ 0.47, retention 0.04; robust core of 7; B1 failed, A4 and B2 held | §3b |
+| Sensitivity, 7 inputs (addendum) | shoreline zero point ±1 dex: total index 0.06; M–R relation 0.005; the same robust core of 7; B3–B5 held | §3b-ii |
+| Validation without ground truth | consistency per component; fitted retention on 8 Solar System bodies out of sample: 7/8 (misses Mars, on the line) | §3b-iii |
 | Candidate factor | P(real) × score over 1,064 candidates; shortlist of 15 (11 above the confirmed top-10 cut); C1 held | §3c |
 
 ## 7. Limitations the paper must state
