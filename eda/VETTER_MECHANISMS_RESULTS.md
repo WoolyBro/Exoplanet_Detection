@@ -83,6 +83,26 @@ Descriptive: the TESS light curves of the Stage C planets (mostly hot Jupiters) 
    - In short, the prior acted as a **level shift** on deep signals, not as a shape feature. Removing it moves deep planets and deep eclipsing binaries up together.
 3. **The pre-registered reading applies:** N4 failed, so the fix is reported as a **trade-off, not a fix**. The remedy this points to, **untested here** because it would need a third read of K2, is per-survey recalibration *conditional on depth or S/N*, fitted on the target survey's own labels. That is a small correction, not retraining. This agrees with E7 of the K2 test: the frozen Platt map does not transfer.
 
+## 3c. Is the architecture the limit? (pre-registered: `eda/ARCHITECTURE_PROTOCOL.md`, commit `a528555`)
+
+**Code:** `vetter_v3.py --config R|T`, `evaluate_architectures.py`. **Output:** `outputs/stage_a_mechanisms/architectures.json`. **Figure:** `figures/20_architecture_vs_data.png`.
+
+Two modern architectures were trained on exactly v2's data, recipe and seeds, and compared on the Kepler v2 validation split (5-seed ensembles, star-bootstrap CIs, paired differences):
+- a **1-D ResNet**, 3 residual stages per view, 497k parameters;
+- a **Transformer**, patch tokens and 3 encoder layers per view, 221k parameters.
+
+| Model | Parameters | ROC-AUC | Difference from v2 [95 %] |
+|---|---|---|---|
+| **CNN + BiLSTM (v2)** | 40k | **0.932** | — |
+| 1-D ResNet | 497k | 0.927 | −0.006 [−0.011, −0.000] |
+| Transformer | 221k | 0.925 | −0.008 [−0.013, −0.002] |
+| *v2 + pipeline measurements (config B: data, not architecture)* | 44k | **0.972** | **+0.040** [+0.031, +0.050] |
+
+**X1 held:** neither alternative beats v2. Both are slightly, and significantly, worse.
+**X2 held:** the best architecture change is −0.006, against +0.040 from adding information.
+
+**Reading it.** With the same light curves, 5–12× more capacity and newer designs do not help; the small, standard network is already at what these views can support. Giving the *same* network more information (centroid, odd/even and secondary-eclipse measurements) gains seven times more than any architecture change. **This is the paper's thesis, measured rather than asserted.** It also turns the "standard architecture" critique around: the choice was deliberate, and it is not what limits the results.
+
 ## 4. Where this leaves the method's contribution
 
 Taken together with the rest of Stage A:
@@ -93,4 +113,4 @@ Taken together with the rest of Stage A:
   - S/N-balanced training (§3b). It removes about two-thirds of the survey prior but costs 0.03 ROC-AUC on K2, because the prior was partly correct base-rate information.
 - **Operating guidance:** abstention on seed disagreement; per-survey recalibration.
 
-The architecture is deliberately standard, so that every effect above can be attributed to data and evaluation rather than to a new network.
+The architecture is deliberately standard, so that every effect above can be attributed to data and evaluation rather than to a new network. §3c shows that a ResNet and a Transformer do no better on the same data.

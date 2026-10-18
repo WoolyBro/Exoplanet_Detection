@@ -67,6 +67,7 @@ One row per claim the paper can make, with its number, its figure and the file t
 | Occlusion | planets: transit core −0.18 to −0.25; EBs: phase-0.5 window +0.04 | 18 | same, §2 |
 | Survey prior is causal through S/N | K2 deep confirmed 0.72 → 0.95 with 5 % noise; Kepler EBs 0.02 → 0.64 at 20 % | 18 | same, §3 |
 | S/N-balanced training (registered) | gap 0.22 → 0.08 (N3 held); deep median 0.84 (N2 failed, needed 0.85); K2 ROC-AUC 0.863 → 0.834 (N4 failed); the prior was partly true base-rate information | 19 | same, §3b |
+| Architecture is not the limit (registered) | same data and recipe: ResNet (497k) 0.927, Transformer (221k) 0.925 vs CNN+BiLSTM (40k) 0.932; adding pipeline measurements +0.040; X1–X2 held | 20 | `eda/VETTER_MECHANISMS_RESULTS.md` §3c |
 | Vetter v3 (registered) | C (NTP + 27 diagnostics): fresh INV rejected 0.991 (v2 0.704, Robovetter 0.984); INJ1 kept 0.842 (H2 failed; Robovetter 0.859); INJ2 / INJ3 rejected 0.20 / 0.23 (Robovetter 0.53 / 0.63; H3 failed); NTP test 0.999; Kepler test 0.962, confirmed vs FP 0.994 (+0.023 over v2); ExoMiner Δ −0.0002 [−0.0025, 0.0021]; centroid-only 0.80. Ablation: the diagnostics drive most gains (H8a failed) | 17 | `eda/VETTER_V3_RESULTS.md` |
 
 ## 4. Atmospheres (Stage B)

@@ -42,6 +42,7 @@
    - S/N-balanced training removes two-thirds of the prior but costs K2 skill, because the prior carries real base rates. **Fig. 4b:** figure 19.
    - Seed disagreement flags errors, so the vetter can abstain.
    - Occlusion maps.
+   - **Architecture is not the limit:** a ResNet and a Transformer with 5–12× the parameters do no better on the same data (−0.006, −0.008), while adding pipeline information gives +0.040. **Fig. 4c:** figure 20.
    - **Fig. 4:** figure 18, with figure 08's opposite biases as an inset.
 4. **The blind spots and their fix** (critique 1).
    - Centroid-only false positives rejected 49 %; false alarms 76 %.
