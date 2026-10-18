@@ -119,3 +119,6 @@ outputs/grid_realistic.log
 outputs/grid_stress.log
 outputs/retrieval_null_*.log
 outputs/retrieval_e_wl3.log
+outputs/retrieval_e_v12.log
+
+# downloaded third-party tables are small and cited; keep

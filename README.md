@@ -64,6 +64,7 @@ with the model chosen on validation by a pre-registered rule and the test set re
 | lift over the base rate (PR-AUC) | **+0.428** | +0.098 |
 | gain over a transit-shape GBM, same split | +0.034 [0.022, 0.045] | +0.094 [0.055, 0.136] |
 | precision at the validation-fixed 90 %-recall threshold | 0.792 | 0.915 |
+| vs published vetters, same test KOIs (confirmed vs FP) | ≈ AstroNet (ΔAUC +0.001); below ExoMiner (−0.019), which uses extra diagnostics | — |
 | calibrated (Platt, fitted on validation) test ECE | 0.023 | 0.018 |
 
 The earlier numbers (Kepler 0.9158, TESS 0.7843) came from split v1. That split leaked: 301 of

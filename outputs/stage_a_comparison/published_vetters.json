@@ -1,0 +1,213 @@
+{
+  "n_test_kois": 1404,
+  "coverage": {
+    "ours": 1404,
+    "koi_score": 1191,
+    "astronet": 944,
+    "exonet": 944,
+    "exominer": 944,
+    "exominer_tce": 944
+  },
+  "circularity": {
+    "FP_label_equals_robovetter_FP": 1.0,
+    "planet_like_label_equals_robovetter_candidate": 0.996,
+    "robovetter_binary_accuracy_vs_label": 0.998
+  },
+  "tasks": {
+    "A_planet_like_vs_FP": {
+      "n": 922,
+      "n_pos": 344,
+      "scorers": {
+        "ours": {
+          "roc_auc": 0.9736,
+          "ci95": [
+            0.9625,
+            0.9831
+          ]
+        },
+        "koi_score": {
+          "roc_auc": 0.9812,
+          "ci95": [
+            0.9712,
+            0.9902
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.0076,
+            "ci95": [
+              -0.0196,
+              0.0035
+            ],
+            "excludes_zero": false
+          }
+        },
+        "astronet": {
+          "roc_auc": 0.974,
+          "ci95": [
+            0.9635,
+            0.983
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.0005,
+            "ci95": [
+              -0.0073,
+              0.0066
+            ],
+            "excludes_zero": false
+          }
+        },
+        "exonet": {
+          "roc_auc": 0.9891,
+          "ci95": [
+            0.9835,
+            0.9941
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.0155,
+            "ci95": [
+              -0.0252,
+              -0.0073
+            ],
+            "excludes_zero": true
+          }
+        },
+        "exominer": {
+          "roc_auc": 0.9961,
+          "ci95": [
+            0.9935,
+            0.9983
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.0225,
+            "ci95": [
+              -0.0329,
+              -0.0137
+            ],
+            "excludes_zero": true
+          }
+        },
+        "exominer_tce": {
+          "roc_auc": 0.9963,
+          "ci95": [
+            0.9936,
+            0.9984
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.0227,
+            "ci95": [
+              -0.0329,
+              -0.0145
+            ],
+            "excludes_zero": true
+          }
+        }
+      },
+      "low_mes_lt_12": {
+        "n": 204,
+        "ours": 0.9314,
+        "koi_score": 0.9831,
+        "astronet": 0.9274,
+        "exonet": 0.962,
+        "exominer": 0.994,
+        "exominer_tce": 0.9928
+      }
+    },
+    "B_confirmed_vs_FP": {
+      "n": 920,
+      "n_pos": 342,
+      "scorers": {
+        "ours": {
+          "roc_auc": 0.9774,
+          "ci95": [
+            0.9677,
+            0.9858
+          ]
+        },
+        "koi_score": {
+          "roc_auc": 0.9844,
+          "ci95": [
+            0.9756,
+            0.9925
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.007,
+            "ci95": [
+              -0.018,
+              0.0041
+            ],
+            "excludes_zero": false
+          }
+        },
+        "astronet": {
+          "roc_auc": 0.9763,
+          "ci95": [
+            0.9656,
+            0.985
+          ],
+          "ours_minus_this": {
+            "delta_auc": 0.0011,
+            "ci95": [
+              -0.0054,
+              0.0077
+            ],
+            "excludes_zero": false
+          }
+        },
+        "exonet": {
+          "roc_auc": 0.9901,
+          "ci95": [
+            0.9841,
+            0.9946
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.0126,
+            "ci95": [
+              -0.0214,
+              -0.005
+            ],
+            "excludes_zero": true
+          }
+        },
+        "exominer": {
+          "roc_auc": 0.9963,
+          "ci95": [
+            0.9938,
+            0.9984
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.0189,
+            "ci95": [
+              -0.0271,
+              -0.0118
+            ],
+            "excludes_zero": true
+          }
+        },
+        "exominer_tce": {
+          "roc_auc": 0.9964,
+          "ci95": [
+            0.9935,
+            0.9984
+          ],
+          "ours_minus_this": {
+            "delta_auc": -0.019,
+            "ci95": [
+              -0.0275,
+              -0.0118
+            ],
+            "excludes_zero": true
+          }
+        }
+      },
+      "low_mes_lt_12": {
+        "n": 204,
+        "ours": 0.9314,
+        "koi_score": 0.9831,
+        "astronet": 0.9274,
+        "exonet": 0.962,
+        "exominer": 0.994,
+        "exominer_tce": 0.9928
+      }
+    }
+  },
+  "n_common": 922
+}
