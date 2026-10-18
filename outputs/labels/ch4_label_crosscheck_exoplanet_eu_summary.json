@@ -1,0 +1,22 @@
+{
+  "source": "exoplanet_eu_species_2026-10-18.csv",
+  "n_labelled": 43,
+  "n_ours_ch4": 11,
+  "n_with_exoplanet_eu_species": 18,
+  "agreement_all": 0.837,
+  "kappa_all": 0.53,
+  "agreement_listed_only": 0.833,
+  "kappa_listed_only": 0.658,
+  "confusion_rows_ours_cols_exoplanet_eu": {
+    "0": {
+      "0": 30,
+      "1": 2
+    },
+    "1": {
+      "0": 5,
+      "1": 6
+    }
+  },
+  "n_disagree": 7,
+  "n_unexplained": 0
+}

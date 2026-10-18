@@ -1,0 +1,44 @@
+planet,label_file,exoplanet_eu_species,ours_ch4,exoplanet_eu_lists_ch4,agree,reason_if_disagree
+WASP-39 b,verified_gas_labels.csv,H2O#Na#CO2#CO#O#K,0,0,True,
+WASP-107 b,verified_gas_labels.csv,He#He#H2O#SO2#CH4#H2O#SO2#H2S#NH3#CO#PH3#HCN#CCH#CH4#CO2#SO#SiO,1,1,True,
+HD 189733 b,verified_gas_labels.csv,H2O#CH4#CO#Na#H#H#H2O#Na#O I#C#O I#He#CO#H2O#CH4#CO#CO2#H2O#Na#H2O#Na#H2O#He#C#O#Na#K#He#Fe I#He#Sc#Ti+#Ca#HCN#C#O#O I#C#O#H2O#CH4#CO#NH3#HCN#H2S#Na,0,1,False,"exoplanet.eu keeps pre-JWST CH4 claims; JWST gives a 5-sigma upper limit of 0.1 ppm (Fu et al. 2024, Nature 632, 752)"
+HD 209458 b,verified_gas_labels.csv,H2O#H#Na#TiO#VO#H#Mg#Mg#O I#C#CH4#CO#CO2#H#HCN#Na#K#H2#He#H2O#H2O#TiO#VO#O2#H2#K#C#O I#CH4#CO#CO2#H2O#NH3#HCN#Na#K#H2#H2O#H2O#CO#CO2#HCN#H2O#Na#Mg#Fe#Na#He#TiO#Na#CO#CH4#H2O#HCN#CCH#Mn#Mn#V#Sc#Ca#Fe+#He,0,1,False,"exoplanet.eu keeps a pre-JWST (ground high-resolution) CH4 claim; JWST finds no evidence of CH4 (Xue et al. 2024, ApJL 963, L5)"
+GJ 3470 b,verified_gas_labels.csv,H#H2O#He#He#H#He#CH4#CO2#H2O#SO2,1,1,True,
+K2-18 b,verified_gas_labels.csv,H2O#H2O#H2O#NH3#CH4#CH4#CO2#CO#CO2#NH3,1,1,True,
+TRAPPIST-1 c,verified_gas_labels.csv,H2O#H2O#CO2,0,0,True,
+TOI-270 d,verified_gas_labels.csv,H2O,1,0,False,"JWST CH4 at 3.8-4.9 sigma (Holmberg & Madhusudhan 2024, A&A 683, L2) not yet in exoplanet.eu (lists H2O only)"
+WASP-80 b,verified_gas_labels.csv,CH4#H#Na#He#H2O#K#CO#He#He#H2O#CH4#NH3#CCH#HCN#CO#CO2#He#H#CH4,1,1,True,
+TOI-5205 b,ch4_labels_extended.csv,,1,0,False,"JWST CH4 ~10 sigma (Canas et al. 2026, AJ 171, 260): planet has no species entry in exoplanet.eu yet"
+TOI-421 b,ch4_labels_extended.csv,,0,0,True,
+HAT-P-12 b,ch4_labels_extended.csv,Na#CO2#CO#H2O,0,0,True,
+TOI-1685 b,ch4_labels_extended.csv,,0,0,True,
+TOI-199 b,ch4_labels_extended.csv,CH4#NH3#H2O,1,1,True,
+TOI-260 b,ch4_labels_extended.csv,,0,0,True,
+TOI-776 c,ch4_labels_extended.csv,,0,0,True,
+TOI-836 c,ch4_labels_extended.csv,,0,0,True,
+TOI-836 b,ch4_labels_extended.csv,,0,0,True,
+TRAPPIST-1 d,ch4_labels_extended.csv,H2O#H2O,0,0,True,
+V1298 Tau b,ch4_labels_extended.csv,C#O I#H#He#CO2#H2O#CO#CH4#SO2#OCS,1,1,True,
+WASP-166 b,ch4_labels_extended.csv,Na#Na,0,0,True,
+LP 791-18 c,ch4_labels_extended.csv,,1,0,False,"JWST CH4 ~4.5 sigma (Roy et al. 2025, Nature Astronomy): no species entry in exoplanet.eu yet"
+GJ 3090 b,ch4_labels_extended.csv,Heα,0,0,True,
+GJ 357 b,ch4_labels_extended.csv,,0,0,True,
+GJ 1132 b,ch4_labels_extended.csv,CO2#O2#H2#N2,0,0,True,
+LTT 3780 c,ch4_labels_extended.csv,,1,0,False,"JWST CH4 3.0-4.6 sigma (Rigby et al. 2025, arXiv:2512.15844): no species entry in exoplanet.eu yet"
+HD 15337 c,ch4_labels_extended.csv,,0,0,True,
+L 98-59 c,ch4_labels_extended.csv,,0,0,True,
+LHS 1140 b,ch4_labels_extended.csv,,0,0,True,
+LHS 475 b,ch4_labels_extended.csv,,0,0,True,
+GJ 341 b,ch4_labels_extended.csv,,0,0,True,
+TrES-4 b,ch4_labels_round2.csv,,0,0,True,
+NGTS-2 b,ch4_labels_round2.csv,,0,0,True,
+HIP 67522 b,ch4_labels_round2.csv,H2O#CO2#CO#H2S#SO2,0,0,True,
+HAT-P-14 b,ch4_labels_round2.csv,,0,0,True,
+TOI-776 b,ch4_labels_round2.csv,,0,0,True,
+TOI-270 b,ch4_labels_round2.csv,,0,0,True,
+L 168-9 b,ch4_labels_round2.csv,,0,0,True,
+L 98-59 d,ch4_labels_round2.csv,,0,0,True,
+GJ 9827 d,ch4_labels_round2.csv,,0,0,True,
+LHS 1140 c,ch4_labels_round2.csv,,0,0,True,
+HATS-6 b,ch4_labels_round3.csv,,1,0,False,"JWST CH4 strong evidence (Guzman Caloca et al. 2026, AJ 172, 193): no species entry in exoplanet.eu yet"
+TRAPPIST-1 f,ch4_labels_round3.csv,H2O,0,0,True,

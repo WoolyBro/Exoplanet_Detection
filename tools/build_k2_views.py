@@ -28,6 +28,8 @@ def main() -> int:
     ap.add_argument("--author", choices=["EVEREST", "K2SFF"], default="EVEREST")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--limit", type=int, default=None, help="first N stars only (a smoke test)")
+    ap.add_argument("--cache-dir", type=Path, default=None,
+                    help="separate download cache, so two builds running at once never delete each other's raw files")
     a = ap.parse_args()
     os.environ["K2_LC_AUTHOR"] = a.author          # read at import, also by every worker process
     sys.path.insert(0, str(R))
@@ -40,7 +42,7 @@ def main() -> int:
         frame = frame[frame.epic.isin(frame.epic.drop_duplicates().head(a.limit))]
     out = R / "detection_views_err" / f"k2_{a.author.lower()}"
     print(f"K2 blind-test views: {len(frame)} signals on {frame.epic.nunique()} stars, light curves {a.author} -> {out}")
-    index = p.build_dataset(frame, out, n_workers=a.workers, discard_raw=True, min_free_ram_gb=0.5,
+    index = p.build_dataset(frame, out, n_workers=a.workers, discard_raw=True, min_free_ram_gb=0.5, cache_dir=a.cache_dir,
                             progress_every=25, verbose=True, use_s3=False, isolate_workers=True, stall_timeout_s=900)
     print(index.status.value_counts().to_dict())
     if "category" in index.columns:

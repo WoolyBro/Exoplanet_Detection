@@ -206,3 +206,28 @@ python stage_b_atmospheres/methane_tls_robustness.py
 All planets with a label fall on the correct side of the v3 class boundary from rounds 1–2 (CH₄ planets ≥ 0.17, others ≤ 0.08). TOI-3235 b is a genuine prediction: the contamination-trained model calls CH₄, as does the paper's deterministic retrieval. HAT-P-12 b's two new MIRI spectra have no CH₄ band on the 1–5 µm grid.
 
 **The CH₄ test set now totals 40 labelled planets: 10 with CH₄, 30 without.** Every one is ranked correctly by v3.
+
+## 11. An independent check of the labels (added 2026-10-18; in place of a second human labeller)
+
+**Code and output:** `tools/label_crosscheck.py` → `outputs/labels/ch4_label_crosscheck_exoplanet_eu.csv` and its summary.
+
+**What was compared.**
+- **Ours:** the CH₄ labels of all 43 labelled planets.
+- **Theirs:** the molecules listed by *The Extrasolar Planets Encyclopaedia* (exoplanet.eu), a compilation kept by a different team. Its `species` field was read through the Paris Observatory EPN-TAP service (`exoplanet.epn_core`, snapshot `external_data/exoplanet_eu/exoplanet_eu_species_2026-10-18.csv`).
+
+The two definitions differ by design:
+- **exoplanet.eu** lists every species ever reported for a planet (detections, claims, tentative mentions), from any instrument or epoch, without a significance threshold.
+- **Ours** require a JWST transmission paper that states a detection or a non-detection.
+
+| | exoplanet.eu: no CH₄ | exoplanet.eu: CH₄ |
+|---|---|---|
+| Ours: no CH₄ (32) | 30 | 2 |
+| Ours: CH₄ (11) | 5 | 6 |
+
+- **Agreement:** 36 of 43 (84 %), Cohen's κ = 0.53. On the 18 planets exoplanet.eu lists species for, κ = 0.66.
+- **All 7 disagreements trace to that difference in definition and date. None comes from a disputed reading of a JWST paper:**
+  - **HD 189733 b and HD 209458 b.** exoplanet.eu keeps pre-JWST CH₄ claims (HST and ground high-resolution). JWST later set a 5σ upper limit of 0.1 ppm (Fu et al. 2024, Nature) and found "no evidence of CH₄" (Xue et al. 2024, ApJL).
+  - **TOI-270 d, TOI-5205 b, LP 791-18 c, LTT 3780 c and HATS-6 b.** JWST CH₄ detections published 2024–2026 that exoplanet.eu does not list yet. Four have no species entry at all; TOI-270 d is listed with H₂O only.
+- **What this does and does not establish.**
+  - No disagreement involves the two sources reading the same JWST result differently.
+  - It cannot replace a blind second reading of the papers. The planets where the literature itself is split are flagged `unknown` and are not in the test set.
