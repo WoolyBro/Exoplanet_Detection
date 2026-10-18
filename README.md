@@ -188,6 +188,8 @@ python stage_a_transit_model/cnn_lstm.py --epochs 3 \
 ROC-AUC, and the printed numbers should be read as "the pipeline works", nothing more. Rebuild
 the sample with `python tools/make_sample_views.py`.
 
+**The complete, ordered run sheet** covers split v2, the final evaluation, the K2 blind test, atmospheres, the forecast, the retrievals and the figures, with both environments (`environment-prt.yml` for petitRADTRANS). It is **[`REPRODUCE.md`](REPRODUCE.md)**. The subsections below are the quick paths into it.
+
 ### 3. Reproduce the real numbers — one ~150 MB download
 The full view set is published as release assets, [`v1.0-views`](https://github.com/WoolyBro/Exoplanet_Detection/releases/tag/v1.0-views), because 15,185
 binary files do not belong in git history. Unpack it at the repository root:
@@ -214,7 +216,7 @@ To re-run the modelling itself, every command below reproduces the reported figu
 ```bash
 python stage_a_transit_model/baselines.py
 python stage_a_transit_model/cnn_lstm.py --batchnorm --augment --scheduler
-python stage_a_transit_model/sweep.py            # 23 runs
+python stage_a_transit_model/sweep.py            # v1 sweep (history); the final v2 sweep is in REPRODUCE.md
 python stage_a_transit_model/cross_mission.py
 python stage_b_atmospheres/stage_b_pipeline.py        # also needs the research pack (spectra)
 python stage_b_atmospheres/stage_b_level2.py
@@ -240,7 +242,7 @@ the mentor's `exoplanet_research_data/` pack, which is not redistributed here (s
 (`stage_d_habitability/`) needs external INARA/PyATMOS data that is not in this repository; point
 the environment variable `EXO_EXTERNAL_DATA` at it (default: the original `D:/Files`).
 
-**Tests:** `python -m pytest tests` (41 tests: folding and view construction, the error channel,
+**Tests:** `python -m pytest tests` (45 tests: folding and view construction, the error channel,
 both splits' leakage guarantees, the data manifest, the habitable-zone / TSM physics against
 published values including mass upper limits, the forecast's noise scaling and transit-count
 solver, and the frozen methane labels and leakage-free calibration). They need the split files and, for the manifest test, nothing else.
