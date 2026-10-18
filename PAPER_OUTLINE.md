@@ -6,7 +6,7 @@
 - *Exoplanet detection and a habitability factor with CNN–LSTM networks: a pre-registered, end-to-end evaluation*
 - Alternative: *From transit signals to habitable-world priorities: what deep networks can and cannot learn from Kepler, TESS, K2 and JWST*
 
-**Central thesis (abstract, first sentence).** In an end-to-end pipeline from transit signals to habitable-world priorities, the limits come from the data — leakage, survey priors, missing false-alarm examples, stellar contamination — more than from the architecture. Pre-registered external tests expose each limit, and targeted data fixes remove most of them.
+**Central thesis (abstract, first sentence).** In an end-to-end pipeline from transit signals to habitable-world priorities, the limits come from the data — leakage, survey priors, missing false-alarm examples, stellar contamination — more than from the architecture. Pre-registered external tests expose each limit, and targeted data fixes remove most of them: real false alarms and pipeline measurements bring a standard CNN–BiLSTM to ExoMiner's level; contamination-aware simulations give real-spectrum CH₄ and CO₂ detectors. Where data cannot decide (temperate rocky planets), the pipeline says so.
 
 **Target journal.** AJ or MNRAS (methods + science), about 9,000 words, 10 main figures, appendices A–F.
 
@@ -46,6 +46,12 @@
 4. **The blind spots and their fix** (critique 1).
    - Centroid-only false positives rejected 49 %; false alarms 76 %.
    - Vetter v3 adds real false alarms and diagnostics. Results on fresh INJ1, INV, INJ2 and INJ3, real NTP and the Kepler test; the training-data ablation; ExoMiner on common KOIs.
+   - **Numbers:**
+     - false alarms rejected 0.70 → 0.99;
+     - neighbouring-star FPs 0.49 → 0.80;
+     - equal to ExoMiner (0.9961 vs 0.9963).
+   - **Remaining gap:** faint simulated off-target/EB signals (0.20 / 0.23 vs the Robovetter's 0.53 / 0.63), explained by the training-FP distribution.
+   - **Ablation:** the diagnostics, not the NTP examples, drive most gains (H8a failed).
    - **Fig. 5:** figure 17.
 5. **Prospective register:** 1,687 open candidates locked by hash.
 
