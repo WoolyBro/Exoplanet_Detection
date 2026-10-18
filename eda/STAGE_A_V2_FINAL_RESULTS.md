@@ -131,6 +131,47 @@ Each final model is the **5-seed ensemble**. Platt calibration and the recall-90
 - The recurrent layer and error channel did not change this picture: the gain from more *information* (diagnostics) is larger than the gain from more *architecture*.
 - **The comparison excludes candidates,** which are 34 % of our test set and the hardest part of our task. ExoMiner publishes no candidate scores with labels to compare against.
 
+## 5c. Which false positives fool it (added 2026-10-18; figure `figures/09`)
+
+**What was done.**
+- The 711 Kepler test false positives were split at the validation-fixed recall-90 threshold (0.593): 552 rejected and 159 passed as planet-like.
+- They were grouped by which of Kepler's own false-positive flags they carry (`koi_fpflag_*`).
+- No model was changed or selected. These are the saved predictions of the single test read.
+
+| False positives with … | n | Rejected | Median score | Fisher p vs all others |
+|---|---|---|---|---|
+| only a stellar-eclipse flag (eclipsing binary) | 191 | **95 %** | 0.02 | < 0.001 |
+| only an ephemeris-match (contamination) flag | 22 | 91 % | 0.16 | 0.19 |
+| two or more flags | 260 | 87 % | 0.13 | < 0.001 |
+| only a not-transit-shaped flag | 150 | 55 % | 0.58 | < 0.001 |
+| **only a centroid-offset flag (light from a neighbouring star)** | 80 | **49 %** | 0.63 | < 0.001 |
+| no flag | 8 | 25 % | 0.63 | 0.002 |
+| all false positives | 711 | 78 % | | |
+
+**Reading it.**
+- **Centroid-offset false positives are a structural blind spot.** When the centroid shift is the only warning sign, the model does no better than a coin flip. A phase-folded light curve contains no centroid information.
+  - This is exactly the diagnostic ExoMiner and ExoNet add (§5b), and it is where their advantage is largest, on weak signals.
+- **Why the per-flag comparison of v1 understated this.** Counting each flag separately, centroid-offset false positives are about as common among the fooled (46 %) as among the rejected (44 %). Most of them also carry an eclipse or contamination flag, which the light curve does show and the model catches. Only the exclusive grouping isolates the blind spot.
+- **"Not transit-shaped" false positives are a second weakness (55 %).** These are signals the Robovetter judged not transit-like, often systematics or variability. Their folded views evidently look transit-like enough to pass.
+
+## 5d. Injection-recovery with the final ensemble (added 2026-10-18; figure `figures/10`)
+
+**What was done.**
+- Synthetic transits of 5–320 ppm were injected into the real Kepler light curves of 50 v2 **test** stars, before detrending. That is 400 injections at real KOI periods and durations.
+- Each was scored by the final 5-seed Kepler ensemble.
+- Script: `injection_recovery.py --split-version v2 --runs …`. Outputs: `outputs/injection_recovery_v2/`.
+
+| Depth (ppm) | 0 | 5 | 10 | 20 | 40 | 80 | 160 | 320 |
+|---|---|---|---|---|---|---|---|---|
+| Median score increase over the same star with nothing injected | 0 | +0.001 | +0.001 | +0.001 | **+0.023** | +0.094 | +0.230 | +0.288 |
+| Stars whose score rose | | 29/50 | 29/50 | 32/50 | **39/50** | 43/50 | 47/50 | 49/50 |
+
+- **The ensemble responds reliably from 40 ppm.** At that depth the median response is above zero and significantly more than half the stars respond, both at 95 %. The v1 single model needed about 80 ppm. An Earth analogue transiting a Sun-like star is 84 ppm deep.
+- **It is a candidate vetter, not a transit search.** With nothing injected, folds of these stars at arbitrary periods already score a median 0.68, and 94 % pass the operating threshold.
+  - The absolute recovery fraction is therefore uninformative: it is 94–98 % at every depth.
+  - Only the paired comparison, each injection against its own star, measures detection.
+  - The model must be run on signals a detection pipeline has already found, which is how it is used here.
+
 ## 6. Limits
 
 - One test reading per mission. The CIs are star-bootstrap intervals and do not include the selection procedure's own variance. The validation–test agreement suggests that is small.

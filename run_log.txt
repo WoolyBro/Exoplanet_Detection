@@ -3707,3 +3707,17 @@ Ranking: TRAPPIST-1 g 2, TOI-700 d 3 (P 0.72), Kepler-62 f 3 (0.98), TRAPPIST-1 
   real TRAPPIST-1 e: atmosphere vs bare +7.4 (all) / +6.4 (>=3 um) / +0.4 (quiet visits 1+2) -> signal = visits 3,4 contamination
     (chi2 gain visit 3 +19, visit 4 +11, visits 1,2 worse); Archean vs bare +2.5 (all) / -1.1 (>=3 um, 2.1 sigma disfavoured);
     Archean vs free -3.6 / -4.3 sigma; CO2 95% upper limit log < -5.0. Null tests b/c/d (bug fixed): lnB -0.5, +0.8, +0.1.
+
+2026-10-18  FIGURES 01-12 REGENERATED FROM THE FINAL v2 RESULTS (figures/make_figures.py rewritten; subtitles computed).
+  01-06 from runs/v2_final (test read once), 03 from v2_comparison.csv (validation), 07 v2 training splits
+  (Kepler >10k ppm: 94 % FP vs base 50 %; TESS 12 % vs 17 %).
+  09 REDONE: exclusive flag groups, Kepler test FPs at val recall-90 thr 0.593 (78 % rejected overall): EB-only 95 %
+     (n=191), ec-only 91 %, >=2 flags 87 %, nt-only 55 % (n=150), CENTROID-ONLY 49 % (n=80) = structural blind spot.
+     The old per-flag view hid it (co among fooled 46 % vs rejected 44 %, p=0.79) because co co-occurs with ss/ec.
+  10 injection-recovery with the v2 5-seed ensemble (injection_recovery.py --runs ... --split-version v2): 50 test stars
+     x 8 depths; responds reliably from 40 ppm (v1 ~80); null median 0.68, 94 % of null folds above threshold.
+     (Script fixes: relative --out path crash at the final print; summary.json recorded the --run default as model_run.)
+  08 / Stage C vetting: score_priority_targets.py now reads target_list.csv (it read the DO_NOT_USE template - a data-rule
+     violation, fixed), --with-errors rebuilds views in detection_views_err/stage_c_targets (41/44 ok), --runs ensembles.
+     v2: Kepler-trained rho(radius) -0.37, 71 % >= 0.5 (HD 189733 b 0.09); TESS-trained +0.35, 98 %. (v1 -0.57/+0.30.)
+     build_priority_table reads the _v2 files; only the two vetting columns changed.
