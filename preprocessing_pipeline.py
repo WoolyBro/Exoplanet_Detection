@@ -35,6 +35,7 @@ from __future__ import annotations
 
 import json
 import os
+import threading
 import re
 import shutil
 import socket
@@ -642,6 +643,9 @@ def _s3_client(pool: int = 10):
                                             retries={"max_attempts": 3}, max_pool_connections=pool))
 
 
+S3_THREADS = 8
+
+
 def fetch_kepler_fits_via_s3(star: int, cache_dir: Path) -> list[Path]:
     """Download one Kepler star's long-cadence FITS from the public AWS mirror; returns the local paths.
 
@@ -668,15 +672,19 @@ def fetch_kepler_fits_via_s3(star: int, cache_dir: Path) -> list[Path]:
         raise LookupError(f"no Kepler long-cadence light curves on S3 for {star}")
     out_dir = Path(cache_dir) / "s3" / f"kplr{star:09d}"
     out_dir.mkdir(parents=True, exist_ok=True)
-    paths = []
-    for key in sorted(keys):
+    def one(key: str) -> Path:
         dest = out_dir / key.rsplit("/", 1)[-1]
         if not dest.is_file() or dest.stat().st_size == 0:
-            tmp = dest.with_suffix(f".tmp{os.getpid()}")
+            tmp = dest.with_suffix(f".tmp{os.getpid()}_{threading.get_ident()}")
             s3.download_file(S3_BUCKET, key, str(tmp))
             os.replace(tmp, dest)
-        paths.append(dest)
-    return paths
+        return dest
+
+    # the quarters in parallel (2026-10-18): a star's ~17 files are latency-bound, not bandwidth-bound;
+    # boto3 clients are thread-safe, and the files and their order are unchanged
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=S3_THREADS) as pool:
+        return list(pool.map(one, sorted(keys)))
 
 
 def _enable_cloud_once() -> None:

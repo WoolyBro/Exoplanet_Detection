@@ -52,12 +52,45 @@ Views are depth-normalised (the deepest bin is −1), so the network cannot see 
   - Mission-specific priors are learned features of the label distribution, not of the light curves.
   - A cross-survey vetter needs either the target survey's labels or S/N-balanced training (e.g., noise augmentation of high-S/N training examples).
 
+## 3b. Closing the loop: removing the S/N–label dependence from training (pre-registered: `eda/SNR_BALANCE_PROTOCOL.md`, commit `47a6930`)
+
+**Outputs:** `outputs/stage_a_mechanisms/snr_balance.json`, `snr_balance_k2_scores.csv`, `figures/19_snr_balance.png`.
+**Code:** `vetter_v3.py --config N`, `evaluate_snr_balance.py`.
+
+**The test.** If the prior is learned from the training labels, a model trained so that S/N carries no label information should lose most of it.
+- **Model N** is the v2 recipe with one change: per-example weights w = P(c) / P(c | S/N decile), clipped to [0.2, 10].
+- It was trained with 5 seeds.
+- **K2 was read a second time**, pre-declared and only for N (guard `runs/snr_balance/K2_READ.json`). The deep-planet subset was chosen *because* v2 failed on it, so this read tests the mechanism, not general skill.
+
+| ID | Expectation | v2 | N | Outcome |
+|---|---|---|---|---|
+| N1 | Validation ROC-AUC ≥ v2 − 0.01 | 0.932 | 0.925 | **held** |
+| N2 | K2 confirmed deeper than 10,000 ppm: median ≥ 0.85 | 0.72 | **0.84** (Wilcoxon p = 7 × 10⁻⁷ for the rise) | **failed**, narrowly |
+| N3 | Deep-vs-shallow gap shrinks by at least half | 0.22 | **0.077**, change [−0.28, −0.08] | **held** (−65 %) |
+| N4 | K2 P1 ROC-AUC ≥ v2 − 0.01 | 0.863 | **0.834** | **failed** |
+| N5 | High-S/N validation FPs rejected at recall 90: ≥ v2 − 0.05 | 0.985 | 0.940 | **held**, narrowly |
+
+Descriptive: the TESS light curves of the Stage C planets (mostly hot Jupiters) rise from a median of 0.70 to 0.83.
+
+**What it shows.**
+1. **The prior is learned from the training labels and is mostly removable.**
+   - The deep-planet penalty on K2 falls by about two-thirds: the gap goes from 0.22 to 0.08, and the deep-vs-shallow test goes from p = 2 × 10⁻⁶ to p = 0.05.
+   - This was done by changing nothing but the weight of training examples. The explanation of §3 thus predicted a fix, and the fix worked in the predicted direction.
+2. **The prior is not pure error: it carried real base-rate information** (post-hoc breakdown of the same read).
+   - N raises deep false positives too: their median goes from 0.05 to 0.12.
+   - Within deep K2 transits, discrimination is unchanged: ROC-AUC 0.689 → 0.681.
+   - The overall K2 loss comes mostly from shallow signals (0.836 → 0.796), where N is simply a slightly weaker network, as on validation (−0.007).
+   - In short, the prior acted as a **level shift** on deep signals, not as a shape feature. Removing it moves deep planets and deep eclipsing binaries up together.
+3. **The pre-registered reading applies:** N4 failed, so the fix is reported as a **trade-off, not a fix**. The remedy this points to, **untested here** because it would need a third read of K2, is per-survey recalibration *conditional on depth or S/N*, fitted on the target survey's own labels. That is a small correction, not retraining. This agrees with E7 of the K2 test: the frozen Platt map does not transfer.
+
 ## 4. Where this leaves the method's contribution
 
 Taken together with the rest of Stage A:
 - **Data hazards found and measured:** signal-twin leakage; survey priors that act causally through S/N; the absence of false-alarm examples in KOI-based training (DR25 INV: 24 % pass).
 - **A protocol:** pre-registration, single guarded reads, and external tests on a new mission (K2) and on the mission's own simulations (DR25).
-- **Fixes tested on fresh data** (vetter v3, `VETTER_V3_PROTOCOL.md`).
+- **Fixes tested on fresh data:**
+  - vetter v3 (`VETTER_V3_PROTOCOL.md`);
+  - S/N-balanced training (§3b). It removes about two-thirds of the survey prior but costs 0.03 ROC-AUC on K2, because the prior was partly correct base-rate information.
 - **Operating guidance:** abstention on seed disagreement; per-survey recalibration.
 
 The architecture is deliberately standard, so that every effect above can be attributed to data and evaluation rather than to a new network.
