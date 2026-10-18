@@ -231,3 +231,38 @@ The two definitions differ by design:
 - **What this does and does not establish.**
   - No disagreement involves the two sources reading the same JWST result differently.
   - It cannot replace a blind second reading of the papers. The planets where the literature itself is split are flagged `unknown` and are not in the test set.
+
+## 12. SpecNet, a strength-blind CNN + BiLSTM: failed (pre-registered: `METHANE_SPECNET_PROTOCOL.md`, commit `3f5b744`)
+
+**Code:** `stage_b_atmospheres/methane_specnet.py`
+**Output:** `outputs/stage_b_methane_ext/specnet.json` and `specnet_scores.csv`
+**Figure:** `eda/methane_specnet.png`
+
+**The attempt.** The paper's title promises CNNs and LSTMs, but its CH₄ detector is a GBM. SpecNet tried to earn the CNN/LSTM claim properly:
+- Its input is the whitened residual divided by its own RMS, so the network **cannot** see overall feature strength, the confound that the v1 CNN failed on (§7).
+- It is a CNN + BiLSTM, trained on the contamination + haze grid, as a 5-seed ensemble.
+- The original 9 planets were scored by strict leave-one-planet-out.
+
+| # | Expectation | SpecNet | GBM v3 | CNN v3 |
+|---|---|---|---|---|
+| S1 | ROC-AUC ≥ 0.95, 29 new planets | **0.80** [0.46, 1.00], p = 0.03 — failed | 1.00 | 0.97 |
+| S2 | ≥ 0.90 on the strong-feature half, p < 0.05 | **0.76**, p = 0.11 — failed | 1.00 (p = 0.003) | 0.97 (p = 0.006)* |
+| S3 | ≥ 0.95 on all 40 labelled planets | **0.78** [0.61, 0.94] — failed | 1.00 | 0.94 (n = 38) |
+| S4 | False-CH₄ rate ≤ 3 % on the stress set | **4.5 %** (6.7 % under strong contamination) — failed | 1.0 % | 3.2 % |
+| S5 | Less tied to feature strength than the v3 CNN | **held**: Spearman 0.34 vs 0.53 | 0.25 | 0.53 |
+
+\* Computed in this run as a comparison column. It was **not** a registered criterion for the v3 CNN.
+
+**Decision (fixed in advance).** SpecNet failed S1–S4, so it is reported as a failed attempt, and **the GBM stays the CH₄ detector.**
+
+**Why it failed.** The figure's right panel shows it. Dividing by the RMS removes what a detector needs: whether a band is *significant*, not just what shape it has.
+- The two strongest CH₄ spectra get low scores: V1298 Tau b 0.15 (GBM 0.97) and WASP-107 b 0.15. Their normalised residual is dominated by H₂O and haze slopes, so the CH₄ bands become a small part of a unit-variance curve.
+- Weak, featureless spectra are inflated to unit variance, which turns noise into "features". Hence the 4.5 % false rate.
+
+Hiding strength from the input is therefore not how the confound is controlled. It is controlled by *evaluating* against it (the strong-feature half, the gas-blind control).
+
+**Where that leaves CNNs in Stage B.** The contamination-trained **1D CNN (v3)** of §9 remains a working CNN detector:
+- 0.97 on the 29 new planets (p = 0.0003) and 0.94 on all 38 it scored;
+- 0.97 on the strong-feature half (p = 0.006). This last number is post hoc, so it is not a confirmed pass of the confound test.
+
+The headline stays with the GBM, which is the most accurate and also the least tied to feature strength (Spearman 0.25). The CNN–LSTM claim of the title rests on detection (Stage A) and on the candidate habitability factor (`STAGE_C_RESULTS.md` §3c), not on atmospheres.
