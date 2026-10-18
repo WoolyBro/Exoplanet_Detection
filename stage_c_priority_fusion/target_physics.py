@@ -179,7 +179,9 @@ def monte_carlo(df: pd.DataFrame, n: int = 4000, seed: int = 20261017, return_dr
              "observable": obs_draw, "retention": (shore["primary"] < 0).astype(float),
              # a terrestrial-size planet that can also keep an atmosphere: the shoreline is a statement about
              # rocky bodies, so on its own it would reward giants for trivially keeping H/He envelopes
-             "terrestrial_atm": ((R < 1.5) & (shore["primary"] < 0)).astype(float)}
+             "terrestrial_atm": ((R < 1.5) & (shore["primary"] < 0)).astype(float),
+             # raw draws for the fitted retention model (retention_model.py); not part of the score
+             "margin_primary": shore["primary"], "radius": R, "teq": teq}
 
     q = lambda x, p: np.nanpercentile(x, p, axis=1) if np.isfinite(x).any() else np.full(len(x), np.nan)
     with np.errstate(all="ignore"):
