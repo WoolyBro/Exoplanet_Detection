@@ -1,0 +1,180 @@
+{
+  "n_targets": 44,
+  "n_base_samples": 4096,
+  "spearman_vs_registered": {
+    "first_order": {
+      "w_hz": 0.274,
+      "w_terrestrial_atm": 0.024,
+      "w_observable": 0.426,
+      "retention_treatment": -0.012,
+      "optimistic_hz_credit": 0.123
+    },
+    "total": {
+      "w_hz": 0.466,
+      "w_terrestrial_atm": 0.113,
+      "w_observable": 0.599,
+      "retention_treatment": 0.037,
+      "optimistic_hz_credit": 0.189
+    },
+    "median": 0.839,
+    "p5": 0.505
+  },
+  "p_top10": {
+    "TOI-700 d": 0.983,
+    "Kepler-62 f": 0.936,
+    "TRAPPIST-1 g": 1.0,
+    "TRAPPIST-1 f": 1.0,
+    "TRAPPIST-1 e": 1.0,
+    "LP 890-9 c": 1.0,
+    "LHS 1140 b": 0.996,
+    "TRAPPIST-1 d": 0.89,
+    "Kepler-296 f": 0.584,
+    "TOI-700 e": 0.729,
+    "K2-18 b": 0.124,
+    "WASP-39 b": 0.0,
+    "HD 209458 b": 0.0,
+    "HD 189733 b": 0.0,
+    "WASP-96 b": 0.0,
+    "WASP-107 b": 0.0,
+    "WASP-121 b": 0.0,
+    "WASP-77 A b": 0.0,
+    "WASP-127 b": 0.0,
+    "WASP-31 b": 0.0,
+    "WASP-17 b": 0.0,
+    "WASP-19 b": 0.0,
+    "WASP-12 b": 0.002,
+    "HAT-P-18 b": 0.002,
+    "HAT-P-32 b": 0.001,
+    "HAT-P-41 b": 0.0,
+    "HAT-P-11 b": 0.024,
+    "HAT-P-26 b": 0.0,
+    "GJ 3470 b": 0.009,
+    "GJ 1214 b": 0.0,
+    "GJ 1132 b": 0.057,
+    "GJ 486 b": 0.335,
+    "TOI-270 d": 0.0,
+    "LHS 475 b": 0.0,
+    "TRAPPIST-1 b": 0.017,
+    "TRAPPIST-1 c": 0.311,
+    "55 Cnc e": 0.0,
+    "KELT-9 b": 0.0,
+    "WASP-33 b": 0.0,
+    "WASP-52 b": 0.0,
+    "WASP-80 b": 0.0,
+    "WASP-6 b": 0.0,
+    "WASP-43 b": 0.0,
+    "WASP-18 b": 0.0
+  },
+  "robust_core_ge_0.9": [
+    "TOI-700 d",
+    "Kepler-62 f",
+    "TRAPPIST-1 g",
+    "TRAPPIST-1 f",
+    "TRAPPIST-1 e",
+    "LP 890-9 c",
+    "LHS 1140 b"
+  ],
+  "uncertain_targets_total_indices": {
+    "Kepler-62 f": {
+      "p_top10": 0.936,
+      "total_index": {
+        "w_hz": 0.68,
+        "w_terrestrial_atm": 0.468,
+        "w_observable": 0.803,
+        "retention_treatment": 0.247,
+        "optimistic_hz_credit": 0.041
+      }
+    },
+    "TRAPPIST-1 d": {
+      "p_top10": 0.89,
+      "total_index": {
+        "w_hz": 0.196,
+        "w_terrestrial_atm": 0.374,
+        "w_observable": 0.292,
+        "retention_treatment": 0.533,
+        "optimistic_hz_credit": 0.74
+      }
+    },
+    "Kepler-296 f": {
+      "p_top10": 0.584,
+      "total_index": {
+        "w_hz": 0.554,
+        "w_terrestrial_atm": 0.119,
+        "w_observable": 0.56,
+        "retention_treatment": 0.163,
+        "optimistic_hz_credit": 0.38
+      }
+    },
+    "TOI-700 e": {
+      "p_top10": 0.729,
+      "total_index": {
+        "w_hz": 0.248,
+        "w_terrestrial_atm": 0.398,
+        "w_observable": 0.506,
+        "retention_treatment": 0.256,
+        "optimistic_hz_credit": 0.676
+      }
+    },
+    "K2-18 b": {
+      "p_top10": 0.124,
+      "total_index": {
+        "w_hz": 0.457,
+        "w_terrestrial_atm": 0.333,
+        "w_observable": 0.39,
+        "retention_treatment": 0.246,
+        "optimistic_hz_credit": 0.829
+      }
+    },
+    "GJ 1132 b": {
+      "p_top10": 0.057,
+      "total_index": {
+        "w_hz": 0.634,
+        "w_terrestrial_atm": 0.354,
+        "w_observable": 0.74,
+        "retention_treatment": 0.475,
+        "optimistic_hz_credit": 0.241
+      }
+    },
+    "GJ 486 b": {
+      "p_top10": 0.335,
+      "total_index": {
+        "w_hz": 0.441,
+        "w_terrestrial_atm": 0.137,
+        "w_observable": 0.4,
+        "retention_treatment": 0.56,
+        "optimistic_hz_credit": 0.367
+      }
+    },
+    "TRAPPIST-1 c": {
+      "p_top10": 0.311,
+      "total_index": {
+        "w_hz": 0.468,
+        "w_terrestrial_atm": 0.169,
+        "w_observable": 0.429,
+        "retention_treatment": 0.506,
+        "optimistic_hz_credit": 0.376
+      }
+    }
+  },
+  "fitted_retention_ranking": {
+    "spearman_vs_registered": 0.841,
+    "top10_overlap": 10,
+    "top10": [
+      "TRAPPIST-1 g",
+      "TRAPPIST-1 f",
+      "TRAPPIST-1 e",
+      "LP 890-9 c",
+      "LHS 1140 b",
+      "TOI-700 d",
+      "Kepler-62 f",
+      "TRAPPIST-1 d",
+      "Kepler-296 f",
+      "TOI-700 e"
+    ]
+  },
+  "expectations": {
+    "A4 fitted-retention ranking Spearman >= 0.8": true,
+    "B1 HZ weight has the largest total index": false,
+    "B2 >= 5 targets in the top 10 in >= 90 % of samples": true
+  }
+}

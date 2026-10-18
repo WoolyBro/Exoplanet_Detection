@@ -1,0 +1,102 @@
+{
+  "n_planets": 20,
+  "labels": {
+    "LHS 3844 b": 0.0,
+    "TRAPPIST-1 b": 0.0,
+    "TRAPPIST-1 c": 0.0,
+    "GJ 1132 b": 0.0,
+    "GJ 486 b": 0.0,
+    "GJ 367 b": 0.0,
+    "TOI-1468 b": 0.0,
+    "LHS 1140 c": 0.0,
+    "LTT 1445 A b": 0.0,
+    "GJ 3929 b": 0.0,
+    "LTT 3780 b": 0.0,
+    "TOI-1685 b": 0.0,
+    "GJ 1252 b": 0.0,
+    "55 Cnc e": 1.0,
+    "LHS 1478 b": 0.6,
+    "L 98-59 b": 0.6,
+    "L 98-59 d": 0.6,
+    "LHS 1140 b": 0.6,
+    "GJ 3473 b": 0.25,
+    "TOI-561 b": 1.0
+  },
+  "magma_planets": [
+    "GJ 367 b",
+    "55 Cnc e",
+    "TOI-561 b"
+  ],
+  "effective_sample_size": 15414,
+  "posterior": {
+    "alpha": {
+      "median": -0.335,
+      "ci68": [
+        -1.097,
+        0.449
+      ],
+      "ci95": [
+        -1.847,
+        1.245
+      ]
+    },
+    "beta": {
+      "median": -1.269,
+      "ci68": [
+        -1.932,
+        -0.663
+      ],
+      "ci95": [
+        -2.637,
+        -0.116
+      ]
+    },
+    "gamma": {
+      "median": 2.631,
+      "ci68": [
+        1.325,
+        4.019
+      ],
+      "ci95": [
+        0.048,
+        5.446
+      ]
+    }
+  },
+  "p_beta_negative": 0.986,
+  "p_gamma_positive": 0.977,
+  "loo_mean_log_score": {
+    "fitted": -0.5344,
+    "fixed_shoreline": -1.7242,
+    "base_rate": -0.5802,
+    "auc_fitted_loo": 0.595,
+    "auc_fixed_shoreline": 0.548
+  },
+  "loo_predictions": {
+    "LHS 3844 b": 0.113,
+    "TRAPPIST-1 b": 0.165,
+    "TRAPPIST-1 c": 0.197,
+    "GJ 1132 b": 0.172,
+    "GJ 486 b": 0.216,
+    "GJ 367 b": 0.389,
+    "TOI-1468 b": 0.22,
+    "LHS 1140 c": 0.263,
+    "LTT 1445 A b": 0.404,
+    "GJ 3929 b": 0.235,
+    "LTT 3780 b": 0.14,
+    "TOI-1685 b": 0.138,
+    "GJ 1252 b": 0.076,
+    "55 Cnc e": 0.517,
+    "LHS 1478 b": 0.181,
+    "L 98-59 b": 0.061,
+    "L 98-59 d": 0.215,
+    "LHS 1140 b": 0.691,
+    "GJ 3473 b": 0.134,
+    "TOI-561 b": 0.176
+  },
+  "expectations": {
+    "A1 P(beta<0) >= 0.90": true,
+    "A2 LOO beats fixed shoreline and base rate": true,
+    "A3 P(gamma>0) >= 0.80": true
+  }
+}
