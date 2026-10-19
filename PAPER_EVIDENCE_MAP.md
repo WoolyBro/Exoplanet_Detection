@@ -107,6 +107,7 @@ One row per claim the paper can make, with its number, its figure and the file t
 | TRAPPIST-1 e | rank 1 → 4 with retention; depends on the XUV history (P 0.03 / 0.17 / 1.00) | §2b |
 | Fitted retention (registered) | β −1.27 [−2.64, −0.12], P(β<0) 0.986; γ_magma +2.63, P 0.977; LOO log score −0.53 vs −1.72 (shoreline) vs −0.58 (base rate); A1–A3 held | §2c |
 | Sensitivity (Sobol) | total index: observability weight 0.60, HZ 0.47, retention 0.04; robust core of 7; B1 failed, A4 and B2 held | §3b |
+| What to observe next (registered design) | bits about the shoreline per JWST hour for 1,288 rocky planets; noise model 0.107 dex on 8 real eclipses; the 6 Rocky Worlds DDT targets rank in the top 45 (median 29.5); bright K dwarfs and lava worlds add the most; S1–S3 held | §2e |
 | Retention, out of sample + refit (addendum 2) | 3 planets published after the fit: log score −0.59 vs base −1.00 vs shoreline −4.75; refit on 23: P(β<0) 0.989, P(γ>0) 0.997, LOO AUC 0.77 (non-magma 0.59); A5–A7 held | §2d |
 | Sensitivity, 7 inputs (addendum) | shoreline zero point ±1 dex: total index 0.06; M–R relation 0.005; the same robust core of 7; B3–B5 held | §3b-ii |
 | Validation without ground truth | consistency per component; fitted retention on 8 Solar System bodies out of sample: 7/8 (misses Mars, on the line) | §3b-iii |

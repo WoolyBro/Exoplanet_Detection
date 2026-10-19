@@ -82,8 +82,9 @@
    - A robust core of 7 targets (TOI-700 d, Kepler-62 f, TRAPPIST-1 e/f/g, LP 890-9 c, LHS 1140 b).
    - The retention treatment barely matters (total index 0.04).
    - **Fig. 9:** figure 12 + stage_c_sensitivity + retention_model.
-4. **What JWST would need:** the forecast with contamination regimes. **Fig. 10:** forecast_contamination_regimes.
-5. **From detection to habitability:** HZ candidates weighted by the vetter's calibrated probability; the shortlist goes into the prospective register.
+4. **What to observe next:** the experimental design ranks 1,288 rocky planets by information about the shoreline per JWST hour. It independently recovers the Rocky Worlds DDT selection (all six open targets in the top 45) and adds bright K-dwarf planets and lava worlds. **Fig. 10:** shoreline_design.
+5. **What JWST would need for gases:** the forecast with contamination regimes (forecast_contamination_regimes, appendix E).
+6. **From detection to habitability:** HZ candidates weighted by the vetter's calibrated probability; the shortlist goes into the prospective register.
 
 ## 6. Discussion (≈ 800 words)
 
