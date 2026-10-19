@@ -63,6 +63,7 @@
    - The GBM, plus **SpecNet**, the strength-blind CNN–BiLSTM, which failed S1–S4 (critique 4): hiding feature strength also hides band significance.
    - 40 labelled planets; the confound test; the stress set; the exoplanet.eu label cross-check.
    - **CO₂ (Pillar B):** 1-D CNN 0.996 and GBM 0.982 on 34 planets; the confound test is passed; masking the 4.3 µm band removes the GBM's skill.
+   - **The prospective molecule register:** the frozen detectors call CH₄ and CO₂ on 29 unresolved planets (hash-locked). CO₂ is absent for K2-18 b, GJ 1214 b and LHS 1140 b, and present for WASP-127 b; the analysis-dependent cases are flagged ambiguous. These are falsifiable predictions for future JWST papers.
    - **Fig. 6:** co2_extension + methane_tls_robustness (methane_specnet in an appendix).
 3. **Stellar contamination is the limiting systematic.**
    - TRAPPIST-1 e: the atmosphere "signal" lives in visits 3–4.
