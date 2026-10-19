@@ -2,7 +2,7 @@
 
 Every graph and diagram made in this project, collected in one folder (copies). The originals stay where the scripts write them (`figures/`, `eda/`), because the write-ups link to those paths and the scripts regenerate them there. If a figure is regenerated, re-copy it here.
 
-**68 diagrams.** File names start with the part of the paper they belong to.
+**70 diagrams.** File names start with the part of the paper they belong to.
 
 ## Paper figures (numbered; the main-text candidates)
 
@@ -28,6 +28,7 @@ Every graph and diagram made in this project, collected in one folder (copies). 
 | `Paper_Fig18_vetter_mechanisms.png` | How does the vetter decide? | `figures/18_vetter_mechanisms.png` | `figures/README.md` |
 | `Paper_Fig19_snr_balance.png` | Does removing the S/N–label link fix the survey prior? | `figures/19_snr_balance.png` | `figures/README.md` |
 | `Paper_Fig20_architecture_vs_data.png` | Is the architecture the limit? | `figures/20_architecture_vs_data.png` | `figures/README.md` |
+| `Paper_Fig21_label_shift.png` | Why does a vetter misjudge a new survey, and what fixes it? | `figures/21_label_shift.png` | `figures/README.md` |
 
 ## Detection (Stage A) analyses
 
@@ -88,6 +89,7 @@ Every graph and diagram made in this project, collected in one folder (copies). 
 | `Habitability_priority_overview.png` | The habitable-world priority ranking and its components | `eda/stage_c_priority_overview.png` | `eda/STAGE_C_RESULTS.md` |
 | `Habitability_sobol_sensitivity_5inputs.png` | Sobol sensitivity of the ranking (5 inputs) and robust core | `eda/stage_c_sensitivity.png` | `eda/STAGE_C_RESULTS.md` |
 | `Habitability_sobol_sensitivity_7inputs.png` | Sobol sensitivity with shoreline zero point and mass-radius relation | `eda/stage_c_sensitivity_extended.png` | `eda/STAGE_C_RESULTS.md` |
+| `Habitability_shoreline_design_what_to_observe_next.png` | Which rocky planet JWST should observe next: bits about the shoreline per hour | `eda/shoreline_design.png` | `eda/STAGE_C_RESULTS.md` |
 | `Habitability_hwc_catalogue_eda.png` | Habitable Worlds Catalog exploration (Stage D data prep) | `eda/hwc_habitability.png` | `eda/EDA_HABITABILITY.md` |
 | `Habitability_pyatmos_gas_distributions.png` | PyATMOS atmosphere grid: gas distributions (Stage D) | `eda/pyatmos_gas_distributions.png` | `eda/EDA_HABITABILITY.md` |
 | `Habitability_pyatmos_o2_co2_scatter.png` | PyATMOS grid: O2 vs CO2 (Stage D) | `eda/pyatmos_o2_co2_scatter.png` | `eda/EDA_HABITABILITY.md` |
