@@ -44,3 +44,7 @@ The validation is written up in:
 - `eda/METHANE_EXTENSION_RESULTS.md` (CH₄);
 - `eda/CO2_EXTENSION_RESULTS.md` (CO₂);
 - `eda/MOLECULE_REGISTER.md`, the frozen calls on 29 unresolved planets.
+
+## License
+
+MIT (see `LICENSE`).
