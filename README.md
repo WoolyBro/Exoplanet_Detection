@@ -326,3 +326,8 @@ These are in the reports too, but they are the load-bearing caveats:
 treated as read-only, every input is declared in `data_manifest.py` rather than opened ad hoc,
 and splits are read from `splits/` and never recomputed. Splits are grouped by star, so no
 light curve from one target can appear in two folds.
+
+
+## License
+
+Code: MIT (see `LICENSE`). The light-curve views and spectra derive from public NASA Exoplanet Archive and MAST data. The mentor's research pack (`exoplanet_research_data/`) is not part of this repository.

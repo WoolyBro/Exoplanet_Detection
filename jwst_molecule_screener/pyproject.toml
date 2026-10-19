@@ -7,6 +7,8 @@ name = "jwst-molecule-screener"
 version = "1.0.0"
 description = "Calibrated CH4 and CO2 calls for exoplanet transmission spectra, from detectors validated on real JWST planets"
 readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Ayush Mondal"}]
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "scikit-learn==1.9.1", "torch>=2.1", "joblib>=1.3"]
 

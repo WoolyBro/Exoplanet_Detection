@@ -11,9 +11,14 @@ def main() -> int:
     ap.add_argument("files", nargs="+", help="tables of wavelength (micron), depth, uncertainty; several = several spectra of one planet")
     ap.add_argument("--depth-unit", choices=["ppm", "percent", "fraction"], default="ppm")
     ap.add_argument("--cols", default="0,1,2", help="column indices of wavelength, depth, uncertainty")
+    ap.add_argument("--merge", action="store_true", help="the files are parts of ONE spectrum (e.g. NIRSpec NRS1 + NRS2)")
     a = ap.parse_args()
     w, d, e = (int(c) for c in a.cols.split(","))
-    print(json.dumps(screen([read_table(f, w, d, e, a.depth_unit) for f in a.files]), indent=2))
+    tables = [read_table(f, w, d, e, a.depth_unit) for f in a.files]
+    if a.merge:
+        import numpy as np
+        tables = [tuple(np.concatenate([t[i] for t in tables]) for i in range(3))]
+    print(json.dumps(screen(tables), indent=2))
     return 0
 
 
