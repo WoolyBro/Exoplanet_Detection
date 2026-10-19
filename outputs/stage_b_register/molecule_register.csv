@@ -1,0 +1,38 @@
+planet,gas,n_spectra,score_gbm,score_cnn,p_gbm,p_cnn,p_gbm_spectra_min,p_gbm_spectra_max,spectra_disagree,call
+GJ 1214 b,CH4,3,0.086,0.036,0.218,0.015,0.053,0.375,False,ambiguous
+GJ 486 b,CH4,3,0.011,0.088,0.005,0.057,0.003,0.01,False,absent
+HAT-P-18 b,CH4,3,0.061,0.123,0.121,0.093,0.108,0.132,False,absent
+HAT-P-26 b,CH4,2,0.006,0.113,0.002,0.082,0.001,0.003,False,absent
+HAT-P-30 b,CH4,4,0.461,0.066,0.944,0.037,0.16,0.997,True,ambiguous
+KELT-7 b,CH4,4,0.003,0.067,0.0,0.038,0.0,0.002,False,absent
+Kepler-51 d,CH4,1,0.7,0.103,0.991,0.072,0.991,0.991,False,ambiguous
+L 98-59 b,CH4,2,0.062,0.087,0.126,0.056,0.022,0.276,False,absent
+LTT 9779 b,CH4,1,0.081,0.019,0.195,0.006,0.195,0.195,False,absent
+TOI-1130 b,CH4,2,0.038,0.218,0.053,0.218,0.002,0.155,False,ambiguous
+TOI-3235 b,CH4,1,0.899,0.333,0.999,0.393,0.999,0.999,False,ambiguous
+TRAPPIST-1 b,CH4,1,0.001,0.031,0.0,0.012,0.0,0.0,False,absent
+TRAPPIST-1 e,CH4,4,0.184,0.214,0.585,0.212,0.001,0.988,True,ambiguous
+WASP-121 b,CH4,4,0.005,0.069,0.001,0.04,0.0,0.004,False,absent
+WASP-127 b,CH4,1,0.078,0.085,0.185,0.053,0.185,0.185,False,absent
+WASP-15 b,CH4,4,0.005,0.07,0.001,0.04,0.0,0.004,False,absent
+WASP-17 b,CH4,2,0.023,0.92,0.02,0.984,0.018,0.023,False,ambiguous
+WASP-52 b,CH4,1,0.001,0.041,0.0,0.018,0.0,0.0,False,absent
+WASP-94 A b,CH4,5,0.12,0.346,0.354,0.413,0.003,0.936,True,ambiguous
+WASP-96 b,CH4,2,0.023,0.172,0.02,0.154,0.001,0.062,False,absent
+GJ 1214 b,CO2,3,0.016,0.005,0.036,0.007,0.015,0.055,False,absent
+GJ 3090 b,CO2,4,0.013,0.022,0.031,0.035,0.015,0.069,False,absent
+GJ 486 b,CO2,3,0.003,0.023,0.009,0.037,0.004,0.016,False,absent
+HAT-P-30 b,CO2,4,0.076,0.162,0.123,0.287,0.056,0.233,False,ambiguous
+HATS-6 b,CO2,3,0.276,0.309,0.323,0.507,0.177,0.395,False,ambiguous
+K2-18 b,CO2,1,0.078,0.053,0.125,0.091,0.125,0.125,False,absent
+KELT-7 b,CO2,4,0.035,0.027,0.067,0.044,0.021,0.137,False,absent
+L 98-59 b,CO2,2,0.02,0.03,0.044,0.049,0.026,0.06,False,absent
+L 98-59 d,CO2,1,0.012,0.01,0.03,0.015,0.03,0.03,False,absent
+LHS 1140 b,CO2,1,0.001,0.015,0.005,0.022,0.005,0.005,False,absent
+NGTS-2 b,CO2,4,0.555,0.733,0.554,0.887,0.247,0.762,True,ambiguous
+TOI-270 b,CO2,3,0.002,0.02,0.006,0.031,0.005,0.007,False,absent
+TOI-270 d,CO2,7,0.473,0.246,0.488,0.419,0.035,0.948,True,ambiguous
+TOI-3235 b,CO2,1,0.146,0.043,0.201,0.073,0.201,0.201,False,ambiguous
+TRAPPIST-1 b,CO2,1,0.005,0.001,0.015,0.001,0.015,0.015,False,absent
+TRAPPIST-1 c,CO2,1,0.002,0.0,0.006,0.0,0.006,0.006,False,absent
+WASP-127 b,CO2,1,0.999,1.0,0.995,1.0,0.995,0.995,False,present

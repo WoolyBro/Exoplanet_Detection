@@ -6,13 +6,13 @@ Every expectation this project registered **before** seeing the result, with its
 - **Commit:** the protocol was committed to git before the build, training or read it governs. The hash is that commit.
 - **Hash file:** the labels were frozen by SHA-256, with a timestamp, before scoring. The protocol entered git together with the results, so the evidence for the order is the local hash file, not git. This applies to methane rounds 1–2, which predate the rule of committing protocols first.
 
-**Totals: 64 directional expectations, 45 held (70 %) and 19 failed.**
+**Totals: 66 directional expectations, 47 held (71 %) and 19 failed.**
 - **Also registered:**
   - 2 model-selection rules (V-K, V-T);
   - 1 test failure criterion (F, not met);
   - 3 CH₄ failure criteria (M1–M3; none met for the GBM, M2 met for the v1 CNN);
   - 2 decision rules (SpecNet, R1), both applied.
-- **The 70 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
+- **The 71 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
 
 ---
 
@@ -122,6 +122,13 @@ Every expectation this project registered **before** seeing the result, with its
 | K2 | Strong-feature half: GBM ≥ 0.80 and ≥ control + 0.10 | **held**: 0.942 vs 0.673 (CNN 0.981) |
 | K3 | Masking 4.20–4.45 µm lowers CO₂ planets' scores more (p < 0.05) | **held**: median drop 0.87 vs −0.005, p = 3 × 10⁻⁶ |
 | K4 | CNN ROC-AUC ≥ 0.80 | **held**: 0.996 |
+
+### Prospective molecule register (`MOLECULE_REGISTER_PROTOCOL.md`, commit `d7f1f6b`; register hash `66c65066…`)
+
+| ID | Expectation | Outcome |
+|---|---|---|
+| P1 | Leave-one-out calibrated probabilities beat the base rate (GBM), both gases | **held**: CH₄ −0.05 vs −0.61; CO₂ −0.23 vs −0.71 |
+| P2 | ≥ half the scored register planets get a definite call | **held**: 19 of 29 |
 
 ### SpecNet, the strength-blind CNN–BiLSTM (`METHANE_SPECNET_PROTOCOL.md`, commit `3f5b744`; result `outputs/stage_b_methane_ext/specnet.json`)
 

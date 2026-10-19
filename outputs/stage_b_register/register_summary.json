@@ -1,0 +1,82 @@
+{
+  "protocol": "stage_b_atmospheres/MOLECULE_REGISTER_PROTOCOL.md (commit d7f1f6b)",
+  "lopo_folds": {
+    "GJ 3470 b": 2616,
+    "HAT-P-18 b": 2618,
+    "HAT-P-26 b": 2651,
+    "HD 189733 b": 2633,
+    "HD 209458 b": 2676,
+    "K2-18 b": 2667,
+    "TOI-270 d": 2370,
+    "TRAPPIST-1 c": 2570,
+    "WASP-107 b": 2201,
+    "WASP-17 b": 2659,
+    "WASP-39 b": 2101,
+    "WASP-52 b": 2728,
+    "WASP-80 b": 2721
+  },
+  "ch4": {
+    "n_labelled_scored": 41,
+    "n_pos": 11,
+    "labelled_roc_auc": {
+      "gbm": 1.0,
+      "cnn": 0.967
+    },
+    "calibration_check_P1": {
+      "gbm": {
+        "loo_calibrated": -0.0459,
+        "loo_base_rate": -0.6072
+      },
+      "cnn": {
+        "loo_calibrated": -0.2873,
+        "loo_base_rate": -0.6072
+      }
+    },
+    "register_planets": 22,
+    "register_scored": 20,
+    "register_unscored": [
+      "K2-22 b",
+      "WASP-43 b"
+    ]
+  },
+  "co2": {
+    "n_labelled_scored": 34,
+    "n_pos": 14,
+    "labelled_roc_auc": {
+      "gbm": 0.982,
+      "cnn": 0.996
+    },
+    "calibration_check_P1": {
+      "gbm": {
+        "loo_calibrated": -0.2334,
+        "loo_base_rate": -0.7083
+      },
+      "cnn": {
+        "loo_calibrated": -0.16,
+        "loo_base_rate": -0.7083
+      }
+    },
+    "register_planets": 17,
+    "register_scored": 17,
+    "register_unscored": []
+  },
+  "register_sha256": "66c65066e4397b045224011847337eb91dbd23e0703024403df8fdca2ac653fb",
+  "n_register_planets_scored": 29,
+  "n_with_a_definite_call": 19,
+  "calls": {
+    "CH4": {
+      "absent": 12,
+      "ambiguous": 8,
+      "present": 0
+    },
+    "CO2": {
+      "absent": 11,
+      "ambiguous": 5,
+      "present": 1
+    }
+  },
+  "expectations": {
+    "P1 LOO calibration beats base rate, both gases (GBM)": true,
+    "P2 >= half the scored register planets get a definite call": true
+  }
+}
