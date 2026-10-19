@@ -165,20 +165,25 @@ def figure(out, frames):
     ax.legend(fontsize=7, loc="lower left")
     ax = axes[1]
     x = np.arange(len(out["cases"]))
-    for j, (k, lab, c) in enumerate([("frozen_platt", "frozen Platt map", "#9a9a9a"), ("label_free", "label-free correction", "#2a78d6"),
-                                     ("oracle", "oracle (true base rates)", "#1a9e77")]):
-        ax.bar(x + (j - 1) * 0.27, [r[k]["ece"] for r in out["cases"]], 0.27, color=c, label=lab)
-    ax.set(xticks=x, xticklabels=[r["case"] for r in out["cases"]], ylabel="expected calibration error", title="Calibration on a survey never trained on")
+    few = OUT / "label_shift_few_label.json"
+    few = json.loads(few.read_text())["cases"] if few.is_file() else None
+    bars = [("frozen_platt", "frozen Platt map", "#9a9a9a"), ("label_free", "label-free EM (failed)", "#c9d9ee"),
+            ("few20", "80 labelled signals (20 per depth band)", "#2a78d6"), ("oracle", "true base rates by depth", "#1a9e77")]
+    for j, (k, lab, c) in enumerate(bars):
+        vals = [few[r["case"]]["20"]["ece_few"] if k == "few20" else r[k]["ece"] for r in out["cases"]] if (k != "few20" or few) else None
+        if vals:
+            ax.bar(x + (j - 1.5) * 0.2, vals, 0.2, color=c, label=lab)
+    ax.set(xticks=x, xticklabels=[r["case"] for r in out["cases"]], ylabel="expected calibration error", title="Calibration on a survey never trained on", ylim=(0, 0.4))
     ax.legend(fontsize=8)
     ax = axes[2]
     f = frames["Kepler -> K2"]
     c = f[f.label == 2]
     ax.scatter(c.depth.clip(lower=10), c.p, s=9, color="#9a9a9a", alpha=0.6, label="frozen Platt map")
-    ax.scatter(c.depth.clip(lower=10), c.p_corrected, s=9, color="#2a78d6", alpha=0.6, label="label-free correction")
+    ax.scatter(c.depth.clip(lower=10), c.p_oracle, s=9, color="#1a9e77", alpha=0.6, label="corrected with base rates by depth")
     ax.axvline(10000, color="k", ls=":", lw=1)
     kd = out["k2_depth_prior"]
     ax.set(xscale="log", xlabel="measured depth (ppm)", ylabel="P(planet-like)",
-           title=f"K2 confirmed planets: deep median {kd['deep_median']['p']:.2f} -> {kd['deep_median']['p_corrected']:.2f}")
+           title=f"K2 confirmed planets: deep median {kd['deep_median']['p']:.2f} -> {kd['deep_median']['p_oracle']:.2f}")
     ax.legend(fontsize=8, loc="lower left")
     fig.tight_layout()
     fig.savefig(R / "figures" / "21_label_shift.png", dpi=150, bbox_inches="tight")

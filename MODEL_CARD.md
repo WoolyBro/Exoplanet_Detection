@@ -73,6 +73,7 @@ Rank transit-like signals **that a detection pipeline has already found** (TCEs,
     - Adding noise raises deep K2 planets from 0.72 to 0.95.
     - S/N-balanced training (model N, `runs/v3_N*`, a research variant, not the release model) removes about two-thirds of it. But it lowers K2 ROC-AUC to 0.834, because the prior also carries real base-rate information.
     - Recalibrate per survey rather than retraining (`eda/VETTER_MECHANISMS_RESULTS.md` §3, §3b; `figures/18`, `19`).
+    - **How to recalibrate:** label about 20 signals of the new survey in each depth band (< 1,000, 1,000–3,000, 3,000–10,000, > 10,000 ppm). Multiply the odds by each band's base-rate ratio. On K2 and TESS this cuts calibration error from 0.20–0.36 to 0.07–0.10 with no ranking cost (§3d, `figures/21`). A label-free estimate of those rates did not work.
 - **Knowing when it is unsure.** The spread of the 5 seeds' scores flags errors: AUROC 0.76 on Kepler validation, falling to 0.68 on K2 and 0.58 on DR25 false alarms. Abstaining on the most uncertain half cuts the in-survey error rate from 16.8 % to 5.1 %. Confident out-of-survey errors are not flagged.
 - **Weak signals.** Near chance below a pipeline S/N of about 7 (Kepler 0.60, TESS 0.65, K2 0.72). On injected planets it is still more complete than the Robovetter at MES 7.1–10 (0.91 vs 0.82).
 - **Detrending dependence.** On K2 the light-curve product moved the ROC-AUC by 0.031 (K2SFF above EVEREST).

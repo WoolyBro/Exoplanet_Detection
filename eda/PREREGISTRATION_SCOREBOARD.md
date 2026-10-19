@@ -6,13 +6,13 @@ Every expectation this project registered **before** seeing the result, with its
 - **Commit:** the protocol was committed to git before the build, training or read it governs. The hash is that commit.
 - **Hash file:** the labels were frozen by SHA-256, with a timestamp, before scoring. The protocol entered git together with the results, so the evidence for the order is the local hash file, not git. This applies to methane rounds 1–2, which predate the rule of committing protocols first.
 
-**Totals: 59 directional expectations, 45 held (76 %) and 14 failed.**
+**Totals: 64 directional expectations, 45 held (70 %) and 19 failed.**
 - **Also registered:**
   - 2 model-selection rules (V-K, V-T);
   - 1 test failure criterion (F, not met);
   - 3 CH₄ failure criteria (M1–M3; none met for the GBM, M2 met for the v1 CNN);
   - 2 decision rules (SpecNet, R1), both applied.
-- **The 76 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
+- **The 70 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
 
 ---
 
@@ -63,6 +63,16 @@ Every expectation this project registered **before** seeing the result, with its
 |---|---|---|
 | X1 | Neither a 1-D ResNet nor a Transformer beats v2 by more than 0.01 (validation ensemble) | **held**: −0.006 and −0.008 |
 | X2 | The best architecture gain is less than a quarter of the data gain | **held**: −0.006 vs +0.040 |
+
+### The survey prior as label shift (`eda/LABEL_SHIFT_PROTOCOL.md`, commit `80dc7ca`; result `outputs/stage_a_mechanisms/label_shift*.json`)
+
+| ID | Expectation | Outcome |
+|---|---|---|
+| L1 | The label-free (EM) correction halves ECE in every case | **failed**: K2 0.358 → 0.294 (the other two halved) |
+| L2 | K2: deep median ≥ 0.85, gap halves, ROC-AUC drop ≤ 0.005 | **failed**: deep 0.89, gap 0.37 → 0.02, but ROC-AUC −0.049 |
+| L3 | EM prior within 0.15 of the truth in ≥ 75 % of cells | **failed**: 5 of 12 |
+| L4 | ROC-AUC improves in ≥ 2 of 3 cases | **failed**: 0 of 3 |
+| L5 | Addendum, after L1–L4: with 20 labels per depth band, ECE within 0.03 of the true-rate correction and ROC-AUC within 0.01, all cases | **failed narrowly**: ECE met in all three cases; ROC-AUC −0.0104 in Kepler → TESS |
 
 ### Vetter v3 (`eda/VETTER_V3_PROTOCOL.md`, commit `ae91f4e`; result `stage_a_transit_model/runs/v3_final/v3_eval.json`)
 
@@ -197,5 +207,6 @@ Every positive significance claim in the main text is listed, with its raw p-val
 | H8a | The pipeline diagnostics, not the NTP examples, drive the false-alarm gain |
 | S1–S4 | Hiding feature strength from a CNN also hides band significance; the confound must be controlled by evaluation |
 | B1 | The observability weight, not the HZ weight, shapes the full ranking most; HZ decides the top group |
+| L1–L5 | A label-free correction of the survey prior is not reliable, because surveys differ in noise as well as in mix. About 80 labels per survey do the job instead |
 
 **The failures do not concentrate in one place.** Each was reported where it occurred, and five of them (E6, H8a, N2/N4, S1–S4, B1) changed a claim in the text.
