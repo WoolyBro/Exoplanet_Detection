@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jwst-molecule-screener"
+version = "1.0.0"
+description = "Calibrated CH4 and CO2 calls for exoplanet transmission spectra, from detectors validated on real JWST planets"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.24", "scikit-learn==1.9.1", "torch>=2.1", "joblib>=1.3"]
+
+[project.scripts]
+jwst-molecule-screener = "jwst_molecule_screener.__main__:main"
+
+[tool.setuptools]
+packages = ["jwst_molecule_screener"]
+
+[tool.setuptools.package-data]
+jwst_molecule_screener = ["data/*.joblib", "data/*.pt", "data/*.json"]

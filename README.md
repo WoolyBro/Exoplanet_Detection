@@ -81,6 +81,9 @@ with the model chosen on validation by a pre-registered rule and the test set re
 | **How the vetter decides** | seed spread flags errors (abstain on half: error 16.8 % → 5.1 %); the survey prior is causal through S/N; S/N-balanced training removes two-thirds of it, at a K2 cost | [`eda/VETTER_MECHANISMS_RESULTS.md`](eda/VETTER_MECHANISMS_RESULTS.md) |
 | **CO₂ detector on 34 real JWST planets** | 1-D CNN 0.996, GBM 0.982; strong-feature half 0.98 / 0.94 vs gas-blind control 0.67; masking the 4.3 µm band removes the skill | [`eda/CO2_EXTENSION_RESULTS.md`](eda/CO2_EXTENSION_RESULTS.md) |
 | **Habitable-zone retrievals** | TRAPPIST-1 f ln B = −0.70, LHS 1140 b −0.90: no atmosphere credited; H₂ envelopes disfavoured | [`eda/RETRIEVAL_HZ_RESULTS.md`](eda/RETRIEVAL_HZ_RESULTS.md) |
+| **JWST molecule screener** (installable tool) | the validated CH₄/CO₂ detectors packaged with their calibration; `pip install ./jwst_molecule_screener`; reproduces the validated scores to 10⁻⁶ | [`jwst_molecule_screener/README.md`](jwst_molecule_screener/README.md) |
+| **Prospective molecule register** | frozen calls on 29 unresolved JWST planets, hash-locked | [`eda/MOLECULE_REGISTER.md`](eda/MOLECULE_REGISTER.md) |
+| **What to observe next** | bits about the shoreline per JWST hour; recovers the Rocky Worlds DDT targets | [`eda/STAGE_C_RESULTS.md`](eda/STAGE_C_RESULTS.md) §2e |
 | **Fitted habitability factor** | retention fitted to 20 rocky planets (P(β < 0) = 0.99); Sobol robust core of 7; 15 vetted HZ candidates | [`eda/STAGE_C_RESULTS.md`](eda/STAGE_C_RESULTS.md) §2c–3c |
 
 The earlier numbers (Kepler 0.9158, TESS 0.7843) came from split v1. That split leaked: 301 of

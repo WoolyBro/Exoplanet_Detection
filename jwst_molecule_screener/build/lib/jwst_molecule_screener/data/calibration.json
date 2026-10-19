@@ -1,0 +1,47 @@
+{
+  "version": "1.0.0",
+  "training_grid": "outputs/stage_b_synthetic_realistic (3,000 spectra; spots, faculae, hazes)",
+  "calibration": "Platt maps on real labelled JWST planets (leave-one-planet-out scores for grid anchors)",
+  "register_protocol": "stage_b_atmospheres/MOLECULE_REGISTER_PROTOCOL.md (commit d7f1f6b)",
+  "versions": {
+    "scikit-learn": "1.9.1",
+    "torch": "2.14.0",
+    "numpy": "2.5.3"
+  },
+  "platt": {
+    "CH4": {
+      "gbm": [
+        1.8590477656756554,
+        3.1085242789414473
+      ],
+      "cnn": [
+        1.4486502100841114,
+        0.5709569775718821
+      ]
+    },
+    "CO2": {
+      "gbm": [
+        0.8039160607649588,
+        0.0382000997209639
+      ],
+      "cnn": [
+        1.119639940561478,
+        0.9282479060295119
+      ]
+    }
+  },
+  "validation": {
+    "CH4": {
+      "n_planets": 41,
+      "n_positive": 11,
+      "roc_auc_gbm": 1.0,
+      "roc_auc_cnn": 0.967
+    },
+    "CO2": {
+      "n_planets": 34,
+      "n_positive": 14,
+      "roc_auc_gbm": 0.982,
+      "roc_auc_cnn": 0.996
+    }
+  }
+}
