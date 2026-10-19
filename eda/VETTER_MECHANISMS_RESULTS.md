@@ -103,6 +103,33 @@ Two modern architectures were trained on exactly v2's data, recipe and seeds, an
 
 **Reading it.** With the same light curves, 5–12× more capacity and newer designs do not help; the small, standard network is already at what these views can support. Giving the *same* network more information (centroid, odd/even and secondary-eclipse measurements) gains seven times more than any architecture change. **This is the paper's thesis, measured rather than asserted.** It also turns the "standard architecture" critique around: the choice was deliberate, and it is not what limits the results.
 
+## 3d. The survey prior as label shift: what corrects it (pre-registered: `eda/LABEL_SHIFT_PROTOCOL.md`, commit `80dc7ca`, plus an addendum)
+
+**Code:** `label_shift.py`. **Output:** `outputs/stage_a_mechanisms/label_shift.json`, `label_shift_few_label.json`. **Figure:** `figures/21_label_shift.png`.
+
+**The idea.** Transit shapes look alike on every survey; what differs is the planet-to-false-positive *mix at each depth*. Kepler's training set is 6.5 % planet-like above 10,000 ppm; K2's is 52 % and TESS's 90 %. A classifier learns its training mix, so on a new survey its posteriors should be off by a per-depth prior ratio (label shift). Three cases were tested, all on predictions already read once: Kepler → K2, Kepler → TESS, and TESS → Kepler, the opposite prior.
+
+| Case | ECE: frozen Platt map | Label-free EM | 80 labels (20 per depth band) | True base rates by depth | ROC-AUC: frozen / 80 labels / true rates |
+|---|---|---|---|---|---|
+| Kepler → K2 | 0.358 | 0.294 | **0.096** | 0.099 | 0.864 / 0.864 / 0.861 |
+| Kepler → TESS | 0.199 | 0.092 | **0.072** | 0.068 | 0.810 / 0.800 / 0.808 |
+| TESS → Kepler | 0.266 | 0.094 | **0.071** | 0.053 | 0.875 / 0.879 / 0.882 |
+
+**K2 confirmed planets deeper than 10,000 ppm.** Median 0.52 frozen, 0.89 label-free, **0.95 with the depth base rates**; the deep-vs-shallow gap goes from 0.37 to 0.05.
+
+**Registered expectations: L1–L4 failed, and the addendum's L5 failed narrowly.**
+- **The label-free part failed.** EM misjudged the target base rates by up to 0.5, collapsing to 0 in two TESS → Kepler strata, and lowered ROC-AUC in all three cases. EM assumes only the class mix changes between surveys. The noise and S/N also change, so the classifier's outputs are not calibrated in the way EM needs.
+- **L5 missed by 0.0004.** At 80 labels, ECE was within 0.03 of the true-rate correction in all three cases, and ROC-AUC within 0.01 of the frozen map in two. Kepler → TESS lost 0.0104.
+
+**What it establishes.**
+1. **The survey prior *is* label shift by depth, quantitatively.** Four base-rate numbers per survey (one per depth band) remove 70–80 % of the cross-survey calibration error in *both* directions, and the K2 deep-planet penalty. Ranking is preserved (within 0.003 in all three cases).
+2. **Those four numbers must come from labels.** About 80 labelled signals of the new survey suffice, roughly 20 per depth band. They cannot yet be inferred from the classifier's outputs alone.
+3. **Compared with the alternatives,** this is far cheaper and better:
+   - S/N-balanced retraining (§3b) removed only two-thirds of the deep-planet penalty and cost 0.03 ROC-AUC;
+   - the frozen Platt map leaves an ECE of 0.20–0.36.
+
+**Operating rule for any vetter used on a new survey:** label ~20 signals per depth band, and correct the outputs with the per-band base-rate ratio. No retraining is needed.
+
 ## 4. Where this leaves the method's contribution
 
 Taken together with the rest of Stage A:
@@ -111,6 +138,7 @@ Taken together with the rest of Stage A:
 - **Fixes tested on fresh data:**
   - vetter v3 (`VETTER_V3_PROTOCOL.md`);
   - S/N-balanced training (§3b). It removes about two-thirds of the survey prior but costs 0.03 ROC-AUC on K2, because the prior was partly correct base-rate information.
+  - The label-shift correction (§3d): about 80 labels per survey (20 per depth band) remove most of the cross-survey miscalibration in both directions without retraining. The label-free version failed.
 - **Operating guidance:** abstention on seed disagreement; per-survey recalibration.
 
 The architecture is deliberately standard, so that every effect above can be attributed to data and evaluation rather than to a new network. §3c shows that a ResNet and a Transformer do no better on the same data.
