@@ -6,13 +6,13 @@ Every expectation this project registered **before** seeing the result, with its
 - **Commit:** the protocol was committed to git before the build, training or read it governs. The hash is that commit.
 - **Hash file:** the labels were frozen by SHA-256, with a timestamp, before scoring. The protocol entered git together with the results, so the evidence for the order is the local hash file, not git. This applies to methane rounds 1–2, which predate the rule of committing protocols first.
 
-**Totals: 56 directional expectations, 42 held (75 %) and 14 failed.**
+**Totals: 59 directional expectations, 45 held (76 %) and 14 failed.**
 - **Also registered:**
   - 2 model-selection rules (V-K, V-T);
   - 1 test failure criterion (F, not met);
   - 3 CH₄ failure criteria (M1–M3; none met for the GBM, M2 met for the v1 CNN);
   - 2 decision rules (SpecNet, R1), both applied.
-- **The 75 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
+- **The 76 % rate is itself evidence.** Expectations were set to be informative, not safe; a scoreboard with every row "held" would suggest they were.
 
 ---
 
@@ -152,6 +152,9 @@ Every expectation this project registered **before** seeing the result, with its
 | A5 | Addendum 2 (commit `2f3582c`): on 3 planets published after the fit, the frozen model beats the base rate and the fixed shoreline | **held**: log score −0.59 vs −1.00 and −4.75 (`retention_update.json`) |
 | A6 | Refit on 23: P(β < 0) ≥ 0.90 and P(γ > 0) ≥ 0.95 | **held**: 0.989 and 0.997 |
 | A7 | Refit on 23: leave-one-out beats the fixed shoreline and the base rate | **held**: −0.50 vs −1.87 and −0.63; AUC 0.77 |
+| S1 (design) | Shoreline design (commit `d1ecaab`): the 15 µm noise model fits the 8 published eclipses within 0.2 dex | **held**: 0.107 dex (`shoreline_design.json`) |
+| S2 (design) | ≥ 6 of the top 10 by bits per hour have 0.2 ≤ P(retain) ≤ 0.8 | **held**: 9 of 10 |
+| S3 (design) | The 6 Rocky Worlds DDT targets without a verdict have a median rank in the top quarter of 1,288 | **held**: median 29.5, all within the top 45 |
 
 ## Significance claims, Holm-adjusted as one family
 

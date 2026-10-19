@@ -1,0 +1,299 @@
+{
+  "protocol": "stage_c_priority_fusion/SHORELINE_DESIGN_PROTOCOL.md (commit d1ecaab)",
+  "pool_size": 1288,
+  "noise_model": {
+    "s0_ppm_at_K8_T14_2h": 31.5,
+    "log_rms_dex": 0.107,
+    "calibration": {
+      "GJ 357 b": {
+        "per_visit_ppm": 12.7,
+        "model_ppm": 19.4
+      },
+      "GJ 3473 b": {
+        "per_visit_ppm": 90.0,
+        "model_ppm": 66.9
+      },
+      "LHS 1478 b": {
+        "per_visit_ppm": 56.0,
+        "model_ppm": 75.4
+      },
+      "TRAPPIST-1 b": {
+        "per_visit_ppm": 221.4,
+        "model_ppm": 165.2
+      },
+      "TRAPPIST-1 c": {
+        "per_visit_ppm": 188.0,
+        "model_ppm": 153.0
+      },
+      "GJ 3929 b": {
+        "per_visit_ppm": 36.4,
+        "model_ppm": 38.4
+      },
+      "TOI-1468 b": {
+        "per_visit_ppm": 53.7,
+        "model_ppm": 53.6
+      },
+      "LTT 3780 b": {
+        "per_visit_ppm": 53.7,
+        "model_ppm": 55.0
+      }
+    }
+  },
+  "prior": {
+    "n_planets": 23,
+    "beta_sd": 0.642
+  },
+  "top15": [
+    {
+      "rank": 1,
+      "pl_name": "HD 219134 b",
+      "pl_rade": 1.602,
+      "pl_eqt": 1015.0,
+      "magma": false,
+      "p_retain_fitted": 0.2895,
+      "visits": 1,
+      "jwst_hours": 3.835,
+      "info_bits": 0.0418,
+      "beta_var_reduction": 0.0019,
+      "bits_per_hour": 0.0109
+    },
+    {
+      "rank": 2,
+      "pl_name": "HD 219134 c",
+      "pl_rade": 1.511,
+      "pl_eqt": 782.0,
+      "magma": false,
+      "p_retain_fitted": 0.413,
+      "visits": 1,
+      "jwst_hours": 5.98,
+      "info_bits": 0.0603,
+      "beta_var_reduction": 0.0116,
+      "bits_per_hour": 0.0101
+    },
+    {
+      "rank": 3,
+      "pl_name": "HD 260655 c",
+      "pl_rade": 1.533,
+      "pl_eqt": 557.0,
+      "magma": false,
+      "p_retain_fitted": 0.3388,
+      "visits": 2,
+      "jwst_hours": 7.88,
+      "info_bits": 0.041,
+      "beta_var_reduction": 0.0044,
+      "bits_per_hour": 0.0052
+    },
+    {
+      "rank": 4,
+      "pl_name": "TOI-2431 b",
+      "pl_rade": 1.534,
+      "pl_eqt": 2063.0,
+      "magma": true,
+      "p_retain_fitted": 0.5939,
+      "visits": 9,
+      "jwst_hours": 16.884,
+      "info_bits": 0.0851,
+      "beta_var_reduction": 0.0007,
+      "bits_per_hour": 0.005
+    },
+    {
+      "rank": 5,
+      "pl_name": "LTT 1445 A c",
+      "pl_rade": 1.147,
+      "pl_eqt": 508.0,
+      "magma": false,
+      "p_retain_fitted": 0.244,
+      "visits": 3,
+      "jwst_hours": 7.338,
+      "info_bits": 0.0294,
+      "beta_var_reduction": 0.0003,
+      "bits_per_hour": 0.004
+    },
+    {
+      "rank": 6,
+      "pl_name": "GJ 806 b",
+      "pl_rade": 1.331,
+      "pl_eqt": 940.0,
+      "magma": false,
+      "p_retain_fitted": 0.1075,
+      "visits": 2,
+      "jwst_hours": 7.58,
+      "info_bits": 0.0247,
+      "beta_var_reduction": 0.0046,
+      "bits_per_hour": 0.0033
+    },
+    {
+      "rank": 7,
+      "pl_name": "L 98-59 c",
+      "pl_rade": 1.329,
+      "pl_eqt": 526.0,
+      "magma": false,
+      "p_retain_fitted": 0.2549,
+      "visits": 2,
+      "jwst_hours": 9.68,
+      "info_bits": 0.029,
+      "beta_var_reduction": 0.0005,
+      "bits_per_hour": 0.003
+    },
+    {
+      "rank": 8,
+      "pl_name": "HD 260655 b",
+      "pl_rade": 1.24,
+      "pl_eqt": 709.0,
+      "magma": false,
+      "p_retain_fitted": 0.2347,
+      "visits": 2,
+      "jwst_hours": 8.9,
+      "info_bits": 0.0255,
+      "beta_var_reduction": 0.0002,
+      "bits_per_hour": 0.0029
+    },
+    {
+      "rank": 9,
+      "pl_name": "K2-141 b",
+      "pl_rade": 1.51,
+      "pl_eqt": 2103.0,
+      "magma": true,
+      "p_retain_fitted": 0.5866,
+      "visits": 9,
+      "jwst_hours": 34.38,
+      "info_bits": 0.0862,
+      "beta_var_reduction": 0.0009,
+      "bits_per_hour": 0.0025
+    },
+    {
+      "rank": 10,
+      "pl_name": "TOI-1807 b",
+      "pl_rade": 1.4968,
+      "pl_eqt": 1694.1,
+      "magma": true,
+      "p_retain_fitted": 0.5416,
+      "visits": 9,
+      "jwst_hours": 35.3847,
+      "info_bits": 0.0884,
+      "beta_var_reduction": 0.0026,
+      "bits_per_hour": 0.0025
+    },
+    {
+      "rank": 11,
+      "pl_name": "HD 136352 b",
+      "pl_rade": 1.664,
+      "pl_eqt": 905.0,
+      "magma": false,
+      "p_retain_fitted": 0.4453,
+      "visits": 2,
+      "jwst_hours": 25.61,
+      "info_bits": 0.0639,
+      "beta_var_reduction": 0.0143,
+      "bits_per_hour": 0.0025
+    },
+    {
+      "rank": 12,
+      "pl_name": "TOI-2427 b",
+      "pl_rade": 1.8,
+      "pl_eqt": 1117.0,
+      "magma": false,
+      "p_retain_fitted": 0.3194,
+      "visits": 5,
+      "jwst_hours": 14.51,
+      "info_bits": 0.0346,
+      "beta_var_reduction": 0.0032,
+      "bits_per_hour": 0.0024
+    },
+    {
+      "rank": 13,
+      "pl_name": "TOI-1075 b",
+      "pl_rade": 1.791,
+      "pl_eqt": 1323.0,
+      "magma": true,
+      "p_retain_fitted": 0.7865,
+      "visits": 7,
+      "jwst_hours": 29.4746,
+      "info_bits": 0.0657,
+      "beta_var_reduction": 0.0044,
+      "bits_per_hour": 0.0022
+    },
+    {
+      "rank": 14,
+      "pl_name": "TOI-5799 b",
+      "pl_rade": 1.733,
+      "pl_eqt": 505.0,
+      "magma": false,
+      "p_retain_fitted": 0.3659,
+      "visits": 4,
+      "jwst_hours": 20.2264,
+      "info_bits": 0.0394,
+      "beta_var_reduction": 0.0057,
+      "bits_per_hour": 0.0019
+    },
+    {
+      "rank": 15,
+      "pl_name": "HD 213885 b",
+      "pl_rade": 1.745,
+      "pl_eqt": 2128.0,
+      "magma": true,
+      "p_retain_fitted": 0.809,
+      "visits": 6,
+      "jwst_hours": 31.38,
+      "info_bits": 0.0609,
+      "beta_var_reduction": 0.0057,
+      "bits_per_hour": 0.0019
+    }
+  ],
+  "ddt_targets": [
+    {
+      "pl_name": "HD 260655 c",
+      "rank": 3,
+      "bits_per_hour": 0.0052,
+      "p_retain_fitted": 0.3388,
+      "visits": 2,
+      "jwst_hours": 7.88
+    },
+    {
+      "pl_name": "LTT 1445 A c",
+      "rank": 5,
+      "bits_per_hour": 0.004,
+      "p_retain_fitted": 0.244,
+      "visits": 3,
+      "jwst_hours": 7.338
+    },
+    {
+      "pl_name": "TOI-771 b",
+      "rank": 26,
+      "bits_per_hour": 0.0012,
+      "p_retain_fitted": 0.264,
+      "visits": 6,
+      "jwst_hours": 23.28
+    },
+    {
+      "pl_name": "TOI-1452 b",
+      "rank": 33,
+      "bits_per_hour": 0.001,
+      "p_retain_fitted": 0.5398,
+      "visits": 10,
+      "jwst_hours": 62.7633
+    },
+    {
+      "pl_name": "TOI-244 b",
+      "rank": 38,
+      "bits_per_hour": 0.0008,
+      "p_retain_fitted": 0.3643,
+      "visits": 9,
+      "jwst_hours": 54.9
+    },
+    {
+      "pl_name": "TOI-198 b",
+      "rank": 45,
+      "bits_per_hour": 0.0007,
+      "p_retain_fitted": 0.4567,
+      "visits": 10,
+      "jwst_hours": 77.8
+    }
+  ],
+  "ddt_median_rank": 29.5,
+  "expectations": {
+    "S1 noise model log-rms <= 0.2 dex": true,
+    "S2 >= 6 of the top 10 have 0.2 <= P(retain) <= 0.8": true,
+    "S3 DDT median rank in the top quarter": true
+  }
+}

@@ -323,6 +323,45 @@ A search on 2026-10-19 found three rocky planets with JWST verdicts published *a
 - **Among non-magma planets alone, the leave-one-out AUC is 0.59.** The shoreline's direction is supported, but it still separates temperate rocky planets only weakly, because few of them have a confirmed atmosphere to learn from.
 - **The ranking is unaffected.** No Stage C target's retention probability moves by more than 0.012. The registered ranking and the robust core stand.
 
+## 2e. Which planet should JWST observe next? Information about the shoreline per hour (pre-registered: `SHORELINE_DESIGN_PROTOCOL.md`, commit `d1ecaab`)
+
+**Code:** `shoreline_design.py`. **Output:** `outputs/stage_c/shoreline_design.csv` and `.json`. **Figure:** `eda/shoreline_design.png`.
+
+The habitability factor says which planets are *promising*. This asks which observation would *teach the most* about whether rocky planets keep atmospheres. It is Bayesian experimental design on the fitted retention model, a data-driven counterpart to Ih et al.'s (2025) simulated survey strategies.
+
+- **Prior:** the 23-planet retention posterior.
+- **Pool:** 1,288 transiting planets with R ≤ 1.8 R⊕ and no JWST verdict yet.
+- **Observation:** a MIRI 15 µm eclipse programme, bare-rock vs thick-atmosphere dayside, with enough visits for a 3σ separation (capped at 10).
+- **Value:** the mutual information between the noisy verdict and the shoreline parameters, per JWST hour.
+
+**Noise model (S1 held).** Per-visit σ = 31.5 ppm · 10^(0.2 (K − 8)) · √(2 h / T₁₄), fitted on 8 published 15 µm eclipses: GJ 357 b, GJ 3473 b, LHS 1478 b, TRAPPIST-1 b and c, GJ 3929 b, TOI-1468 b, LTT 3780 b. The scatter is **0.107 dex** (a factor of 1.28). For example, GJ 3929 b is measured at 36 and modelled at 38 ppm; TOI-1468 b at 54 and 54.
+
+| Rank | Planet | R (R⊕) | T_eq (K) | Fitted P(retain) | Visits / hours | Bits per hour |
+|---|---|---|---|---|---|---|
+| 1 | HD 219134 b | 1.60 | 1,015 | 0.29 | 1 / 3.8 | 0.011 |
+| 2 | HD 219134 c | 1.51 | 782 | 0.41 | 1 / 6.0 | 0.010 |
+| 3 | **HD 260655 c** (DDT) | 1.53 | 557 | 0.34 | 2 / 7.9 | 0.005 |
+| 4 | TOI-2431 b (lava) | 1.53 | 2,063 | 0.59 | 9 / 16.9 | 0.005 |
+| 5 | **LTT 1445 A c** (DDT) | 1.15 | 508 | 0.24 | 3 / 7.3 | 0.004 |
+| 6 | GJ 806 b | 1.33 | 940 | 0.11 | 2 / 7.6 | 0.003 |
+| 7 | L 98-59 c | 1.33 | 526 | 0.26 | 2 / 9.7 | 0.003 |
+| 8 | HD 260655 b | 1.24 | 709 | 0.24 | 2 / 8.9 | 0.003 |
+| 9 | K2-141 b (lava) | 1.51 | 2,103 | 0.59 | 9 / 34.4 | 0.003 |
+| 10 | TOI-1807 b (lava) | 1.50 | 1,694 | 0.54 | 9 / 35.4 | 0.002 |
+
+**Expectations: all held.**
+- **S2:** information concentrates near the line. 9 of the top 10 have a fitted P(retain) of 0.2–0.8, the region where the 23 planets leave the model most unsure.
+- **S3:** the six **Rocky Worlds DDT** targets still without a verdict have a median rank of **29.5 of 1,288** (all within the top 45, the top 3.5 %): HD 260655 c is 3rd, LTT 1445 A c 5th, TOI-771 b 26th, TOI-1452 b 33rd, TOI-244 b 38th and TOI-198 b 45th. An expert committee and an information-optimal design, built independently, largely agree.
+
+**What the ranking adds to the expert list.**
+- **Bright K-dwarf planets** (HD 219134 b and c, HD 260655 b, GJ 806 b) give about twice the information per hour of most DDT targets. One visit suffices for HD 219134 b.
+- **The lava worlds** (TOI-2431 b, K2-141 b, TOI-1807 b) inform the magma-ocean exception (γ), which the DDT programme, focused on M-dwarf planets, does not target.
+
+**Limits.**
+- The design is *myopic*: one programme at a time, not a jointly optimised portfolio.
+- Detector saturation for the brightest hosts (HD 219134 has K = 3.3) is not modelled and must be checked against MIRI's bright limits.
+- The value is information under *this* model. A planet that would overturn the model's form (say, a temperate world with an unexpected atmosphere) is valued only through its effect on α, β and γ.
+
 ## 3. Ablation — what the order depends on
 
 | Criterion removed | Spearman vs full ranking | Top-10 overlap |
