@@ -68,6 +68,8 @@ python tools/build_dr25_simulated_views.py --set INJ1 --sample external_data/kep
 python stage_a_transit_model/vetter_v3.py --sweep --configs CAB --jobs 5   # 15 runs, about 1 h
 python stage_a_transit_model/evaluate_v3.py --dry-run && python stage_a_transit_model/evaluate_v3.py      # figures/17; read guarded
 python tools/pillar_a_status.py                                     # progress of the v3 builds and training
+python stage_a_transit_model/vetter_v3.py --sweep --configs RT --jobs 5 && python stage_a_transit_model/evaluate_architectures.py   # figures/20
+python stage_a_transit_model/label_shift.py && python stage_a_transit_model/label_shift.py --few-label                           # figures/21
 ```
 
 The guarded reads refuse to run a second time.
@@ -91,6 +93,9 @@ python stage_b_atmospheres/methane_round3.py            # round 3: planets new t
 python tools/label_crosscheck.py                        # labels vs exoplanet.eu (independent compilation)
 python stage_b_atmospheres/methane_specnet.py           # SpecNet (strength-blind CNN+BiLSTM; failed its protocol)
 python stage_b_atmospheres/co2_extension.py             # CO2 detector on 34 planets (labels hash-checked)
+python stage_b_atmospheres/methane_round4.py            # TOI-1231 b (OSF spectra), published after freezing
+python stage_b_atmospheres/molecule_register.py         # prospective register, about 30 min (13 LOPO folds); tools/register_check.py
+python tools/build_screener.py                          # package the detectors into jwst_molecule_screener/ (verifies vs the register)
 ```
 
 ## 5. Forecast and retrievals
@@ -117,13 +122,16 @@ python stage_c_priority_fusion/build_priority_table.py
 python stage_c_priority_fusion/retention_model.py        # Bayesian retention fit to 20 rocky planets
 python stage_c_priority_fusion/sensitivity.py            # Sobol indices, robust core
 python stage_c_priority_fusion/candidate_factor.py       # P(real) x score for candidates (TIC via MAST)
+python stage_c_priority_fusion/sensitivity_extended.py   # 7-input Sobol + Solar System check
+python stage_c_priority_fusion/retention_update.py       # out-of-sample test on 3 later planets + 23-planet refit
+python stage_c_priority_fusion/shoreline_design.py       # what to observe next: bits per JWST hour
 ```
 
 ## 7. Figures and tests (minutes, no network)
 
 ```bash
 python figures/make_figures.py      # figures/01-12 from committed results
-python -m pytest tests -q           # 58 tests
+python -m pytest tests -q           # 63 tests
 ```
 
 ## Where each result is written up

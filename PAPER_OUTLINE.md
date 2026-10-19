@@ -132,7 +132,7 @@ Reporting the failures (E4, E6, D3, M4, N2, N4, S1–S4, B1, ...) is part of the
 
 ## 8. Reproducibility
 
-`REPRODUCE.md`, the environments, the model card, 50+ tests, and the data and code DOIs (to create at submission).
+`REPRODUCE.md`, the environments, the model card, 63 tests, the installable JWST molecule screener (`pip install ./jwst_molecule_screener`), and the data and code DOIs (to create at submission).
 
 ---
 

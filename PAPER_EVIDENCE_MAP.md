@@ -133,4 +133,4 @@ All are in the write-ups above and in `README.md` (caveats 1–8):
 
 ## 8. Reproducibility
 
-`REPRODUCE.md`, `environment-prt.yml`, `requirements-lock*.txt`, `MODEL_CARD.md`; 58 tests (`python -m pytest tests`); every pre-registered expectation and outcome in `eda/PREREGISTRATION_SCOREBOARD.md`.
+`REPRODUCE.md`, `environment-prt.yml`, `requirements-lock*.txt`, `MODEL_CARD.md`; the installable `jwst_molecule_screener/` (validated detectors and calibration); 63 tests (`python -m pytest tests`); every pre-registered expectation and outcome in `eda/PREREGISTRATION_SCOREBOARD.md`.
