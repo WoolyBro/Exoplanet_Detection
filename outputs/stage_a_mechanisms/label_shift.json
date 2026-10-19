@@ -1,0 +1,180 @@
+{
+  "protocol": "eda/LABEL_SHIFT_PROTOCOL.md",
+  "cases": [
+    {
+      "case": "Kepler -> K2",
+      "n": 1462,
+      "strata": [
+        {
+          "stratum": "<1,000",
+          "n": 775,
+          "source_prior": 0.577,
+          "em_target_prior": 0.645,
+          "true_target_fraction": 0.956,
+          "abs_error": 0.311
+        },
+        {
+          "stratum": "1,000-3,000",
+          "n": 231,
+          "source_prior": 0.525,
+          "em_target_prior": 0.708,
+          "true_target_fraction": 0.935,
+          "abs_error": 0.227
+        },
+        {
+          "stratum": "3,000-10,000",
+          "n": 159,
+          "source_prior": 0.417,
+          "em_target_prior": 0.36,
+          "true_target_fraction": 0.868,
+          "abs_error": 0.508
+        },
+        {
+          "stratum": ">10,000",
+          "n": 297,
+          "source_prior": 0.065,
+          "em_target_prior": 0.34,
+          "true_target_fraction": 0.525,
+          "abs_error": 0.185
+        }
+      ],
+      "frozen_platt": {
+        "roc_auc": 0.8634,
+        "ece": 0.3578
+      },
+      "label_free": {
+        "roc_auc": 0.8148,
+        "ece": 0.2936
+      },
+      "oracle": {
+        "roc_auc": 0.8611,
+        "ece": 0.0994
+      }
+    },
+    {
+      "case": "Kepler -> TESS",
+      "n": 867,
+      "strata": [
+        {
+          "stratum": "<1,000",
+          "n": 190,
+          "source_prior": 0.577,
+          "em_target_prior": 0.661,
+          "true_target_fraction": 0.8,
+          "abs_error": 0.139
+        },
+        {
+          "stratum": "1,000-3,000",
+          "n": 181,
+          "source_prior": 0.525,
+          "em_target_prior": 0.78,
+          "true_target_fraction": 0.829,
+          "abs_error": 0.048
+        },
+        {
+          "stratum": "3,000-10,000",
+          "n": 321,
+          "source_prior": 0.417,
+          "em_target_prior": 0.922,
+          "true_target_fraction": 0.897,
+          "abs_error": 0.025
+        },
+        {
+          "stratum": ">10,000",
+          "n": 175,
+          "source_prior": 0.065,
+          "em_target_prior": 1.0,
+          "true_target_fraction": 0.903,
+          "abs_error": 0.097
+        }
+      ],
+      "frozen_platt": {
+        "roc_auc": 0.8109,
+        "ece": 0.1986
+      },
+      "label_free": {
+        "roc_auc": 0.7443,
+        "ece": 0.0917
+      },
+      "oracle": {
+        "roc_auc": 0.8081,
+        "ece": 0.0682
+      }
+    },
+    {
+      "case": "TESS -> Kepler",
+      "n": 1404,
+      "strata": [
+        {
+          "stratum": "<1,000",
+          "n": 1088,
+          "source_prior": 0.821,
+          "em_target_prior": 0.635,
+          "true_target_fraction": 0.556,
+          "abs_error": 0.079
+        },
+        {
+          "stratum": "1,000-3,000",
+          "n": 97,
+          "source_prior": 0.793,
+          "em_target_prior": 0.659,
+          "true_target_fraction": 0.567,
+          "abs_error": 0.092
+        },
+        {
+          "stratum": "3,000-10,000",
+          "n": 58,
+          "source_prior": 0.885,
+          "em_target_prior": 0.0,
+          "true_target_fraction": 0.414,
+          "abs_error": 0.414
+        },
+        {
+          "stratum": ">10,000",
+          "n": 161,
+          "source_prior": 0.915,
+          "em_target_prior": 0.0,
+          "true_target_fraction": 0.056,
+          "abs_error": 0.056
+        }
+      ],
+      "frozen_platt": {
+        "roc_auc": 0.8751,
+        "ece": 0.2656
+      },
+      "label_free": {
+        "roc_auc": 0.87,
+        "ece": 0.0939
+      },
+      "oracle": {
+        "roc_auc": 0.8819,
+        "ece": 0.0534
+      }
+    }
+  ],
+  "k2_depth_prior": {
+    "n_deep": 27,
+    "n_shallow": 444,
+    "deep_median": {
+      "p": 0.523,
+      "p_corrected": 0.891,
+      "p_oracle": 0.946
+    },
+    "shallow_median": {
+      "p": 0.888,
+      "p_corrected": 0.915,
+      "p_oracle": 0.992
+    },
+    "gap": {
+      "p": 0.366,
+      "p_corrected": 0.024,
+      "p_oracle": 0.046
+    }
+  },
+  "expectations": {
+    "L1 label-free correction halves ECE in every case": false,
+    "L2 K2 deep median >= 0.85, gap halves, AUC drop <= 0.005": false,
+    "L3 EM prior within 0.15 of truth in >= 75 % of cells (n >= 20)": false,
+    "L4 ROC-AUC improves in >= 2 of 3 cases": false
+  }
+}
