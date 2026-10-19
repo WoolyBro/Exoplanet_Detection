@@ -12,11 +12,11 @@
 
 > Machine learning for exoplanets is usually judged by test scores on held-out catalogues. We instead pre-registered every expectation (66 in all; 47 held) and tested a CNN–BiLSTM pipeline from transit signals to habitable-world priorities on data it never saw.
 >
-> **Atmospheres.** Molecule detectors trained only on simulated spectra with stellar contamination and hazes identify CH₄ in all 41 and CO₂ in 34 labelled real JWST transmission spectra (ROC-AUC 1.00 and 0.996). They pass a gas-blind confound test, and masking the 4.3 µm band removes the CO₂ skill. Frozen, they make hash-locked calls on 29 planets whose CH₄ or CO₂ status is unresolved; CO₂ is absent in K2-18 b, GJ 1214 b and LHS 1140 b.
+> **Atmospheres.** Molecule detectors trained only on simulated spectra with stellar contamination and hazes identify CH₄ in all 41 and CO₂ in 34 labelled real JWST transmission spectra (ROC-AUC 1.00 and 0.996). They pass a gas-blind confound test, and masking the 4.3 µm band removes most of the CO₂ skill. Frozen, they make hash-locked calls on 29 planets whose CH₄ or CO₂ status is unresolved; CO₂ is absent in K2-18 b, GJ 1214 b and LHS 1140 b.
 >
-> **Detection.** Signal twins inflate Kepler test scores by 0.019 even in star-grouped splits. On the same data, a ResNet and a Transformer with 5–12× more parameters do no better than the CNN–BiLSTM, while adding pipeline measurements and real false alarms raises it to ExoMiner's level (0.996), with 99 % of false alarms rejected. Survey priors are label shift by depth: about 80 labelled signals per survey fix the cross-survey calibration without retraining.
+> **Detection.** Signal twins inflate Kepler test scores by 0.018 even in star-grouped splits. On the same data, a ResNet and a Transformer with 5–12× more parameters do no better than the CNN–BiLSTM, while adding pipeline measurements and real false alarms raises it to ExoMiner's level (0.996), with 99 % of false alarms rejected. Survey priors are label shift by depth: about 80 labelled signals per survey fix the cross-survey calibration without retraining.
 >
-> **Habitability.** Contamination-aware retrievals credit no atmosphere to TRAPPIST-1 e, TRAPPIST-1 f or LHS 1140 b. A Bayesian retention model fitted to 23 observed rocky planets predicts three later ones, and drives an experimental design that independently recovers the JWST Rocky Worlds targets.
+> **Habitability.** Contamination-aware retrievals credit no atmosphere to TRAPPIST-1 e, TRAPPIST-1 f or LHS 1140 b. A Bayesian retention model fitted to 20 observed rocky planets predicts three published later. Refitted on all 23, it drives an experimental design that independently recovers the JWST Rocky Worlds targets.
 >
 > Data, labels and the observing record, not network design, set the limits at every stage.
 
