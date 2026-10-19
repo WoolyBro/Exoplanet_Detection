@@ -7,8 +7,9 @@ eda/LABEL_SHIFT_PROTOCOL.md: the survey prior as label shift. A label-free per-d
 it was not trained on, in three cases (Kepler->K2, Kepler->TESS, TESS->Kepler). Target labels are used only to
 evaluate.
 
-    python stage_a_transit_model/label_shift.py
-Output: outputs/stage_a_mechanisms/label_shift.json, figures/21_label_shift.png
+    python stage_a_transit_model/label_shift.py               # L1-L4 (registered)
+    python stage_a_transit_model/label_shift.py --few-label   # addendum L5: m labelled signals per stratum
+Output: outputs/stage_a_mechanisms/label_shift.json, label_shift_few_label.json, figures/21_label_shift.png
 """
 
 from __future__ import annotations
@@ -183,5 +184,54 @@ def figure(out, frames):
     fig.savefig(R / "figures" / "21_label_shift.png", dpi=150, bbox_inches="tight")
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and "--few-label" not in sys.argv:
     raise SystemExit(main())
+
+
+def few_label() -> int:
+    """Addendum L5: per-stratum base rates from m labelled target signals per stratum (200 draws each)."""
+    rng = np.random.default_rng(20261019)
+    kval, tval = scored("kepler", "kepler_val"), scored("tess", "tess_val")
+    k2 = pd.read_csv(R / "stage_a_transit_model" / "runs" / "k2_blind" / "k2_predictions.csv")
+    k2 = k2[k2.duration_source.isin(["catalogue", "other set"])]
+    k2 = pd.DataFrame({"y": (k2.true_label != "FALSE POSITIVE").astype(int), "p": platt("kepler", k2.score_kepler), "depth": k2.depth_ppm})
+    cases = [("Kepler -> K2", kval, k2), ("Kepler -> TESS", kval, scored("kepler", "tess_test")), ("TESS -> Kepler", tval, scored("tess", "kepler_test"))]
+    out = {"addendum": "eda/LABEL_SHIFT_PROTOCOL.md (addendum, L5)", "cases": {}}
+    ok_all = True
+    for name, src, tgt in cases:
+        ss, ts = stratum(src.depth.to_numpy()), stratum(tgt.depth.to_numpy())
+        y, p = tgt.y.to_numpy(), tgt.p.to_numpy()
+        pi_s = {k: float(src.y.to_numpy()[ss == k].mean()) if (ss == k).any() else float(src.y.mean()) for k in range(len(STRATA))}
+        pi_true = {k: float(y[ts == k].mean()) for k in range(len(STRATA)) if (ts == k).any()}
+        res = {}
+        for m in [5, 10, 20, 50]:
+            rows = []
+            for _ in range(200):
+                lab = np.zeros(len(y), bool)
+                for k in pi_true:
+                    idx = np.flatnonzero(ts == k)
+                    if len(idx) > m:
+                        lab[rng.choice(idx, m, replace=False)] = True
+                q, o = p.copy(), p.copy()
+                for k in pi_true:
+                    mk = ts == k
+                    est = float(y[mk & lab].mean()) if (mk & lab).any() else pi_s[k]
+                    q[mk], o[mk] = shift(p[mk], pi_s[k], est), shift(p[mk], pi_s[k], pi_true[k])
+                h = ~lab
+                rows.append((ece(y[h], q[h]), ece(y[h], o[h]), ece(y[h], p[h]),
+                             roc_auc_score(y[h], q[h]), roc_auc_score(y[h], p[h])))
+            a = np.array(rows)
+            res[m] = {"labels_used": int(m * len(pi_true)), "ece_few": round(float(np.median(a[:, 0])), 4),
+                      "ece_oracle": round(float(np.median(a[:, 1])), 4), "ece_frozen": round(float(np.median(a[:, 2])), 4),
+                      "auc_few": round(float(np.median(a[:, 3])), 4), "auc_frozen": round(float(np.median(a[:, 4])), 4)}
+        r20 = res[20]
+        ok_all &= (r20["ece_few"] - r20["ece_oracle"] <= 0.03) and (r20["auc_few"] >= r20["auc_frozen"] - 0.01)
+        out["cases"][name] = res
+    out["expectations"] = {"L5 at m = 20: ECE within 0.03 of the oracle and AUC within 0.01 of the frozen map, all cases": bool(ok_all)}
+    (OUT / "label_shift_few_label.json").write_text(json.dumps(out, indent=2, default=float))
+    print(json.dumps(out, indent=2, default=float))
+    return 0
+
+
+if __name__ == "__main__" and "--few-label" in sys.argv:
+    raise SystemExit(few_label())
