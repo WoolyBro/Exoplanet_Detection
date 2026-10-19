@@ -41,3 +41,20 @@ If only that mix differs, the Bayes-optimal posterior on survey B follows from A
 | L4 | ROC-AUC improves in at least 2 of the 3 cases |
 
 **If L1–L3 hold,** the paper can state the survey prior as a law: training base rates by depth set the cross-survey bias, and the bias is removed by the label-free per-stratum correction. That makes it predictable for any vetter, not specific to this network.
+
+## Addendum (2026-10-19, written after L1–L4 were read and failed; committed before the analysis below)
+
+**What L1–L4 showed.** The label-free EM estimate misjudged the target base rates by up to 0.5 and lowered ROC-AUC in all three cases. The *oracle* correction, with the true base rate per depth stratum, fixed calibration in every case without hurting ROC-AUC (K2 ECE 0.358 → 0.099; Kepler → TESS 0.199 → 0.068; TESS → Kepler 0.266 → 0.053). So label shift explains the prior, but the pure label-shift assumption EM needs does not hold.
+
+**The practical question.** How many labelled target signals are needed?
+
+**Test (fixed now).** For m = 5, 10, 20 and 50 labelled signals per depth stratum:
+1. Draw them at random (200 repetitions, seed 20261019).
+2. Estimate each stratum's target base rate from them; use the source prior where a stratum has fewer than m signals.
+3. Apply the per-stratum correction to the remaining signals, and evaluate ECE and ROC-AUC on those.
+
+| ID | Expectation |
+|---|---|
+| L5 | At m = 20 per stratum (≤ 80 labels per survey), the median ECE is within 0.03 of the oracle's in all three cases, and the median ROC-AUC is within 0.01 of the frozen map's |
+
+This is an addendum after an observed result, and is reported as such.
