@@ -2,11 +2,34 @@
 
 **The rule that removes the sprawl.** Every result in the main text supports the central thesis below. Everything else goes to an appendix. Numbers come from `PAPER_EVIDENCE_MAP.md`.
 
-**Working title** (keep the user's terms):
-- *Exoplanet detection and a habitability factor with CNN–LSTM networks: a pre-registered, end-to-end evaluation*
-- Alternative: *From transit signals to habitable-world priorities: what deep networks can and cannot learn from Kepler, TESS, K2 and JWST*
+**Title** (keeps the user's terms and leads with what is unique):
+- **Main:** *Exoplanet detection and a habitability factor with CNN–LSTM networks: data, not architecture, sets the limits, from Kepler light curves to real JWST atmospheres*
+- **Shorter:** *Data, not architecture: pre-registered CNN–LSTM pipelines from transit detection to JWST atmospheres and habitable-world priorities*
 
-**Central thesis (abstract, first sentence).** In an end-to-end pipeline from transit signals to habitable-world priorities, the limits come from the data — leakage, survey priors, missing false-alarm examples, stellar contamination — more than from the architecture. Pre-registered external tests expose each limit, and targeted data fixes remove most of them: real false alarms and pipeline measurements bring a standard CNN–BiLSTM to ExoMiner's level; contamination-aware simulations give real-spectrum CH₄ and CO₂ detectors. Where data cannot decide (temperate rocky planets), the pipeline says so.
+**Central thesis.** Across an end-to-end pipeline from transit signals to habitable-world priorities, what a deep network can learn is set by its data, not its architecture. Pre-registered tests measure each data limit and show which fixes remove it.
+
+**Abstract draft** (≈ 250 words; numbers from `PAPER_EVIDENCE_MAP.md`). It **opens with the two unique results** and puts the vetter numbers after them:
+
+> Machine learning for exoplanets is usually judged by test scores on held-out catalogues. We instead pre-registered every expectation (66 in all; 47 held) and tested a CNN–BiLSTM pipeline from transit signals to habitable-world priorities on data it never saw.
+>
+> **Atmospheres.** Molecule detectors trained only on simulated spectra with stellar contamination and hazes identify CH₄ in all 41 and CO₂ in 34 labelled real JWST transmission spectra (ROC-AUC 1.00 and 0.996). They pass a gas-blind confound test, and masking the 4.3 µm band removes the CO₂ skill. Frozen, they make hash-locked calls on 29 planets whose CH₄ or CO₂ status is unresolved; CO₂ is absent in K2-18 b, GJ 1214 b and LHS 1140 b.
+>
+> **Detection.** Signal twins inflate Kepler test scores by 0.019 even in star-grouped splits. On the same data, a ResNet and a Transformer with 5–12× more parameters do no better than the CNN–BiLSTM, while adding pipeline measurements and real false alarms raises it to ExoMiner's level (0.996), with 99 % of false alarms rejected. Survey priors are label shift by depth: about 80 labelled signals per survey fix the cross-survey calibration without retraining.
+>
+> **Habitability.** Contamination-aware retrievals credit no atmosphere to TRAPPIST-1 e, TRAPPIST-1 f or LHS 1140 b. A Bayesian retention model fitted to 23 observed rocky planets predicts three later ones, and drives an experimental design that independently recovers the JWST Rocky Worlds targets.
+>
+> Data, labels and the observing record, not network design, set the limits at every stage.
+
+**Contributions, in the order the introduction lists them (most unique first):**
+1. **Real-spectrum molecule detection with a confound test, and a prospective register.** CH₄ (41 planets) and CO₂ (34); the band occlusion; hash-locked calls on 29 unresolved planets. *Unique.*
+2. **Data, not architecture, measured.**
+   - Signal-twin leakage.
+   - ResNet and Transformer nulls against +0.04 from information.
+   - Survey priors as label shift by depth, fixed with ~80 labels.
+   - v3 at ExoMiner's level with a 44k-parameter network. *Unique as a set.*
+3. **What to observe next.** A posterior-driven design for the cosmic shoreline that recovers the Rocky Worlds selection and adds bright K dwarfs and lava worlds. *Unique.*
+4. **Contamination-aware verdicts** on three habitable-zone planets, and a fitted retention model validated out of sample.
+5. **Pre-registration throughout:** 66 expectations, 19 failures reported, 12 significance claims Holm-adjusted together.
 
 **Target journal.** AJ or MNRAS (methods + science), about 9,000 words, 10 main figures, appendices A–F.
 
@@ -15,13 +38,12 @@
 ## 1. Introduction (≈ 900 words)
 
 - **Problem.** ML vetters report test scores near 0.99, but their evaluation is rarely independent. Habitability rankings rarely carry uncertainty. Atmospheric ML is mostly tested on simulations.
-- **Contributions** (numbered, one per act, plus the method):
-  1. Signal-twin leakage in star-grouped splits.
-  2. A pre-registered evaluation of a CNN–BiLSTM vetter: external K2 and DR25 tests, a diagnosed blind spot and its fix (v3).
-  3. Simulation-trained CH₄ (40 planets) and CO₂ (34 planets) detectors validated on real JWST spectra against a gas-blind confound. The CO₂ 1-D CNN scores 0.996, with band occlusion showing gas specificity. A strength-blind CNN–BiLSTM for CH₄ failed and is reported.
-  4. Contamination-aware verdicts on three habitable-zone planets (TRAPPIST-1 e and f, LHS 1140 b): none has a credited atmosphere, and an H₂ envelope is disfavoured for all three.
-  5. A fitted habitability factor that is robust to its assumptions.
-- **The method itself:** pre-registration and single reads, with a scoreboard of all registered expectations (§7).
+- **Contributions:** the five above, in that order. Open with contribution 1, the result no earlier paper has. Note the related work it must be set against:
+  - Duque-Castaño et al. 2025 (synthetic-only tests);
+  - Márquez-Neila et al. 2018 (one real HST spectrum);
+  - the ESS Open Archive CNN preprint, to read before submission;
+  - ExoMiner and ExoMiner++ for vetting;
+  - Meni-Gallardo & Pallé 2025 and Ih et al. 2025 for the shoreline.
 
 ## 2. Data and the leakage problem (≈ 900 words)
 
