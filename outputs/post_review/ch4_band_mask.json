@@ -1,0 +1,30 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (D), post hoc",
+  "bands_um": [
+    [
+      2.15,
+      2.45
+    ],
+    [
+      3.05,
+      3.65
+    ]
+  ],
+  "n": 41,
+  "n_ch4": 11,
+  "gbm": {
+    "roc_auc": 1.0,
+    "roc_auc_masked": 0.803,
+    "median_drop_ch4": 0.489,
+    "median_drop_no_ch4": -0.002,
+    "mannwhitney_p": 6.481207349565631e-07
+  },
+  "cnn": {
+    "roc_auc": 0.9667,
+    "roc_auc_masked": 0.7818,
+    "median_drop_ch4": 0.46,
+    "median_drop_no_ch4": 0.01,
+    "mannwhitney_p": 0.00019582184462494246
+  },
+  "specific": true
+}

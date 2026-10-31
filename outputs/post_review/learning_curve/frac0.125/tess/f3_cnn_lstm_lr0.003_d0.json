@@ -1,0 +1,1 @@
+{"fold": 3, "arch": "cnn_lstm", "lr": 0.003, "dropout": 0.3, "seed": 1, "inner_val_auc": 0.7636224517680494, "best_epoch": 29, "minutes": 0.19, "n_params": 40451}

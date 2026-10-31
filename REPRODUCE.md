@@ -127,6 +127,32 @@ python stage_c_priority_fusion/retention_update.py       # out-of-sample test on
 python stage_c_priority_fusion/shoreline_design.py       # what to observe next: bits per JWST hour
 ```
 
+## 6b. Post-review analyses (post hoc; about 6 h on a laptop with a GPU)
+
+Rules: `eda/POST_REVIEW_PROTOCOL.md`. Results: `eda/POST_REVIEW_RESULTS.md`. Output: `outputs/post_review/`.
+
+```bash
+python stage_a_transit_model/nested_architectures.py --mission kepler --jobs 4 && python stage_a_transit_model/nested_architectures.py --mission kepler --report
+python stage_a_transit_model/nested_architectures.py --mission tess --jobs 4 && python stage_a_transit_model/nested_architectures.py --mission tess --report
+python stage_a_transit_model/embeddings_v2.py
+python stage_a_transit_model/learning_curve.py --mission kepler --jobs 4 && python stage_a_transit_model/learning_curve.py --mission tess --jobs 4
+python stage_c_priority_fusion/rocky_worlds_predictions.py
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/trappist1e_fit_curves.py
+python stage_a_transit_model/label_shift_baseline.py
+python stage_a_transit_model/noise_vs_shape.py
+python stage_b_atmospheres/ch4_band_mask.py
+python stage_b_atmospheres/molecule_baselines.py
+~/micromamba/envs/prt/bin/python stage_b_atmospheres/detector_injection.py --templates
+python stage_b_atmospheres/detector_injection.py --score
+TARGET="TRAPPIST-1 f" INJ=n2_co2 ~/micromamba/envs/prt/bin/python stage_b_atmospheres/injection_recovery_hz.py --workers 3
+python stage_c_priority_fusion/retention_prior_sensitivity.py
+python stage_c_priority_fusion/retention_model_comparison.py
+python stage_c_priority_fusion/priority_decomposition.py
+python stage_c_priority_fusion/design_baseline.py
+python tools/post_review_stats.py
+python tools/label_audit.py --make
+```
+
 ## 7. Figures and tests (minutes, no network)
 
 ```bash

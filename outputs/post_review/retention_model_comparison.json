@@ -1,0 +1,73 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (K), post hoc",
+  "n": 23,
+  "main": {
+    "intercept": {
+      "log_marginal": -15.093395957796567,
+      "loo_log_score": -0.6235275050172955,
+      "p_beta_negative": null,
+      "p_gamma_positive": null,
+      "ln_bf_vs_intercept": 0.0
+    },
+    "slope": {
+      "log_marginal": -16.317651364091894,
+      "loo_log_score": -0.6504668477439549,
+      "p_beta_negative": 0.6315592171110399,
+      "p_gamma_positive": null,
+      "ln_bf_vs_intercept": -1.22
+    },
+    "magma": {
+      "log_marginal": -13.833764295541114,
+      "loo_log_score": -0.5344359041902207,
+      "p_beta_negative": null,
+      "p_gamma_positive": 0.9767370118052939,
+      "ln_bf_vs_intercept": 1.26
+    },
+    "both": {
+      "log_marginal": -14.122495363477407,
+      "loo_log_score": -0.5061634381562828,
+      "p_beta_negative": 0.9099810090701632,
+      "p_gamma_positive": 0.9913650146658199,
+      "ln_bf_vs_intercept": 0.97
+    }
+  },
+  "sensitivity": {
+    "hard labels": {
+      "log_marginal": -14.724852334495171,
+      "loo_log_score": -0.5728971367096622,
+      "p_beta_negative": 0.945344646029604,
+      "p_gamma_positive": 0.9947912568625954
+    },
+    "softer labels": {
+      "log_marginal": -14.147034239818488,
+      "loo_log_score": -0.5059824792996637,
+      "p_beta_negative": 0.8958180584934202,
+      "p_gamma_positive": 0.9891864310170039
+    },
+    "tentative planets dropped": {
+      "log_marginal": -7.221525864811822,
+      "loo_log_score": -0.3198869215984853,
+      "p_beta_negative": 0.8982848427239514,
+      "p_gamma_positive": 0.9952329243172017,
+      "n": 16
+    },
+    "magma threshold 1000 K": {
+      "log_marginal": -15.42944799021667,
+      "loo_log_score": -0.5846352086155061,
+      "p_beta_negative": 0.8949057667367142,
+      "p_gamma_positive": 0.9605583264978002
+    },
+    "magma threshold 1500 K": {
+      "log_marginal": -13.396820071195375,
+      "loo_log_score": -0.4555628764937537,
+      "p_beta_negative": 0.8502406724841904,
+      "p_gamma_positive": 0.9961909849633607
+    },
+    "empirical shoreline margin": {
+      "log_marginal": -14.408247072110012,
+      "loo_log_score": -0.5186155384993089,
+      "p_beta_negative": 0.875346117061141,
+      "p_gamma_positive": 0.9883924288090807
+    }
+  }
+}

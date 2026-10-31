@@ -1,0 +1,65 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (G), post hoc",
+  "target": "TRAPPIST-1 f",
+  "case": "n2_co2",
+  "injected": {
+    "gases": {
+      "CO2": 0.01,
+      "CH4": 0.001,
+      "H2O": 0.0001
+    },
+    "bg": "N2",
+    "model": "n2"
+  },
+  "max_signal_ppm_per_spectrum": [
+    47.017371926357555,
+    48.56434000956324,
+    48.56434000956324,
+    48.56434000956324,
+    48.56434000956324
+  ],
+  "lnB_atm_vs_bare": -0.41,
+  "lnB_err": 0.15,
+  "chi2_gain": [
+    2.3,
+    3.2,
+    0.3,
+    1.7,
+    0.6
+  ],
+  "n_spectra_improved": 5,
+  "n_needed": 4,
+  "credited": false,
+  "runs": {
+    "bare_rock": {
+      "model": "bare_rock",
+      "logz": -1703.9928749554936,
+      "logz_err": 0.08693834018975954,
+      "seconds": 13,
+      "best_fit": {
+        "Rp": 1.0407588116863487
+      }
+    },
+    "n2": {
+      "model": "n2",
+      "logz": -1704.4067288400774,
+      "logz_err": 0.12476628283917253,
+      "seconds": 1926,
+      "best_fit": {
+        "log_CH4": -9.77793391258498,
+        "log_CO2": -8.70728748099158,
+        "log_H2O": -8.538542151231056,
+        "T": 385.6082096745391,
+        "logP": 0.9962920893200118,
+        "Rp": 1.057154785739578
+      }
+    }
+  },
+  "n_points": [
+    49,
+    50,
+    50,
+    50,
+    50
+  ]
+}

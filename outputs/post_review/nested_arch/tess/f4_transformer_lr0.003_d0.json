@@ -1,0 +1,1 @@
+{"fold": 4, "arch": "transformer", "lr": 0.003, "dropout": 0.3, "seed": 42, "inner_val_auc": 0.7097626767663006, "best_epoch": 37, "minutes": 2.54, "n_params": 220547}

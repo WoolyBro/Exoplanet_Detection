@@ -1,0 +1,33 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (C), post hoc",
+  "sigma_depth_units": 0.05,
+  "groups": {
+    "deep_confirmed_gt_10000ppm": {
+      "n": 27,
+      "median_score": {
+        "none": 0.716,
+        "everywhere": 0.948,
+        "in_transit_only": 0.557,
+        "out_of_transit_only": 0.838,
+        "phase_0.5_only": 0.612
+      }
+    },
+    "shallow_confirmed_lt_3000ppm": {
+      "n": 200,
+      "median_score": {
+        "none": 0.893,
+        "everywhere": 0.909,
+        "in_transit_only": 0.876,
+        "out_of_transit_only": 0.9,
+        "phase_0.5_only": 0.886
+      }
+    }
+  },
+  "rise_everywhere": 0.232,
+  "share_of_rise": {
+    "in_transit_only": -0.69,
+    "out_of_transit_only": 0.53,
+    "phase_0.5_only": -0.45
+  },
+  "reading": "not separated"
+}

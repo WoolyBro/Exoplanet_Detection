@@ -1,0 +1,117 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (H), post hoc",
+  "holm": {
+    "m": 15,
+    "largest_adjusted_p": 0.009,
+    "all_below_0.05": true,
+    "adjusted": {
+      "v3 rejects more INV false alarms than v2": 3e-85,
+      "v3 rejects more NTP false alarms than v2": 2.8e-63,
+      "v3 rejects more INJ2 than v2": 1.3e-32,
+      "v3 rejects more INJ3 than v2": 1.2e-08,
+      "DR25: v2 keeps more injected planets than the Robovetter": 3.3e-07,
+      "CH4 band masking": 6.5e-06,
+      "S/N balance raises deep K2 planets": 6.5e-06,
+      "K2: deep confirmed planets underscored": 1.6e-05,
+      "CO2 band masking": 2.1e-05,
+      "CO2 GBM on 34 planets": 6e-05,
+      "CH4 GBM on 29 new planets": 0.0015,
+      "CO2 CNN, strong-feature half": 0.0032,
+      "CH4 GBM, strong-feature half": 0.009,
+      "CO2 GBM, strong-feature half": 0.009,
+      "CH4 CNN, strong-feature half": 0.009
+    }
+  },
+  "newcombe": {
+    "CH4 GBM 41 planets": {
+      "auc": 1.0,
+      "m": 11,
+      "n": 30,
+      "ci95": [
+        0.875,
+        1.0
+      ]
+    },
+    "CH4 CNN 41 planets": {
+      "auc": 0.967,
+      "m": 11,
+      "n": 30,
+      "ci95": [
+        0.818,
+        0.994
+      ]
+    },
+    "CO2 CNN 34 planets": {
+      "auc": 0.996,
+      "m": 14,
+      "n": 20,
+      "ci95": [
+        0.87,
+        1.0
+      ]
+    },
+    "CO2 GBM 34 planets": {
+      "auc": 0.982,
+      "m": 14,
+      "n": 20,
+      "ci95": [
+        0.845,
+        0.998
+      ]
+    }
+  },
+  "co2_strong_half_vs_control": {
+    "cnn": {
+      "difference": 0.308,
+      "ci95": [
+        0.067,
+        0.583
+      ],
+      "n": 17,
+      "n_pos": 13,
+      "p_gt_0": 0.985
+    },
+    "gbm": {
+      "difference": 0.269,
+      "ci95": [
+        -0.027,
+        0.6
+      ],
+      "n": 17,
+      "n_pos": 13,
+      "p_gt_0": 0.959
+    }
+  },
+  "ch4_strong_half_vs_control": {
+    "n_new": 29,
+    "gbm": {
+      "difference": 0.303,
+      "ci95": [
+        0.0,
+        0.75
+      ],
+      "n": 14,
+      "n_pos": 3,
+      "p_gt_0": 0.91
+    },
+    "cnn": {
+      "difference": 0.273,
+      "ci95": [
+        0.0,
+        0.636
+      ],
+      "n": 14,
+      "n_pos": 3,
+      "p_gt_0": 0.909
+    }
+  },
+  "co2_crosscheck_exoplanet_eu": {
+    "n": 37,
+    "n_with_species": 15,
+    "agreement": 0.811,
+    "kappa": 0.58,
+    "ours1_eu0": 5,
+    "ours0_eu1": 2,
+    "kappa_listed_only": 0.53
+  }
+}

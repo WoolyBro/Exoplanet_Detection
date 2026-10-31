@@ -1,0 +1,84 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (L), post hoc",
+  "n": 44,
+  "spearman_with_full": 0.845,
+  "top10_full": {
+    "TRAPPIST-1 g": 3,
+    "TOI-700 d": 2,
+    "Kepler-62 f": 1,
+    "TRAPPIST-1 f": 5,
+    "TRAPPIST-1 e": 7,
+    "LP 890-9 c": 4,
+    "LHS 1140 b": 8,
+    "TRAPPIST-1 d": 11,
+    "Kepler-296 f": 6,
+    "TOI-700 e": 9
+  },
+  "top10_without_observability": [
+    {
+      "pl_name": "Kepler-62 f",
+      "without_obs": 0.951,
+      "rank_all": 2
+    },
+    {
+      "pl_name": "TOI-700 d",
+      "without_obs": 0.828,
+      "rank_all": 2
+    },
+    {
+      "pl_name": "TRAPPIST-1 g",
+      "without_obs": 0.752,
+      "rank_all": 1
+    },
+    {
+      "pl_name": "LP 890-9 c",
+      "without_obs": 0.684,
+      "rank_all": 5
+    },
+    {
+      "pl_name": "TRAPPIST-1 f",
+      "without_obs": 0.652,
+      "rank_all": 2
+    },
+    {
+      "pl_name": "Kepler-296 f",
+      "without_obs": 0.63,
+      "rank_all": 9
+    },
+    {
+      "pl_name": "TRAPPIST-1 e",
+      "without_obs": 0.584,
+      "rank_all": 5
+    },
+    {
+      "pl_name": "LHS 1140 b",
+      "without_obs": 0.571,
+      "rank_all": 7
+    },
+    {
+      "pl_name": "TOI-700 e",
+      "without_obs": 0.46,
+      "rank_all": 10
+    },
+    {
+      "pl_name": "K2-18 b",
+      "without_obs": 0.337,
+      "rank_all": 11
+    }
+  ],
+  "shared_top10": 9,
+  "dropped_term": {
+    "without_hz": {
+      "spearman_with_full": 0.26,
+      "shared_top10": 5
+    },
+    "without_atm": {
+      "spearman_with_full": 0.884,
+      "shared_top10": 9
+    },
+    "without_obs": {
+      "spearman_with_full": 0.845,
+      "shared_top10": 9
+    }
+  }
+}

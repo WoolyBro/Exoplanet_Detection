@@ -1,0 +1,21 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (P), post hoc",
+  "targets": [
+    "TOI-1452 b",
+    "TOI-198 b",
+    "TOI-244 b",
+    "HD 260655 c",
+    "TOI-771 b",
+    "LTT 1445 A c"
+  ],
+  "expected_atmospheres": {
+    "mean": 2.21,
+    "ci90": [
+      0.96,
+      3.51
+    ]
+  },
+  "p_none_of_six": 0.101,
+  "p_five_or_six": 0.051,
+  "sha256": "db14e8ab7b13a4e90f4ea90bf33f4647260b44eb6acb6663a90fb928cbaa3c13"
+}

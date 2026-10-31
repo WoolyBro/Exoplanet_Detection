@@ -1,0 +1,143 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (I), post hoc",
+  "boundary": {
+    "CH4": 0.125,
+    "CO2": 0.5
+  },
+  "gases": {
+    "CH4": {
+      "n_planets": 29,
+      "logx_-5": {
+        "median_peak_ppm": 28.5,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.863,
+          "recovered_above_boundary": 0.448,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.743,
+          "recovered_above_boundary": 0.655,
+          "false_rate_uninjected": 0.31,
+          "recovered_when_signal_gt_3x_error": 0.917
+        },
+        "n_signal_gt_3x_error": 12
+      },
+      "logx_-4": {
+        "median_peak_ppm": 54.6,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.897,
+          "recovered_above_boundary": 0.552,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.81,
+          "recovered_above_boundary": 0.724,
+          "false_rate_uninjected": 0.31,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "n_signal_gt_3x_error": 13
+      },
+      "logx_-3": {
+        "median_peak_ppm": 93.7,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.917,
+          "recovered_above_boundary": 0.621,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.845,
+          "recovered_above_boundary": 0.793,
+          "false_rate_uninjected": 0.31,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "n_signal_gt_3x_error": 13
+      },
+      "logx_-2": {
+        "median_peak_ppm": 136.6,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.926,
+          "recovered_above_boundary": 0.621,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.863,
+          "recovered_above_boundary": 0.793,
+          "false_rate_uninjected": 0.31,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "n_signal_gt_3x_error": 13
+      }
+    },
+    "CO2": {
+      "n_planets": 19,
+      "logx_-5": {
+        "median_peak_ppm": 33.2,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.756,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.817,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.053,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "n_signal_gt_3x_error": 7
+      },
+      "logx_-4": {
+        "median_peak_ppm": 48.6,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.776,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.85,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.053,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "n_signal_gt_3x_error": 8
+      },
+      "logx_-3": {
+        "median_peak_ppm": 65.0,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.806,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.878,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.053,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "n_signal_gt_3x_error": 8
+      },
+      "logx_-2": {
+        "median_peak_ppm": 82.2,
+        "gbm": {
+          "roc_auc_vs_uninjected": 0.828,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.0,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "cnn": {
+          "roc_auc_vs_uninjected": 0.886,
+          "recovered_above_boundary": 0.474,
+          "false_rate_uninjected": 0.053,
+          "recovered_when_signal_gt_3x_error": 1.0
+        },
+        "n_signal_gt_3x_error": 8
+      }
+    }
+  }
+}
