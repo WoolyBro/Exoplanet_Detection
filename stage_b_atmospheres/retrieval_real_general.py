@@ -35,6 +35,8 @@ REFRESH = sorted((RESEARCH / "external_data").glob("archive_spectra_*"))[-1] / "
 CONFIG = {
     "TRAPPIST-1 f": {"files": [REFRESH / f"TRAPPIST-1_f_Transmission_TRAPPIST_1_f_3.11991_6157_{i}.tbl" for i in range(1, 6)],
                      "labels": [f"NIRISS visit {i}" for i in range(1, 6)]},
+    "TRAPPIST-1 e": {"files": [PACK / f"TRAPPIST-1_e_Transmission_TRAPPIST_1_e_3.11990_5756_{i}.tbl" for i in range(1, 5)],
+                     "labels": [f"NIRSpec PRISM visit {i}" for i in range(1, 5)]},
     "LHS 1140 b": {"files": [PACK / "LHS_1140_b_Transmission_LHS_1140_b_3.12019_5422_1.tbl",
                              PACK / "LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_1.tbl",
                              PACK / "LHS_1140_b_Transmission_LHS_1140_b_3.12019_5435_2.tbl"],

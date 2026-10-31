@@ -1,0 +1,46 @@
+{
+  "flags": {
+    "borderline": {
+      "GJ 341 b CO2": "3.1 sigma in one reduction, read by its authors as not astrophysical",
+      "TOI-1685 b CH4": "a pure CH4 atmosphere had marginally higher evidence than a flat line",
+      "TrES-4 b CO2": "evidence stated without a significance in the sentences found"
+    },
+    "no_direct_statement": [
+      "HIP 67522 b CH4",
+      "Kepler-51 d CO2",
+      "L 98-59 d CH4",
+      "TOI-270 b CH4",
+      "TOI-836 b CH4",
+      "TOI-836 b CO2",
+      "TRAPPIST-1 c CH4",
+      "WASP-121 b CO2",
+      "WASP-39 b CH4"
+    ]
+  },
+  "CH4": {
+    "n": 41,
+    "n_after": 34,
+    "pos_after": 11,
+    "gbm": [
+      1.0,
+      1.0
+    ],
+    "cnn": [
+      0.967,
+      0.957
+    ]
+  },
+  "CO2": {
+    "n": 34,
+    "n_after": 29,
+    "pos_after": 13,
+    "gbm": [
+      0.982,
+      1.0
+    ],
+    "cnn": [
+      0.996,
+      1.0
+    ]
+  }
+}

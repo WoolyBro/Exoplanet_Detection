@@ -1,0 +1,56 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (B), post hoc",
+  "labels_per_band": 20,
+  "draws": 200,
+  "cases": {
+    "Kepler -> K2": {
+      "n": 1462,
+      "ece": {
+        "frozen": 0.3567,
+        "depth_correction": 0.0898,
+        "platt_refit": 0.0522,
+        "global_shift": 0.1692
+      },
+      "roc_auc": {
+        "frozen": 0.8646,
+        "depth_correction": 0.863,
+        "platt_refit": 0.8646,
+        "global_shift": 0.8646
+      },
+      "depth_beats_platt_by_0.01": false
+    },
+    "Kepler -> TESS": {
+      "n": 867,
+      "ece": {
+        "frozen": 0.198,
+        "depth_correction": 0.0723,
+        "platt_refit": 0.0483,
+        "global_shift": 0.0614
+      },
+      "roc_auc": {
+        "frozen": 0.8099,
+        "depth_correction": 0.797,
+        "platt_refit": 0.8099,
+        "global_shift": 0.8099
+      },
+      "depth_beats_platt_by_0.01": false
+    },
+    "TESS -> Kepler": {
+      "n": 1404,
+      "ece": {
+        "frozen": 0.2621,
+        "depth_correction": 0.0709,
+        "platt_refit": 0.0765,
+        "global_shift": 0.107
+      },
+      "roc_auc": {
+        "frozen": 0.8745,
+        "depth_correction": 0.8789,
+        "platt_refit": 0.8745,
+        "global_shift": 0.8745
+      },
+      "depth_beats_platt_by_0.01": false
+    }
+  },
+  "may_be_called_label_shift_by_depth": false
+}

@@ -1,0 +1,49 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (G), post hoc",
+  "target": "TRAPPIST-1 e",
+  "case": "none_h2",
+  "injected": null,
+  "max_signal_ppm_per_spectrum": null,
+  "lnB_atm_vs_bare": 3.62,
+  "lnB_err": 0.2,
+  "chi2_gain": [
+    -0.3,
+    -3.1,
+    16.5,
+    10.0
+  ],
+  "n_spectra_improved": 2,
+  "n_needed": 3,
+  "credited": false,
+  "runs": {
+    "bare_rock": {
+      "model": "bare_rock",
+      "logz": -1746.8801265293519,
+      "logz_err": 0.07694144859367862,
+      "seconds": 4,
+      "best_fit": {
+        "Rp": 0.9151008971485075
+      }
+    },
+    "h2": {
+      "model": "h2",
+      "logz": -1743.2553812463361,
+      "logz_err": 0.18981877907283046,
+      "seconds": 9414,
+      "best_fit": {
+        "log_CH4": -2.6852311753399913,
+        "log_CO2": -8.596112052381503,
+        "log_H2O": -0.5015021786227205,
+        "T": 310.59272871264284,
+        "logP": -2.8828102691137527,
+        "Rp": 0.9104499193953809
+      }
+    }
+  },
+  "n_points": [
+    67,
+    67,
+    67,
+    67
+  ]
+}

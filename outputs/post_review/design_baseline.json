@@ -1,0 +1,59 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (F), post hoc",
+  "pool": 1288,
+  "targets": [
+    "HD 260655 c",
+    "LTT 1445 A c",
+    "TOI-1452 b",
+    "TOI-198 b",
+    "TOI-244 b",
+    "TOI-771 b"
+  ],
+  "median_rank": {
+    "information_per_hour": 29.5,
+    "shortest_program": 130.0,
+    "snr_per_visit": 28.5,
+    "brightest_host": 62.0
+  },
+  "ranks": {
+    "information_per_hour": {
+      "HD 260655 c": 3,
+      "LTT 1445 A c": 5,
+      "TOI-771 b": 26,
+      "TOI-1452 b": 33,
+      "TOI-244 b": 38,
+      "TOI-198 b": 45
+    },
+    "shortest_program": {
+      "HD 260655 c": 5,
+      "LTT 1445 A c": 3,
+      "TOI-771 b": 22,
+      "TOI-1452 b": 332,
+      "TOI-244 b": 238,
+      "TOI-198 b": 547
+    },
+    "snr_per_visit": {
+      "HD 260655 c": 5,
+      "LTT 1445 A c": 8,
+      "TOI-771 b": 20,
+      "TOI-1452 b": 53,
+      "TOI-244 b": 37,
+      "TOI-198 b": 43
+    },
+    "brightest_host": {
+      "HD 260655 c": 11,
+      "LTT 1445 A c": 14,
+      "TOI-771 b": 158,
+      "TOI-1452 b": 160,
+      "TOI-244 b": 65,
+      "TOI-198 b": 59
+    }
+  },
+  "top45_count": {
+    "information_per_hour": 6,
+    "shortest_program": 3,
+    "snr_per_visit": 5,
+    "brightest_host": 2
+  },
+  "independently_recovers_stays": false
+}

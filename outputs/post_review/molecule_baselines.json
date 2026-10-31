@@ -1,0 +1,63 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (J), post hoc",
+  "CH4": {
+    "n": 41,
+    "n_pos": 11,
+    "gbm": 1.0,
+    "cnn": 0.967,
+    "cooler_alone": 0.683,
+    "hotter_alone": 0.317,
+    "larger_alone": 0.705,
+    "smaller_alone": 0.295,
+    "bands": {
+      "0-600 K": {
+        "n": 18,
+        "n_pos": 6,
+        "gbm": 1.0,
+        "cnn": 0.917
+      },
+      "600-1000 K": {
+        "n": 13,
+        "n_pos": 5,
+        "gbm": 1.0,
+        "cnn": 1.0
+      },
+      "1000-5000 K": {
+        "n": 9,
+        "n_pos": 0,
+        "gbm": null,
+        "cnn": null
+      }
+    }
+  },
+  "CO2": {
+    "n": 34,
+    "n_pos": 14,
+    "gbm": 0.982,
+    "cnn": 0.996,
+    "cooler_alone": 0.184,
+    "hotter_alone": 0.816,
+    "larger_alone": 0.838,
+    "smaller_alone": 0.162,
+    "bands": {
+      "0-600 K": {
+        "n": 11,
+        "n_pos": 1,
+        "gbm": 1.0,
+        "cnn": 1.0
+      },
+      "600-1000 K": {
+        "n": 10,
+        "n_pos": 4,
+        "gbm": 1.0,
+        "cnn": 1.0
+      },
+      "1000-5000 K": {
+        "n": 12,
+        "n_pos": 9,
+        "gbm": 0.926,
+        "cnn": 0.963
+      }
+    }
+  }
+}

@@ -1,0 +1,1 @@
+{"fold": 0, "arch": "resnet", "lr": 0.0003, "dropout": 0.3, "seed": 42, "inner_val_auc": 0.9204665881660288, "best_epoch": 19, "minutes": 14.38, "n_params": 497155}

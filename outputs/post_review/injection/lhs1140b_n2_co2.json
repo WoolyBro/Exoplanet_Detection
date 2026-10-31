@@ -1,0 +1,59 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (G), post hoc",
+  "target": "LHS 1140 b",
+  "case": "n2_co2",
+  "injected": {
+    "gases": {
+      "CO2": 0.01,
+      "CH4": 0.001,
+      "H2O": 0.0001
+    },
+    "bg": "N2",
+    "model": "n2"
+  },
+  "max_signal_ppm_per_spectrum": [
+    12.714315239643838,
+    10.867093830275735,
+    20.723229642317165
+  ],
+  "lnB_atm_vs_bare": -0.17,
+  "lnB_err": 0.13,
+  "chi2_gain": [
+    4.8,
+    0.2,
+    2.0
+  ],
+  "n_spectra_improved": 3,
+  "n_needed": 2,
+  "credited": false,
+  "runs": {
+    "bare_rock": {
+      "model": "bare_rock",
+      "logz": -1231.796908267588,
+      "logz_err": 0.07593307332293618,
+      "seconds": 14,
+      "best_fit": {
+        "Rp": 1.735790179598904
+      }
+    },
+    "n2": {
+      "model": "n2",
+      "logz": -1231.9643231753444,
+      "logz_err": 0.10799500894895467,
+      "seconds": 4152,
+      "best_fit": {
+        "log_CH4": -6.024889977201085,
+        "log_CO2": -9.79558495347255,
+        "log_H2O": -7.276465709766037,
+        "T": 378.2925714624183,
+        "logP": 0.9238720530555096,
+        "Rp": 1.704810742742761
+      }
+    }
+  },
+  "n_points": [
+    142,
+    39,
+    37
+  ]
+}

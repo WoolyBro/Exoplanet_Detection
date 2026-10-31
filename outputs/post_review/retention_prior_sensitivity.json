@@ -1,0 +1,124 @@
+{
+  "protocol": "eda/POST_REVIEW_PROTOCOL.md (E), post hoc",
+  "rows": [
+    {
+      "beta_prior": [
+        -2,
+        1
+      ],
+      "n": 20,
+      "prior_p_beta_negative": 0.977,
+      "p_beta_negative": 0.986,
+      "beta_median": -1.27,
+      "beta_ci95": [
+        -2.64,
+        -0.12
+      ],
+      "p_gamma_positive": 0.977,
+      "loo_log_score": -0.534,
+      "base_rate_log_score": -0.58
+    },
+    {
+      "beta_prior": [
+        0,
+        1
+      ],
+      "n": 20,
+      "prior_p_beta_negative": 0.5,
+      "p_beta_negative": 0.846,
+      "beta_median": -0.56,
+      "beta_ci95": [
+        -1.74,
+        0.52
+      ],
+      "p_gamma_positive": 0.948,
+      "loo_log_score": -0.531,
+      "base_rate_log_score": -0.58
+    },
+    {
+      "beta_prior": [
+        0,
+        1.5
+      ],
+      "n": 20,
+      "prior_p_beta_negative": 0.5,
+      "p_beta_negative": 0.869,
+      "beta_median": -0.69,
+      "beta_ci95": [
+        -2.06,
+        0.51
+      ],
+      "p_gamma_positive": 0.953,
+      "loo_log_score": -0.533,
+      "base_rate_log_score": -0.58
+    },
+    {
+      "beta_prior": [
+        0,
+        2
+      ],
+      "n": 20,
+      "prior_p_beta_negative": 0.5,
+      "p_beta_negative": 0.878,
+      "beta_median": -0.74,
+      "beta_ci95": [
+        -2.23,
+        0.5
+      ],
+      "p_gamma_positive": 0.955,
+      "loo_log_score": -0.536,
+      "base_rate_log_score": -0.58
+    },
+    {
+      "beta_prior": [
+        0,
+        3
+      ],
+      "n": 20,
+      "prior_p_beta_negative": 0.5,
+      "p_beta_negative": 0.886,
+      "beta_median": -0.8,
+      "beta_ci95": [
+        -2.43,
+        0.49
+      ],
+      "p_gamma_positive": 0.957,
+      "loo_log_score": -0.538,
+      "base_rate_log_score": -0.58
+    },
+    {
+      "beta_prior": [
+        -2,
+        1
+      ],
+      "n": 23,
+      "prior_p_beta_negative": 0.977,
+      "p_beta_negative": 0.989,
+      "beta_median": -1.32,
+      "beta_ci95": [
+        -2.67,
+        -0.18
+      ],
+      "p_gamma_positive": 0.997,
+      "loo_log_score": -0.502,
+      "base_rate_log_score": -0.627
+    },
+    {
+      "beta_prior": [
+        0,
+        2
+      ],
+      "n": 23,
+      "prior_p_beta_negative": 0.5,
+      "p_beta_negative": 0.905,
+      "beta_median": -0.82,
+      "beta_ci95": [
+        -2.3,
+        0.4
+      ],
+      "p_gamma_positive": 0.991,
+      "loo_log_score": -0.508,
+      "base_rate_log_score": -0.627
+    }
+  ]
+}

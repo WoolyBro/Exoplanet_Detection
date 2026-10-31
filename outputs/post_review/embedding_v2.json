@@ -1,0 +1,12 @@
+{
+  "model": "v2_kepler_dual_cnn_lstm_err",
+  "architecture": "{'dropout': 0.3, 'width': 1.0, 'batchnorm': True, 'arch': 'dual_cnn_lstm', 'use_errors': True}",
+  "split": "Kepler v2 validation",
+  "n": 1415,
+  "dims": 64,
+  "knn_accuracy": 0.7547703180212014,
+  "knn_accuracy_shuffled_labels": 0.47208480565371025,
+  "silhouette": 0.17286062240600586,
+  "silhouette_shuffled_labels": -0.021637944504618645,
+  "majority_class_rate": 0.5060070671378092
+}
